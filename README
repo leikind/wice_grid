@@ -1,0 +1,762 @@
+= WiceGrid
+
+Version:: 0.4
+Author::  Yuri Leikind & The WICE team
+Website:: https://redmine.wice.eu/wiki/wice-grid
+Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
+
+== Intro
+
+WiceGrid is a Rails plugin which builds the call to the ActiveRecord layer for you and creates a table view with the results of the call including:
+
+* paging
+* sortable columns
+* filtering by multiple columns
+* CSV export
+* saving queries (<em>considered experimental as of version 0.3</em>)
+
+All working nicely together. Filters are added automatically according to the type of the underlying DB column. Filtering by more than one column at the same time is possible. More than one such grid can appear on a page, and manipulations with one grid do not have any impact on the other.
+
+WiceGrid does not take a collection as an input, it works directly with ActiveRecord (with the help of <tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt>).
+
+WiceGrid does not use AJAX calls to reload itself, instead simple GET requests are used for this, nevertheless, all other page parameters are respected and preserved. WiceGrid views do not contain forms so you can include it in your own forms.
+
+
+WiceGrid is known to work with MySQL and Postgres.
+
+
+== Requirements
+
+<tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 2.3.2 or newer.
+
+<tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer.
+
+== How-To
+
+=== Installation
+
+Run the following command to install the plugin:
+
+  script/plugin install  http://svn.wice.eu/public/wice_grid/
+
+You will see that icon files, a javascript file and a stylesheet have been copied to +public+.
+
+If you are installing manually, copy the files with the following command:
+
+   rake wice_grid:copy_resources_to_public
+
+=== Basics
+
+WiceGrid requires prototype.js and effects.js in order to function, so make sure you have <tt><%=javascript_include_tag :defaults %></tt> in your layout template.
+
+To include WiceGrid javascript and stylesheet files to the page use helper +include_wice_grid_assets+ :
+
+  <%= include_wice_grid_assets %>
+
+The simplest example of a WiceGrid for one simple DB table called ApplicationAccount is the following:
+
+Controller:
+
+  @accounts_grid = initialize_grid(ApplicationAccount)
+
+View:
+
+  <%= grid(@accounts_grid) do |g|
+
+    g.column do |account|
+      account.username
+    end
+
+    g.column do |account|
+      account.active? ? 'Yes' : 'No'
+    end
+
+    g.column do |account|
+      link_to('Edit', edit_account_path(account))
+    end
+  end -%>
+
+Code <tt>g.column do |account| ... end</tt>
+defines everything related to a column in the resulting view table including column names, sorting, filering, the content of the column cells, etc.
+The only obligatory parameter is the block which is called for every ActiveRecord instance in the resultset, the return value of the block being
+the table cell content.
+
+In the above view code three columns were defined, all without names, no sorting or filtering is available. Still, pagination becomes active if
+the number of all extracted records exceeds the default number of rows per page.
+
+Column names are defined with parameter <tt>:column_name</tt>:
+
+  <%= grid(@accounts_grid) do |g|
+
+    g.column :column_name => 'Username' do |account|
+      account.username
+    end
+
+    g.column :column_name => 'Active' do |account|
+      account.active? ? 'Yes' : 'No'
+    end
+
+    g.column :column_name => 'Edit' do |account|
+      link_to('Edit', edit_account_path(account))
+    end
+  end -%>
+
+To add filtering and ordering, declare to which column in the underlying database table(s) the view column corresponds using
+parameter <tt>:attribute_name</tt> :
+
+  <%= grid(@accounts_grid) do |g|
+
+    g.column :column_name => 'Username', :attribute_name => 'username'  do |account|
+      account.username
+    end
+
+    g.column :column_name => 'Active', :attribute_name => 'active' do |account|
+      account.active? ? 'Yes' : 'No'
+    end
+
+    g.column :column_name => 'Edit' do |account|
+      link_to('Edit', edit_account_path(account))
+    end
+  end -%>
+
+This will magically add sorting links and filters for columns +Username+ and +Active+. The plugin automatically creates filters according to the type
+of the database column. In the above example a text field will be created for column Username (username is a string), while for
+column +Active+ a dropdown filter will be created with options 'Yes', 'No', and '--'.
+
+It is important to remember that <tt>:attribute_name</tt> is the name of the database column, not a model attribute. Of course, all database columns have corresponding model attributes, but not all model attributes map to columns in the same table with the same name.
+
+Read more about available filters in the documentation
+for the column method. Read the section about custom dropdown filters for more advanced filters.
+
+
+For simple columns like
+
+  g.column :column_name => 'Username', :attribute_name => 'username'  do |account|
+    account.username
+  end
+
+the following blockless shortcut can be used:
+
+  g.column :column_name => 'Username', :attribute_name => 'username'
+
+In this case +attribute_name+ will be used as the method name to send to the ActiveRecord instance.
+
+If only sorting is needed, we can turn off filters using <tt>:no_filter</tt> :
+
+  g.column :column_name => 'Username', :attribute_name => 'username', :no_filter => true
+
+
+It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute_name</tt> (and <tt>:model_class</tt> discussed below).
+
+=== Initial Ordering
+
+Initializing the grid we can also define the column by which the record will be ordered <em>on the first rendering of the grid</em>, when the user has not set their ordering setting by clicking the column label, and the order direction:
+
+  @accounts_grid = initialize_grid(ApplicationAccount,
+    :order => 'username',
+    :order_direction => 'desc'
+  )
+
+=== Records Per Page
+
+The number of rows per page is set with <tt>:per_page</tt>:
+
+  @accounts_grid = initialize_grid(ApplicationAccount,
+    :per_page => 20,
+    :order => 'username',
+    :order_direction => 'desc'
+  )
+
+
+
+=== Conditions
+
+The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), so it can be anything that <tt>:conditions</tt> in <tt>ActiveRecord#find</tt> can be.
+
+A good example is substituting a common pattern like
+
+  @user_groups = @portal_application.user_groups
+
+with WiceGrid code:
+
+  @user_groups_grid = initialize_grid(UserGroup, :conditions => ['portal_application_id = ?', @portal_application])
+
+
+=== Queries with join tables
+
+WiceGrid also supports ActiveRecord's <tt>:joins</tt> and <tt>:include</tt>.
+
+  @products_grid = initialize_grid(Product,
+    :include => :category,
+    :order => 'products.name',
+    :per_page => 20)
+
+Note that if we want to order initially by a column from a joined table we have to specify the table and the column name with the sql dot notation, that is, <tt>products.name</tt>
+
+To show columns of joined tables in the view table, the ActiveRecord model class name has to be specified, that corresponds to the joined table:
+
+  <%= grid(@products_grid) do |g|
+    g.column :column_name => 'Product Name', :attribute_name => 'name' do |product|  # primary table
+      link_to(product.name, product_path(product))
+    end
+
+    g.column :column_name => 'Category', :attribute_name => 'name', :model_class => Category |product| # joined table
+      product.category.name
+    end
+  %>
+
+=== Joined associations referring to the same table
+
+In case there are two joined assocations both referring to the same table, ActiveRecord constructs a query where
+the second join provides an alias for the joined table. To enable WiceGrid to order and filter by columns belonging to different associatiations
+but originating from the same table, set <tt>:table_alias</tt> to this alias:
+
+Model:
+
+   class Contract < ActiveRecord::Base
+     belongs_to :supplier_company, :class_name => 'Company', :foreign_key => :supplier_company_id
+     belongs_to :customer_company, :class_name => 'Company', :foreign_key => :customer_company_id
+   end
+
+Controller:
+
+   @grid = initialize_grid(Contract, :include => [:supplier_company, :customer_company])
+
+
+View:
+
+  <%= grid(@grid) do |g|
+    g.column :column_name => 'contract name', :attribute_name => 'name'  do |c|
+      c.name
+    end
+
+    g.column :column_name => 'supplier name', :attribute_name => 'name',   :model_class => Company do |c|
+      c.supplier_company.name
+    end
+
+    g.column :column_name => 'customer name', :attribute_name => 'name', :model_class => Company,  :table_alias => 'customer_companies_contracts'  do |c|
+      c.customer_company.name
+    end
+  end -%>
+
+=== Custom dropdown filters
+
+It is possible to construct custom dropdown filters. Depending on the value of <tt>column</tt> parameter<tt>:custom_filter</tt> different
+modes are available:
+
+
+==== Array of strings or numbers
+
+This is a direct  definition of possible values of the dropdown. The generated dropdown list filter will contain these values
+together with a special value '--' (+nil+). Every item will be used both as the value of the select option and as its label.
+
+  g.column :column_name => 'Periodicity (years)', :attribute_name => 'years', :model_class => Periodicity,
+           :custom_filter => [0.5, 1, 2] |order|
+    order.periodicity.name
+  end
+
+==== Array of two-element arrays 
+
+Every first item of the two-element array is used for the label of the select option while the second element is the value of the select option:
+
+  g.column :column_name => 'Periodicity (years)', :attribute_name => 'years', :model_class => Periodicity,
+           :custom_filter => [['Every half year', 0.5], ['Yearly', 1], ['Every two years', 2]] |order|
+    order.periodicity.name
+  end
+
+
+==== Hash
+
+The keys of the hash become the labels of the generated dropdown list, while the values will be values of options of the dropdown list:
+
+  g.column :column_name => 'Periodicity (years)', :attribute_name => 'years', :model_class => Periodicity,
+           :custom_filter => {'Every half year' => 0.5, 'Yearly' => 1, 'Every two years' => 2} |order|
+    order.periodicity.name
+  end
+
+==== :auto
+
+<tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the column specified by
+<tt>:attribute_name</tt> and <tt>:model_class</tt>.
+
+  g.column :column_name => 'Category', :attribute_name => 'name', :model_class => Category, :custom_filter => :auto |product|
+    product.category.name
+  end
+
+Note that in the above example all names of all possible categories will appear even if they don't appear in the current resultset.
+To only show those which do appear in the resutset, use an array of symbol messages <tt>:custom_filter => [:category, :name] </tt>
+(see section 'An array of symbols').
+
+==== Any other symbol name (method name)
+
+The dropdown list is populated by all unique value returned by the method with this name
+sent to <em>all</em> ActiveRecord objects throughout all pages. The main difference from <tt>:auto</tt> is that this method does
+not have to be a field in the result set, it is just some  value computed in the method after the database call and ActiveRecord
+instantiation.
+
+But here lies the major drawback - this mode requires additional query without +offset+ and +limit+ clauses to instantiate _all_
+ActiveRecord objects, and performance-wise it brings all the advantages of pagination to nothing.  Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
+
+
+
+
+==== An array of symbols (method names)
+
+Similar to the mode with a single symbol name. The first method name is sent to the ActiveRecord
+object if it responds to this method, the second method name is sent to the
+returned value unless it is +nil+, and so on. In other words, a single symbol mode is a
+case of an array of symbols where the array contains just one element. Thus the warning about the single method name
+mode applies here as well. Be warned.
+
+  g.column :column_name => 'Customer Profile', :attribute_name => 'name', :model_class => CustomerProfile,
+           :custom_filter => [:customer_profile, :name] do |shop_preference|
+    link_to(shop_preference.customer_profile.name, shop_customer_profile_path(@shop, shop_pref.customer_profile))
+  end
+
+
+=== Defaults
+
+Default values like  can be  changed in <tt>lib/wice_grid_config.rb</tt>, as well grid labels and paths to some images.
+
+
+=== Rendering filter panel
+
+The filter panel can be shown and hidden clicking the icon with binoculars.
+
+The way the filter panel is shown after the page is loaded is controlled via parameter <tt>:show_filters</tt> of the <tt>grid</tt> helper.
+Possible values are:
+
+* <tt>:when_filtered</tt> - the filter is shown when the current table is the result of filtering
+* <tt>:always</tt> - show the filter always
+* <tt>:no</tt> - never show the filter
+
+Example:
+
+  <%= grid(@accounts_grid, :show_filters => :always) do |g|
+    ......
+  end -%>
+
+=== Submit/Reset buttons
+View helper +submit_grid_javascript+ returns javascript which applies current filters.
+View helper +reset_grid_javascript+ returns javascript which resets the grid, clearing the state of filters. 
+This allows to create your own Submit and Reset buttons anywhere on the page with the help of +button_to_function+:
+
+  <%= button_to_function "Submit", submit_grid_javascript(@grid) %>
+  <%= button_to_function "Reset",  reset_grid_javascript(@grid) %>
+  
+To complement this feature there are two parameters in the +grid+ helper :hide_submit_button and :hide_reset_button which 
+hide default buttons in the grid if set to true.
+
+
+=== Custom Ordering
+
+It is possible to change the way results are ordered injecting a piece of SQL code, for example, use <tt>ORDER BY ip_address</tt> instead
+of <tt>ORDER BY INET_ATON(ip_address)</tt>.
+
+To do so, provide parameter <tt>:custom_order</tt> in the initialization of the grid with a hash where keys are fully qualified names
+of database columns, and values the required chunks of SQL to use in the ORDER BY clause.
+
+For example:
+
+
+  @hosts_grid = initialize_grid(Host,
+    :custom_order => {
+      'hosts.ip_address' => 'INET_ATON(hosts.ip_address)'
+    })
+
+
+It is possible to use the '?' character instead of the name of the column in the hash value:
+
+    @hosts_grid = initialize_grid(Host,
+      :custom_order => {
+        'hosts.ip_address' => 'INET_ATON( ? )'
+      })
+
+Values can also be Proc objects. The parameter suppied to such a Proc object is the name of the column:
+
+      @hosts_grid = initialize_grid(Host,
+        :custom_order => {
+          'hosts.ip_address' => lambda{|f| "INET_ATON( #{f} )"}
+        })
+
+
+=== Styling the grid
+
+The grid table has style class +wice_grid+ by default. The +grid+ helper accepts parameter <tt>:table_html_attrs</tt> which is a hash of HTML
+attributes for the table tag. If this hash contains a :class key, the default style class gets overwritten.
+
+Another +grid+ parameter is <tt>header_tr_html_attrs</tt> which is a hash of HTML attributes to be added to the first +tr+ tag (or two first +tr+'s if the filter row is present).
+
+<tt>:td_html_attrs</tt> is a parameter for the +column+ method setting HTML attributes of +td+ tags for a certain column.
+
++td+ tags also are assigned two styles automatically - +sorted+ if the column is the one by which the grid is ordered, and +active_filter+ if
+the column's filter is on.
+
+If it is required to assign a class attribute to a specific <tt><td></tt>, let the +column+ return an array where the first item is the usual
+string output whole the second is a hash of HTML attributes to be added for the <tt><td></tt> tag of the current cell.
+
+  g.column  do |portal_application|
+    css_class = portal_application.public? ? 'public' : 'private'
+    [portal_application.name, {:class => css_class}]
+  end
+
+
+Style classes +sorted+ and +active_filter+ and the style coming from <tt>:td_html_attrs</tt> or from the +column+ block do not overwite each other, instead, they are concatenated. The resulting class might be <tt>class="active_filter sorted column_user_class specific_cell_class"</tt>
+
+Additionally, odd and even +tr+ tags are assigned styles +odd+ and +even+, correspondingly.
+
+It is also possible to dynamically define HTML attributes for a certain row depending on the ActiveRecord instance of this  row. For this method
++row_attributes+ is used, similar to +column+, only it should return a hash:
+
+  <%= grid(@portal_applications_grid) do |g|
+    g.row_attributes{ |portal_application|
+      {:id => "#{@portal_applications_grid.name}_row_#{portal_application.id}"}
+    }
+
+    g.column{ |portal_application| ... }
+    g.column{ |portal_application| ... }
+  end  -%>
+
+Naturally, there is only one +row_attributes+ definition for a WiceGrid instance. One of <tt><tr></tt> tags in the example above might look like <tt><tr id="grid_row_2"></tt>.
+
+
+The css file coming with the plugin is an example defining 2 styles for ordered columns (one for the header, one for content cells), and two
+styles for filtered columns. Customize them to your needs.
+
+WiceGrid icons are in directory <tt>public/images/icons/grid/</tt>.
+
+
+=== Adding rows to the grid
+
+It is possible to add your own handcrafted HTML after and/or before each grid row. This works similar to +row_attributes+, by adding blocks +after_row+ and +before_row+:
+
+  <%= grid(@tasks_grid) do |g|
+    g.before_row do |task|
+      if task.active?
+        "<tr><td colspan=\"10\">Custom line for #{t.name}</td></tr>"  # this would add a row 
+                                                                      # before every active task row
+      else
+        nil
+      end
+    end
+    .......
+  end %>
+
+It is up for the developer to return the correct HTML code, or return +nil+ if no row is needed for this record. Naturally, there is only one +before_row+  definition and one +after_row+  definition for a WiceGrid instance.
+
+A real life example might be some enterprisy  tables inside a table.
+
+=== More than one grid on a page
+
+It is possible to use more that one grid on a page, each with its own state. To do so, you must specify the name of the grid in +initialize_grid+ using
+parameter <tt>:name</tt>
+
+The name serves as the base name for HTTP parameters, DOM IDs, etc, so it is important that all grids on a page have different names. The default
+name is 'grid'.
+
+The name can only contain alphanumeric characters.
+
+  @accounts_grid = initialize_grid(ApplicationAccount, :order => 'username', :order_direction => 'desc')
+
+  @user_groups_grid = initialize_grid(UserGroup, :conditions => ['portal_application_id = ?', @portal_application], :name => 'grid2')
+
+=== ERB mode
+
+The view helper can function in two different modes. These are defined by its +erb_mode+ parameter.
+By default (<tt>:erb_mode => false</tt>) the view helper is a simple helper surrounded by <tt><%=</tt> and <tt>%></tt>, like in all examples
+above.
+
+
+The second mode (<tt>:erb_mode => true</tt>) is called <em>ERB mode</em> and it allows to embed any ERB content inside blocks,
+which is basically the style of the
+<tt>form_for</tt> helper, only <tt>form_for</tt> takes one block, while inside the <tt>grid</tt> block there are other method calls taking
+blocks as parameters:
+
+    <% grid(@countries_grid, :erb_mode => true) do |g| %>
+
+      <% g.column :column_name => 'Name', :attribute_name => 'name' do |country| %>
+        <b>Name: <%= link_to(country.name, country_path(country)) %></b>
+      <% end %>
+
+      <% g.column :column_name => 'Numeric Code', :attribute_name => 'numeric_code' do |country| %>
+        <i>Numeric Code: <%= country.numeric_code %></i>
+      <% end %>
+
+    <% end -%>
+
+This mode can be usable if you like to have much HTML code inside cells.
+
+Please remember that in this mode the helper opens with <tt><%</tt> instead of <tt><%=</tt>, similar to <tt>form_for</tt>.
+
+The default value for <tt>:show_filters</tt> can be changed in <tt>lib/wice_grid_config.rb</tt>.
+
+
+=== Integration of the grid with other forms on page
+
+Imagine that the user should be able to change grid's conditions using some other control on the page, and not a grid filter.
+For example, on a page showing users,
+change options 'Show all users' to 'Show only active users' clicking a button or a checkbox.
+WiceGrid allows to keep the status of the grid with all the filtering and sorting
+using helper +dump_filter_parameters_as_hidden_fields+ which takes a grid object and dumps all current sorting and filtering parameters as
+hidden fields. Just include <tt>dump_filter_parameters_as_hidden_fields(@grid)</tt> inside your form, and the newly rendered grid will
+keep ordering and filtering.
+
+  <% form_tag('', :method => :get) do %>
+    <%= dump_filter_parameters_as_hidden_fields(@grid) %>
+    <%= check_box_tag('show_all', '1', @show_all, :onclick => 'this.form.submit()') %>
+    <label for="show_all">Show all</label>
+  <% end -%>
+
+
+=== Javascript Calendar for Date and DateTime Filters.
+
+Standard Rails Date and DateTime helpers are a set of dropdown lists, and while this is practical, displaying two Date or especially DateTime
+helpers takes too much space on a page and is in general confusing.
+
+To solve this, WiceGrid includes a second variant of Date/DateTime filters based on a Javascript calendar borrowed from http://www.dynarch.com.
+
+If you are upgrading WiceGrid, run the following command to copy the calendar javascript and styleshet files to the public directory:
+
+   rake wice_grid:copy_calendar_to_public
+
+Calendar based helpers are enabled by default, but it's possible to change it in <tt>lib/wice_grid_config.rb</tt>, variable HELPER_STYLE.
+
+The flavor of the date filter can also be changed on per-column basis:
+
+      <% g.column :column_name => 'Acquisition Date', :attribute_name => 'acquisition_date', :helper_style => :calendar do |product| %>
+        ...
+      <% end -%>
+
+      <% g.column :column_name => 'Added', :attribute_name => 'created_at', :helper_style => :standard do |product| %>
+        ...
+      <% end -%>
+
+You can change the presentation format of the date changing +DATETIME_FORMAT+ and +DATE_FORMAT+ in <tt>lib/wice_grid_config.rb</tt>. Doing
+this,  make sure that lamdbas defined in +DATETIME_PARSER+ and +DATE_PARSER+ return  valid DateTime and Date objects. The format
+by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and DateTime.parse and Date.parse handle it.
+Make sure it stays so.
+
+Use constant <tt>DYNARCH_CALENDAR_STYLE</tt> in <tt>lib/wice_grid_config.rb</tt> to change the style of the calendar.
+Use constant <tt>DYNARCH_CALENDAR_LANG</tt> in <tt>lib/wice_grid_config.rb</tt> to change the language of the calendar.
+
+=== Show All Records
+
+It is possible to switch to the All Records mode clicking on link "show all" in the bottom right corner. This functionality should be used
+with care. To turn this mode off for all grid instances, change constant +ALLOW_SHOWING_ALL_QUERIES+ in <tt>wice_grid_config.rb</tt> to
++false+. To do so for a specific grid, use initializer parameter <tt>:allow_showing_all_records</tt>.
+
+Configuration constant +START_SHOWING_WARNING_FROM+ sets the threshold number of all records after which clicking on the
+link results in a javascript confirmation dialog.
+
+
+=== CSV Export
+
+It is possible to export the data displayed on a grid to a CSV file. The dumped data is the current resultset with all the
+current filters and sorting applied, only without the pagination constraint (i.e. all pages).
+
+To enable CSV export add parameters +enable_export_to_csv+ and +csv_file_name+ to the initialization of the grid:
+
+  @products_grid = initialize_grid(Product,
+    :include => :category,
+    :order => 'products.name',
+    :enable_export_to_csv => true,
+    :csv_file_name => 'products',
+    :per_page => 20)
+
++csv_file_name+ is the name of the downloaded file. This parameter is optional, if it is missing, the name of the grid is used instead.
+The export icon will appear at the bottom right corner of the grid.
+
+Next, each grid view helper should be placed in a partial of its own, requiring it from the master template for the usual flow.
+
+By convention the name of such a partial follows the following pattern:
+
+  _GRID_NAME_grid.html.erb
+
+In other words, a grid named +orders+ is expected to be found in a template called <tt>_orders_grid.html.erb</tt> (remember that the default name of grids is '+grid+'.)
+
+Next, method +export_grid_if_requested+ should be added to the end of each action containing grids with enabled CSV export.
+
++export_grid_if_requested+ intercepts CSV export requests and evaluates the  partial with the required grid helper.
+
+The naming convention for grid partials can be easily overridden by supplying a hash parameter to +export_grid_if_requested+
+where each key is the name of a grid, and the value is the name of the template (like it is specified for +render+, i.e.
+without '_' and extensions):
+
+
+  export_grid_if_requested(:grid => 'orders', 'grid2' => 'invoices')
+
+If the request is not a CSV export request, +export_grid_if_requested+ does nothing and returns +false+, if it is a CSV export request,
+the method returns +true+.
+
+
+If the action has no explicit +render+ call, it's OK to just place +export_grid_if_requested+ as the last line of the action:
+
+  def index
+
+    @products_grid = initialize_grid(Product,
+      :include => :category,
+      :order => 'products.name',
+      :enable_export_to_csv => true,
+      :csv_file_name => 'products',
+      :per_page => 20)
+
+    @accounts_grid = initialize_grid(ApplicationAccount,
+      :per_page => 20,
+      :order => 'username',
+      :order_direction => 'desc'
+    )
+
+    export_grid_if_requested
+  end
+
+
+Otherwise, to avoid double rendering, use the return value of the method to conditionally call your +render+ :
+
+
+  def index
+
+    ...........
+
+    export_grid_if_requested || render(:action => 'my_template')
+  end
+
+
+
+
+It's also possible to supply a block which will be called if no CSV export is requested:
+
+  def index
+
+    ...........
+
+    export_grid_if_requested do
+       render(:action => 'my_template')
+    end
+  end
+
+
+
+If certain columns have to be excluded from the generated CSV file (for example, column with icons or buttons),
+use +column+ parameter +in_html+:
+
+  g.column  :in_csv => false do |identity|
+    link_to(identity.name, identity_accounts_path(identity))
+  end
+
+Some columns generate html and cannot be included in CSV the way they are. To solve this, duplicate the column and use
+parameters +in_csv+ and +in_html+ to include one of them to  html output only, the other to CSV only:
+
+
+  g.column :column_name => 'Person', :attribute_name => 'firstname', :in_csv => false do |identity| # for HTML
+    link_to(identity.name, identity_accounts_path(identity))
+  end
+  g.column :column_name => 'Person', :attribute_name => 'firstname', :in_html => false do |identity|            # for CSV
+    identity.person.name
+  end
+
+The default field separator in generated CSV is a comma, but it's possible to override this submitting a 
+string to the <tt>:enable_export_to_csv</tt> parameter:
+
+  @products_grid = initialize_grid(Product,
+    :enable_export_to_csv => ';',
+    :csv_file_name => 'products')
+
+
+=== Integration With The Application
+
+If it is needed to retrieve the objects of the current selection that the user has set up using filters, for use outside of WiceGrid,
+WiceGrid initialization routine accepts parameter <tt>:after</tt> to setup a callback to a method or a Proc object which will be called
+with an object giving access to the selection of objects.
+
+A good example is the following use case:
+
+* User sets up filters to select products
+* User clicks the button "Send to customer"
+* The system generates a letter to a customer containing descriptions of the products selected by the user.
+
+The code to implement this use case might look the following way:
+
+
+  def index
+
+    @products_grid = initialize_grid(Product,
+      :include => [:category, :vat_code, :labels, :brand],
+      :order => 'products.name',
+      :after => :process_selection,
+      :per_page => 10)
+
+    @user_requests_mail_to_be_sent = user_requests_mail_to_be_sent?()
+
+  end
+
+  def process_selection(wrapper_proc)
+    if @user_requests_mail_to_be_sent
+      compose_mail(wrapper_proc.call)
+    end
+  end
+
+The object supplied to the callback is not the list of selected objects but a Proc object that needs to be called to obtain this list.
+This is done so to avoid redundant SQL calls each time when the page with the grid is rendered;
+the list of objects are objects accessible throughout <i>all pages</i> of the current filtered selection, and can be quite large.
+
+
+=== Detached Filters
+
+It is possible to detach filters and place them anywhere on the page. To do so, use parameter <tt>:detach_with_id</tt> for a column whose filter needs to be detached, with an arbitrary string or a symbol value which will be used later to identify the filter. As soon as there is one column with <tt>:detach_with_id</tt>, the behavior of the +grid+ helper changes - it becomes an <i>initializer</i> of the grid and doesn't output any HTML code. To render the grid, use <tt>grid</tt> for the second time without the block. To render a detached output filter, use helper <tt>grid_filter(grid_object, detached_filter_key)</tt>:
+
+  <%= grid(@orders_grid) do |g|
+	
+  	g.column :column_name => 'Name'._,  :attribute_name => 'name',  :detach_with_id => :name_filter do |order|
+  		order.identity.name
+  	end
+
+  	g.column :column_name => 'Number'._, :attribute_name => 'number', :detach_with_id => :number_filter do |order|
+  		link_to(order.number, operator_order_path(@operator, order))
+  	end
+	
+  	............
+  end -%>
+
+  <% # rendering filter with key :name_filter %>
+  <%= grid_filter @orders_grid, :name_filter  %>
+  <% # rendering filter with key :number_filter %>
+  <%= grid_filter @orders_grid, :number_filter  %>
+
+  <% # Rendering the grid body %>
+  <%= grid(@orders_grid) %>
+
+It is important that the grid initializer goes first, the order of +grid_filter+ and the second call to +grid+ is of no importance.
+
+Using custom submit and reset buttons together with <tt>:hide_submit_button => true</tt> and <tt>:hide_reset_button => true</tt> 
+allows to completely get rid
+of the default filter row and the default icons (see section 'Submit/Reset Buttons').
+
+For CSV export will continue functioning, just make sure the first call to +grid+ is still in the template of its own and 
+is inside of <tt><%= %></tt>, because when CSV is requested, the first  +grid+ works in the old fashioned way producing CSV formatted output.
+
+This feature also works with <tt>:erb_mode => true</tt>.
+
+If a column was declared with <tt>:detach_with_id</tt>, but never output with +grid_filter+, filtering the grid in development mode will result
+in an warning javascript message and the missing filter will be ignored. There is no such message in production.
+
+==== How Does It Work? (For the interested)
+
+When there is at least one column with <tt>:detach_with_id</tt>, the generated HTML code is stored in a buffer, code for detached filters is stored
+in buffers of their own identified by the given IDs, and nothing is returned to the view. 
+When the helper is called for the second time, the buffer outputs is content.
+In a similar fashion, the +grid_filter+ helper outputs buffers for filters.
+
+=== Compatibility with Rails Asset Caching
+
+Helpers +names_of_wice_grid_stylesheets+ and +names_of_wice_grid_javascripts+ return names of stylesheet and javascript files and can be used with   
++stylesheet_link_tag+ and +javascript_include_tag+ with <tt>:cache => true</tt>. 
+Using this trick you have to deal with the parameters correctly, mind that Prototype has to be loaded before WiceGrid javascripts:
+
+	<%= stylesheet_link_tag *(['core',  'modalbox'] + names_of_wice_grid_stylesheets + [ {:cache => true}]) %>
+	<%= javascript_include_tag *([:defaults] + names_of_wice_grid_javascripts + [ 'ui', 'swfobject', {:cache => true}]) %>
+
+
+== Icons
+
+Icons used by the plugin are courtesy of Mark James, the creator of the SILK icon set -
+http://www.famfamfam.com/lab/icons/silk/. 

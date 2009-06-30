@@ -1,0 +1,203 @@
+* Detached filters: it has become possible to detach filters and place them anywhere on the page, before or after the grid.
+  Read section "Detached Filters" in the README.
+
+*  More control over Submit and Reset buttons.
+   Two new view helpers: submit_grid_javascript returns javascript which applies current filters; reset_grid_javascript returns javascript
+   which resets the grid, clearing the state of filters. This allows to create your own Submit and Reset buttons anywhere on the page  
+   with the help of button_to_function:
+
+     <%= button_to_function "Submit", submit_grid_javascript(@grid) %>
+     <%= button_to_function "Reset",  reset_grid_javascript(@grid) %>
+
+   To complement this feature there are two new parameters in the +grid+ helper :hide_submit_button and :hide_reset_button which 
+   hide default buttons in the grid if set to true. Together with detached filter this allows to completely 
+   get rid of the filter row with filters and icons.
+
+* erb_mode option has been moved to the grid view helper - watch for warnings and remove the parameter from initialize_grid if you have it there.
+
+* helper include_wice_grid_assets will require WiceGrid javascripts and stylesheets on demand, that is, only if at least one initialize_grid 
+  has been called in the controller. Otherwise the helper returns an empty string. However, you can force the old unconditioned behavior if you
+  need by submitting  parameter :load_on_demand set to false:
+    <%= include_wice_grid_assets(:load_on_demand => false) %>
+
+* Compatibility with Rails asset caching. Helpers names_of_wice_grid_stylesheets and names_of_wice_grid_javascripts return names of stylesheet and 
+  javascript files and can be used with stylesheet_link_tag and javascript_include_tag with :cache => true. Using this trick you have to deal with
+  the parameters correctly, mind that Prototype has to be loaded before WiceGrid javascripts:
+
+    <%= stylesheet_link_tag *(['core',  'modalbox'] + names_of_wice_grid_stylesheets + [ {:cache => true}]) %>
+    <%= javascript_include_tag *([:defaults] + names_of_wice_grid_javascripts + [ 'ui', 'swfobject', {:cache => true}]) %> 
+
+*  When a page with a WiceGrid instance is loaded there is check a small chunk of javascript that checks whether Prototype is loaded and whether
+   the main WiceGrid javascript files is loaded and is of the correct version. Problems are reported to the user via alert() dialog boxes.
+   This check has now been disabled in the production mode.
+   
+*  The default field separator in generated CSV (comma) can now be overridden by setting :enable_export_to_csv  to a string instead of +true+.
+  
+*  It is possible to add your own handcrafted HTML after and/or before each grid row. This works similar to +row_attributes+, 
+   by adding blocks after_row and before_row:
+   
+   <%= grid(@tasks_grid) do |g|
+      g.before_row do |task|
+        if task.active?
+          "<tr><td colspan=\"10\">Custom line for #{t.name}</td></tr>"  # this would add a row
+                                                                        # before every active task row
+        else
+          nil
+        end
+      end
+      .......
+    end %>
+  
+*  Bug fixes
+
+*  Refactoring
+=============
+
+=== 03/04/2009
+
+Possibility to add custom lines after and/or before a grid row.
+
+
+=== 16/03/2009
+
+Option to override the default field separator in generated CSV (comma).
+
+
+=== 13/02/2009
+
+a bug fix for incorrect generation if dom ids for javascript calendar filter. Happened only for columns belonging to joined tables
+
+=== 12/01/2009
+
+WiceGrid 0.3 released
+
+=== 12/01/2009
+
+All records mode
+
+=== 10/12/2008
+
+custom_filter made Rails-compliant, a new flavor -  Array of two-element arrays 
+
+=== 4/12/2008
+A single helper to include all assets in a page
+
+A javascript error message if Prototype is not loaded
+
+A javascript error message if wice_grid.js is not loaded
+
+Added status info to the pagination line:
+       « Previous 1 2 3 Next »          1-20 / 50
+
+=== 3/12/2008
+First implementation of saved queries
+
+
+=== 25/11/2008
+
+Negation for string filters: match records where this fiels DOES NOT include the given fragment.
+
+=== 24/11/2008
+
+The string matching operator for string filters (LIKE) has been moved to wice_grid_config.rb in order to make it easier to substitute it with
+something else, for example, ILIKE of Postgresql.
+
+
+=== 19/11/2008
+
+Experimental feature : :table_alias parameter to allow ordering and filtering for joining associations referring the same table.
+(See "Joined associations referring to the same table" in README)
+
+=== 18/11/2008
+
+Refactoring
+
+=== 6/11/2008
+
+Ability to provide a callback to a Proc object or a method, the callback will be called with the objects of the current selection of 
+objects (throughout all pages). Can be used to use the WiceGrid filters set up by the user for further processing of the user's selection  of
+objects.
+
+=== 5/11/2008
+
+Javascript calendars as Date/Datetime filters
+
+
+=== 4/11/2008
+
+Ability to inject custom sql code into the ORDER BY clause, for example, ORDER BY char_length(table1.foo)
+
+=== 4/11/2008
+
+Creates a new branch for version 2.3
+
+
+
+=== 21/10/2008
+
+A bugfix related to custom filters influencing other columns with filters
+A more informative error message if the grid can't find the underlying database column for a view column (incorrect :column_name and :model_class)
+
+=== 8/10/2008
+
+New view helper parameter <tt>:sorting_dependant_row_cycling</tt> - When set to true (by default it is false) the row styles +odd+ and +even+
+will be changed only when the content of the cell belonging to the sorted column changes. In other words, rows with identical values in the
+ordered column will have the same style (color).
+
+=== 3/10/2008
+
+For simple columns like
+
+  g.column :column_name => 'Username', :attribute_name => 'username'  do |account|
+    account.username
+  end
+
+the following blockless shortcut can be used:
+
+  g.column :column_name => 'Username', :attribute_name => 'username'
+
+In this case +attribute_name+ will be used as the method name to send to the ActiveRecord instance.
+
+=== revision 27 (30/09/2008)
+
+* CSV export
+* Custom filters can switch between a dropdown list and a multiple select list, thus allowing to search for records matching
+  more that one value (operator OR)
+
+=== revision 17 (19/08/2008)
+
+* A bug fixed: extra_request_parameters did not propagate to will_paginate page panel. Now it does.
+
+=== revision 13 (6/08/2008)
+
+* File <tt>config.rb</tt> renamed.
+* New parameters for +column+ :
+  * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt> ('+yes+') in the config.
+    Only has effect in a column with a boolean filter.
+  * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('+no+') in the config.
+    Only has effect in a column with a boolean filter.
+  * <tt>:filter_all_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('<tt>--</tt>') in the config.
+    Has effect in a column with a boolean filter _or_ a custom filter.
+
+=== revision 11
+
+* New row_attributes method to dynamically generate HTML attributes for the <tt><tr></tt> tag:
+
+	<%= grid(@portal_applications_grid) do |g|
+		g.row_attributes{ |portal_application|
+			{:id => "#{@portal_applications_grid.name}_row_#{portal_application.id}"}
+		}
+
+		g.column{ |portal_application| ... }
+		g.column{ |portal_application| ... }
+	end    -%>
+
+* The column block can now optionally return an array of two values, where the first element is the cell
+  contents and the second is a hash of HTML attributes to be added for the <td> tag of the current cell.
+
+=== revision 10
+
+* New parameter +grid+ parameter:  <tt>:extra_request_parameters</tt>.
+  (Read http://redmine.wice.eu/api/wice_grid/classes/Wice/GridViewHelper.html#M000002)
+
+=== 0
