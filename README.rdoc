@@ -37,11 +37,11 @@ WiceGrid is known to work with MySQL and Postgres.
 
 Run the following command to install the plugin:
 
-  script/plugin install  http://svn.wice.eu/public/wice_grid/
+  script/plugin install git://github.com/leikind/wice_grid.git
 
 You will see that icon files, a javascript file and a stylesheet have been copied to +public+.
 
-If you are installing manually, copy the files with the following command:
+If you are not using <tt>script/plugin</tt>, run the following command to copy the assets:
 
    rake wice_grid:copy_resources_to_public
 
