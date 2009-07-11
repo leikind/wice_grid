@@ -49,6 +49,9 @@ module Wice
     end
   end
 
+  module Defaults
+  end
+  
   module ExceptionsMixin  #:nodoc:
     def initialize(str)  #:nodoc:
       super("WiceGrid: " + str)

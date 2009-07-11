@@ -8,7 +8,6 @@ rescue MissingSourceFile => e
                                     'gem sources -a http://gems.github.com')
 end
 
-require 'wice_grid_config.rb'
 require 'js_calendar_helpers.rb'
 require 'core_ext.rb'
 require 'grid_renderer.rb'

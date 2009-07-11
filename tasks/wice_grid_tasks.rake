@@ -1,6 +1,19 @@
 namespace "wice_grid" do
+  
+  desc "Copy configuration file to config/initializers"
+  task :copy_config_to_initializers   do
+    puts "copying wice_grid_config.rb to config/initializers"
+    destination = File.join(RAILS_ROOT,  '/config/initializers/wice_grid_config.rb')
+    if File.exist?(destination)
+      puts "Found wice_grid_config.rb in config/initializers (older version?), thus not copying wice_grid_config.rb...\n" +
+           'Please update manually if needed.'
+    else
+      FileUtils.copy(File.join(RAILS_ROOT,  '/vendor/plugins/wice_grid/assets/wice_grid_config.rb'), destination  )
+    end
+  end
+  
   desc "Copy images, the javascript file, and the stylesheet file to public"
-  task :copy_resources_to_public => :copy_calendar_to_public do
+  task :copy_resources_to_public => [:copy_calendar_to_public, :copy_config_to_initializers] do
     puts "copying wice_grid.js to /public/javascripts/"
     FileUtils.copy(
       File.join(RAILS_ROOT,  '/vendor/plugins/wice_grid/javascripts/wice_grid.js'), 
@@ -65,7 +78,6 @@ namespace "wice_grid" do
     
     CreateWiceGridSerializedQueriesTable.up
   end
-  
   
   
 end
