@@ -331,6 +331,13 @@ module Wice
     end
     
     
+    def dump_status
+      "   params: #{params[name].inspect}\n"  +
+      "   status: #{@status.inspect}\n" +
+      "   ar_options #{@ar_options.inspect}\n"
+    end
+    
+    
     protected
 
 
@@ -396,11 +403,6 @@ module Wice
       query
     end
 
-    def dump_status
-      "   params: #{params[name].inspect}\n"  +
-      "   status: #{@status.inspect}\n" +
-      "   ar_options #{@ar_options.inspect}\n"
-    end
 
   end
 end
@@ -409,6 +411,14 @@ module ActiveRecord #:nodoc:
   module ConnectionAdapters #:nodoc:
     class Column #:nodoc:
 
+      # TO DO: Moved into this module what can be moved not to pollute the namespace
+      module GridTools   #:nodoc:
+        class << self
+          def special_value(str)   #:nodoc:
+            str =~ /^\s*(not\s+)?null\s*$/i
+          end
+        end
+      end
       attr_accessor :model_klass
 
       def initialize_request_parameters(all_filter_params, main_table, table_alias, custom_filter_active)  #:nodoc:
@@ -494,15 +504,38 @@ module ActiveRecord #:nodoc:
 
       alias_method :generate_conditions_text, :generate_conditions_string
 
+
       def  generate_conditions_custom_filter_options(table_alias, opts)   #:nodoc:
         if opts.empty?
           Wice.log "empty parameters for the grid custom filter"
           return false
         end
+        opts = (opts.kind_of?(Array) && opts.size == 1) ? opts[0] : opts
+        
         if opts.kind_of?(Array)
-          [" #{alias_or_table_name(table_alias)}.#{self.name} IN ( " + (['?'] * opts.size).join(', ') + ' )'] + opts
+          opts_with_special_values, normal_opts = opts.partition{|v| GridTools.special_value(v)}
+          
+          conditions_ar = if normal_opts.size > 0 
+            [" #{alias_or_table_name(table_alias)}.#{self.name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
+          else
+            []
+          end
+            
+          if opts_with_special_values.size > 0
+            special_conditions = opts_with_special_values.collect{|v| " #{alias_or_table_name(table_alias)}.#{self.name} is " + v}.join(' or ')
+            if conditions_ar.size > 0
+              conditions_ar[0] = " (#{conditions_ar[0]} or #{special_conditions} ) "
+            else
+              conditions_ar = " ( #{special_conditions} ) "
+            end
+          end
+          conditions_ar
         else
-          [" #{alias_or_table_name(table_alias)}.#{self.name} = ?", opts]
+          if GridTools.special_value(opts)
+            " #{alias_or_table_name(table_alias)}.#{self.name} is " + opts
+          else 
+            [" #{alias_or_table_name(table_alias)}.#{self.name} = ?", opts]
+          end
         end
       end
 
