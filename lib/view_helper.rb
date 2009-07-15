@@ -682,7 +682,7 @@ module Wice
         extra_request_parameters["#{grid.name}[q]"] = grid.saved_query.id
       end
 
-      will_paginate(grid.resultset, :prev_label => Defaults::PREVIOUS_LABEL, :next_label => Defaults::NEXT_LABEL,
+      will_paginate(grid.resultset, :previous_label => Defaults::PREVIOUS_LABEL, :next_label => Defaults::NEXT_LABEL,
       :param_name => "#{grid.name}[page]", :params => extra_request_parameters).to_s +
       ' <div class="pagination_status">' + pagination_info(grid) + '</div>'
     end
