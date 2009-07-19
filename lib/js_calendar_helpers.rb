@@ -36,18 +36,17 @@ module Wice
       date_picker, datepicker_placeholder_id, trigger_id, dom_id, date_span_id = select_date_datetime_common(options, date_string, html_opts)
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
-      html << %(<script type="text/javascript">\n)
-      html << %(    Calendar.setup\({\n)
-      html << %(        button : "#{trigger_id}",\n )
-      html << %(        ifFormat : "#{date_format}",\n )
-      html << %(        inputField : "#{dom_id}",\n )
-      html << %(        include_blank : true,\n )
-      html << %(        singleClick    :    true,\n)
-      html << %(        onClose    :    function(cal){ new Effect.Highlight("#{date_span_id}"); cal.hide(); }\n)
-      html << %(    }\);\n)
-      html << %(</script>\n)
 
-      html
+      javascript = %(    Calendar.setup\({\n)
+      javascript << %(        button : "#{trigger_id}",\n )
+      javascript << %(        ifFormat : "#{date_format}",\n )
+      javascript << %(        inputField : "#{dom_id}",\n )
+      javascript << %(        include_blank : true,\n )
+      javascript << %(        singleClick    :    true,\n)
+      javascript << %(        onClose    :    function(cal){ new Effect.Highlight("#{date_span_id}"); cal.hide(); }\n)
+      javascript << %(    }\);\n)
+
+      [html, javascript]
     end
 
     def datetime_calendar(initial_date, opts = {}, html_opts = {})  #:nodoc:
@@ -59,21 +58,20 @@ module Wice
       date_picker, datepicker_placeholder_id, trigger_id, dom_id, date_span_id = select_date_datetime_common(options, date_string, html_opts)
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
-      html << %(<script type="text/javascript">\n)
-      html << %(    Calendar.setup\({\n)
-      html << %(        button : "#{trigger_id}",\n )
-      html << %(        ifFormat : "#{date_format}",\n )
-      html << %(        inputField : "#{dom_id}",\n )
-      html << %(        include_blank : true,\n )
-      html << %(        showsTime      :    true, \n)
-      html << %(        time24         :    true, \n)
-      html << %(        singleClick    :    true,\n)
-      html << %(        onClose    :    function(cal){ new Effect.Highlight("#{date_span_id}"); cal.hide(); }\n)
-      html << %(    }\);\n)
-      html << %(</script>\n)
-      html
-    end
+      
+      javascript = %(    Calendar.setup\({\n)
+      javascript << %(        button : "#{trigger_id}",\n )
+      javascript << %(        ifFormat : "#{date_format}",\n )
+      javascript << %(        inputField : "#{dom_id}",\n )
+      javascript << %(        include_blank : true,\n )
+      javascript << %(        showsTime      :    true, \n)
+      javascript << %(        time24         :    true, \n)
+      javascript << %(        singleClick    :    true,\n)
+      javascript << %(        onClose    :    function(cal){ new Effect.Highlight("#{date_span_id}"); cal.hide(); }\n)
+      javascript << %(    }\);\n)
 
+      [html, javascript]
+    end
 
   end
 end

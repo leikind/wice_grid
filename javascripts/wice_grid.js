@@ -1,6 +1,5 @@
-WiceGridProcessor = Class.create();
-WiceGridProcessor._version = '0.3.1';
-Object.extend(WiceGridProcessor.prototype, {
+WiceGridProcessor = Class.create( {
+  
   initialize : function(name, base_request_for_filter, base_link_for_show_all_records, 
                         link_for_export, parameter_name_for_query_loading, environment){
     this.checkIfPrototypeIsLoaded();
@@ -9,8 +8,12 @@ Object.extend(WiceGridProcessor.prototype, {
     this.base_request_for_filter = base_request_for_filter;
     this.base_link_for_show_all_records = base_link_for_show_all_records;
     this.link_for_export = link_for_export;
-    this.column_callbacks = new Array();
+    this.filter_declarations = new Array();
     this.environment = environment;
+  },
+  
+  toString : function(){
+    return "<WiceGridProcessor instance for grid '" + this.name + "'>";
   },
 
   checkIfPrototypeIsLoaded : function(){
@@ -72,12 +75,16 @@ Object.extend(WiceGridProcessor.prototype, {
 
   build_url_with_params : function(){
     results = new Array();
-    this.column_callbacks.each(function(k){
-      param = k();
+    this.filter_declarations.each(function(filter_declaration){
+      param = this.read_values_and_form_query_string(
+        filter_declaration.filter_name, 
+        filter_declaration.detached, 
+        filter_declaration.templates, 
+        filter_declaration.ids);
       if (param && ! param.empty()){
         results.push(param);
       }
-    });
+    }.bind(this));
     res = this.base_request_for_filter;
     if ( results.size() != 0){
       all_filter_params = results.join('&');
@@ -98,7 +105,7 @@ Object.extend(WiceGridProcessor.prototype, {
 
 
   register : function(func){
-    this.column_callbacks.push(func);
+    this.filter_declarations.push(func);
   },
 
   read_values_and_form_query_string : function(filter_name, detached, templates, ids){
@@ -140,3 +147,5 @@ function toggle_multi_select(select_id, link_obj, expand_label, collapse_label) 
     link_obj.title = collapse_label;
   }
 }
+
+WiceGridProcessor._version = '0.4.1';

@@ -293,14 +293,18 @@ module Wice
       content = GridOutputBuffer.new
       
       if ENV['RAILS_ENV'] == 'development'
-        content << javascript_tag( %$ if (typeof(WiceGridProcessor) == "undefined"){
-          alert("wice_grid.js not loaded, WiceGrid cannot proceed! Please make sure that you include Prototype and WiceGrid javascripts in your page. Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> for WiceGrid javascripts and assets.")
-        } else {
-          if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.3.1")) {
-            alert("wice_grid.js in your /public is outdated, please run\\n rake wice_grid:copy_resources_to_public\\nto update it.");
-          }
-        } 
-        $ )
+        content << javascript_tag( %$ document.observe("dom:loaded", function() { 
+          if (typeof(WiceGridProcessor) == "undefined"){
+            alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' + 
+              'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +
+              'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' + 
+              'for WiceGrid javascripts and assets.')
+          } else {
+            if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {
+              alert("wice_grid.js in your /public is outdated, please run\\n rake wice_grid:copy_resources_to_public\\nto update it.");
+            }
+          } 
+        })  $ )
       end
       
       content << %!<div class="wice_grid_container"><h3 id="#{grid.name}_title">!
@@ -392,12 +396,16 @@ module Wice
       content << '</tr>'
 
 
+      cached_javascript = []
+
       unless no_filters_at_all # there are filters, we don't know where, in the table or detached
         if no_filter_row # they are all detached
           content.stubborn_output_mode = true
           rendering.each_column(:in_html) do |column|
             if column.filter_shown?
-              content.add_filter(column.detach_with_id, column.render_filter)
+              filter_html_code, filter_js_code = column.render_filter
+              cached_javascript << filter_js_code
+              content.add_filter(column.detach_with_id, filter_html_code)
             end
           end
           
@@ -408,12 +416,14 @@ module Wice
 
           rendering.each_column(:in_html) do |column|
             if column.filter_shown?
+              filter_html_code, filter_js_code = column.render_filter
+              cached_javascript << filter_js_code
               if column.detach_with_id
                 content.stubborn_output_mode = true
                 content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
-                content.add_filter(column.detach_with_id, column.render_filter)
+                content.add_filter(column.detach_with_id, filter_html_code)
               else
-                content << content_tag(:th, column.render_filter, Hash.make_hash(:class, column.css_class))
+                content << content_tag(:th, filter_html_code, Hash.make_hash(:class, column.css_class))
               end
             else
               content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
@@ -526,9 +536,13 @@ module Wice
 
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
 
-      content << javascript_tag(
-        "#{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}', '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n" +
-        rendering.select_for(:in_html){|vc|vc.attribute_name and not vc.no_filter}.collect{|column|  column.yield_javascript}.join("\n")
+      content << javascript_tag( 
+        %$document.observe("dom:loaded", function() { 
+        #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}', 
+          '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n $ +
+        rendering.select_for(:in_html){|vc|vc.attribute_name and not vc.no_filter}.collect{|column|  column.yield_javascript}.join("\n") +
+        "\n" + cached_javascript.compact.join("\n") +
+        '})'
       )
       
       if content.stubborn_output_mode
