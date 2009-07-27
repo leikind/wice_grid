@@ -311,7 +311,15 @@ module Wice
         v = ar.deep_send(*messages)
         uniq_vals << v unless v.nil?
       end
-      return uniq_vals.to_a.map{|i|[i,i]}
+      return uniq_vals.to_a.map{|i|
+        if i.is_a?(Array) && i.size == 2
+          i
+        elsif i.is_a?(Hash) && i.size == 1
+          i.to_a.flatten
+        else
+          [i,i]
+        end
+      }
     end
 
     def output_csv?
