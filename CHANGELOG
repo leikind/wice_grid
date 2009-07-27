@@ -1,3 +1,33 @@
+== 0.5
+
+* Improvement to custom filters, namely to
+    :custom => :symbol
+  and
+    :custom => [:symbol1, :symbol2, symbol3]
+  flavors: if the last method returns an array of 2 elements, the first element becomes
+  the select option label and the second - the select option value (usually +id+)
+
+  Before this change the value returned by the method was used for both the value and the label of the select option.
+  
+* Improvement to custom filters:   
+  Values 'null' and 'not null' in a generated custom filter dropdown are treated specially, as SQL +null+ statement and not as strings.
+  Value 'null' is transformed into SQL condition <tt>IS NULL</tt>, and 'not null' into <tt>IS NOT NULL</tt>
+
+  Thus, if in a filter defined by
+       :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
+  values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
+
+      ( table.field IN ( '1', '2' ) OR table.field IS NULL )
+
+
+
+* Configuration file wice_grid_config.rb is removed from the plugin lib directory, the config is now
+  an initializer copied to config/initializers/ by task :copy_config_to_initializers.
+
+* Cleaned up and refactored javascript code
+
+== 0.4
+
 * Detached filters: it has become possible to detach filters and place them anywhere on the page, before or after the grid.
   Read section "Detached Filters" in the README.
 

@@ -136,14 +136,25 @@ module Wice
     #     sent to <em>all</em> ActiveRecord objects throughout all pages. The main difference from <tt>:auto</tt> is that this method does
     #     not have to be a field in the result set, it is just some  value computed in the method after the database call and ActiveRecord
     #     instantiation.
+    #
     #     But here lies the major drawback - this mode requires additional query without +offset+ and +limit+ clauses to instantiate _all_
     #     ActiveRecord objects, and performance-wise it brings all the advantages of pagination to nothing.
     #     Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
+    #
+    #     If the method returns a atomic value like a string or an integer, it is used for both the value and the label of the select option element.
+    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value. 
+    #     Read more in README, section 'Custom dropdown filters'
     #   * An array of symbols (method names) - similar to the mode with a single symbol name. The first method name is sent to the ActiveRecord
     #     object if it responds to this method, the second method name is sent to the
     #     returned value unless it is +nil+, and so on. In other words, a single symbol mode is a
     #     case of an array of symbols where the array contains just one element. Thus the warning about the single method name
     #     mode applies here as well.
+    #
+    #     If the last method returns a atomic value like a string or an integer, it is used for both the value and the label of the 
+    #     select option element.
+    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value. 
+    #     Read more in README, section 'Custom dropdown filters'
+    
     # * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt> ('+yes+') in the config.
     #   Only has effect in a column with a boolean filter.
     # * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('+no+') in the config.

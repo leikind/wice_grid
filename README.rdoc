@@ -39,7 +39,8 @@ Run the following command to install the plugin:
 
   script/plugin install git://github.com/leikind/wice_grid.git
 
-You will see that icon files, a javascript file and a stylesheet have been copied to +public+.
+You will see that icon files, a javascript file and a stylesheet have been copied to +public+, and the configuration file 
+<tt>wice_grid_config.rb</tt> is copied to <tt>config/initializers/</tt>.
 
 If you are not using <tt>script/plugin</tt>, run the following command to copy the assets:
 
@@ -298,6 +299,31 @@ But here lies the major drawback - this mode requires additional query without +
 ActiveRecord objects, and performance-wise it brings all the advantages of pagination to nothing.  Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
 
 
+If the method returns a atomic value like a string or an integer, it is used for both the value and the label of the select option element:
+
+  <option value="returned value">returned value</option>
+
+However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
+
+Typically, a model method like the following:
+
+  def to_option
+    [name, id]
+  end
+  
+together with 
+
+  :custom_filter => :to_option
+  
+would do the trick:
+
+  <option value="id">name</option>
+
+Alternatively, a hash with the single key-value pair can be used, where the key will be used for the label, and the key - for the value:
+
+  def to_option
+    {name => id}
+  end
 
 
 ==== An array of symbols (method names)
@@ -313,10 +339,24 @@ mode applies here as well. Be warned.
     link_to(shop_preference.customer_profile.name, shop_customer_profile_path(@shop, shop_pref.customer_profile))
   end
 
+The trick with the method returning a two element array (see section 'Custom dropdown filters') applies here as well, 
+only for the last method in the queue, logically.
+
+==== Special treatment of values 'null' and 'not null'
+
+Values 'null' and 'not null' in a generated custom filter are treated specially, as SQL +null+ statement and not as strings.
+Value 'null' is transformed into SQL condition <tt>IS NULL</tt>, and 'not null' into <tt>IS NOT NULL</tt>
+  
+Thus, if in a filter defined by
+     :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
+values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
+  
+    ( table.field IN ( '1', '2' ) OR table.field IS NULL )
+
 
 === Defaults
 
-Default values like  can be  changed in <tt>lib/wice_grid_config.rb</tt>, as well grid labels and paths to some images.
+Default values like  can be  changed in <tt>config/initializers/wice_grid_config.rb</tt>, as well grid labels and paths to some images.
 
 
 === Rendering filter panel
@@ -488,7 +528,7 @@ This mode can be usable if you like to have much HTML code inside cells.
 
 Please remember that in this mode the helper opens with <tt><%</tt> instead of <tt><%=</tt>, similar to <tt>form_for</tt>.
 
-The default value for <tt>:show_filters</tt> can be changed in <tt>lib/wice_grid_config.rb</tt>.
+The default value for <tt>:show_filters</tt> can be changed in <tt>config/initializers/wice_grid_config.rb</tt>.
 
 
 === Integration of the grid with other forms on page
@@ -519,7 +559,7 @@ If you are upgrading WiceGrid, run the following command to copy the calendar ja
 
    rake wice_grid:copy_calendar_to_public
 
-Calendar based helpers are enabled by default, but it's possible to change it in <tt>lib/wice_grid_config.rb</tt>, variable HELPER_STYLE.
+Calendar based helpers are enabled by default, but it's possible to change it in <tt>config/initializers/wice_grid_config.rb</tt>, variable HELPER_STYLE.
 
 The flavor of the date filter can also be changed on per-column basis:
 
@@ -531,18 +571,20 @@ The flavor of the date filter can also be changed on per-column basis:
         ...
       <% end -%>
 
-You can change the presentation format of the date changing +DATETIME_FORMAT+ and +DATE_FORMAT+ in <tt>lib/wice_grid_config.rb</tt>. Doing
+You can change the presentation format of the date changing +DATETIME_FORMAT+ and +DATE_FORMAT+ in 
+<tt>config/initializers/wice_grid_config.rb</tt>. Doing
 this,  make sure that lamdbas defined in +DATETIME_PARSER+ and +DATE_PARSER+ return  valid DateTime and Date objects. The format
 by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and DateTime.parse and Date.parse handle it.
 Make sure it stays so.
 
-Use constant <tt>DYNARCH_CALENDAR_STYLE</tt> in <tt>lib/wice_grid_config.rb</tt> to change the style of the calendar.
-Use constant <tt>DYNARCH_CALENDAR_LANG</tt> in <tt>lib/wice_grid_config.rb</tt> to change the language of the calendar.
+Use constant <tt>DYNARCH_CALENDAR_STYLE</tt> in <tt>config/initializers/wice_grid_config.rb</tt> to change the style of the calendar.
+Use constant <tt>DYNARCH_CALENDAR_LANG</tt> in <tt>config/initializers/wice_grid_config.rb</tt> to change the language of the calendar.
 
 === Show All Records
 
 It is possible to switch to the All Records mode clicking on link "show all" in the bottom right corner. This functionality should be used
-with care. To turn this mode off for all grid instances, change constant +ALLOW_SHOWING_ALL_QUERIES+ in <tt>wice_grid_config.rb</tt> to
+with care. To turn this mode off for all grid instances, change constant +ALLOW_SHOWING_ALL_QUERIES+ in
+<tt>config/initializers/wice_grid_config.rb</tt> to
 +false+. To do so for a specific grid, use initializer parameter <tt>:allow_showing_all_records</tt>.
 
 Configuration constant +START_SHOWING_WARNING_FROM+ sets the threshold number of all records after which clicking on the

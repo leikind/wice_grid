@@ -419,7 +419,7 @@ module ActiveRecord #:nodoc:
   module ConnectionAdapters #:nodoc:
     class Column #:nodoc:
 
-      # TO DO: Moved into this module what can be moved not to pollute the namespace
+      # TO DO: Move into this module what can be moved not to pollute the namespace
       module GridTools   #:nodoc:
         class << self
           def special_value(str)   #:nodoc:
