@@ -644,10 +644,7 @@ module Wice
         javascript_include_tag('wice_grid') +
         stylesheet_link_tag('wice_grid') +
         if opts[:include_calendar]
-          stylesheet_link_tag(File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "calendar-#{Defaults::DYNARCH_CALENDAR_STYLE}.css")) +
-          javascript_include_tag(File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "calendar.js")) +
-          javascript_include_tag(File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "lang/calendar-#{Defaults::DYNARCH_CALENDAR_LANG}.js")) +
-          javascript_include_tag(File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "calendar-setup.js"))
+          stylesheet_link_tag("calendarview.css") + javascript_include_tag("calendarview.js")
         else
           ''
         end
@@ -665,11 +662,7 @@ module Wice
       opts = {:include_calendar => true}
       opts.merge!(options)
       res = ['wice_grid']
-      if opts[:include_calendar]
-        res += [ File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "calendar.js"),
-          File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "lang/calendar-#{Defaults::DYNARCH_CALENDAR_LANG}.js"),
-          File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "calendar-setup.js") ]
-      end
+      res <<  'calendarview.js' if opts[:include_calendar]
       res
     end
 
@@ -684,7 +677,7 @@ module Wice
       opts = {:include_calendar => true}
       opts.merge!(options)
       res = ['wice_grid']
-      res += [File.join(Defaults::DYNARCH_CALENDAR_ASSETS_PATH,  "calendar-#{Defaults::DYNARCH_CALENDAR_STYLE}.css")] if opts[:include_calendar]
+      res << "calendarview.css" if opts[:include_calendar]
       res
     end
 

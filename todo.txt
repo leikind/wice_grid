@@ -1,0 +1,9 @@
+check if names_of_wice_grid_javascripts and names_of_wice_grid_stylesheets work!
+
+
+look for Expand/Collapse in view_columns
+
+* use Event.observe(window, "load", function() { 
+* see if you can apply toggle
+* ass lists - check if it's foo.className or element.removeClassName element.addClassName
+* look at posible method chaining

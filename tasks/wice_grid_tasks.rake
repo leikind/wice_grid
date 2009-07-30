@@ -46,12 +46,17 @@ namespace "wice_grid" do
   
   desc "Copy the DynArch javascript calendar to public"
   task :copy_calendar_to_public do
-    puts "copying grid_calendar to /public/javascripts/"
-    copy_set_of_files('/vendor/plugins/wice_grid/javascripts/grid_calendar',            '/public/javascripts/grid_calendar', ['lang', 'skins'])
-    copy_set_of_files('/vendor/plugins/wice_grid/javascripts/grid_calendar/lang',       '/public/javascripts/grid_calendar/lang')
-    copy_set_of_files('/vendor/plugins/wice_grid/javascripts/grid_calendar/skins',      '/public/javascripts/grid_calendar/skins', ['aqua'])
-    copy_set_of_files('/vendor/plugins/wice_grid/javascripts/grid_calendar/skins/aqua', '/public/javascripts/grid_calendar/skins/aqua')
-  end  
+    puts "copying calendarview.js to /public/javascripts/"
+    FileUtils.copy(
+      File.join(RAILS_ROOT,  '/vendor/plugins/wice_grid/javascripts/calendarview.js'), 
+      File.join(RAILS_ROOT,  '/public/javascripts/')
+    )
+    puts "copying calendarview.css to /public/stylesheets/"    
+    FileUtils.copy(
+      File.join(RAILS_ROOT,  '/vendor/plugins/wice_grid/stylesheets/calendarview.css'), 
+      File.join(RAILS_ROOT,  '/public/stylesheets/')
+    )
+  end 
   
 
   desc "Create a table to store saved queries"
