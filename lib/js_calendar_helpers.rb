@@ -38,6 +38,7 @@ module Wice
       javascript =  %|    new Calendar({\n |
       javascript << %|      triggerElement : "#{trigger_id}",\n |
       javascript << %|      dateField : "#{dom_id}",\n |
+      javascript << %|      dateFormat : "#{date_format}",\n|      
       javascript << %|      extraOutputDateFields : $A([#{date_span_id}])\n |
       javascript << %|    });\n|
 
@@ -49,7 +50,7 @@ module Wice
       options.merge!(opts)
       date_format = Wice::Defaults::DATETIME_FORMAT
 
-      date_string = initial_date.nil? ? '' : initial_date.strftime(Wice::Defaults::DATETIME_FORMAT)
+      date_string = initial_date.nil? ? '' : initial_date.strftime(date_format)
       date_picker, datepicker_placeholder_id, trigger_id, dom_id, date_span_id = select_date_datetime_common(options, date_string, html_opts)
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
@@ -57,6 +58,7 @@ module Wice
       javascript = %|    new Calendar({\n|
       javascript << %|        triggerElement : "#{trigger_id}",\n|
       javascript << %|        dateField : "#{dom_id}",\n|
+      javascript << %|        dateFormat : "#{date_format}",\n|
       javascript << %|        extraOutputDateFields : $A([#{date_span_id}]),\n |
       javascript << %|        withTime : true\n|
       javascript << %|    });\n|
