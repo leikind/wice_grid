@@ -135,9 +135,6 @@ if defined?(Wice::Defaults)
   # * <tt>:standard</tt> - standard Rails date and datetime helpers
   Wice::Defaults::HELPER_STYLE = :calendar
 
-  # Path to the directory with dynarch calendar files.
-  Wice::Defaults::DYNARCH_CALENDAR_ASSETS_PATH = '/javascripts/grid_calendar'
-
   # Format of the datetime displayed.
   # If you change the format, make sure to check if +DATETIME_PARSER+ can still parse this string.
   Wice::Defaults::DATETIME_FORMAT = "%Y-%m-%d %H:%M"
@@ -168,23 +165,4 @@ if defined?(Wice::Defaults)
 
   # Title of the date string.
   Wice::Defaults::DATE_STRING_TOOLTIP = 'Click to delete'
-
-  # Style of the calendar
-  # possible styles:
-  # * green
-  # * blue
-  # * blue2
-  # * brown
-  # * system
-  # * tas
-  # * win2k-1
-  # * win2k-2
-  # * win2k-cold-1
-  # * win2k-cold-2
-  Wice::Defaults::DYNARCH_CALENDAR_STYLE = 'green'
-
-  # Language of the calendar.
-  # Look for possible values in <tt>/vendor/plugins/wice_grid/javascripts/grid_calendar/lang</tt>, the part of the file name between
-  # <tt>calendar-</tt> and <tt>.js</tt> is the codename for the language.
-  Wice::Defaults::DYNARCH_CALENDAR_LANG = 'en'
 end
