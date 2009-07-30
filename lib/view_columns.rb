@@ -167,7 +167,7 @@ module Wice
         select_options[:class] = 'custom_dropdown'
         select_options[:multiple] = params.is_a?(Array) && params.size > 1
         select_toggle = content_tag(:a,
-          content_tag(:img, '', :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
+          tag(:img, :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
           :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');",
           :class => 'toggle_multi_select_icon', :title => 'Expand')
       end
