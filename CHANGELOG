@@ -1,5 +1,9 @@
 == 0.5
 
+* Copying asset files is now done by a plugin generator, not rake tasks:
+
+       ./script/generate wice_grid_assets
+
 * Improvement to custom filters, namely to
     :custom => :symbol
   and

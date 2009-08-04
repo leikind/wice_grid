@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 0.4
+Version:: 0.4.1
 Author::  Yuri Leikind & The WICE team
 Website:: https://redmine.wice.eu/wiki/wice-grid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
@@ -39,12 +39,12 @@ Run the following command to install the plugin:
 
   script/plugin install git://github.com/leikind/wice_grid.git
 
-You will see that icon files, a javascript file and a stylesheet have been copied to +public+, and the configuration file 
-<tt>wice_grid_config.rb</tt> is copied to <tt>config/initializers/</tt>.
+To copy the plugin initializer, icons,  javascripts, and stylesheets to correct location,  run the following command:
 
-If you are not using <tt>script/plugin</tt>, run the following command to copy the assets:
+   ./script/generate wice_grid_assets
 
-   rake wice_grid:copy_resources_to_public
+Using ./script/generate to copy assets gives the advantage of collision control - if a file with the same name already
+exists at the given location, the script will pause and ask the user about what action to take.
 
 === Basics
 
