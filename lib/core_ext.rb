@@ -37,8 +37,7 @@ class Hash #:nodoc:
       self[:class] = self['class']
       self.delete('class')
     end
-
-    self[:class] = self.has_key?(:class) ?  "#{klass_value} #{self[:class]}" : klass_value
+    self[:class] = self.has_key?(:class) ?  "#{self[:class]} #{klass_value}" : klass_value
   end
 
 
@@ -100,6 +99,6 @@ end
 
 class Array  #:nodoc:
   def to_parameter_name #:nodoc:
-    self[0].to_s + self[1..-1].collect{|k| '[' + k.to_s + ']'}.join('')
+    self[0].to_s + (self[1..-1] || []).collect{|k| '[' + k.to_s + ']'}.join('')
   end
 end
