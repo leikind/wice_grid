@@ -551,6 +551,8 @@ module ActiveRecord #:nodoc:
       def  generate_conditions_decimal(table_alias, opts)   #:nodoc:
         generate_conditions_integer(table_alias, opts)
       end
+      
+      alias_method :generate_conditions_float, :generate_conditions_decimal
 
       def  generate_conditions_integer(table_alias, opts)   #:nodoc:
         unless opts.kind_of? Hash

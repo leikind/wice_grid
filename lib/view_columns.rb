@@ -137,6 +137,7 @@ module Wice
 
   class ViewColumnFloat < ViewColumnInteger #:nodoc:
     @@handled_type[:decimal] = self
+    @@handled_type[:float] = self
   end
 
   class ViewColumnCustomDropdown < ViewColumn #:nodoc:

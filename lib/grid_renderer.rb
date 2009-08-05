@@ -241,7 +241,7 @@ module Wice
 
         db_column, table_name, main_table = col_type_and_table_name
         col_type = db_column.type
-        
+
         if options[:custom_filter]
           
           custom_filter = if options[:custom_filter] == :auto
@@ -280,8 +280,8 @@ module Wice
           klass = ViewColumnCustomDropdown
         else
           klass = ViewColumn.handled_type[col_type] || ViewColumn
-        end
-      end
+        end # custom_filter
+      end # attribute_name
 
       vc = klass.new(block, options, @grid, table_name, main_table, custom_filter)
       
