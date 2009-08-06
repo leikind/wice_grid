@@ -18,7 +18,7 @@
 //
 
 
-/* This branch by Yuri Leikind ( git://github.com/leikind/calendarview.git ) adds the following features/changes:
+/* This fork by Yuri Leikind ( git://github.com/leikind/calendarview.git ) adds the following features/changes:
 
 The differences from the original are
 
@@ -27,9 +27,9 @@ The differences from the original are
 * Close button
 * Popup calendars  are not created every time they pop up, on the contrary, they are created once just like
   embedded calendars, and then shown or hidden.
-* Possible to have many popup calendars on page. The behavior of the original calendarview when a popup 
+* Possible to have many popup calendars on page. The behavior of the original calendarview when a popup
   calendar is hidden when the user clicks elsewhere on the page is an option now.
-* Refactoring and changes to the OO design like getting rid of Calendar.prototype in favor of class based 
+* Refactoring and changes to the OO design like getting rid of Calendar.prototype in favor of class based
   OO provided by OO, and getting rid of Calendar.setup({}) in favor of a simple object constructor new Calendar({}).
 
 */
@@ -54,20 +54,22 @@ var Calendar = Class.create({
   isPopup: true,
 
   initialize: function(params){
-                                               
-    parentElement        = params.parentElement        || null; // just getting rid of indefined 'values' :)
+
+    parentElement        = params.parentElement        || null; // just getting rid of undefined 'values' :)
     withTime             = params.withTime             || null;
     dateFormat           = params.dateFormat           || null;
     dateField            = params.dateField            || null;
     triggerElement       = params.triggerElement       || null;
-    closeHandler         = params.closeHandler         || null;
-    selectHandler        = params.selectHandler        || null;
-    this.hideOnClickOnDay     = params.hideOnClickOnDay     || false;
-    this.hideOnClickElsewhere = params.hideOnClickElsewhere || false;
+    this.onHideCallback  = params.onHideCallback           || function(date, calendar){};
+    this.onDateChangedCallback     = params.onDateChangedCallback || function(date, calendar){};
+    this.minuteStep                = params.minuteStep            || 5;
+    this.hideOnClickOnDay          = params.hideOnClickOnDay      || false;
+    this.hideOnClickElsewhere      = params.hideOnClickElsewhere  || false;
     this.extraOutputDateFields     = params.extraOutputDateFields || $A();
-    
+
     if (parentElement){
       this.parentElement = $(parentElement);
+      this.parentElement._calendar = this;
     }else{
       this.parentElement = null;
     }
@@ -86,27 +88,24 @@ var Calendar = Class.create({
 
     this.build();
 
-    this.selectHandler = selectHandler || Calendar.defaultSelectHandler;
-
     if (dateField) {
       this.dateField = $(dateField);
-      this.parseDate(this.dateField.innerHTML || this.dateField.value)
+      this.parseDate(this.dateField.innerHTML || this.dateField.value);
     }
 
 
     if (this.isPopup) { //Popup Calendars
       var triggerElement = $(triggerElement || dateField);
-      this.closeHandler = closeHandler || Calendar.defaultCloseHandler;
-
+      triggerElement._calendar = this;
       
       triggerElement.onclick = function() {
-        this.showAtElement(triggerElement)
+        this.showAtElement(triggerElement);
       }.bind(this);
-      
+
     } else{ // In-Page Calendar
       this.show();
     }
-      
+
   },
 
   // Build the DOM structure
@@ -119,24 +118,24 @@ var Calendar = Class.create({
       parentForCalendarTable = document.getElementsByTagName('body')[0];
       this.isPopup = true;
     }
-    
+
 
     // Calendar Table
-    var table = new Element('table')
+    var table = new Element('table');
 
     // Calendar Header
-    var thead = new Element('thead')
+    var thead = new Element('thead');
     table.appendChild(thead)
 
     // Title Placeholder
     var firstRow  = new Element('tr');
-    
-    
+
+
     if (this.isPopup){
       var cell = new Element('td');
       cell.addClassName('draggableHandler');
       firstRow.appendChild(cell);
-      
+
       cell = new Element('td', { colSpan: 5 });
       cell.addClassName('title' );
       cell.addClassName('draggableHandler');
@@ -146,29 +145,29 @@ var Calendar = Class.create({
       cell.addClassName('closeButton');
       firstRow.appendChild(cell);
       cell.update('x');
-      
+
       cell.observe('mousedown', function(){
         this.hide();
       }.bind(this));
-      
-      
-      
+
+
+
     }else{
       var cell = new Element('td', { colSpan: 7 } );
-      firstRow.appendChild(cell);      
+      firstRow.appendChild(cell);
     }
-    
+
     cell.addClassName('title');
 
     thead.appendChild(firstRow);
 
     // Calendar Navigation
     var row = new Element('tr')
-    this._drawButtonCell(row, '&#x00ab;', 1, Calendar.NAV_PREVIOUS_YEAR)
-    this._drawButtonCell(row, '&#x2039;', 1, Calendar.NAV_PREVIOUS_MONTH)
-    this._drawButtonCell(row, 'Today',    3, Calendar.NAV_TODAY)
-    this._drawButtonCell(row, '&#x203a;', 1, Calendar.NAV_NEXT_MONTH)
-    this._drawButtonCell(row, '&#x00bb;', 1, Calendar.NAV_NEXT_YEAR)
+    this._drawButtonCell(row, '&#x00ab;', 1, Calendar.NAV_PREVIOUS_YEAR);
+    this._drawButtonCell(row, '&#x2039;', 1, Calendar.NAV_PREVIOUS_MONTH);
+    this._drawButtonCell(row, 'Today',    3, Calendar.NAV_TODAY);
+    this._drawButtonCell(row, '&#x203a;', 1, Calendar.NAV_NEXT_MONTH);
+    this._drawButtonCell(row, '&#x00bb;', 1, Calendar.NAV_NEXT_YEAR);
     thead.appendChild(row)
 
     // Day Names
@@ -182,50 +181,52 @@ var Calendar = Class.create({
     thead.appendChild(row)
 
     // Calendar Days
-    var tbody = table.appendChild(new Element('tbody'))
+    var tbody = table.appendChild(new Element('tbody'));
     for (i = 6; i > 0; --i) {
       row = tbody.appendChild(new Element('tr'))
-      row.addClassName('days')
+      row.addClassName('days');
       for (var j = 7; j > 0; --j) {
         cell = row.appendChild(new Element('td'))
-        cell.calendar = this
+        cell.calendar = this;
       }
     }
 
     // Time Placeholder
     if (this.withTime){
-      var tfoot = table.appendChild(new Element('tfoot'))
-      row = tfoot.appendChild(new Element('tr'))
-      cell = row.appendChild(new Element('td', { colSpan: 7 }))
-      cell.addClassName('time')
-      var hourSelect = cell.appendChild(new Element('select', { name : 'hourSelect'}))
+      var tfoot = table.appendChild(new Element('tfoot'));
+      row = tfoot.appendChild(new Element('tr'));
+      cell = row.appendChild(new Element('td', { colSpan: 7 }));
+      cell.addClassName('time');
+      var hourSelect = cell.appendChild(new Element('select', { name : 'hourSelect'}));
       for (var i = 0; i < 24; i++) {
-        hourSelect.appendChild(new Element('option', {value : i}).update(i))
+        hourSelect.appendChild(new Element('option', {value : i}).update(i));
       }
-  
-      cell.appendChild(new Element('span')).update(' : ')
-  
-      var minuteSelect = cell.appendChild(new Element('select', { name : 'minuteSelect'}))
-      for (var i = 0; i < 60; i++) {
-        minuteSelect.appendChild(new Element('option', {value : i}).update(i))
+
+      cell.appendChild(new Element('span')).update(' : ');
+
+      var minuteSelect = cell.appendChild(new Element('select', { name : 'minuteSelect'}));
+      for (var i = 0; i < 60; i += this.minuteStep) {
+        minuteSelect.appendChild(new Element('option', {value : i}).update(i));
       }
-    
+
       hourSelect.observe('change', function(event){
-        selectedIndex = event.element().selectedIndex;
+        var elem = event.element();
+        var selectedIndex = elem.selectedIndex;
         if (selectedIndex){
-          this.date.setHours(selectedIndex);
+          this.date.setHours(elem.options[selectedIndex].value);
+          this.updateOuterField();
+        }
+      }.bind(this));
+
+      minuteSelect.observe('change', function(event){
+        var elem = event.element();
+        var selectedIndex = elem.selectedIndex;
+        if (selectedIndex){
+          this.date.setMinutes(elem.options[selectedIndex].value);
           this.updateOuterField();
         }
       }.bind(this))
 
-      minuteSelect.observe('change', function(event){
-        selectedIndex = event.element().selectedIndex
-        if (selectedIndex){
-          this.date.setMinutes(selectedIndex)
-          this.updateOuterField();
-        }
-      }.bind(this))
-    
     }
 
     // Calendar Container (div)
@@ -245,18 +246,18 @@ var Calendar = Class.create({
 
     // Append to parent element
     parentForCalendarTable.appendChild(this.container)
-    
+
     if (this.isPopup){
       new Draggable(table, {handle : firstRow });
     }
-    
+
   },
 
   updateOuterFieldReal: function(element){
     if (element.tagName == 'DIV' || element.tagName == 'SPAN') {
       element.update(this.date.print(this.dateFormat))
     } else if (element.tagName == 'INPUT') {
-      this.dateField.value = this.date.print(this.dateFormat) 
+      element.value = this.date.print(this.dateFormat)
     }
   },
 
@@ -265,8 +266,9 @@ var Calendar = Class.create({
     this.extraOutputDateFields.each(function(field){
       this.updateOuterFieldReal($(field));
     }.bind(this));
+    this.onDateChangedCallback(this.date, this);    
   },
-  
+
 
   //----------------------------------------------------------------------------
   // Update  Calendar
@@ -282,14 +284,14 @@ var Calendar = Class.create({
     var dayOfMonth = date.getDate();
     var hour       = date.getHours();
     var minute     = date.getMinutes();
-    
+
     // Ensure date is within the defined range
     if (date.getFullYear() < this.minYear)
       date.__setFullYear(this.minYear)
     else if (date.getFullYear() > this.maxYear)
       date.__setFullYear(this.maxYear)
 
-    this.date = new Date(date)
+    this.date = new Date(date);
 
     // Calculate the first day to display (including the previous month)
     date.setDate(1)
@@ -342,11 +344,15 @@ var Calendar = Class.create({
     Element.getElementsBySelector(this.container, 'tfoot tr td select').each(
       function(sel){
         if(sel.name == 'hourSelect'){
-          sel.selectedIndex = hour
+          sel.selectedIndex = hour;
         }else if(sel.name == 'minuteSelect'){
-          sel.selectedIndex = minute
+          if (this.minuteStep == 1){
+            sel.selectedIndex = minute;
+          }else{
+            sel.selectedIndex = this.findClosestMinute(minute);
+          }
         }
-      }
+      }.bind(this)
     )
 
     this.container.getElementsBySelector('td.title')[0].update(
@@ -355,8 +361,31 @@ var Calendar = Class.create({
   },
 
 
-  _drawButtonCell: function(parentForCell, text, colSpan, navAction)
-  {
+  findClosestMinute:  function(val){
+    if (val == 0){
+      return 0;
+    }
+    var lowest = ((val / this.minuteStep).floor() * this.minuteStep);
+    var distance = val % this.minuteStep;
+    var minuteValueToShow;
+    
+    if (distance <= (this.minuteStep / 2)){
+      minuteValueToShow = lowest;
+    }else{
+      minuteValueToShow = lowest + this.minuteStep;
+    }
+    
+    if (minuteValueToShow == 0){
+      return minuteValueToShow;
+    }else if(minuteValueToShow >= 60){
+      return (minuteValueToShow / this.minuteStep).floor() - 1;
+    }else{
+      return minuteValueToShow / this.minuteStep;
+    }
+  },
+
+
+  _drawButtonCell: function(parentForCell, text, colSpan, navAction) {
     var cell          = new Element('td')
     if (colSpan > 1) cell.colSpan = colSpan
     cell.className    = 'button'
@@ -369,25 +398,6 @@ var Calendar = Class.create({
   },
 
 
-
-  //------------------------------------------------------------------------------
-  // Callbacks
-  //------------------------------------------------------------------------------
-
-  // Calls the Select Handler (if defined)
-  callSelectHandler: function() {
-    if (this.selectHandler)
-      this.selectHandler(this, this.date.print(this.dateFormat))
-  },
-
-  // Calls the Close Handler (if defined)
-  callCloseHandler: function(){
-    if (this.closeHandler)
-      this.closeHandler(this)
-  },
-
-
-
   //------------------------------------------------------------------------------
   // Calendar Display Functions
   //------------------------------------------------------------------------------
@@ -395,8 +405,8 @@ var Calendar = Class.create({
   show: function(){
     this.container.show()
     if (this.isPopup) {
-      window._popupCalendar = this;
       if (this.hideOnClickElsewhere){
+        window._popupCalendar = this;
         document.observe('mousedown', Calendar._checkCalendar);
       }
     }
@@ -411,16 +421,18 @@ var Calendar = Class.create({
   // Shows the Calendar at the coordinates of the provided element
   showAtElement: function(element) {
     var pos = Position.cumulativeOffset(element);
-    
+
     this.container.show();
     this.showAt(pos[0], pos[1]  + (this.container.offsetHeight * 0.75));
   },
 
   // Hides the Calendar
   hide: function() {
-    if (this.isPopup)
+    if (this.isPopup){
       Event.stopObserving(document, 'mousedown', Calendar._checkCalendar)
-    this.container.hide()
+    }
+    this.container.hide();
+    this.onHideCallback(this.date, this);
   },
 
 
@@ -472,7 +484,7 @@ Calendar.MONTH_NAMES = new Array(
 
 Calendar.SHORT_MONTH_NAMES = new Array(
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
-  'Dec' 
+  'Dec'
 );
 
 Calendar.NAV_PREVIOUS_YEAR  = -2;
@@ -489,11 +501,13 @@ Calendar.NAV_NEXT_YEAR      =  2;
 // document, if the calendar is shown. If the click was outside the open
 // calendar this function closes it.
 Calendar._checkCalendar = function(event) {
-  if (!window._popupCalendar)
+  if (!window._popupCalendar){
     return false;
-  if (Element.descendantOf(Event.element(event), window._popupCalendar.container))
+  }
+  if (Element.descendantOf(Event.element(event), window._popupCalendar.container)){
     return;
-  window._popupCalendar.callCloseHandler()
+  }
+  Calendar.closeHandler(window._popupCalendar);
   return Event.stop(event)
 }
 
@@ -504,7 +518,7 @@ Calendar._checkCalendar = function(event) {
 Calendar.handleMouseDownEvent = function(event){
   if (event.element().type == 'select-one'){ // ignore select elements - not escaping this in Safari leaves select boxes non-functional
     return true
-  } 
+  }
   Event.observe(document, 'mouseup', Calendar.handleMouseUpEvent)
   Event.stop(event)
 }
@@ -523,28 +537,39 @@ Calendar.handleMouseUpEvent = function(event){
   // Clicked on a day
   if (typeof el.navAction == 'undefined') {
     if (calendar.currentDateElement) {
-      Element.removeClassName(calendar.currentDateElement, 'selected')
-      Element.addClassName(el, 'selected')
-      calendar.shouldClose = (calendar.currentDateElement == el)
-      if (!calendar.shouldClose) calendar.currentDateElement = el
+      Element.removeClassName(calendar.currentDateElement, 'selected');
+      Element.addClassName(el, 'selected');
+      calendar.shouldClose = (calendar.currentDateElement == el);
+
+      if (!calendar.shouldClose) {
+        calendar.currentDateElement = el;
+      }
     }
     calendar.date.setDateOnly(el.date)
     isNewDate = true
-    calendar.shouldClose = !el.hasClassName('otherDay')
-    var isOtherMonth     = !calendar.shouldClose
-    if (isOtherMonth) calendar.update(calendar.date)
+    calendar.shouldClose = !el.hasClassName('otherDay');
+    var isOtherMonth     = !calendar.shouldClose;
+    if (isOtherMonth) {
+      calendar.update(calendar.date)
+    }
+
+    if (! calendar.hideOnClickOnDay){ // override closing if calendar.hideOnClickOnDay is false
+      calendar.shouldClose = false;
+    }
+
   } else { // Clicked on an action button
     var date = new Date(calendar.date)
 
-    if (el.navAction == Calendar.NAV_TODAY)
-      date.setDateOnly(new Date())
+    if (el.navAction == Calendar.NAV_TODAY){
+      date.setDateOnly(new Date());
+    }
 
     var year = date.getFullYear()
     var mon = date.getMonth()
     function setMonth(m) {
-      var day = date.getDate()
-      var max = date.getMonthDays(m)
-      if (day > max) date.setDate(max)
+      var day = date.getDate();
+      var max = date.getMonthDays(m);
+      if (day > max) date.setDate(max);
       date.setMonth(m)
     }
     switch (el.navAction) {
@@ -552,17 +577,17 @@ Calendar.handleMouseUpEvent = function(event){
       // Previous Year
       case Calendar.NAV_PREVIOUS_YEAR:
         if (year > calendar.minYear)
-          date.__setFullYear(year - 1)
+          date.__setFullYear(year - 1);
         break
 
       // Previous Month
       case Calendar.NAV_PREVIOUS_MONTH:
         if (mon > 0) {
-          setMonth(mon - 1)
+          setMonth(mon - 1);
         }
         else if (year-- > calendar.minYear) {
-          date.__setFullYear(year)
-          setMonth(11)
+          date.__setFullYear(year);
+          setMonth(11);
         }
         break
 
@@ -575,52 +600,56 @@ Calendar.handleMouseUpEvent = function(event){
         if (mon < 11) {
           setMonth(mon + 1)
         }else if (year < calendar.maxYear) {
-          date.__setFullYear(year + 1)
-          setMonth(0)
+          date.__setFullYear(year + 1);
+          setMonth(0);
         }
         break
 
       // Next Year
       case Calendar.NAV_NEXT_YEAR:
-        if (year < calendar.maxYear)
+        if (year < calendar.maxYear){
           date.__setFullYear(year + 1)
-        break
+        }
+        break;
     }
 
     if (!date.equalsTo(calendar.date)) {
       calendar.updateIfDateDifferent(date)
-      isNewDate = true
+      isNewDate = true;
     } else if (el.navAction == 0) {
-      isNewDate = (calendar.shouldClose = true)
+      isNewDate = (calendar.shouldClose = true);
     }
   }
 
-  if (isNewDate) event && calendar.callSelectHandler()
-  if (calendar.shouldClose) event && calendar.callCloseHandler()
+  if (isNewDate) event && Calendar.selectHandler(calendar, calendar.date.print(calendar.dateFormat));
+  if (calendar.shouldClose) event && Calendar.closeHandler(calendar);
 
-  Event.stopObserving(document, 'mouseup', Calendar.handleMouseUpEvent)
+  Event.stopObserving(document, 'mouseup', Calendar.handleMouseUpEvent);
 
-  return Event.stop(event)
+  return Event.stop(event);
 }
 
-Calendar.defaultSelectHandler = function(calendar){
-  if (!calendar.dateField) return false
+Calendar.selectHandler = function(calendar){
+  if (!calendar.dateField) {
+    return false;
+  }
 
   // Update dateField value
-  calendar.updateOuterField()
+  calendar.updateOuterField();
 
   // Trigger the onchange callback on the dateField, if one has been defined
-  if (typeof calendar.dateField.onchange == 'function')
-    calendar.dateField.onchange()
+  if (typeof calendar.dateField.onchange == 'function'){
+    calendar.dateField.onchange();
+  }
 
   // Call the close handler, if necessary
-  if (calendar.shouldClose) calendar.callCloseHandler()
+  if (calendar.shouldClose) {
+    Calendar.closeHandler(calendar);
+  }
 }
 
-Calendar.defaultCloseHandler = function(calendar){
-  if (calendar.hideOnClickOnDay){
-    calendar.hide();
-  }
+Calendar.closeHandler = function(calendar){
+  calendar.hide();
   calendar.shouldClose = false;
 }
 
@@ -631,7 +660,7 @@ Calendar.defaultCloseHandler = function(calendar){
 //------------------------------------------------------------------------------
 
 // global object that remembers the calendar
-window._popupCalendar = null
+window._popupCalendar = null;
 
 
 
@@ -681,8 +710,13 @@ Date.WEEK          =  7 * Date.DAY
 
 // Parses Date
 Date.parseDate = function(str, fmt) {
-  str = str.strip()
-  
+  if (str){
+    str = new String(str);
+  }else{
+    str = new String('');
+  }
+  str = str.strip();
+
   var today = new Date();
   var y     = 0;
   var m     = -1;

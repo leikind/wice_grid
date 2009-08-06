@@ -92,3 +92,15 @@ div.calendar tr.days td.otherDay
 div.calendar .draggableHandler{
   cursor: move;
 }
+
+/*  styles for the date_picker Rails plugin */
+span.date_picker a.date_label{
+  margin-left: 5px;
+  margin-right: 5px;
+  text-decoration: none;
+}
+span.date_picker a.date_label:hover{text-decoration: line-through;}
+
+span.date_picker span.trigger:hover{
+  cursor: pointer;
+}
