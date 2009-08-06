@@ -1,12 +1,14 @@
-# required for will_paginate
-# read this - http://err.lighthouseapp.com/projects/466/tickets/197-using-param_name-something-page-leads-to-invalid-behavior
 unless Hash.instance_methods.include? 'rec_merge'
   Hash.class_eval do
+    
+    # a deep merge of two hashes. 
+    # That is, if both hashes have the same key and the values are hashes, these two hashes should also be merged.
+    # Used for merging two sets of params.
     def rec_merge(other)  #:nodoc:
       res = self.clone
       other.each do |key, other_value|
         value = res[key]
-        if value.is_a?(Hash) and other_value.is_a?(Hash)
+        if value.is_a?(Hash) && other_value.is_a?(Hash)
           res[key] = value.rec_merge other_value
         else
           res[key] = other_value

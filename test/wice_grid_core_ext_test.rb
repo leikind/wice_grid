@@ -14,6 +14,21 @@ class WiceGridCoreExtTest < Test::Unit::TestCase
     # required for will_paginate
     # read this - http://err.lighthouseapp.com/projects/466/tickets/197-using-param_name-something-page-leads-to-invalid-behavior
     
+    a_hash = {34 => 12,  :key1 => 87,  :key2 => {:f => 67} }
+    b_hash = {34 => 'x', :key3 => 987, :key2 => {:key4 => {:key5 => 0} } }
+    
+    assert_equal({:key3 => 987, 34 => "x", :key1 => 87, :key2 => {:key4 => {:key5 => 0}, :f => 67}} , a_hash.rec_merge(b_hash))
+
+    a_hash = {34 => 12,  :key1 => 87}
+    b_hash = {34 => 12}
+    
+    assert_equal({34 => 12,  :key1 => 87} , a_hash.rec_merge(b_hash))
+
+    a_hash = {34 => { :f => :moo},  :key1 => 87}
+    b_hash = {34 => { :k => [1,2, { :z => :baz }]},  :key1 => 87}
+    
+    assert_equal({34 => {  :f => :moo,  :k => [1,2, { :z => :baz}]},  :key1 => 87} , a_hash.rec_merge(b_hash))
+
   end
   
   def test_hash_make_hash
