@@ -72,8 +72,14 @@ module Wice
       @csv_file_name = @options[:csv_file_name]
 
       @after = @options[:after]
-      @name = @options[:name].to_s
-      raise WiceGridArgumentError.new("name of the grid should be a string or a symbol") unless name.kind_of? String or name.kind_of? Symbol
+      
+      case @name = @options[:name]
+      when String
+      when Symbol
+        @name = @name.to_s
+      else
+        raise WiceGridArgumentError.new("name of the grid should be a string or a symbol")
+      end
       raise WiceGridArgumentError.new("name of the grid can only contain alphanumeruc characters") unless @name =~ /^\w[\w\d_]*$/
 
       @klass = klass
