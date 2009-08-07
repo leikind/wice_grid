@@ -80,7 +80,7 @@ module Wice
       else
         raise WiceGridArgumentError.new("name of the grid should be a string or a symbol")
       end
-      raise WiceGridArgumentError.new("name of the grid can only contain alphanumeruc characters") unless @name =~ /^\w[\w\d_]*$/
+      raise WiceGridArgumentError.new("name of the grid can only contain alphanumeruc characters") unless @name =~ /^[a-zA-Z\d_]*$/
 
       @klass = klass
 

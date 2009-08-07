@@ -31,26 +31,12 @@ class WiceGridTest < Test::Unit::TestCase
     object_without_to_s = ObjectWithoutStringRepresentation.new
     assert !object_without_to_s.respond_to?(:to_s)
     assert_raise(Wice::WiceGridArgumentError) { Wice::WiceGrid.new(Person, @controller, :name => object_without_to_s) }
-    # assert_raise(Wice::WiceGridArgumentError) { Wice::WiceGrid.new(Person, @controller, :name => "1nvalid") }
-    # assert_raise(Wice::WiceGridArgumentError) { Wice::WiceGrid.new(Person, @controller, :name => "échec") }
+    assert_nothing_raised { Wice::WiceGrid.new(Person, @controller, :name => "1nvalid") }
+    # we are strict about grid names
+    assert_raise(Wice::WiceGridArgumentError) { Wice::WiceGrid.new(Person, @controller, :name => "céhec") }
     assert_nothing_raised { Wice::WiceGrid.new(Person, @controller, :name => "valid") }
     assert_nothing_raised { Wice::WiceGrid.new(Person, @controller, :name => :valid) }
   end
 
 end
 
-class WiceMiscTest < Test::Unit::TestCase
-  
-  def test_string_conditions_to_array_cond
-    assert_equal ["1 = 1"], Wice.string_conditions_to_array_cond("1 = 1")
-    assert_equal ["1 = 1"], Wice.string_conditions_to_array_cond(["1 = 1"])
-  end
-  
-  def test_unite_conditions    
-    #assert_equal "foo IS NULL", Wice.unite_conditions("foo IS NULL", nil)
-    #assert_equal ["foo IS NULL"], Wice.unite_conditions("foo IS NULL", "")
-    assert_equal ["foo IS NULL and bar > 5"], Wice.unite_conditions("foo IS NULL", "bar > 5")
-    assert_equal ["foo IS NULL and bar > ?", 5], Wice.unite_conditions("foo IS NULL", ["bar > ?", 5])
-  end
-  
-end

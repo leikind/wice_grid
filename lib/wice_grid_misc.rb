@@ -3,6 +3,9 @@ module Wice
   class << self
 
     @@model_validated = false
+    
+    
+    # checks whether the class is a valid storage for saved queries
     def validate_query_model(query_store_model)  #:nodoc:
       unless query_store_model.respond_to?(:list)
         raise ::Wice::WiceGridArgumentError.new("Model for saving queries #{query_store_model.class.name} is invalid - there is no class method #list defined")
@@ -14,6 +17,7 @@ module Wice
       @@model_validated = true
     end
 
+    # Retrieves and constantizes (if needed ) the Query Store model
     def get_query_store_model #:nodoc:
 
       query_store_model = ::Wice::Defaults::QUERY_STORE_MODEL
@@ -31,11 +35,19 @@ module Wice
       end
     end
 
+    # used for processing of parameters to ActiveRecord: transforms a string into a single item array,
+    # or if the parameter is an array, does nothing
     def string_conditions_to_array_cond(o)  #:nodoc:
       o.kind_of?(Array) ? o : [o]
     end
 
+    # unites two conditions into one
+    # unite_conditions(['name = ?', 'yuri'], ['age > ?', 30]) #=> ['name = ? and age > ?', 'yuri', 30]
+    # or
+    # unite_conditions('name is not null', ['age > ?', 30]) #=> ['name is not null and age > ?',  30]    
     def unite_conditions(c1, c2)  #:nodoc:
+      raise WiceGridException.new('invalid call to unite_conditions') if c1.blank? && c2.blank?
+      return c1 if c2.blank?
       return c2 if c1.blank?
       c1 = string_conditions_to_array_cond(c1)
       c2 = string_conditions_to_array_cond(c2)

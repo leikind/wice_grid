@@ -22,4 +22,12 @@ ActiveRecord::Schema.define(:version => 0) do
     t.timestamps
   end
   
+  create_table :saved_queries, :force => true  do |t|
+    t.column :name,      :string
+    t.column :grid_name, :string
+    t.column :query,     :text
+    t.column :grid_hash, :string
+
+    t.timestamps
+  end  
 end

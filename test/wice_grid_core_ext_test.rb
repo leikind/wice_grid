@@ -1,6 +1,6 @@
+# More or less complete
 
 require 'test/unit'
-
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class WiceGridCoreExtTest < Test::Unit::TestCase
@@ -87,12 +87,22 @@ class WiceGridCoreExtTest < Test::Unit::TestCase
     assert_equal([], {}.parameter_names_and_values)
     assert_equal([], {}.parameter_names_and_values(%w(foo)))
 
-    assert_equal([['a', 'b']], {'a' => 'b'}.parameter_names_and_values)
+
     assert_equal([['a', 'b']], {'a' => 'b'}.parameter_names_and_values)
     assert_equal([['a', 'b'], ['c[d]', 'e']], {'a' => 'b', 'c' => {'d' => 'e'}}.parameter_names_and_values)
     
     assert_equal([['foo[a]', 'b']], {'a' => 'b'}.parameter_names_and_values(%w(foo)))
     assert_equal([['foo[a]', 'b'], ['foo[c][d]', 'e']], {'a' => 'b', 'c' => {'d' => 'e'}}.parameter_names_and_values(%w(foo)))
+    
+    assert_equal(
+      [["a[d][e]", 5], ["a[b]", 3], ["a[c]", 4]].sort, 
+      { :a => { :b => 3, :c => 4, :d => { :e => 5 }} }.parameter_names_and_values.sort
+    )
+
+    assert_equal(
+      [["foo[baz][a][d][e]", 5], ["foo[baz][a][b]", 3], ["foo[baz][a][c]", 4]].sort, 
+      { :a => { :b => 3, :c => 4, :d => { :e => 5 }} }.parameter_names_and_values(['foo', 'baz']).sort
+    )
 
   end
 
@@ -161,10 +171,10 @@ class WiceGridCoreExtTest < Test::Unit::TestCase
   include ActionView::Helpers::TagHelper
   
   def test_action_view_tag_options_visibility
-    # Probably not Good Enough
     assert_nothing_raised {
       tag_options({})
     }
+    assert_equal(%! class="foo" style="baz"!, tag_options({:class => 'foo', :style => 'baz'}))
   end
   
 

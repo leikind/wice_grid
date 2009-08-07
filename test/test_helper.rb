@@ -62,6 +62,11 @@ class Task < ActiveRecord::Base
   validates_presence_of :person_id
 end
 
+class SavedQuery < ActiveRecord::Base
+  def self.list(a, b)
+  end
+end
+
 NUM_PEOPLE   = 10
 NUM_PROJECTS = 5
 NUM_TASKS    = 1000
