@@ -715,14 +715,16 @@ module Wice
 
     def pagination_info(grid, options = {})  #:nodoc:
       collection = grid.resultset
+
+      collection_total_entries = collection.total_entries
+      collection_total_entries_str = collection_total_entries.to_s
+      
+      parameters = grid.get_state_as_parameter_value_pairs
+      
+      
       if (collection.total_pages < 2 && collection.length == 0)
         '0'
       else
-        collection_total_entries = collection.total_entries
-        collection_total_entries_str = collection_total_entries.to_s
-        parameters = grid.get_state_as_parameter_value_pairs
-        parameters << ["#{grid.name}[pp]", collection_total_entries_str]
-
         "#{collection.offset + 1}-#{collection.offset + collection.length} / #{collection_total_entries_str} " +
           if (! grid.allow_showing_all_records?) || collection_total_entries <= collection.length
             ''
