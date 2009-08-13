@@ -306,7 +306,7 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model_klass.find(:all, :select => 'distinct ' + column.name).collect{|ar| ar.send(column.name) }.reject(&:blank?).map{|i|[i,i]}
+      res = column.model_klass.find(:all, :select => 'distinct ' + column.name).collect{|ar| ar[column.name] }.reject(&:blank?).map{|i|[i,i]}
     end
 
 
