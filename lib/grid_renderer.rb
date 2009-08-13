@@ -11,6 +11,7 @@ module Wice
     attr_reader :page_parameter_name
     attr_reader :after_row_handler
     attr_reader :before_row_handler
+    attr_reader :blank_slate_handler
     attr_reader :grid
     attr_accessor :erb_mode
 
@@ -52,6 +53,10 @@ module Wice
 
     def select_for(filter)  #:nodoc:
       filter_columns(filter).select{|col| yield col}
+    end
+
+    def find_one_for(filter)  #:nodoc:
+      filter_columns(filter).find{|col| yield col}
     end
 
 
@@ -313,6 +318,16 @@ module Wice
     # Can be used to add HTML code (another row, for example) right before each grid row. Nothing is added if the block return +false+ or +nil+.
     def before_row(&block)
       @before_row_handler = block
+    end
+
+    def blank_slate(opts = nil, &block)
+      if (opts.is_a?(Hash) && opts.has_key?(:partial) && block.nil?) || (opts.is_a?(String) && block.nil?)
+        @blank_slate_handler = opts
+      elsif opts.nil? && block
+        @blank_slate_handler = block
+      else
+        raise WiceGridArgumentError.new("blank_slate accepts only a string, a block, or :template => 'path_to_template' ")
+      end
     end
 
 
