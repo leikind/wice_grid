@@ -45,6 +45,7 @@ WiceGridProcessor = Class.create( {
     }
     
     request_path = this.grid_state_to_request(grid_state);
+    
     new Ajax.Request(base_path_to_query_controller, {
       asynchronous:true,
       evalScripts:true,
@@ -53,8 +54,8 @@ WiceGridProcessor = Class.create( {
   },
 
   grid_state_to_request : function(grid_state){
-    return grid_state.collect(function(pair){
-      return pair[0] + '=' + encodeURIComponent(pair[1]);
+    return res = grid_state.collect(function(pair){
+      return encodeURIComponent(pair[0]) + '=' + encodeURIComponent(pair[1]);
     }).join('&');
   },
 

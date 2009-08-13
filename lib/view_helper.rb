@@ -38,7 +38,7 @@ module Wice
       parameters = grid.get_state_as_parameter_value_pairs
 
       options[:extra_parameters].each do |k, v|
-        parameters << [ {:extra => {k => ''}}.to_query.sub(/=$/,'') , v.to_s ]
+        parameters << [ CGI.unescape({:extra => {k => ''}}.to_query.sub(/=$/,'')) , v.to_s ]
       end
       parameters <<  ['authenticity_token', form_authenticity_token]
       %! <div class="wice_grid_query_panel"><h3>#{Defaults::SAVED_QUERY_PANEL_TITLE}</h3>! +
@@ -715,16 +715,16 @@ module Wice
 
     def pagination_info(grid, options = {})  #:nodoc:
       collection = grid.resultset
-
+      
       collection_total_entries = collection.total_entries
       collection_total_entries_str = collection_total_entries.to_s
-      
       parameters = grid.get_state_as_parameter_value_pairs
-      
-      
+
       if (collection.total_pages < 2 && collection.length == 0)
         '0'
       else
+        parameters << ["#{grid.name}[pp]", collection_total_entries_str]
+        
         "#{collection.offset + 1}-#{collection.offset + collection.length} / #{collection_total_entries_str} " +
           if (! grid.allow_showing_all_records?) || collection_total_entries <= collection.length
             ''
