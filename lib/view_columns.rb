@@ -203,6 +203,7 @@ module Wice
 
   class ViewColumnDatetime < ViewColumn #:nodoc:
     @@handled_type[:datetime] = self
+    @@handled_type[:timestamp] = self
     include ActionView::Helpers::DateHelper
     include ::Wice::JSCalendarHelpers
 

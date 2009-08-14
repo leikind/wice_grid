@@ -447,7 +447,7 @@ module ActiveRecord #:nodoc:
         end
 
         if @request_params
-          if self.type == :datetime
+          if self.type == :datetime || self.type == :timestamp
             [:fr, :to].each do |sym|
               if @request_params[sym]
                 if @request_params[sym].is_a?(String)
@@ -612,6 +612,8 @@ module ActiveRecord #:nodoc:
       def  generate_conditions_datetime(table_alias, opts)  #:nodoc:
         generate_conditions_date(table_alias, opts)
       end
+      
+      alias_method :generate_conditions_timestamp, :generate_conditions_datetime
 
       def generate_conditions_date(table_alias, opts)   #:nodoc:
         conditions = [[]]
