@@ -51,16 +51,16 @@ module Wice
           ''
         end +
         javascript_tag do
-          %! 
+          %/
           function #{grid_name}_save_query(){
-            #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})
-          } !
+            if ( typeof(#{grid_name}) != "undefined")
+                #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})
+          } /
         end +
         text_field_tag(id_and_name,  '', 
           :size => 20, :onkeydown=>'', :id => id_and_name, 
           :onkeydown=>"if (event.keyCode == 13) {#{grid_name}_save_query()}") +
         button_to_function(Defaults::SAVE_QUERY_BUTTON_LABEL,  "#{grid_name}_save_query()" ) +  '</div>'
-        
     end
 
 
@@ -78,7 +78,9 @@ module Wice
           {:url => delete_serialized_query_path(:grid_name => grid_name, :id => sq.id, :current => currently_loaded_query_id ),
             :confirm => Defaults::SAVED_QUERY_DELETION_CONFIRMATION, :with => with},
           {:title => "#{Defaults::SAVED_QUERY_DELETION_LINK_TITLE} #{sq.name}"} )  + ' &nbsp; ' +
-        link_to_function(h(sq.name), "#{grid_name}.load_query(#{sq.id})", link_opts) + 
+        link_to_function(h(sq.name), 
+          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.load_query(#{sq.id}) /, 
+          link_opts) + 
         if sq.respond_to? :description
           desc = sq.description 
           desc.blank? ? '' : " <i>#{desc}</i>"
@@ -184,7 +186,6 @@ module Wice
     def grid(grid, opts = {}, &block)
       raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class") unless grid.class == WiceGrid
 
-      
       if grid.output_buffer
         if grid.output_buffer == true
           raise  WiceGridException.new("Second occurence of grid helper with the same grid object. Did you intend to use detached filters and forget to define them?")
@@ -228,6 +229,12 @@ module Wice
       if grid.output_csv?
         content = grid_csv(grid, rendering)
       else
+        # If blank_slate is defined we don't show any grid at all
+        if rendering.blank_slate_handler &&  grid.resultset.size == 0 && ! grid.filtering_on?
+          content = generate_blank_slate(grid, rendering)
+          return prepare_result(rendering, grid, content, block)
+        end
+        
         content = grid_html(grid, table_html_attrs, header_tr_html_attrs, options, rendering)
       end
 
@@ -239,9 +246,13 @@ module Wice
           controller.send(grid.after, lazy_grid_caller)
         end
       end
-
+      
+      prepare_result(rendering, grid, content, block)
+    end
+    
+    def prepare_result(rendering, grid, content, block)
       if rendering.erb_mode
-        # true in this case is a sign that grid_html has run in a normal mode, i.e. wuthout detached filters
+        # true in this case is a sign that grid_html has run in a normal mode, i.e. without detached filters
         if grid.output_buffer.nil? || grid.output_buffer == true
           return concat(content, block.binding)
         else
@@ -250,7 +261,7 @@ module Wice
         end
       else
         return content
-      end
+      end      
     end
 
     # secret but stupid weapon
@@ -277,6 +288,25 @@ module Wice
       end
     end
 
+    def generate_blank_slate(grid, rendering) #:nodoc:
+      buff = GridOutputBuffer.new
+
+      buff <<  if rendering.blank_slate_handler.is_a?(Proc)
+        call_block_as_erb_or_ruby(rendering, rendering.blank_slate_handler, nil)
+      elsif rendering.blank_slate_handler.is_a?(Hash)
+        render(rendering.blank_slate_handler)
+      else
+        rendering.blank_slate_handler
+      end
+      
+      if rendering.find_one_for(:in_html){|column| column.detach_with_id}
+        buff.stubborn_output_mode = true
+        buff.return_empty_strings_for_nonexistent_filters = true
+        grid.output_buffer   = buff
+      end
+      buff
+    end
+
     def call_block_as_erb_or_ruby(rendering, block, ar)  #:nodoc:
       if rendering.erb_mode
         capture(ar, &block)
@@ -285,6 +315,7 @@ module Wice
       end
     end    
 
+    # the longest method? :(
     def grid_html(grid, table_html_attrs, header_tr_html_attrs, options, rendering) #:nodoc:
 
       cycle_class = nil
@@ -310,8 +341,8 @@ module Wice
       content << %!<div class="wice_grid_container"><h3 id="#{grid.name}_title">!
       content << h(grid.saved_query.name) if grid.saved_query
       content << "</h3><table #{tag_options(table_html_attrs, true)}>"
-
-
+      content << "<thead>"
+      
       no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?) ? true: false
       
       if no_filters_at_all
@@ -454,13 +485,16 @@ module Wice
         end
       end
 
+      content << "</thead><tbody>"
+
       # rendering  rows
       cell_value_of_the_ordered_column = nil
       previous_cell_value_of_the_ordered_column = nil
+            
       grid.each do |ar| # rows
 
         before_row_output = if rendering.before_row_handler
-          call_block_as_erb_or_ruby(rendering, rendering.before_row_handler, ar)           
+          call_block_as_erb_or_ruby(rendering, rendering.before_row_handler, ar)
         else
           nil
         end
@@ -527,8 +561,10 @@ module Wice
         content << '</tr>'
       end
 
+      content << "</tbody><tfoot>"
+
       content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
-      content << '</table></div>'
+      content << '</tfoot></table></div>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
       

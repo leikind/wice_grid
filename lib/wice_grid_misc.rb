@@ -52,8 +52,8 @@ module Wice
       c1 = string_conditions_to_array_cond(c1)
       c2 = string_conditions_to_array_cond(c2)
       c1[0] += ' and ' + c2[0]
-      c1 << c2[1..-1]
-      c1.flatten
+      c1 += c2[1..-1]
+      c1
     end
 
     def log(message) #:nodoc:
