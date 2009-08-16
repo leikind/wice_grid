@@ -486,6 +486,29 @@ It is up for the developer to return the correct HTML code, or return +nil+ if n
 
 A real life example might be some enterprisy  tables inside a table.
 
+=== Rendering a grid without records
+
+It is possible to replace the grid with some alternative view if no filters are active  and there are no records to render:
+  
+    <%= grid(@grid) do |g|
+    
+      g.blank_slate  do
+        "There are no records"
+      end
+  
+      g.column  do |product|
+         ...
+      end
+     end  -%>
+  
+There are two alternative three ways to do the same, submitting a string to +blank_slate+:
+  
+  g.blank_slate "some text to be rendered"
+  
+Or a partial:
+  
+  g.blank_slate :partial => "partial_name"
+
 === More than one grid on a page
 
 It is possible to use more that one grid on a page, each with its own state. To do so, you must specify the name of the grid in +initialize_grid+ using

@@ -1,6 +1,6 @@
-module WGHashExtensions
+module WGHashExtensions  #:nodoc:
   
-  def self.included(base)
+  def self.included(base)  #:nodoc:
     base.extend(ClassMethods)
   end
   
@@ -63,7 +63,7 @@ module WGHashExtensions
   end
 
 
-  module ClassMethods
+  module ClassMethods  #:nodoc:
     
     # Used mostly for submitting options to view helpers, that is, like this:
     #   content_tag(:th, col_link, Hash.make_hash(:class, css_class))

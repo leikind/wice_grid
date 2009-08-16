@@ -320,6 +320,11 @@ module Wice
       @before_row_handler = block
     end
 
+    # The output of the block submitted to +blank_slate+ is rendered instead of the whole grid if no filters are active
+    # and there are no records to render.
+    # In addition to the block style two other variants are accepted:
+    # *   <tt>g.blank_slate "some text to be rendered"</tt>
+    # *   <tt>g.blank_slate :partial => "partial_name"</tt>
     def blank_slate(opts = nil, &block)
       if (opts.is_a?(Hash) && opts.has_key?(:partial) && block.nil?) || (opts.is_a?(String) && block.nil?)
         @blank_slate_handler = opts

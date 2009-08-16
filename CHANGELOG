@@ -1,5 +1,24 @@
 == 0.5
 
+* Blank slate feature: it is now possible to replace the grid with some alternative view if no filters are active
+  and there are no records to render:
+  
+    <%= grid(@grid) do |g|
+    
+      g.blank_slate  do
+        "There are no records"
+      end
+  
+      g.column  do |product|
+         ...
+      end
+     end  -%>
+  
+  There are two alternative three ways to do the same:
+  
+  *   <tt>g.blank_slate "some text to be rendered"</tt>
+  *   <tt>g.blank_slate :partial => "partial_name"</tt>
+
 * Copying asset files is now done by a plugin generator, not rake tasks:
 
        ./script/generate wice_grid_assets
@@ -29,6 +48,7 @@
   an initializer copied to config/initializers/ by task :copy_config_to_initializers.
 
 * Cleaned up and refactored javascript code
+* Quite some number of bugs fixed
 
 == 0.4
 

@@ -61,7 +61,7 @@ module Wice
     end
   end
 
-  module Defaults
+  module Defaults  #:nodoc:
   end
   
   module ExceptionsMixin  #:nodoc:
