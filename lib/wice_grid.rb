@@ -9,10 +9,10 @@ rescue MissingSourceFile => e
 end
 
 require 'js_calendar_helpers.rb'
-require 'core_ext.rb'
+require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
 require 'table_column_matrix.rb'
-require 'view_helper.rb'
+require 'wice_grid_view_helpers.rb'
 require 'view_columns.rb'
 require 'grid_output_buffer.rb'
 require 'controller.rb'
