@@ -107,6 +107,7 @@ module Wice
     #
     # * <tt>:column_name</tt> - Name of the column.
     # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
+    # * <tt>:class</tt> - a shortcut for <tt>:td_html_attrs => {:class => 'css_class'}</tt>    
     # * <tt>:attribute_name</tt> - name of a database column (which normally correspond to a model attribute with the same name). By default the
     #   field is assumed to belong to the default table (see documentation for the +initialize_grid+ method). Parameter <tt>:model_class</tt>
     #   allows to specify another table. Presence of this parameter
@@ -195,6 +196,7 @@ module Wice
       options = {
         :column_name        => '',
         :td_html_attrs      => {},
+        :class              => nil,
         :model_class        => nil,
         :attribute_name     => nil,
         :no_filter          => false,
@@ -229,6 +231,12 @@ module Wice
       if options[:attribute_name] && options[:attribute_name].index('.')
         raise WiceGridArgumentError.new("Invalid attribute name #{options[:attribute_name]}. An attribute name must not contain a table name!")
       end
+
+      if options[:class]
+        options[:td_html_attrs].add_or_append_class_value(options[:class])
+        options.delete(:class)
+      end
+
 
       if block.nil?
         if ! options[:attribute_name].blank?

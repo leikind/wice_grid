@@ -98,6 +98,7 @@ module Wice
     #
     # The second parameter is a hash of options:
     # * <tt>:table_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>table</tt> tag.
+    # * <tt>:class</tt> - a shortcut for <tt>:table_html_attrs => {:class => 'css_class'}</tt>
     # * <tt>:header_tr_html_attrs</tt> - a hash of HTML attributes to be included into the first <tt>tr</tt> tag
     #   (or two first <tt>tr</tt>'s if the filter row is present).
     # * <tt>:show_filters</tt> - defines when the filter is shown. Possible values are:
@@ -194,21 +195,8 @@ module Wice
         end
       end
 
-      table_html_attrs = {:class => "wice_grid"}
-      header_tr_html_attrs = {}
-
       Wice.deprecated_call(:table_html_opts, :table_html_attrs, opts)
       Wice.deprecated_call(:header_tr_html_opts, :header_tr_html_attrs, opts)
-
-      if opts[:table_html_attrs]
-        table_html_attrs.merge!(opts[:table_html_attrs])
-        opts.delete(:table_html_attrs)
-      end
-
-      if  opts[:header_tr_html_attrs]
-        header_tr_html_attrs.merge!(opts[:header_tr_html_attrs])
-        opts.delete(:table_html_attrs)
-      end
 
       options = {
         :show_filters => Defaults::SHOW_FILTER,
@@ -217,9 +205,21 @@ module Wice
         :erb_mode => Defaults::ERB_MODE,
         :hide_submit_button => false,
         :hide_reset_button => false,
-        :extra_request_parameters => {}}
+        :class => nil,
+        :extra_request_parameters => {},
+        :table_html_attrs => {},
+        :header_tr_html_attrs => {}
+      }
         
       options.merge!(opts)
+      
+      options[:table_html_attrs].add_or_append_class_value('wice_grid')
+      
+      
+      if options[:class]
+        options[:table_html_attrs].add_or_append_class_value(options[:class])
+        options.delete(:class)
+      end
 
       rendering = GridRenderer.new(grid)
       rendering.erb_mode = options[:erb_mode]
@@ -235,7 +235,7 @@ module Wice
           return prepare_result(rendering, grid, content, block)
         end
         
-        content = grid_html(grid, table_html_attrs, header_tr_html_attrs, options, rendering)
+        content = grid_html(grid, options[:table_html_attrs], options[:header_tr_html_attrs], options, rendering)
       end
 
       if grid.after
@@ -249,7 +249,7 @@ module Wice
       
       prepare_result(rendering, grid, content, block)
     end
-    
+
     def prepare_result(rendering, grid, content, block)
       if rendering.erb_mode
         # true in this case is a sign that grid_html has run in a normal mode, i.e. without detached filters

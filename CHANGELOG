@@ -1,5 +1,23 @@
 == 0.5
 
+* :td_html_attrs in column definitions and table_html_attrs in the table definitions are mostly used to add
+   css classes, so a shorter way has been added to add css classes.
+
+  Instead of 
+  
+    <%= grid(@grid, :table_html_attrs => {:class => 'css_class1'}) do |g|
+        g.column(:td_html_attrs => {:class => 'css_class2'}) do
+        end
+    end -%>
+    
+  It's possible to just use the new <tt>:class</tt> option:
+  
+  <%= grid(@grid, :class => 'css_class1') do |g|
+      g.column(:class => 'css_class2') do
+      end
+  end -%>
+  
+
 * Blank slate feature: it is now possible to replace the grid with some alternative view if no filters are active
   and there are no records to render:
   
