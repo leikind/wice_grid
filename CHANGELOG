@@ -1,5 +1,17 @@
 == 0.5
 
+New configuration option: in addition to the configuration constant Wice::Defaults::STRING_MATCHING_OPERATOR 
+to define the operator for matching strings (LIKE in most cases), hash Wice::Defaults::STRING_MATCHING_OPERATORS
+was added to specify string matching operators on per-database basis:
+
+  Wice::Defaults::STRING_MATCHING_OPERATORS = {
+    'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
+    'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
+  }
+
+A use-case for this is a Rails application connecting to two databases, one of which is MySQL, and the other is Postgresql.
+To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this operator is unknown to MySQL.
+
 * :td_html_attrs in column definitions and table_html_attrs in the table definitions are mostly used to add
    css classes, so a shorter way has been added to add css classes.
 

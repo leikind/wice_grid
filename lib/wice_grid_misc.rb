@@ -26,6 +26,15 @@ module Wice
       validate_query_model(query_store_model) unless @@model_validated
       query_store_model
     end
+    
+    def get_string_matching_operators(model)   #:nodoc:
+      if defined?(Wice::Defaults::STRING_MATCHING_OPERATORS) && Wice::Defaults::STRING_MATCHING_OPERATORS.is_a?(Hash) &&
+          str_matching_operator = Wice::Defaults::STRING_MATCHING_OPERATORS[model.connection.class.to_s]
+        str_matching_operator
+      else
+        Wice::Defaults::STRING_MATCHING_OPERATOR
+      end
+    end
 
     def deprecated_call(old_name, new_name, opts) #:nodoc:
       if opts[old_name] && ! opts[new_name]

@@ -63,6 +63,15 @@ if defined?(Wice::Defaults)
   # SQL operator used for matching strings in string filters.
   Wice::Defaults::STRING_MATCHING_OPERATOR = 'LIKE'
   # STRING_MATCHING_OPERATOR = 'ILIKE' # Use this for Postgresql case-insensitive matching.
+  
+  
+  # Defining one string matching operator globally for the whole application turns is not enough
+  # when you connect to two databases one of which is MySQL and the other is Postgresql.
+  # If the key for an adapter is missing it will fall back to Wice::Defaults::STRING_MATCHING_OPERATOR
+  Wice::Defaults::STRING_MATCHING_OPERATORS = {
+    'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
+    'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
+  }
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                                will_paginate                              #

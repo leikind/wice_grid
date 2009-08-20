@@ -512,7 +512,7 @@ module ActiveRecord #:nodoc:
           Wice.log "invalid parameters for the grid string filter - empty string"
           return false
         end
-        [" #{negation}  #{alias_or_table_name(table_alias)}.#{self.name} #{::Wice::Defaults::STRING_MATCHING_OPERATOR} ?",
+        [" #{negation}  #{alias_or_table_name(table_alias)}.#{self.name} #{::Wice.get_string_matching_operators(model_klass)} ?",
             '%' + string_fragment + '%']
       end
 
