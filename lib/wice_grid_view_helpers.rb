@@ -405,8 +405,7 @@ module Wice
             image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
               :title => Defaults::HIDE_FILTER_TOOLTIP,
               :alt => Defaults::HIDE_FILTER_TOOLTIP),
-            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); "  +
-              visual_effect(:fade, filter_row_id, :duration => 0.5, :queue => 'front') ),
+            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').hide()" ),
           :id => hide_icon_id,
           :style => styles[0]
         )
@@ -416,8 +415,7 @@ module Wice
             image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
               :title => Defaults::SHOW_FILTER_TOOLTIP,
               :alt => Defaults::SHOW_FILTER_TOOLTIP),
-            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); " +
-              visual_effect(:appear, filter_row_id, :duration => 0.5, :queue => 'front') ),
+            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').show()" ),
           :id => show_icon_id,
           :style => styles[1]
         )
