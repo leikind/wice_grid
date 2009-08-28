@@ -332,7 +332,7 @@ module Wice
               'for WiceGrid javascripts and assets.')
           } else {
             if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {
-              alert("wice_grid.js in your /public is outdated, please run\\n rake wice_grid:copy_resources_to_public\\nto update it.");
+              alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets\\nto update it.");
             }
           } 
         })  $ )
