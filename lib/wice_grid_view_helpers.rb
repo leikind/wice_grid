@@ -439,7 +439,7 @@ module Wice
           end
           
         else # some filters are present in the table
-          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id}"!
+          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id} "!
           content << 'style="display:none"' unless filter_shown
           content << '>'
 
@@ -483,8 +483,10 @@ module Wice
         end
       end
 
-      content << "</thead><tbody>"
-
+      content << '</thead><tfoot>'
+      content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
+      content << '</tfoot><tbody>'
+      
       # rendering  rows
       cell_value_of_the_ordered_column = nil
       previous_cell_value_of_the_ordered_column = nil
@@ -559,10 +561,7 @@ module Wice
         content << '</tr>'
       end
 
-      content << "</tbody><tfoot>"
-
-      content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
-      content << '</tfoot></table></div>'
+      content << '</tbody></table></div>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
       
