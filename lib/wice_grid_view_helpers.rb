@@ -424,7 +424,7 @@ module Wice
           end
           
         else # some filters are present in the table
-          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id} "!
+          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id}" !
           content << 'style="display:none"' unless filter_shown
           content << '>'
 
