@@ -303,6 +303,11 @@ module Wice
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:v => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:n => '')
         text_field_tag(parameter_name, params[:v], :size => 8, :onkeydown=>enter_key_handler, :id => @dom_id) +
+          if defined?(::Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! ::Wice::Defaults::NEGATION_CHECKBOX_LABEL.blank?
+            ::Wice::Defaults::NEGATION_CHECKBOX_LABEL
+          else
+            ''
+          end +
           check_box_tag(parameter_name2, '1', (params[:n] == '1'), :id => @dom_id2, :title => ::Wice::Defaults::NEGATION_CHECKBOX_TITLE)
 
       else

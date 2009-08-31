@@ -87,6 +87,7 @@ if defined?(Wice::Defaults)
 
   # The title of the checkox to turn on negation
   Wice::Defaults::NEGATION_CHECKBOX_TITLE = 'Exclude'
+  Wice::Defaults::NEGATION_CHECKBOX_TITLE = ''
 
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
