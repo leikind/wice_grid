@@ -323,21 +323,6 @@ module Wice
 
       content = GridOutputBuffer.new
       
-      if ENV['RAILS_ENV'] == 'development'
-        content << javascript_tag( %$ document.observe("dom:loaded", function() { 
-          if (typeof(WiceGridProcessor) == "undefined"){
-            alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' + 
-              'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +
-              'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' + 
-              'for WiceGrid javascripts and assets.')
-          } else {
-            if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {
-              alert("wice_grid.js in your /public is outdated, please run\\n rake wice_grid:copy_resources_to_public\\nto update it.");
-            }
-          } 
-        })  $ )
-      end
-      
       content << %!<div class="wice_grid_container"><h3 id="#{grid.name}_title">!
       content << h(grid.saved_query.name) if grid.saved_query
       content << "</h3><table #{tag_options(table_html_attrs, true)}>"
@@ -439,7 +424,7 @@ module Wice
           end
           
         else # some filters are present in the table
-          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id}"!
+          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id}" !
           content << 'style="display:none"' unless filter_shown
           content << '>'
 
@@ -483,8 +468,10 @@ module Wice
         end
       end
 
-      content << "</thead><tbody>"
-
+      content << '</thead><tfoot>'
+      content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
+      content << '</tfoot><tbody>'
+      
       # rendering  rows
       cell_value_of_the_ordered_column = nil
       previous_cell_value_of_the_ordered_column = nil
@@ -559,10 +546,7 @@ module Wice
         content << '</tr>'
       end
 
-      content << "</tbody><tfoot>"
-
-      content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
-      content << '</tfoot></table></div>'
+      content << '</tbody></table></div>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
       
@@ -570,8 +554,22 @@ module Wice
 
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
 
+      prototype_and_js_version_check = ENV['RAILS_ENV'] == 'development' ? %$
+        if (typeof(WiceGridProcessor) == "undefined"){
+          alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' + 
+            'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +
+            'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' + 
+            'for WiceGrid javascripts and assets.')
+        } else {
+          if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {
+            alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets\\nto update it.");
+          }
+        } $ : ''
+        
+
       content << javascript_tag( 
         %$document.observe("dom:loaded", function() { 
+        #{prototype_and_js_version_check}
         #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}', 
           '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n $ +
         rendering.select_for(:in_html){|vc|vc.attribute_name and not vc.no_filter}.collect{|column|  column.yield_javascript}.join("\n") +

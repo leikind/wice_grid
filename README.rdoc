@@ -390,8 +390,8 @@ hide default buttons in the grid if set to true.
 
 === Custom Ordering
 
-It is possible to change the way results are ordered injecting a piece of SQL code, for example, use <tt>ORDER BY ip_address</tt> instead
-of <tt>ORDER BY INET_ATON(ip_address)</tt>.
+It is possible to change the way results are ordered injecting a piece of SQL code, for example, use 
+<tt>ORDER BY INET_ATON(ip_address)</tt> instead of <tt>ORDER BY ip_address</tt>.
 
 To do so, provide parameter <tt>:custom_order</tt> in the initialization of the grid with a hash where keys are fully qualified names
 of database columns, and values the required chunks of SQL to use in the ORDER BY clause.
@@ -501,7 +501,7 @@ It is possible to replace the grid with some alternative view if no filters are 
       end
      end  -%>
   
-There are two alternative three ways to do the same, submitting a string to +blank_slate+:
+There are two alternative ways to do the same, submitting a string to +blank_slate+:
   
   g.blank_slate "some text to be rendered"
   
@@ -576,7 +576,7 @@ keep ordering and filtering.
 Standard Rails Date and DateTime helpers are a set of dropdown lists, and while this is practical, displaying two Date or especially DateTime
 helpers takes too much space on a page and is in general confusing.
 
-To solve this, WiceGrid includes a second variant of Date/DateTime filters based on a Javascript calendar borrowed from http://www.dynarch.com.
+To solve this, WiceGrid includes a second variant of Date/DateTime filters based on a Javascript calendar.
 
 If you are upgrading WiceGrid, run the following command to copy the calendar javascript and styleshet files to the public directory:
 
@@ -600,8 +600,6 @@ this,  make sure that lamdbas defined in +DATETIME_PARSER+ and +DATE_PARSER+ ret
 by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and DateTime.parse and Date.parse handle it.
 Make sure it stays so.
 
-Use constant <tt>DYNARCH_CALENDAR_STYLE</tt> in <tt>config/initializers/wice_grid_config.rb</tt> to change the style of the calendar.
-Use constant <tt>DYNARCH_CALENDAR_LANG</tt> in <tt>config/initializers/wice_grid_config.rb</tt> to change the language of the calendar.
 
 === Show All Records
 
@@ -702,7 +700,7 @@ It's also possible to supply a block which will be called if no CSV export is re
 
 
 If certain columns have to be excluded from the generated CSV file (for example, column with icons or buttons),
-use +column+ parameter +in_html+:
+set +column+ parameter +in_csv+ to +false+:
 
   g.column  :in_csv => false do |identity|
     link_to(identity.name, identity_accounts_path(identity))
@@ -808,7 +806,7 @@ in an warning javascript message and the missing filter will be ignored. There i
 
 When there is at least one column with <tt>:detach_with_id</tt>, the generated HTML code is stored in a buffer, code for detached filters is stored
 in buffers of their own identified by the given IDs, and nothing is returned to the view. 
-When the helper is called for the second time, the buffer outputs is content.
+When the helper is called for the second time, the buffer outputs its content.
 In a similar fashion, the +grid_filter+ helper outputs buffers for filters.
 
 === Compatibility with Rails Asset Caching
