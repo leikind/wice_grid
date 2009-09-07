@@ -212,7 +212,7 @@ var Calendar = Class.create({
       hourSelect.observe('change', function(event){
         var elem = event.element();
         var selectedIndex = elem.selectedIndex;
-        if (selectedIndex){
+        if ((typeof selectedIndex != 'undefined') && selectedIndex != null){
           this.date.setHours(elem.options[selectedIndex].value);
           this.updateOuterField();
         }
@@ -221,7 +221,7 @@ var Calendar = Class.create({
       minuteSelect.observe('change', function(event){
         var elem = event.element();
         var selectedIndex = elem.selectedIndex;
-        if (selectedIndex){
+        if ((typeof selectedIndex != 'undefined') && selectedIndex != null){
           this.date.setMinutes(elem.options[selectedIndex].value);
           this.updateOuterField();
         }
