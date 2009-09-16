@@ -58,71 +58,96 @@ The simplest example of a WiceGrid for one simple DB table called ApplicationAcc
 
 Controller:
 
-  @accounts_grid = initialize_grid(ApplicationAccount)
+  @tasks_grid = initialize_grid(Task)
 
 View:
 
-  <%= grid(@accounts_grid) do |g|
+  <%= grid(@tasks_grid) do |g|
 
-    g.column do |account|
-      account.username
+    g.column do |task|
+      task.id
     end
 
-    g.column do |account|
-      account.active? ? 'Yes' : 'No'
+    g.column  do |task|
+      task.title
     end
 
-    g.column do |account|
-      link_to('Edit', edit_account_path(account))
+    g.column do |task|
+      task.description
+    end
+
+    g.column do |task|
+      task.archived? ? 'Yes' : 'No'
+    end
+
+    g.column do |task|
+      link_to('Edit', edit_task_path(task))
     end
   end -%>
 
-Code <tt>g.column do |account| ... end</tt>
-defines everything related to a column in the resulting view table including column names, sorting, filering, the content of the column cells, etc.
-The only obligatory parameter is the block which is called for every ActiveRecord instance in the resultset, the return value of the block being
-the table cell content.
+Code <tt>g.column do |task| ... end</tt>
+defines everything related to a column in the resulting view table including column names, sorting, filtering, the content of the column cells, etc.
+The return value of the block is the table cell content.
 
-In the above view code three columns were defined, all without names, no sorting or filtering is available. Still, pagination becomes active if
+In the above view code five columns were defined, all without names, no sorting or filtering is available. Still, pagination becomes active if
 the number of all extracted records exceeds the default number of rows per page.
 
 Column names are defined with parameter <tt>:column_name</tt>:
 
-  <%= grid(@accounts_grid) do |g|
+  <%= grid(@tasks_grid) do |g|
 
-    g.column :column_name => 'Username' do |account|
-      account.username
+    g.column :column_name => 'ID' do |task|
+      task.id
     end
 
-    g.column :column_name => 'Active' do |account|
-      account.active? ? 'Yes' : 'No'
+    g.column :column_name => 'Title'  do |task|
+      task.title
     end
 
-    g.column :column_name => 'Edit' do |account|
-      link_to('Edit', edit_account_path(account))
+    g.column  :column_name => 'Description' do |task|
+      task.description
+    end
+
+    g.column  :column_name => 'Archived' do |task|
+      task.archived? ? 'Yes' : 'No'
+    end
+
+    g.column   do |task|
+      link_to('Edit', edit_task_path(task))
     end
   end -%>
 
 To add filtering and ordering, declare to which column in the underlying database table(s) the view column corresponds using
 parameter <tt>:attribute_name</tt> :
 
-  <%= grid(@accounts_grid) do |g|
+  <%= grid(@tasks_grid) do |g|
 
-    g.column :column_name => 'Username', :attribute_name => 'username'  do |account|
-      account.username
+    g.column :column_name => 'ID', :attribute_name => 'id' do |task|
+      task.id
     end
 
-    g.column :column_name => 'Active', :attribute_name => 'active' do |account|
-      account.active? ? 'Yes' : 'No'
+    g.column :column_name => 'Title', :attribute_name => 'title'  do |task|
+      task.title
     end
 
-    g.column :column_name => 'Edit' do |account|
-      link_to('Edit', edit_account_path(account))
+    g.column  :column_name => 'Description', :attribute_name => 'description' do |task|
+      task.description
+    end
+
+    g.column  :column_name => 'Archived', :attribute_name => 'archived' do |task|
+      task.archived? ? 'Yes' : 'No'
+    end
+
+    g.column   do |task|
+      link_to('Edit', edit_task_path(task))
     end
   end -%>
 
-This will magically add sorting links and filters for columns +Username+ and +Active+. The plugin automatically creates filters according to the type
-of the database column. In the above example a text field will be created for column Username (username is a string), while for
-column +Active+ a dropdown filter will be created with options 'Yes', 'No', and '--'.
+This will  add sorting links and filters for columns +Username+ and +Active+. 
+The plugin automatically creates filters according to the type
+of the database column. In the above example a text field will be created for column Title (title is a string), 
+for column +Archived+ a dropdown filter will be created with options 'Yes', 'No', and '--', and for the integer ID two short text fields are
+added which can containt the numeric range (more than, less than).
 
 It is important to remember that <tt>:attribute_name</tt> is the name of the database column, not a model attribute. Of course, all database columns have corresponding model attributes, but not all model attributes map to columns in the same table with the same name.
 
@@ -130,21 +155,37 @@ Read more about available filters in the documentation
 for the column method. Read the section about custom dropdown filters for more advanced filters.
 
 
-For simple columns like
+For columns like
 
-  g.column :column_name => 'Username', :attribute_name => 'username'  do |account|
-    account.username
+  g.column :column_name => 'Title', :attribute_name => 'title'  do |task|
+    task.title
   end
 
-the following blockless shortcut can be used:
+where the block contains just a call to the same attribute declared by :attribute_name, the block can be ommited:
 
-  g.column :column_name => 'Username', :attribute_name => 'username'
+  <%= grid(@tasks_grid) do |g|
+
+    g.column :column_name => 'ID', :attribute_name => 'id'
+
+    g.column :column_name => 'Title', :attribute_name => 'title'
+
+    g.column  :column_name => 'Description', :attribute_name => 'description'
+
+    g.column  :column_name => 'Archived', :attribute_name => 'archived' do |task|
+      task.archived? ? 'Yes' : 'No'
+    end
+
+    g.column   do |task|
+      link_to('Edit', edit_task_path(task))
+    end
+  end -%>
+
 
 In this case +attribute_name+ will be used as the method name to send to the ActiveRecord instance.
 
 If only sorting is needed, we can turn off filters using <tt>:no_filter</tt> :
 
-  g.column :column_name => 'Username', :attribute_name => 'username', :no_filter => true
+  g.column :column_name => 'ID', :attribute_name => 'id', :no_filter => true
 
 
 It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute_name</tt> (and <tt>:model_class</tt> discussed below).
@@ -205,6 +246,8 @@ To show columns of joined tables in the view table, the ActiveRecord model class
       product.category.name
     end
   %>
+  
+Please note that the blockless definition of the column only works with columns from the main table and it won't work with columns with <tt>:model_class</tt>
 
 === Joined associations referring to the same table
 

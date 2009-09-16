@@ -1,3 +1,5 @@
+to do: control the number of links in the paginator
+
 == 0.5
 
 New configuration option: in addition to the configuration constant Wice::Defaults::STRING_MATCHING_OPERATOR 
@@ -77,6 +79,7 @@ To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this 
 * Configuration file wice_grid_config.rb is removed from the plugin lib directory, the config is now
   an initializer copied to config/initializers/ by task :copy_config_to_initializers.
 
+* Updated default styles
 * Cleaned up and refactored javascript code
 * Quite some number of bugs fixed
 
