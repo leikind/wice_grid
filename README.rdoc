@@ -194,8 +194,8 @@ It is important to understand that it is up to the developer to make sure that t
 
 Initializing the grid we can also define the column by which the record will be ordered <em>on the first rendering of the grid</em>, when the user has not set their ordering setting by clicking the column label, and the order direction:
 
-  @accounts_grid = initialize_grid(ApplicationAccount,
-    :order => 'username',
+  @tasks_grid = initialize_grid(Task,
+    :order => 'title',
     :order_direction => 'desc'
   )
 
@@ -203,17 +203,16 @@ Initializing the grid we can also define the column by which the record will be 
 
 The number of rows per page is set with <tt>:per_page</tt>:
 
-  @accounts_grid = initialize_grid(ApplicationAccount,
-    :per_page => 20,
-    :order => 'username',
-    :order_direction => 'desc'
-  )
-
-
+  @tasks_grid = initialize_grid(Task, :per_page => 40)
 
 === Conditions
 
-The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), so it can be anything that <tt>:conditions</tt> in <tt>ActiveRecord#find</tt> can be.
+The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), so it can be anything that <tt>:conditions</tt> in <tt>ActiveRecord#find</tt> can be:
+
+
+  @tasks_grid = initialize_grid(Task,
+    :conditions => {:archived => false}
+  )
 
 A good example is substituting a common pattern like
 
@@ -455,7 +454,7 @@ It is possible to use the '?' character instead of the name of the column in the
         'hosts.ip_address' => 'INET_ATON( ? )'
       })
 
-Values can also be Proc objects. The parameter suppied to such a Proc object is the name of the column:
+Values can also be Proc objects. The parameter supplied to such a Proc object is the name of the column:
 
       @hosts_grid = initialize_grid(Host,
         :custom_order => {
