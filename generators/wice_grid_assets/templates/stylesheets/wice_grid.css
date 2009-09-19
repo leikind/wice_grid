@@ -57,6 +57,10 @@
   background: transparent url(/images/icons/grid/arrow_up.gif)   right no-repeat
 }
 
+.wice_grid th div.date-filter {
+  text-align: left;
+}
+
 .wice_grid tr.even td.active_filter  { background-color: #ddddff; }
 .wice_grid tr.odd td.active_filter  { background-color: #eeeeff; }
 
