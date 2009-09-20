@@ -347,6 +347,7 @@ module Wice
     def get_row_attributes(ar_object) #:nodoc:
       if @row_attributes_handler
         row_attributes = @row_attributes_handler.call(ar_object)
+        row_attributes = {} if row_attributes.blank?
         unless row_attributes.is_a?(Hash)
           raise WiceGridArgumentError.new("row_attributes block must return a hash containing HTML attributes. The returned value is #{row_attributes.inspect}")
         end
