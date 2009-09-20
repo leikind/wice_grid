@@ -213,8 +213,7 @@ module Wice
         
       options.merge!(opts)
       
-      options[:table_html_attrs].add_or_append_class_value('wice_grid')
-      
+      options[:table_html_attrs].add_or_append_class_value('wice_grid', true)
       
       if options[:class]
         options[:table_html_attrs].add_or_append_class_value(options[:class])
@@ -340,7 +339,10 @@ module Wice
         content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
       end
 
-      content << %!<tr class="wice_grid_title_row" #{tag_options(header_tr_html_attrs, true)}>!
+      title_row_attrs = header_tr_html_attrs.clone
+      title_row_attrs.add_or_append_class_value('wice_grid_title_row', true)
+
+      content << %!<tr #{tag_options(title_row_attrs, true)}>!
 
       # first row of column labels with sorting links
       rendering.each_column(:in_html) do |column|
@@ -424,7 +426,12 @@ module Wice
           end
           
         else # some filters are present in the table
-          content << %!<tr class="wice_grid_filter_row" id="#{filter_row_id}" !
+          
+          filter_row_attrs = header_tr_html_attrs.clone
+          filter_row_attrs.add_or_append_class_value('wice_grid_filter_row', true)
+          filter_row_attrs['id'] = filter_row_id
+          
+          content << %!<tr #{tag_options(filter_row_attrs, true)}" !
           content << 'style="display:none"' unless filter_shown
           content << '>'
 
