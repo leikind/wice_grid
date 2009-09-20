@@ -147,7 +147,7 @@ This will  add sorting links and filters for columns +Username+ and +Active+.
 The plugin automatically creates filters according to the type
 of the database column. In the above example a text field will be created for column Title (title is a string), 
 for column +Archived+ a dropdown filter will be created with options 'Yes', 'No', and '--', and for the integer ID two short text fields are
-added which can containt the numeric range (more than, less than).
+added which can contain the numeric range (more than, less than).
 
 It is important to remember that <tt>:attribute_name</tt> is the name of the database column, not a model attribute. Of course, all database columns have corresponding model attributes, but not all model attributes map to columns in the same table with the same name.
 
@@ -161,7 +161,7 @@ For columns like
     task.title
   end
 
-where the block contains just a call to the same attribute declared by :attribute_name, the block can be ommited:
+where the block contains just a call to the same attribute declared by :attribute_name, the block can be omitted:
 
   <%= grid(@tasks_grid) do |g|
 
@@ -190,12 +190,31 @@ If only sorting is needed, we can turn off filters using <tt>:no_filter</tt> :
 
 It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute_name</tt> (and <tt>:model_class</tt> discussed below).
 
+
+=== Rendering filter panel
+
+The filter panel can be shown and hidden clicking the icon with binoculars.
+
+The way the filter panel is shown after the page is loaded is controlled via parameter <tt>:show_filters</tt> of the <tt>grid</tt> helper.
+Possible values are:
+
+* <tt>:when_filtered</tt> - the filter is shown when the current table is the result of filtering
+* <tt>:always</tt> - show the filter always
+* <tt>:no</tt> - never show the filter
+
+Example:
+
+  <%= grid(@tasks_grid, :show_filters => :always) do |g|
+    ......
+  end -%>
+
+
 === Initial Ordering
 
 Initializing the grid we can also define the column by which the record will be ordered <em>on the first rendering of the grid</em>, when the user has not set their ordering setting by clicking the column label, and the order direction:
 
   @tasks_grid = initialize_grid(Task,
-    :order => 'title',
+    :order => 'tasks.title',
     :order_direction => 'desc'
   )
 
@@ -250,184 +269,51 @@ Please note that the blockless definition of the column only works with columns 
 
 === Joined associations referring to the same table
 
-In case there are two joined assocations both referring to the same table, ActiveRecord constructs a query where
-the second join provides an alias for the joined table. To enable WiceGrid to order and filter by columns belonging to different associatiations
+In case there are two joined associations both referring to the same table, ActiveRecord constructs a query where
+the second join provides an alias for the joined table. To enable WiceGrid to order and filter by columns belonging to different associations
 but originating from the same table, set <tt>:table_alias</tt> to this alias:
 
 Model:
 
-   class Contract < ActiveRecord::Base
-     belongs_to :supplier_company, :class_name => 'Company', :foreign_key => :supplier_company_id
-     belongs_to :customer_company, :class_name => 'Company', :foreign_key => :customer_company_id
+   class Project < ActiveRecord::Base
+     belongs_to :customer, :class_name => 'Company'
+     belongs_to :supplier, :class_name => 'Company'
    end
 
 Controller:
 
-   @grid = initialize_grid(Contract, :include => [:supplier_company, :customer_company])
+    @projects_grid = initialize_grid(Project, :include => [:customer, :supplier] )
 
 
 View:
 
-  <%= grid(@grid) do |g|
-    g.column :column_name => 'contract name', :attribute_name => 'name'  do |c|
-      c.name
+  <%= grid(@projects_grid, :show_filters => :always) do |g|
+
+    g.column :column_name => 'Project Name', :attribute_name => 'name'
+
+    g.column  :column_name => 'Customer company', :model_class => 'Company', :attribute_name => 'name' do |task|
+      task.customer.name if task.customer
     end
 
-    g.column :column_name => 'supplier name', :attribute_name => 'name',   :model_class => Company do |c|
-      c.supplier_company.name
+    g.column  :column_name => 'Supplier company', :model_class => 'Company', :attribute_name => 'name', :table_alias => ' suppliers_projects' do |task|
+      task.supplier.name if task.supplier
     end
 
-    g.column :column_name => 'customer name', :attribute_name => 'name', :model_class => Company,  :table_alias => 'customer_companies_contracts'  do |c|
-      c.customer_company.name
-    end
   end -%>
 
-=== Custom dropdown filters
 
-It is possible to construct custom dropdown filters. Depending on the value of <tt>column</tt> parameter<tt>:custom_filter</tt> different
-modes are available:
+=== More than one grid on a page
 
+It is possible to use more that one grid on a page, each with its own state. To do so, you must specify the name of the grid in +initialize_grid+ using
+parameter <tt>:name</tt>
 
-==== Array of strings or numbers
+The name serves as the base name for HTTP parameters, DOM IDs, etc, so it is important that all grids on a page have different names. The default
+name is 'grid'.
 
-This is a direct  definition of possible values of the dropdown. The generated dropdown list filter will contain these values
-together with a special value '--' (+nil+). Every item will be used both as the value of the select option and as its label.
+The name can only contain alphanumeric characters.
 
-  g.column :column_name => 'Periodicity (years)', :attribute_name => 'years', :model_class => Periodicity,
-           :custom_filter => [0.5, 1, 2] |order|
-    order.periodicity.name
-  end
-
-==== Array of two-element arrays 
-
-Every first item of the two-element array is used for the label of the select option while the second element is the value of the select option:
-
-  g.column :column_name => 'Periodicity (years)', :attribute_name => 'years', :model_class => Periodicity,
-           :custom_filter => [['Every half year', 0.5], ['Yearly', 1], ['Every two years', 2]] |order|
-    order.periodicity.name
-  end
-
-
-==== Hash
-
-The keys of the hash become the labels of the generated dropdown list, while the values will be values of options of the dropdown list:
-
-  g.column :column_name => 'Periodicity (years)', :attribute_name => 'years', :model_class => Periodicity,
-           :custom_filter => {'Every half year' => 0.5, 'Yearly' => 1, 'Every two years' => 2} |order|
-    order.periodicity.name
-  end
-
-==== :auto
-
-<tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the column specified by
-<tt>:attribute_name</tt> and <tt>:model_class</tt>.
-
-  g.column :column_name => 'Category', :attribute_name => 'name', :model_class => Category, :custom_filter => :auto |product|
-    product.category.name
-  end
-
-Note that in the above example all names of all possible categories will appear even if they don't appear in the current resultset.
-To only show those which do appear in the resutset, use an array of symbol messages <tt>:custom_filter => [:category, :name] </tt>
-(see section 'An array of symbols').
-
-==== Any other symbol name (method name)
-
-The dropdown list is populated by all unique value returned by the method with this name
-sent to <em>all</em> ActiveRecord objects throughout all pages. The main difference from <tt>:auto</tt> is that this method does
-not have to be a field in the result set, it is just some  value computed in the method after the database call and ActiveRecord
-instantiation.
-
-But here lies the major drawback - this mode requires additional query without +offset+ and +limit+ clauses to instantiate _all_
-ActiveRecord objects, and performance-wise it brings all the advantages of pagination to nothing.  Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
-
-
-If the method returns a atomic value like a string or an integer, it is used for both the value and the label of the select option element:
-
-  <option value="returned value">returned value</option>
-
-However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
-
-Typically, a model method like the following:
-
-  def to_option
-    [name, id]
-  end
-  
-together with 
-
-  :custom_filter => :to_option
-  
-would do the trick:
-
-  <option value="id">name</option>
-
-Alternatively, a hash with the single key-value pair can be used, where the key will be used for the label, and the key - for the value:
-
-  def to_option
-    {name => id}
-  end
-
-
-==== An array of symbols (method names)
-
-Similar to the mode with a single symbol name. The first method name is sent to the ActiveRecord
-object if it responds to this method, the second method name is sent to the
-returned value unless it is +nil+, and so on. In other words, a single symbol mode is a
-case of an array of symbols where the array contains just one element. Thus the warning about the single method name
-mode applies here as well. Be warned.
-
-  g.column :column_name => 'Customer Profile', :attribute_name => 'name', :model_class => CustomerProfile,
-           :custom_filter => [:customer_profile, :name] do |shop_preference|
-    link_to(shop_preference.customer_profile.name, shop_customer_profile_path(@shop, shop_pref.customer_profile))
-  end
-
-The trick with the method returning a two element array (see section 'Custom dropdown filters') applies here as well, 
-only for the last method in the queue, logically.
-
-==== Special treatment of values 'null' and 'not null'
-
-Values 'null' and 'not null' in a generated custom filter are treated specially, as SQL +null+ statement and not as strings.
-Value 'null' is transformed into SQL condition <tt>IS NULL</tt>, and 'not null' into <tt>IS NOT NULL</tt>
-  
-Thus, if in a filter defined by
-     :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
-values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
-  
-    ( table.field IN ( '1', '2' ) OR table.field IS NULL )
-
-
-=== Defaults
-
-Default values like  can be  changed in <tt>config/initializers/wice_grid_config.rb</tt>, as well grid labels and paths to some images.
-
-
-=== Rendering filter panel
-
-The filter panel can be shown and hidden clicking the icon with binoculars.
-
-The way the filter panel is shown after the page is loaded is controlled via parameter <tt>:show_filters</tt> of the <tt>grid</tt> helper.
-Possible values are:
-
-* <tt>:when_filtered</tt> - the filter is shown when the current table is the result of filtering
-* <tt>:always</tt> - show the filter always
-* <tt>:no</tt> - never show the filter
-
-Example:
-
-  <%= grid(@accounts_grid, :show_filters => :always) do |g|
-    ......
-  end -%>
-
-=== Submit/Reset buttons
-View helper +submit_grid_javascript+ returns javascript which applies current filters.
-View helper +reset_grid_javascript+ returns javascript which resets the grid, clearing the state of filters. 
-This allows to create your own Submit and Reset buttons anywhere on the page with the help of +button_to_function+:
-
-  <%= button_to_function "Submit", submit_grid_javascript(@grid) %>
-  <%= button_to_function "Reset",  reset_grid_javascript(@grid) %>
-  
-To complement this feature there are two parameters in the +grid+ helper :hide_submit_button and :hide_reset_button which 
-hide default buttons in the grid if set to true.
+  @projects_grid = initialize_grid(Project, :name => 'g1' )
+  @tasks_grid = initialize_grid(Task, :name => 'g2')
 
 
 === Custom Ordering
@@ -462,48 +348,220 @@ Values can also be Proc objects. The parameter supplied to such a Proc object is
         })
 
 
+=== Custom dropdown filters
+
+It is possible to construct custom dropdown filters. Depending on the value of <tt>column</tt> parameter<tt>:custom_filter</tt> different
+modes are available:
+
+
+==== Array of two-element arrays or a hash
+
+An array of two-element arrays or a hash are semantically identical ways of creating a custom filter.
+
+Every first item of the two-element array is used for the label of the select option while the second element is the value of the select option. In case of a hash the keys become the labels of the generated dropdown list, while the values will be values of options of the dropdown list:
+
+  g.column :column_name => 'Status', :attribute_name => 'status', 
+           :custom_filter => {'Development' => 'development', 'Testing' => 'testing', 'Production' => 'production'}
+
+  g.column :column_name => 'Status', :attribute_name => 'status', 
+          :custom_filter => [['Development', 'development'], ['Testing', 'testing'], ['Production', 'production']]
+
+It is also possible to submit a array of strings or numbers, in this case every item will be used both as the value of the select option and as its label:
+
+  g.column :column_name => 'Status', :attribute_name => 'status', 
+           :custom_filter => ['development', 'testing', 'production']
+
+
+==== :auto
+
+<tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the column specified by
+<tt>:attribute_name</tt> and <tt>:model_class</tt>.
+
+  g.column :column_name => 'Status', :attribute_name => 'status', 
+           :custom_filter => ['development', 'testing', 'production']
+
+Note that in the above example all names of all possible categories will appear even if they don't appear in the current resultset.
+To only show those which do appear in the resutset, use an array of symbol messages (see section 'An array of symbols').
+
+
+==== Custom filters and associations (joined tables)
+
+In most cases custom fields are required for one-to-many and many-to-many associations. 
+
+To correctly build a filter condition foreign keys have to be matched.
+
+For example, if there is a column:
+
+  g.column :column_name => 'Project Name', :attribute_name => 'name', :model_class => 'Project' do |task|
+    task.project.name if task.project
+  end
+
+adding <tt>:custom_filter</tt> like this:
+
+  g.column :column_name => 'Project Name', :attribute_name => 'name', :model_class => 'Project', 
+           :custom_filter => Project.find(:all).map{|pr| [pr.name, pr.name]} do |task|
+    task.project.name if task.project
+  end
+
+is bad style and can fail, because the resulting condition will compare the name of the project, <tt>projects.name</tt> to a string,
+and in some databases it is possible that different  records (projects in our example) have the same name.
+
+To use filter with foreign keys, we have to change the declaration of the column from <tt>projects.name</tt>, to 
+<tt>tasks.project_id</tt>, and build the dropdown with foreign keys as values:
+
+
+  g.column :column_name => 'Project Name', :attribute_name => 'tasks.project_id',
+           :custom_filter => Project.find(:all).map{|pr| [pr.id, pr.name]} do |task|
+    task.project.name if task.project
+  end
+
+However, this will break the ordering of the column - the column will be ordered by the integer foreign key. To fix this,
+we can override the ordering using <tt>:custom_order</tt>:
+
+  @tasks_grid = initialize_grid(Task,
+    :include => :project,
+    :custom_order => {
+      'tasks.project_id' => 'projects.name'
+    }
+  )
+
+
+==== Any other symbol (method name) or an array of symbols (method names)
+
+
+For one symbol (different from <tt>:auto</tt>) the dropdown list is populated by all unique values returned by the method with this name
+sent to <em>all</em> ActiveRecord objects throughout all pages.
+
+The conditions set up by the user are ignored, that is, the records used are all those found on all pages without any filters active.
+
+For an array of symbols, the first method name is sent to the ActiveRecord
+object if it responds to this method, the second method name is sent to the
+returned value unless it is +nil+, and so on. In other words, a single symbol mode is the
+same as an array of symbols where the array contains just one element.
+
+  g.column :column_name => 'Version', :attribute_name => 'expected_version_id', :custom_filter => [:expected_version, :to_option] do |task|
+    task.expected_version.name if task.expected_version
+  end
+
+
+There are two important differences from <tt>:auto</tt>:
+
+1. The  method does not have to be a field in the result set, it is just some  value computed in the method after the database call and ActiveRecord instantiation.
+2. Filtering by any option of such a custom filter will bring a non-empty list, unlike with <tt>:auto</tt>.
+
+
+This mode has one major drawback - this mode requires an additional query without +offset+ and +limit+ clauses to instantiate _all_
+ActiveRecord objects, and performance-wise it brings all the advantages of pagination to nothing.  Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
+
+
+If the final method returns a atomic value like a string or an integer, it is used for both the value and the label of the select option element:
+
+  <option value="returned value">returned value</option>
+
+However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
+
+Typically, a model method like the following:
+
+  def to_option
+    [name, id]
+  end
+  
+together with 
+
+  :custom_filter => :to_option
+  
+would do the trick:
+
+  <option value="id">name</option>
+
+Alternatively, a hash with the single key-value pair can be used, where the key will be used for the label, and the key - for the value:
+
+  def to_option
+    {name => id}
+  end
+
+
+==== Special treatment of values 'null' and 'not null'
+
+Values 'null' and 'not null' in a generated custom filter are treated specially, as SQL +null+ statement and not as strings.
+Value 'null' is transformed into SQL condition <tt>IS NULL</tt>, and 'not null' into <tt>IS NOT NULL</tt>
+  
+Thus, if in a filter defined by
+     :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
+values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
+  
+    ( table.field IN ( '1', '2' ) OR table.field IS NULL )
+
+
+=== Defaults
+
+Default values like  can be  changed in <tt>config/initializers/wice_grid_config.rb</tt>, as well grid labels and paths to some images.
+
+
+
+=== Submit/Reset buttons
+View helper +submit_grid_javascript+ returns javascript which applies current filters.
+View helper +reset_grid_javascript+ returns javascript which resets the grid, clearing the state of filters. 
+This allows to create your own Submit and Reset buttons anywhere on the page with the help of +button_to_function+:
+
+  <%= button_to_function "Submit", submit_grid_javascript(@grid) %>
+  <%= button_to_function "Reset",  reset_grid_javascript(@grid) %>
+  
+To complement this feature there are two parameters in the +grid+ helper <tt>:hide_submit_button</tt> and <tt>:hide_reset_button</tt> which 
+hide default buttons in the grid if set to true.
+
+
+
+
 === Styling the grid
 
-The grid table has style class +wice_grid+ by default. The +grid+ helper accepts parameter <tt>:table_html_attrs</tt> which is a hash of HTML
-attributes for the table tag. If this hash contains a :class key, the default style class gets overwritten.
+==== Predefined css classes used by the grid
+
++td+ tags are assigned two styles automatically - +sorted+ if the column is the one by which the grid is ordered, 
+and +active_filter+ if the column's filter is on.
+
+Odd and even +tr+ tags are assigned styles +odd+ and +even+, correspondingly.
+
+For other classes see <tt>wice_grid.css</tt>. Feel free to customize it according to your needs.
+
+==== Adding classes and styles
+
+The +grid+ helper accepts parameter <tt>:table_html_attrs</tt> which is a hash of HTML
+attributes for the table tag. 
 
 Another +grid+ parameter is <tt>header_tr_html_attrs</tt> which is a hash of HTML attributes to be added to the first +tr+ tag (or two first +tr+'s if the filter row is present).
 
 <tt>:td_html_attrs</tt> is a parameter for the +column+ method setting HTML attributes of +td+ tags for a certain column.
 
-+td+ tags also are assigned two styles automatically - +sorted+ if the column is the one by which the grid is ordered, and +active_filter+ if
-the column's filter is on.
+==== Adding classes and styles dynamically
 
-If it is required to assign a class attribute to a specific <tt><td></tt>, let the +column+ return an array where the first item is the usual
-string output whole the second is a hash of HTML attributes to be added for the <tt><td></tt> tag of the current cell.
+WiceGrid offers ways to dynamically add classes and styles to +TR+ and +TD+ based on the current ActiveRecord instance.
+
+
+For <tt><TD></tt>, let the +column+ return an array where the first item is the usual
+string output whole the second is a hash of HTML attributes to be added for the <tt><td></tt> tag of the current cell:
 
   g.column  do |portal_application|
     css_class = portal_application.public? ? 'public' : 'private'
     [portal_application.name, {:class => css_class}]
   end
 
+For adding classes/styles to <tt><TR></tt> use special clause  +row_attributes+ , similar to +column+, only returning a hash:
 
-Style classes +sorted+ and +active_filter+ and the style coming from <tt>:td_html_attrs</tt> or from the +column+ block do not overwite each other, instead, they are concatenated. The resulting class might be <tt>class="active_filter sorted column_user_class specific_cell_class"</tt>
+    <%= grid(@versions_grid) do |g|
+      g.row_attributes do |version|
+        if version.status == 'production'
+          {:style => 'background-color: rgb(255, 255, 204);'}
+        end
+      end
 
-Additionally, odd and even +tr+ tags are assigned styles +odd+ and +even+, correspondingly.
+      g.column{|version| ... }
+      g.column{|version| ... }
+    end  -%>
 
-It is also possible to dynamically define HTML attributes for a certain row depending on the ActiveRecord instance of this  row. For this method
-+row_attributes+ is used, similar to +column+, only it should return a hash:
+Naturally, there can be only one +row_attributes+ definition for a WiceGrid instance.
 
-  <%= grid(@portal_applications_grid) do |g|
-    g.row_attributes{ |portal_application|
-      {:id => "#{@portal_applications_grid.name}_row_#{portal_application.id}"}
-    }
-
-    g.column{ |portal_application| ... }
-    g.column{ |portal_application| ... }
-  end  -%>
-
-Naturally, there is only one +row_attributes+ definition for a WiceGrid instance. One of <tt><tr></tt> tags in the example above might look like <tt><tr id="grid_row_2"></tt>.
-
-
-The css file coming with the plugin is an example defining 2 styles for ordered columns (one for the header, one for content cells), and two
-styles for filtered columns. Customize them to your needs.
+Various classes do not overwrite each other, instead, they are concatenated.
 
 WiceGrid icons are in directory <tt>public/images/icons/grid/</tt>.
 
@@ -551,19 +609,6 @@ Or a partial:
   
   g.blank_slate :partial => "partial_name"
 
-=== More than one grid on a page
-
-It is possible to use more that one grid on a page, each with its own state. To do so, you must specify the name of the grid in +initialize_grid+ using
-parameter <tt>:name</tt>
-
-The name serves as the base name for HTTP parameters, DOM IDs, etc, so it is important that all grids on a page have different names. The default
-name is 'grid'.
-
-The name can only contain alphanumeric characters.
-
-  @accounts_grid = initialize_grid(ApplicationAccount, :order => 'username', :order_direction => 'desc')
-
-  @user_groups_grid = initialize_grid(UserGroup, :conditions => ['portal_application_id = ?', @portal_application], :name => 'grid2')
 
 === ERB mode
 
