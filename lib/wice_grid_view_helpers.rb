@@ -637,7 +637,7 @@ module Wice
 
 
       field_separator = (grid.export_to_csv_enabled && grid.export_to_csv_enabled.is_a?(String)) ? grid.export_to_csv_enabled : ','
-      spreadsheet = Spreadsheet.new(grid.name, field_separator)
+      spreadsheet = ::Wice::Spreadsheet.new(grid.name, field_separator)
 
       # columns
       spreadsheet << rendering.column_labels(:in_csv)
