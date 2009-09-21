@@ -550,7 +550,7 @@ For adding classes/styles to <tt><TR></tt> use special clause  +row_attributes+ 
 
     <%= grid(@versions_grid) do |g|
       g.row_attributes do |version|
-        if version.status == 'production'
+        if version.in_production?
           {:style => 'background-color: rgb(255, 255, 204);'}
         end
       end
