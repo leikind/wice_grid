@@ -117,6 +117,7 @@ module Wice
     #   only when the content of the cell belonging to the sorted column changes. In other words, rows with identical values in the ordered
     #   column will have the same style (color).
     # * <tt>:erb_mode</tt> - can be <tt>true</tt> or <tt>false</tt>. Defines the style of the helper method in the view. The default is <tt>false</tt>.
+    # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
     #   Please read README for more insights.    
     #
     # The block contains definitions of grid columns using the +column+ method sent to the object yielded into the block. In other words,
@@ -208,13 +209,14 @@ module Wice
         :class => nil,
         :extra_request_parameters => {},
         :table_html_attrs => {},
-        :header_tr_html_attrs => {}
+        :header_tr_html_attrs => {},
+        :allow_showing_all_records => Defaults::ALLOW_SHOWING_ALL_QUERIES
       }
-        
+
       options.merge!(opts)
-      
+
       options[:table_html_attrs].add_or_append_class_value('wice_grid', true)
-      
+
       if options[:class]
         options[:table_html_attrs].add_or_append_class_value(options[:class])
         options.delete(:class)
@@ -336,7 +338,9 @@ module Wice
       end
       
       if options[:upper_pagination_panel]
-        content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
+        content << rendering.pagination_panel(no_rightmost_column){ 
+          pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
+        }
       end
 
       title_row_attrs = header_tr_html_attrs.clone
@@ -476,7 +480,9 @@ module Wice
       end
 
       content << '</thead><tfoot>'
-      content << rendering.pagination_panel(no_rightmost_column){ pagination_panel_content(grid, options[:extra_request_parameters]) }
+      content << rendering.pagination_panel(no_rightmost_column){ 
+        pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records]) 
+      }
       content << '</tfoot><tbody>'
       
       # rendering  rows
@@ -722,7 +728,7 @@ module Wice
 
 
 
-    def pagination_panel_content(grid, extra_request_parameters) #:nodoc:
+    def pagination_panel_content(grid, extra_request_parameters, allow_showing_all_records) #:nodoc:
       extra_request_parameters = extra_request_parameters.clone
       if grid.saved_query
         extra_request_parameters["#{grid.name}[q]"] = grid.saved_query.id
@@ -730,7 +736,7 @@ module Wice
 
       will_paginate(grid.resultset, :previous_label => Defaults::PREVIOUS_LABEL, :next_label => Defaults::NEXT_LABEL,
       :param_name => "#{grid.name}[page]", :params => extra_request_parameters).to_s +
-      ' <div class="pagination_status">' + pagination_info(grid) + '</div>'
+      ' <div class="pagination_status">' + pagination_info(grid, allow_showing_all_records) + '</div>'
     end
 
 
@@ -752,7 +758,7 @@ module Wice
         '</span>'
     end
 
-    def pagination_info(grid, options = {})  #:nodoc:
+    def pagination_info(grid, allow_showing_all_records)  #:nodoc:
       collection = grid.resultset
       
       collection_total_entries = collection.total_entries
@@ -763,9 +769,9 @@ module Wice
         '0'
       else
         parameters << ["#{grid.name}[pp]", collection_total_entries_str]
-        
+
         "#{collection.offset + 1}-#{collection.offset + collection.length} / #{collection_total_entries_str} " +
-          if (! grid.allow_showing_all_records?) || collection_total_entries <= collection.length
+          if (! allow_showing_all_records) || collection_total_entries <= collection.length
             ''
           else
             show_all_link(collection_total_entries, parameters, grid.name)

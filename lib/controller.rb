@@ -46,7 +46,6 @@ module Wice
     #   The value of the parameter is a hash where keys are fully qualified names
     #   of database columns, and values the required chunks of SQL to use in the ORDER BY clause, either as strings or Proc object
     #   evaluating to string. See section 'Custom Ordering' in the README.
-    # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
     # * <tt>:saved_query</tt> - id of the saved query or the query object itself to load initially.
     #   Read section "Saving Queries How-To" in README for more details.
     #

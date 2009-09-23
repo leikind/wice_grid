@@ -50,7 +50,6 @@ module Wice
         :order_direction => Defaults::ORDER_DIRECTION,
         :name => Defaults::GRID_NAME,
         :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
-        :allow_showing_all_records => Defaults::ALLOW_SHOWING_ALL_QUERIES,
         :csv_file_name => nil,
         :columns => nil,
         :order => nil,
@@ -339,12 +338,7 @@ module Wice
     def all_record_mode?
       @status[:pp]
     end
-    
-    def allow_showing_all_records?
-      @options[:allow_showing_all_records]
-    end
-    
-    
+        
     def dump_status
       "   params: #{params[name].inspect}\n"  +
       "   status: #{@status.inspect}\n" +
