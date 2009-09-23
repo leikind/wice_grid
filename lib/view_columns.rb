@@ -240,8 +240,10 @@ module Wice
 
 
     def render_standard_filter_internal(params) #:nodoc:
+      '<div class="date-filter">' +
       select_datetime(params[:fr], {:include_blank => true, :prefix => @name1}) + '<br/>' +
-      select_datetime(params[:to], {:include_blank => true, :prefix => @name2})
+      select_datetime(params[:to], {:include_blank => true, :prefix => @name2}) +
+      '</div>'
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
@@ -276,8 +278,10 @@ module Wice
     @@datetime_chunk_names = %w(year month day)
 
     def render_standard_filter_internal(params) #:nodoc:
+      '<div class="date-filter">' +
       select_date(params[:fr], {:include_blank => true, :prefix => @name1, :id => @dom_id}) + '<br/>' +
-      select_date(params[:to], {:include_blank => true, :prefix => @name2, :id => @dom_id2})
+      select_date(params[:to], {:include_blank => true, :prefix => @name2, :id => @dom_id2}) +
+      '</div>'
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
