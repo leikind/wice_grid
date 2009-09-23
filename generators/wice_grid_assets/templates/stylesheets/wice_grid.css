@@ -10,6 +10,9 @@
   background-color: #dfdfdf; 
   font-weight: bold; 
   text-shadow: rgb(204, 204, 204) 0px 1px 0px; 
+  height: 2em;
+  padding: 0 1em;
+  
 }
 .wice_grid th a { 
   color: #000; 
