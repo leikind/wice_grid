@@ -877,9 +877,9 @@ Using this trick you have to deal with the parameters correctly, mind that Proto
 
 === Integration With The Application
 
-If it is needed to retrieve the objects of the current selection that the user has set up using filters, for use outside of WiceGrid,
+If it is needed to retrieve the objects of the current selection that the user has selected with filters, for use outside of the grid,
 WiceGrid initialization routine accepts parameter <tt>:after</tt> to setup a callback to a method or a Proc object which will be called
-with an object giving access to the selection of objects.
+with a parameter giving access to the selection of objects.
 
 A good example is the following use case:
 
@@ -887,30 +887,23 @@ A good example is the following use case:
 * User clicks the button "Send to customer"
 * The system generates a letter to a customer containing descriptions of the products selected by the user.
 
-The code to implement this use case might look the following way:
+The code to implement this use case might look in the following way:
 
 
   def index
-
-    @products_grid = initialize_grid(Product,
-      :include => [:category, :vat_code, :labels, :brand],
-      :order => 'products.name',
-      :after => :process_selection,
-      :per_page => 10)
-
-    @user_requests_mail_to_be_sent = user_requests_mail_to_be_sent?()
-
+    @tasks_grid = initialize_grid(Task, :after => :process_selection)
   end
 
-  def process_selection(wrapper_proc)
-    if @user_requests_mail_to_be_sent
-      compose_mail(wrapper_proc.call)
+  def process_selection(wrapper_lambda)
+    if params[:process_selected_tasks]
+      @selected_tasks = wrapper_lambda.call
+      # Do something with @selected_tasks
     end
   end
 
-The object supplied to the callback is not the list of selected objects but a Proc object that needs to be called to obtain this list.
+The object supplied to the callback is not the list of the selected objects but a Proc object that needs to be called to obtain this list.
 This is done so to avoid redundant SQL calls each time when the page with the grid is rendered;
-the list of objects are objects accessible throughout <i>all pages</i> of the current filtered selection, and can be quite large.
+the list of objects is  <i>all pages</i> of the current filtered selection, and can be quite large.
 
 == Icons
 
