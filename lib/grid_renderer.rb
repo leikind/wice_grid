@@ -160,7 +160,6 @@ module Wice
     #     select option element.
     #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value. 
     #     Read more in README, section 'Custom dropdown filters'
-    
     # * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt> ('+yes+') in the config.
     #   Only has effect in a column with a boolean filter.
     # * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('+no+') in the config.

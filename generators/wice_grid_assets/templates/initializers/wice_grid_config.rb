@@ -82,7 +82,7 @@ if defined?(Wice::Defaults)
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                              Advanced Filters                             #
 
-  # The title of the checkox to turn on negation
+  # Switch of the negation checkbox in all text filters
   Wice::Defaults::NEGATION_IN_STRING_FILTERS = true
 
   # The title of the checkox to turn on negation
