@@ -1,18 +1,22 @@
-to do: control the number of links in the paginator
-       option to turn off ordering links
-       solve the problem of the last column with filter icons
-       option to turn off miltiple selection boxes
+examples to add: 
+  * <tt>:allow_ordering</tt>
+  * <tt>:allow_multiple_selection</tt>
 
+to do: control the number of links in the paginator
+       solve the problem of the last column with filter icons
+       style negation checkbox just like the custom selection icon
+      integration with the application: access records from the view
+      
 == 0.5
 
-New configuration option: in addition to the configuration constant Wice::Defaults::STRING_MATCHING_OPERATOR 
-to define the operator for matching strings (LIKE in most cases), hash Wice::Defaults::STRING_MATCHING_OPERATORS
-was added to specify string matching operators on per-database basis:
+* New configuration option: in addition to the configuration constant Wice::Defaults::STRING_MATCHING_OPERATOR 
+  to define the operator for matching strings (LIKE in most cases), hash Wice::Defaults::STRING_MATCHING_OPERATORS
+  was added to specify string matching operators on per-database basis:
 
-  Wice::Defaults::STRING_MATCHING_OPERATORS = {
-    'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
-    'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
-  }
+    Wice::Defaults::STRING_MATCHING_OPERATORS = {
+      'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
+      'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
+    }
 
 A use-case for this is a Rails application connecting to two databases, one of which is MySQL, and the other is Postgresql.
 To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this operator is unknown to MySQL.
@@ -77,7 +81,9 @@ To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this 
 
       ( table.field IN ( '1', '2' ) OR table.field IS NULL )
 
+* New options for +column+: <tt>:allow_multiple_selection</tt>, use <tt>:allow_multiple_selection => false</tt> to disable switching between single and multiple selection modes for custom dropdown boxes. +true+ by default (see +ALLOW_MULTIPLE_SELECTION+ in the configuration file).
 
+* New parameter for +column+: <tt>:allow_ordering</tt>. User <tt>:allow_ordering => false</tt> to disable the ordering of the column
 
 * Configuration file wice_grid_config.rb is now
   an initializer copied to config/initializers/ by task :copy_config_to_initializers.

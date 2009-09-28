@@ -354,7 +354,7 @@ module Wice
 
       # first row of column labels with sorting links
       rendering.each_column(:in_html) do |column|
-        if column.attribute_name
+        if column.attribute_name && column.allow_ordering
 
           css_class = grid.filtered_by?(column) ? 'active_filter' : nil
 

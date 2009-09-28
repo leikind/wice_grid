@@ -122,6 +122,8 @@ module Wice
     #       is far from being user-friendly due to the number of dropdown lists.
     # * <tt>:no_filter</tt> - Turns off filters even if <tt>:attribute_name</tt> is specified. This is needed if sorting is required while
     #   filters are not.
+    # * <tt>:allow_ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+ (i.e. if <tt>:attribute_name</tt>
+    #   is defined, ordering is enabled)
     # * <tt>:model_class</tt> - Name of the model class to which <tt>:attribute_name</tt> belongs to if this is not the main table.
     # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord constructs a query where
     #   the second join provides an alias for the joined table. Setting <tt>:table_alias</tt> to this alias will enable WiceGrid to order
@@ -164,6 +166,8 @@ module Wice
     #   Only has effect in a column with a boolean filter.
     # * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('+no+') in the config.
     #   Only has effect in a column with a boolean filter.
+    # * <tt>:allow_multiple_selection</tt> - enables or disables switching between single and multiple selection modes for
+    #   custom dropdown boxes. +true+ by default (see +ALLOW_MULTIPLE_SELECTION+ in the configuration file).
     # * <tt>:filter_all_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('<tt>--</tt>') in the config.
     #   Has effect in a column with a boolean filter _or_ a custom filter.
     # * <tt>:detach_with_id</tt> - allows to detach the filter and render it after or before the grid with the +grid_filter+ helper. 
@@ -209,7 +213,9 @@ module Wice
         :helper_style       => Defaults::HELPER_STYLE,
         :table_alias        => nil,
         :negation_in_filter => Defaults::NEGATION_IN_STRING_FILTERS,
-        :detach_with_id     => nil
+        :detach_with_id     => nil,
+        :allow_ordering     => true,
+        :allow_multiple_selection => Defaults::ALLOW_MULTIPLE_SELECTION
       }
 
       Wice.deprecated_call(:filter_options, :custom_filter, opts)

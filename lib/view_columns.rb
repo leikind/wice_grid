@@ -5,12 +5,14 @@ module Wice
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::JavaScriptHelper
     
-    FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, 
-              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id]
+    # fields defined from the options parameter
+    FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
+              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering]
     
     attr_accessor *FIELDS
     
     attr_accessor :cell_rendering_block, :grid, :css_class, :table_name, :main_table, :model_class, :custom_filter
+    
     def initialize(block, options, grid_obj, tname, mtable, cfilter)  #:nodoc:
       self.cell_rendering_block = block
       self.grid           = grid_obj
@@ -166,11 +168,16 @@ module Wice
         select_toggle = ''
       else
         select_options[:class] = 'custom_dropdown'
-        select_options[:multiple] = params.is_a?(Array) && params.size > 1
-        select_toggle = content_tag(:a,
-          tag(:img, :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
-          :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');",
-          :class => 'toggle_multi_select_icon', :title => 'Expand')
+        if self.allow_multiple_selection
+          select_options[:multiple] = params.is_a?(Array) && params.size > 1
+          select_toggle = content_tag(:a,
+            tag(:img, :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
+            :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');",
+            :class => 'toggle_multi_select_icon', :title => 'Expand')
+        else
+          select_options[:multiple] = false
+          select_toggle = ''
+        end
       end
 
       '<div class="custom_dropdown_container">' +
