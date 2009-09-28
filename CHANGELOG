@@ -2,9 +2,9 @@ examples to add:
   * <tt>:allow_ordering</tt>
   * <tt>:allow_multiple_selection</tt>
 
-to do: control the number of links in the paginator
-       solve the problem of the last column with filter icons
-       style negation checkbox just like the custom selection icon
+to do: 
+      control the number of links in the paginator
+      solve the problem of the last column with filter icons
       integration with the application: access records from the view
       
 == 0.5

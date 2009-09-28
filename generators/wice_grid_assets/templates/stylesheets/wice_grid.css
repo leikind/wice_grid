@@ -23,6 +23,7 @@
 
 .wice_grid tr.wice_grid_title_row th {
   background-color: #dddddd;
+  vertical-align: top;
 }
 
 .wice_grid tr.wice_grid_filter_row th {
@@ -91,6 +92,9 @@
 
 .wice_grid .custom_dropdown_container { position: relative; padding-right: 9px;}
 .wice_grid .custom_dropdown_container .toggle_multi_select_icon { position:absolute; top:0; right:0;  }
+
+.wice_grid .text_filter_container { position: relative; padding-right: 13px;}
+.wice_grid .text_filter_container .negation_checkbox { position:absolute; top:0; right:0;  }
 
 
 /*  Saved Queries  */
