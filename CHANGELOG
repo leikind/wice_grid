@@ -5,7 +5,7 @@ examples to add:
 to do: 
       control the number of links in the paginator
       solve the problem of the last column with filter icons
-      integration with the application: access records from the view
+
       
 == 0.5
 
@@ -88,6 +88,18 @@ To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this 
 * Configuration file wice_grid_config.rb is now
   an initializer copied to config/initializers/ by task :copy_config_to_initializers.
 
+* Method +selected_records+ of WiceGrid instances to access the list of all records of the current selection throughout all pages in the context of a view:
+
+  <%= grid(@tasks_grid) do |g|
+     ...
+   end -%>
+
+   <% if params[:process_selected_tasks]
+     selected = @tasks_grid.selected_records %>
+     <p><%= selected.size %> selected: <%= selected.map(&:id).to_sentence %></p>
+   <% end -%>
+
+
 * Parameter :allow_showing_all_records moved from initialize_grid  to the view helper
 * Updated default styles
 * Cleaned up and refactored javascript code
@@ -144,6 +156,8 @@ To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this 
       end
       .......
     end %>
+  
+
   
 *  Bug fixes
 

@@ -21,12 +21,12 @@ require 'wice_grid_serialized_queries_controller.rb'
 
 module Wice
 
-  class WiceGrid #:nodoc:
+  class WiceGrid 
 
     attr_reader :klass, :name, :resultset, :custom_order, :after, :query_store_model
     attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :saved_query
     attr_writer :renderer
-    attr_accessor :output_buffer
+    attr_accessor :output_buffer, :view_helper_finished
 
     # core workflow methods START
 
@@ -111,7 +111,7 @@ module Wice
     end
 
 
-    def process_loading_query
+    def process_loading_query #:nodoc:
       @saved_query = nil
       if params[name] && params[name][:q]
         @saved_query = load_query(params[name][:q])
@@ -264,7 +264,7 @@ module Wice
       @status[:f].nil? ? false : @status[:f].has_key?(view_column.attribute_name_fully_qualified_for_all_but_main_table_columns)
     end
 
-    def get_state_as_parameter_value_pairs(including_saved_query_request = false)
+    def get_state_as_parameter_value_pairs(including_saved_query_request = false) #:nodoc:
       res = []
       unless status[:f].blank?
         status[:f].parameter_names_and_values([name, 'f']).collect do |param_name, value|
@@ -327,30 +327,37 @@ module Wice
       }
     end
 
-    def output_csv?
+    def output_csv? #:nodoc:
       @status[:export] == 'csv'
     end
 
-    def output_html?
+    def output_html? #:nodoc:
       @status[:export].blank?
     end
 
-    def all_record_mode?
+    def all_record_mode? #:nodoc:
       @status[:pp]
     end
         
-    def dump_status
+    def dump_status #:nodoc:
       "   params: #{params[name].inspect}\n"  +
       "   status: #{@status.inspect}\n" +
       "   ar_options #{@ar_options.inspect}\n"
     end
     
     
+    # Returns a list of all records of the current selection throughout all pages. 
+    # Can be called only after the view helper.
+    # See section "Integration With The Application" in the README.
+    def selected_records
+      raise WiceGridException.new("all_records can only be called only after the grid view helper") unless self.view_helper_finished
+      resultset_without_paging_with_user_filters
+    end
+    
+    
     protected
 
-
-
-    def add_custom_order_sql(fully_qualified_column_name)
+    def add_custom_order_sql(fully_qualified_column_name) #:nodoc:
       custom_order = if @options[:custom_order].has_key?(fully_qualified_column_name)
         @options[:custom_order][fully_qualified_column_name]
       else
@@ -403,8 +410,9 @@ module Wice
                         :conditions => @ar_options[:conditions],
                         :order      => @ar_options[:order])
     end
+    
 
-    def load_query(query_id)
+    def load_query(query_id) #:nodoc:
       @query_store_model ||= Wice::get_query_store_model
       query = @query_store_model.find_by_id_and_grid_name(query_id, self.name)
       Wice::log("Query with id #{query_id} for grid '#{self.name}' not found!!!") if query.nil?

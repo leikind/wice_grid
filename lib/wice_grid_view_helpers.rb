@@ -247,11 +247,11 @@ module Wice
           controller.send(grid.after, lazy_grid_caller)
         end
       end
-      
+      grid.view_helper_finished = true
       prepare_result(rendering, grid, content, block)
     end
 
-    def prepare_result(rendering, grid, content, block)
+    def prepare_result(rendering, grid, content, block) #:nodoc:
       if rendering.erb_mode
         # true in this case is a sign that grid_html has run in a normal mode, i.e. without detached filters
         if grid.output_buffer.nil? || grid.output_buffer == true

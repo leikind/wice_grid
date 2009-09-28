@@ -878,17 +878,32 @@ Using this trick you have to deal with the parameters correctly, mind that Proto
 === Integration With The Application
 
 If it is needed to retrieve the objects of the current selection that the user has selected with filters, for use outside of the grid,
-WiceGrid initialization routine accepts parameter <tt>:after</tt> to setup a callback to a method or a Proc object which will be called
+WiceGrid offers two options.
+
+
+==== Accessing selected records from the view
+
+Use method +selected_records+ of a WiceGrid instance:
+
+  <%= grid(@tasks_grid) do |g|
+    ...
+  end -%>
+
+  <% if params[:process_selected_tasks] 
+    selected = @tasks_grid.selected_records %>
+    <p><%= selected.size %> selected: <%= selected.map(&:id).to_sentence %></p>
+  <% end -%>
+
+This call can only be used after the view helper.
+
+==== Accessing selected records from the controller
+
+Because the real database work is done from the view helper, to access the selected records it is required to set up a callback to a controller
+method. +initialize_grid+ accepts parameter <tt>:after</tt> to setup a callback to a method or a Proc object which will be called
 with a parameter giving access to the selection of objects.
 
-A good example is the following use case:
-
-* User sets up filters to select products
-* User clicks the button "Send to customer"
-* The system generates a letter to a customer containing descriptions of the products selected by the user.
 
 The code to implement this use case might look in the following way:
-
 
   def index
     @tasks_grid = initialize_grid(Task, :after => :process_selection)

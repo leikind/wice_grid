@@ -48,6 +48,9 @@ module Wice
     #   evaluating to string. See section 'Custom Ordering' in the README.
     # * <tt>:saved_query</tt> - id of the saved query or the query object itself to load initially.
     #   Read section "Saving Queries How-To" in README for more details.
+    # * <tt>:after</tt> - defined a name of a controller method which would be called by the grid after all user input has been processed,
+    #   with a single parameter which is a Proc object. Once called, the object returns a list of all records of the current selection
+    #  throughout all pages. See section "Integration With The Application" in the README.
     #
     # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting
