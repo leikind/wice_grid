@@ -18,6 +18,16 @@ to do:
       'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
     }
 
+* A change in placement of filter related icons (filter icon, reset icon, show/hide icon): if the last column doesn't have
+  any filter or a column name, icons will be placed in the header of this column, otherwise it falls back to the usual 
+  behavior when an additional table column is added. To change the behavior back to the old style, set 
+  <tt>Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS</tt> to +false+ in the configuration file.
+
+# If REUSE_LAST_COLUMN_FOR_FILTER_ICONS is true and the , it will be used
+# for filter related icons (filter icon, reset icon, show/hide icon), otherwise an additional table icon is added.
+
+
+
 A use-case for this is a Rails application connecting to two databases, one of which is MySQL, and the other is Postgresql.
 To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this operator is unknown to MySQL.
 

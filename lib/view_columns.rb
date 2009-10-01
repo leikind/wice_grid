@@ -98,6 +98,10 @@ module Wice
       table_alias || table_name
     end
 
+    def capable_of_hosting_filter_related_icons?  #:nodoc:
+      self.attribute_name.blank? && ! self.filter_shown?
+    end
+
     protected
 
     def form_parameter_template(v) #:nodoc:

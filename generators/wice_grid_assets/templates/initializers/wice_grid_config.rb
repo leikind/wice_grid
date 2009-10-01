@@ -17,6 +17,9 @@ if defined?(Wice::Defaults)
   # The shorter the name is the shorter the request URI will be.
   Wice::Defaults::GRID_NAME = 'grid'
 
+  # If REUSE_LAST_COLUMN_FOR_FILTER_ICONS is true and the last column doesn't have any filter and column name, it will be used
+  # for filter related icons (filter icon, reset icon, show/hide icon), otherwise an additional table column is added.
+  Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS = true
 
   Wice::Defaults::SHOW_HIDE_FILTER_ICON = 'icons/grid/page_white_find.png'
 

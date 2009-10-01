@@ -31,6 +31,10 @@
 }
 
 
+.wice_grid th.filter_icons, .wice_grid th.hide_show_icon {
+  text-align: right ;
+}
+
 .wice_grid thead {
   border-bottom: 1px solid #666;
 }

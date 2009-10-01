@@ -209,6 +209,12 @@ Example:
   end -%>
 
 
+Filter related icons (filter icon, reset icon, show/hide icon) are placed in the header of the last column if
+it doesn't have any filter or a column name, otherwise an additional table column is added. To always place
+the icons in the additional column, set <tt>Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS</tt> to +false+ in 
+the configuration file.
+
+
 === Initial Ordering
 
 Initializing the grid we can also define the column by which the record will be ordered <em>on the first rendering of the grid</em>, when the user has not set their ordering setting by clicking the column label, and the order direction:

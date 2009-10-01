@@ -51,6 +51,16 @@ module Wice
       filter_columns(filter).each{|col| yield col}
     end
 
+    def each_column_aware_of_one_last_one(filter = nil)  #:nodoc:
+      cols = filter_columns(filter)
+      cols[0..-2].each{|col| yield col, false}
+      yield cols.last, true
+    end
+
+    def last_column_for_html  #:nodoc:
+      filter_columns(:in_html).last
+    end
+
     def select_for(filter)  #:nodoc:
       filter_columns(filter).select{|col| yield col}
     end

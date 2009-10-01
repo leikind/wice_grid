@@ -227,6 +227,9 @@ module Wice
 
       block.call(rendering) # calling block containing column() calls
 
+      reuse_last_column_for_filter_buttons = 
+        Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS && rendering.last_column_for_html.capable_of_hosting_filter_related_icons?
+
       if grid.output_csv?
         content = grid_csv(grid, rendering)
       else
@@ -236,7 +239,7 @@ module Wice
           return prepare_result(rendering, grid, content, block)
         end
         
-        content = grid_html(grid, options[:table_html_attrs], options[:header_tr_html_attrs], options, rendering)
+        content = grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons)
       end
 
       if grid.after
@@ -321,7 +324,9 @@ module Wice
     end    
 
     # the longest method? :(
-    def grid_html(grid, table_html_attrs, header_tr_html_attrs, options, rendering) #:nodoc:
+    def grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons) #:nodoc:
+
+      table_html_attrs, header_tr_html_attrs = options[:table_html_attrs], options[:header_tr_html_attrs]
 
       cycle_class = nil
       sorting_dependant_row_cycling = options[:sorting_dependant_row_cycling]
@@ -341,6 +346,8 @@ module Wice
         no_rightmost_column = no_filter_row = (options[:show_filters] == :no || rendering.no_filter_needed_in_main_table?) ? true: false
       end
       
+      no_rightmost_column = true if reuse_last_column_for_filter_buttons
+      
       if options[:upper_pagination_panel]
         content << rendering.pagination_panel(no_rightmost_column){ 
           pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
@@ -352,9 +359,19 @@ module Wice
 
       content << %!<tr #{tag_options(title_row_attrs, true)}>!
 
+      filter_row_id = grid.name + '_filter_row'
+
       # first row of column labels with sorting links
-      rendering.each_column(:in_html) do |column|
+      
+      filter_shown = if options[:show_filters] == :when_filtered
+        grid.filtering_on?
+      elsif options[:show_filters] == :always
+        true
+      end
+      
+      rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
         if column.attribute_name && column.allow_ordering
+          
 
           css_class = grid.filtered_by?(column) ? 'active_filter' : nil
 
@@ -373,51 +390,24 @@ module Wice
           content << content_tag(:th, col_link, Hash.make_hash(:class, css_class))
           column.css_class = css_class
         else
-          content << content_tag(:th, column.column_name)
+          if reuse_last_column_for_filter_buttons && last
+            content << content_tag(:th, 
+              hide_show_icon(filter_row_id, grid.name, filter_shown, no_filter_row, options[:show_filters]),
+              :class => 'hide_show_icon'
+            )
+          else
+            content << content_tag(:th, column.column_name)
+          end
         end
       end
-      # rendering first row end
 
-      filter_shown = if options[:show_filters] == :when_filtered
-        grid.filtering_on?
-      elsif options[:show_filters] == :always
-        true
-      end
-
-      no_filter_opening_closing_icon = (options[:show_filters] == :always) || no_filter_row
-
-      styles = ["display: block;", "display: none;"]
-      styles.reverse! unless filter_shown
-      hide_icon_id = grid.name + '_hide_icon'
-      show_icon_id = grid.name + '_show_icon'
-      filter_row_id = grid.name + '_filter_row'
-
-      if no_filter_opening_closing_icon
-        hide_icon = show_icon = ''
-      else
-        hide_icon = content_tag(:span,
-          link_to_function(
-            image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-              :title => Defaults::HIDE_FILTER_TOOLTIP,
-              :alt => Defaults::HIDE_FILTER_TOOLTIP),
-            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').hide()" ),
-          :id => hide_icon_id,
-          :style => styles[0]
-        )
-
-        show_icon = content_tag(:span,
-          link_to_function(
-            image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-              :title => Defaults::SHOW_FILTER_TOOLTIP,
-              :alt => Defaults::SHOW_FILTER_TOOLTIP),
-            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').show()" ),
-          :id => show_icon_id,
-          :style => styles[1]
-        )
-
-      end
-      content << content_tag(:th, hide_icon + show_icon) unless no_rightmost_column
+      content << content_tag(:th, 
+        hide_show_icon(filter_row_id, grid.name, filter_shown, no_filter_row, options[:show_filters]),
+        :class => 'hide_show_icon'
+      ) unless no_rightmost_column
+      
       content << '</tr>'
+      # rendering first row end
 
 
       cached_javascript = []
@@ -443,8 +433,9 @@ module Wice
           content << 'style="display:none"' unless filter_shown
           content << '>'
 
-          rendering.each_column(:in_html) do |column|
+          rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
             if column.filter_shown?
+
               filter_html_code, filter_js_code = column.render_filter
               cached_javascript << filter_js_code
               if column.detach_with_id
@@ -455,24 +446,20 @@ module Wice
                 content << content_tag(:th, filter_html_code, Hash.make_hash(:class, column.css_class))
               end
             else
-              content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
+              if reuse_last_column_for_filter_buttons && last
+                # p Hash.make_hash(:class, column.css_class)
+                # p Hash.make_hash(:class, column.css_class).add_or_append_class_value('filter_icons')
+                content << content_tag(:th, 
+                  reset_submit_buttons(options, grid), 
+                  Hash.make_hash(:class, column.css_class).add_or_append_class_value('filter_icons')
+                )
+              else
+                content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
+              end
             end
           end
 
-          content << content_tag(:th,
-              if options[:hide_submit_button] 
-                ''
-              else
-                link_to_function(image_tag(Defaults::FILTER_ICON, :title => Defaults::FILTER_TOOLTIP,
-                  :alt => Defaults::FILTER_TOOLTIP),submit_grid_javascript(grid))
-              end + ' ' +
-              if options[:hide_reset_button]
-                ''
-              else
-                link_to_function(image_tag(Defaults::RESET_ICON, :title => Defaults::RESET_FILTER_TOOLTIP,
-                  :alt => Defaults::RESET_FILTER_TOOLTIP), reset_grid_javascript(grid))
-              end
-            )
+          content << content_tag(:th, reset_submit_buttons(options, grid), :class => 'filter_icons' ) unless no_rightmost_column
           content << '</tr>'
         end
       end
@@ -604,6 +591,58 @@ module Wice
       return content
     end
     
+
+    def hide_show_icon(filter_row_id, grid_name, filter_shown, no_filter_row, show_filters)  #:nodoc:
+
+      no_filter_opening_closing_icon = (show_filters == :always) || no_filter_row
+
+      styles = ["display: block;", "display: none;"]
+      styles.reverse! unless filter_shown
+
+
+      if no_filter_opening_closing_icon
+        hide_icon = show_icon = ''
+      else
+        hide_icon_id = grid_name + '_hide_icon'
+        show_icon_id = grid_name + '_show_icon'
+
+        hide_icon = content_tag(:span,
+          link_to_function(
+            image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
+              :title => Defaults::HIDE_FILTER_TOOLTIP,
+              :alt => Defaults::HIDE_FILTER_TOOLTIP),
+            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').hide()" ),
+          :id => hide_icon_id,
+          :style => styles[0]
+        )
+
+        show_icon = content_tag(:span,
+          link_to_function(
+            image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
+              :title => Defaults::SHOW_FILTER_TOOLTIP,
+              :alt => Defaults::SHOW_FILTER_TOOLTIP),
+            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').show()" ),
+          :id => show_icon_id,
+          :style => styles[1]
+        )
+        hide_icon + show_icon
+      end
+    end
+
+    def reset_submit_buttons(options, grid)  #:nodoc:
+      if options[:hide_submit_button] 
+        ''
+      else
+        link_to_function(image_tag(Defaults::FILTER_ICON, :title => Defaults::FILTER_TOOLTIP,
+          :alt => Defaults::FILTER_TOOLTIP),submit_grid_javascript(grid))
+      end + ' ' +
+      if options[:hide_reset_button]
+        ''
+      else
+        link_to_function(image_tag(Defaults::RESET_ICON, :title => Defaults::RESET_FILTER_TOOLTIP,
+          :alt => Defaults::RESET_FILTER_TOOLTIP), reset_grid_javascript(grid))
+      end
+    end
     
     
     # Renders a detached filter. The parameters are:

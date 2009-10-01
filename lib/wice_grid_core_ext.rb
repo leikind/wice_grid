@@ -25,6 +25,7 @@ module WGHashExtensions  #:nodoc:
       self[:class] = self['class']
       self.delete('class')
     end
+    
     self[:class] = if self.has_key?(:class)
       if prepend
         "#{klass_value} #{self[:class]}"
@@ -34,6 +35,8 @@ module WGHashExtensions  #:nodoc:
     else
       klass_value
     end
+    
+    return self
   end
 
 
