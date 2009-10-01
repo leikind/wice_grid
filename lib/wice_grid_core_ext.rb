@@ -20,7 +20,7 @@ module WGHashExtensions  #:nodoc:
   # Used to modify options submitted to view helpers. If there is no :klass option,
   # it will be added, if there is, the css class name will be appended to the existing
   # class name(s)
-  def add_or_append_class_value(klass_value, prepend = false) #:nodoc:
+  def add_or_append_class_value!(klass_value, prepend = false) #:nodoc:
     if self.has_key?('class')
       self[:class] = self['class']
       self.delete('class')

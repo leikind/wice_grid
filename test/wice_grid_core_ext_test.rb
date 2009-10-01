@@ -65,11 +65,13 @@ class WiceGridCoreExtTest < Test::Unit::TestCase
     
     h = {}
     
-    h.add_or_append_class_value('foo')
+    h.add_or_append_class_value!('foo')
     assert_equal({:class => 'foo'}, h)
 
-    h.add_or_append_class_value('bar')
+    res = h.add_or_append_class_value!('bar')
     assert_equal({:class => 'foo bar'}, h)
+    
+    assert_equal(res, h)
         
   end
   
@@ -77,7 +79,7 @@ class WiceGridCoreExtTest < Test::Unit::TestCase
     
     h = {'class' => 'foo'}
 
-    h.add_or_append_class_value('bar')
+    h.add_or_append_class_value!('bar')
     assert_equal({:class => 'foo bar'}, h)
   
   end

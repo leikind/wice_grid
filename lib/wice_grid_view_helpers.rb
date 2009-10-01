@@ -215,10 +215,10 @@ module Wice
 
       options.merge!(opts)
 
-      options[:table_html_attrs].add_or_append_class_value('wice_grid', true)
+      options[:table_html_attrs].add_or_append_class_value!('wice_grid', true)
 
       if options[:class]
-        options[:table_html_attrs].add_or_append_class_value(options[:class])
+        options[:table_html_attrs].add_or_append_class_value!(options[:class])
         options.delete(:class)
       end
 
@@ -355,7 +355,7 @@ module Wice
       end
 
       title_row_attrs = header_tr_html_attrs.clone
-      title_row_attrs.add_or_append_class_value('wice_grid_title_row', true)
+      title_row_attrs.add_or_append_class_value!('wice_grid_title_row', true)
 
       content << %!<tr #{tag_options(title_row_attrs, true)}>!
 
@@ -426,7 +426,7 @@ module Wice
         else # some filters are present in the table
           
           filter_row_attrs = header_tr_html_attrs.clone
-          filter_row_attrs.add_or_append_class_value('wice_grid_filter_row', true)
+          filter_row_attrs.add_or_append_class_value!('wice_grid_filter_row', true)
           filter_row_attrs['id'] = filter_row_id
           
           content << %!<tr #{tag_options(filter_row_attrs, true)}" !
@@ -447,11 +447,9 @@ module Wice
               end
             else
               if reuse_last_column_for_filter_buttons && last
-                # p Hash.make_hash(:class, column.css_class)
-                # p Hash.make_hash(:class, column.css_class).add_or_append_class_value('filter_icons')
                 content << content_tag(:th, 
                   reset_submit_buttons(options, grid), 
-                  Hash.make_hash(:class, column.css_class).add_or_append_class_value('filter_icons')
+                  Hash.make_hash(:class, column.css_class).add_or_append_class_value!('filter_icons')
                 )
               else
                 content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
@@ -466,7 +464,7 @@ module Wice
 
       rendering.each_column(:in_html) do |column|
         unless column.css_class.blank?
-          column.td_html_attrs.add_or_append_class_value(column.css_class)
+          column.td_html_attrs.add_or_append_class_value!(column.css_class)
         end
       end
 
@@ -522,7 +520,7 @@ module Wice
               additional_opts.delete('class')
             end
             opts.merge!(additional_opts)
-            opts.add_or_append_class_value(additional_css_class) unless additional_css_class.blank?
+            opts.add_or_append_class_value!(additional_css_class) unless additional_css_class.blank?
           end
 
           if sorting_dependant_row_cycling && column.attribute_name && grid.ordered_by?(column)
@@ -540,7 +538,7 @@ module Wice
           cycle_class = cycle('odd', 'even', :name => grid.name)
         end
 
-        row_attributes.add_or_append_class_value(cycle_class)
+        row_attributes.add_or_append_class_value!(cycle_class)
 
 
         content << before_row_output if before_row_output

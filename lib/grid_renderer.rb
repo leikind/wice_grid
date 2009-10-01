@@ -248,7 +248,7 @@ module Wice
       end
 
       if options[:class]
-        options[:td_html_attrs].add_or_append_class_value(options[:class])
+        options[:td_html_attrs].add_or_append_class_value!(options[:class])
         options.delete(:class)
       end
 
