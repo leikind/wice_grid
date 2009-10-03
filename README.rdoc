@@ -2,7 +2,7 @@
 
 Version:: 0.4.1
 Author::  Yuri Leikind & The WICE team
-Website:: https://redmine.wice.eu/wiki/wice-grid
+Website:: http://leikind.org/pages/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 == Intro
