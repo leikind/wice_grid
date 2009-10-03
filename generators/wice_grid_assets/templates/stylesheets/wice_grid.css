@@ -21,14 +21,12 @@
   color: #333; 
 }
 
-.wice_grid tr.wice_grid_title_row th {
+.wice_grid tr.wice_grid_title_row th,  
+.wice_grid tr.wice_grid_filter_row th{
   background-color: #dddddd;
   vertical-align: top;
 }
 
-.wice_grid tr.wice_grid_filter_row th {
-  background-color: #dddddd;
-}
 
 
 .wice_grid th.filter_icons, .wice_grid th.hide_show_icon {
