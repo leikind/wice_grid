@@ -1,19 +1,24 @@
 = WiceGrid
 
 Version:: 0.4.1
-Author::  Yuri Leikind & The WICE team
+Author::  Yuri Leikind
 Website:: http://leikind.org/pages/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 == Intro
 
-WiceGrid is a Rails plugin which builds the call to the ActiveRecord layer for you and creates a table view with the results of the call including:
+WiceGrid is a Rails grid plugin.
+
+One of the goals of this plugin was to allow the programmer to define the contents of the cell by himself, just like one does when rendering a collection via a simple table (and this is what differentiates WiceGrid from various scaffolding solutions), but automate implementation of filters, ordering, paginations, CSV export, and so on. Ruby blocks provide an elegant means for this. 
+
+
+WiceGrid builds the call to the ActiveRecord layer for you and creates a table view with the results of the call including:
 
 * paging
 * sortable columns
 * filtering by multiple columns
 * CSV export
-* saving queries (<em>considered experimental as of version 0.3</em>)
+* saving queries
 
 All working nicely together. Filters are added automatically according to the type of the underlying DB column. Filtering by more than one column at the same time is possible. More than one such grid can appear on a page, and manipulations with one grid do not have any impact on the other.
 
@@ -21,8 +26,11 @@ WiceGrid does not take a collection as an input, it works directly with ActiveRe
 
 WiceGrid does not use AJAX calls to reload itself, instead simple GET requests are used for this, nevertheless, all other page parameters are respected and preserved. WiceGrid views do not contain forms so you can include it in your own forms.
 
-
 WiceGrid is known to work with MySQL and Postgres.
+
+=== Examples
+
+This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online ( http://grid.leikind.org ), or just view the code ( http://github.com/leikind/wice_grid_examples ).
 
 
 == Requirements
@@ -45,6 +53,7 @@ To copy the plugin initializer, icons,  javascripts, and stylesheets to correct 
 
 Using ./script/generate to copy assets gives the advantage of collision control - if a file with the same name already
 exists at the given location, the script will pause and ask the user about what action to take.
+
 
 === Basics
 
