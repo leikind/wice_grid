@@ -3,6 +3,7 @@
 Version:: 0.4.1
 Author::  Yuri Leikind
 Website:: http://leikind.org/pages/wicegrid
+Examples online:: http://grid.leikind.org
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 == Intro
