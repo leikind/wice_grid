@@ -187,6 +187,9 @@ If only sorting is needed, we can turn off filters using <tt>:no_filter</tt> :
 
   g.column :column_name => 'ID', :attribute_name => 'id', :no_filter => true
 
+If no ordering links are needed, use <tt>:allow_ordering</tt>:
+
+  g.column :column_name => 'Added', :attribute_name => 'created_at', :allow_ordering => false
 
 It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute_name</tt> (and <tt>:model_class</tt> discussed below).
 
@@ -497,6 +500,18 @@ Thus, if in a filter defined by
 values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
   
     ( table.field IN ( '1', '2' ) OR table.field IS NULL )
+
+
+==== Multiple selection
+
+By default it is possible for any dropdown list to switch between single and multiple selection modes. To only allow
+single selection use <tt>:allow_multiple_selection</tt>:
+
+
+  g.column :column_name => 'Expected in version', :attribute_name => 'expected_version_id', 
+         :custom_filter => [:expected_version, :to_option], :allow_multiple_selection => false do |task|
+    ...
+  end
 
 
 === Defaults
