@@ -39,7 +39,7 @@ module Wice
       javascript << %|      triggerElement : "#{trigger_id}",\n |
       javascript << %|      dateField : "#{dom_id}",\n |
       javascript << %|      dateFormat : "#{date_format}",\n|      
-      javascript << %|      extraOutputDateFields : $A([#{date_span_id}])\n |
+      javascript << %|      extraOutputDateFields : $A(['#{date_span_id}'])\n |
       javascript << %|    });\n|
 
       [html, javascript]
@@ -59,7 +59,7 @@ module Wice
       javascript << %|        triggerElement : "#{trigger_id}",\n|
       javascript << %|        dateField : "#{dom_id}",\n|
       javascript << %|        dateFormat : "#{date_format}",\n|
-      javascript << %|        extraOutputDateFields : $A([#{date_span_id}]),\n |
+      javascript << %|        extraOutputDateFields : $A(['#{date_span_id}']),\n |
       javascript << %|        withTime : true\n|
       javascript << %|    });\n|
 
