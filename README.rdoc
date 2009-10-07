@@ -245,11 +245,11 @@ The number of rows per page is set with <tt>:per_page</tt>:
 
 === Conditions
 
-The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), so it can be anything that <tt>:conditions</tt> in <tt>ActiveRecord#find</tt> can be:
+The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), but  it can only be in a string or an array format, the hash format is not supported at the moment:
 
 
   @tasks_grid = initialize_grid(Task,
-    :conditions => {:archived => false}
+    :conditions => ["archived = false and estimated_time > ?", 100]
   )
 
 A good example is substituting a common pattern like
