@@ -1,110 +1,160 @@
-
 == 0.5
 
-* New configuration option: in addition to the configuration constant Wice::Defaults::STRING_MATCHING_OPERATOR 
-  to define the operator for matching strings (LIKE in most cases), hash Wice::Defaults::STRING_MATCHING_OPERATORS
-  was added to specify string matching operators on per-database basis:
+Today "WiceGrid":http://leikind.org/pages/wicegrid has reached its next level of maturity and was awarded the tag of version 0.5.
 
-    Wice::Defaults::STRING_MATCHING_OPERATORS = {
-      'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
-      'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
-    }
+This version of WiceGrid is accompanied by an application called _WiceGrid Examples_ running "online":http://grid.leikind.org/ and with source code available on  "GitHub":http://github.com/leikind/wice_grid_examples.
 
-* A change in placement of filter related icons (filter icon, reset icon, show/hide icon): if the last column doesn't have
-  any filter or a column name, icons will be placed in the header of this column, otherwise it falls back to the usual 
-  behavior when an additional table column is added. To change the behavior back to the old style, set 
-  <tt>Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS</tt> to +false+ in the configuration file.
+Here's a list of changes as compared with "version 0.4":https://blog.wice.eu/2009/7/6/moving-to-github-and-wicegrid-version-0-4 :
 
-# If REUSE_LAST_COLUMN_FOR_FILTER_ICONS is true and the , it will be used
-# for filter related icons (filter icon, reset icon, show/hide icon), otherwise an additional table icon is added.
+h4. selected_records
+
+Method @selected_records@ of WiceGrid instances allows to  access the list of all records of the current selection throughout all pages in the context of a view:
+
+--- RHTML
+<%= grid(@tasks_grid) do |g|
+   ...
+end -%>
+
+<% selected = @tasks_grid.selected_records %>
+<p><%= selected.size %> records selected: <%= selected.map(&:id).to_sentence %></p>
+---
+
+"See an online example":http://grid.leikind.org/integration_with_application_view
+
+h4. placement of filter related icons
+
+A change in placement of filter related icons (filter icon, reset icon, show/hide icon): if the last column doesn't have  any filter or a column name, icons will be placed in the header of this column, otherwise it falls back to the usual   behavior when an additional table column is added. To change the behavior back to the old style, set   @Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS@ to @false@ in the configuration file.
+
+"See an online example":http://grid.leikind.org/custom_filters2
 
 
+h4. wice_grid_assets generator
 
-A use-case for this is a Rails application connecting to two databases, one of which is MySQL, and the other is Postgresql.
-To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this operator is unknown to MySQL.
+Copying asset files (images, css, js, and the configuration file) is now done by a plugin generator, not rake tasks:
 
-* :td_html_attrs in column definitions and table_html_attrs in the table definitions are mostly used to add
-   css classes, so a shorter way has been added to add css classes.
+---
+./script/generate wice_grid_assets
+---
 
-  Instead of 
+h4. blank slate
+
+Blank slate feature: it is now possible to replace the grid with some alternative view if no filters are active  and there are no records to render:
+
+--- RHTML
+<%= grid(@grid) do |g|
+
+   g.blank_slate  do
+     "There are no records"
+   end
+
+   g.column  do |product|
+      ...
+   end
+end  -%>
+---
+
+There are also two alternative three ways to do it:
+
+--- Ruby
+g.blank_slate "some text to be rendered"
+---
+and
+--- Ruby
+g.blank_slate :partial => "partial_name"
+---
+
+"See an online example":http://grid.leikind.org/no_records
+
+h4. custom filters with symbols
+
+Improvement to custom filters, namely to
+--- Ruby
+:custom_filter => :symbol
+---
+and
+--- Ruby
+:custom_filter => [:symbol1, :symbol2, :symbol3]
+---
   
-    <%= grid(@grid, :table_html_attrs => {:class => 'css_class1'}) do |g|
-        g.column(:td_html_attrs => {:class => 'css_class2'}) do
-        end
-    end -%>
-    
-  It's possible to just use the new <tt>:class</tt> option:
-  
-  <%= grid(@grid, :class => 'css_class1') do |g|
-      g.column(:class => 'css_class2') do
-      end
-  end -%>
-  
+Now, if the last method returns an array of 2 elements, the first element becomes  the select option label and the second - the select option value (usually @id@).
 
-* Blank slate feature: it is now possible to replace the grid with some alternative view if no filters are active
-  and there are no records to render:
-  
-    <%= grid(@grid) do |g|
-    
-      g.blank_slate  do
-        "There are no records"
-      end
-  
-      g.column  do |product|
-         ...
-      end
-     end  -%>
-  
-  There are two alternative three ways to do the same:
-  
-  *   <tt>g.blank_slate "some text to be rendered"</tt>
-  *   <tt>g.blank_slate :partial => "partial_name"</tt>
+Before this change the value returned by the method had been used for both the value and the label of the select option.
 
-* Copying asset files is now done by a plugin generator, not rake tasks:
+"See an online example":http://grid.leikind.org/custom_filters3
 
-       ./script/generate wice_grid_assets
+h4. custom filters and NULL
 
-* Improvement to custom filters, namely to
-    :custom => :symbol
-  and
-    :custom => [:symbol1, :symbol2, symbol3]
-  flavors: if the last method returns an array of 2 elements, the first element becomes
-  the select option label and the second - the select option value (usually +id+)
+Values @null@ and @not null@ in a generated custom filter dropdown are treated specially, as SQL @null@ statement  and not as strings.  Value @null@ is transformed into SQL condition @IS NULL@, and @not null@ into @IS NOT NULL@ .
 
-  Before this change the value returned by the method was used for both the value and the label of the select option.
-  
-* Improvement to custom filters:   
-  Values 'null' and 'not null' in a generated custom filter dropdown are treated specially, as SQL +null+ statement and not as strings.
-  Value 'null' is transformed into SQL condition <tt>IS NULL</tt>, and 'not null' into <tt>IS NOT NULL</tt>
+Thus, if in a filter defined by
 
-  Thus, if in a filter defined by
-       :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
-  values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
+--- Ruby  
+:custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
+---
+values @1@, @2@ and @'No'@ are selected (in a multi-select mode),  this will result in the following SQL:
 
-      ( table.field IN ( '1', '2' ) OR table.field IS NULL )
+--- SQL  
+( table.field IN ( '1', '2' ) OR table.field IS NULL )
+---
 
-* New options for +column+: <tt>:allow_multiple_selection</tt>, use <tt>:allow_multiple_selection => false</tt> to disable switching between single and multiple selection modes for custom dropdown boxes. +true+ by default (see +ALLOW_MULTIPLE_SELECTION+ in the configuration file).
+"See an online example":http://grid.leikind.org/null_values
 
-* New parameter for +column+: <tt>:allow_ordering</tt>. User <tt>:allow_ordering => false</tt> to disable the ordering of the column
+h4. Wice::Defaults::STRING_MATCHING_OPERATORS
 
-* Configuration file wice_grid_config.rb is now
-  an initializer copied to config/initializers/ by task :copy_config_to_initializers.
+ in addition to the configuration constant @Wice::Defaults::STRING_MATCHING_OPERATOR@   to define the operator for matching strings (@LIKE@ in most cases), hash @Wice::Defaults::STRING_MATCHING_OPERATORS@   was added to specify string matching operators on per-database basis:
 
-* Method +selected_records+ of WiceGrid instances to access the list of all records of the current selection throughout all pages in the context of a view:
+--- Ruby
+Wice::Defaults::STRING_MATCHING_OPERATORS = {
+ 'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
+ 'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
+}
+---
 
-  <%= grid(@tasks_grid) do |g|
-     ...
-   end -%>
+A use-case for this is a Rails application connecting to two databases, one of which is MySQL, and the other is Postgresql. To use case-insensitive matching in Postgresql 'ILIKE' has to be used, but this operator is unknown to MySQL.
 
-   <% if params[:process_selected_tasks]
-     selected = @tasks_grid.selected_records %>
-     <p><%= selected.size %> selected: <%= selected.map(&:id).to_sentence %></p>
-   <% end -%>
+h4. td_html_attrs and table_html_attrs shortcuts
 
+@:td_html_attrs@ in column definitions and @table_html_attrs@ in the table definitions are mostly used to add css classes, so a shorter way has been added to add css classes.
 
-* Parameter :allow_showing_all_records moved from initialize_grid  to the view helper
-* Updated default styles
-* Cleaned up and refactored javascript code
+Instead of 
+
+--- RHTML
+<%= grid(@grid, :table_html_attrs => {:class => 'css_class1'}) do |g|
+    g.column(:td_html_attrs => {:class => 'css_class2'}) do
+      ...
+    end
+end -%>
+---
+
+It's possible to just use the new @:class@ option:
+
+--- RHTML  
+<%= grid(@grid, :class => 'css_class1') do |g|
+  g.column(:class => 'css_class2') do
+  end
+end -%>
+---
+
+h4. allow_multiple_selection
+
+New options for @column@: @:allow_multiple_selection@, use @:allow_multiple_selection => false@ to disable switching between single and multiple selection modes for custom dropdown boxes. 
+
+"See an online example":http://grid.leikind.org/custom_filters4
+
+h4. allow_ordering
+
+New parameter for @column@: @:allow_ordering@. Use @:allow_ordering => false@ to disable the ordering of the column.
+
+"See an online example":http://grid.leikind.org/basics6
+
+h4. allow_showing_all_records
+
+Parameter @:allow_showing_all_records@ moved from @initialize_grid@  to the view helper.
+
+h4. other
+
+* Default styles updated.
+* Javascript code cleaned up and refactored.
 * Quite some number of bugs fixed
 
 == 0.4
