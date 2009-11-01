@@ -1,13 +1,4 @@
 require 'wice_grid_misc.rb'
-
-begin
-  require 'will_paginate'
-rescue MissingSourceFile => e
-  raise Wice::WiceGridException.new('will_paginate not found, WiceGrid cannot proceed. Please install gem mislav-will_paginate. ' + 
-                                    'You might need to add github.com as the gem source before you install the gem: ' + 
-                                    'gem sources -a http://gems.github.com')
-end
-
 require 'js_calendar_helpers.rb'
 require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
@@ -34,7 +25,12 @@ module Wice
       @controller = controller
 
       # check for will_paginate
-      raise WiceGridException.new("Plugin will_paginate not found! wice_grid requires will_paginate.") unless klass.respond_to?(:paginate)
+      # raise WiceGridException.new("Plugin will_paginate not found! wice_grid requires will_paginate.") 
+      unless klass.respond_to?(:paginate)
+        raise Wice::WiceGridException.new('will_paginate not found, WiceGrid cannot proceed. Please install gem mislav-will_paginate. ' + 
+                                          'You might need to add github.com as the gem source before you install the gem: ' + 
+                                          'gem sources -a http://gems.github.com')
+      end
 
       unless klass.kind_of?(Class) && klass.ancestors.index(ActiveRecord::Base)
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
