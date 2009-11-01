@@ -196,9 +196,6 @@ module Wice
         end
       end
 
-      Wice.deprecated_call(:table_html_opts, :table_html_attrs, opts)
-      Wice.deprecated_call(:header_tr_html_opts, :header_tr_html_attrs, opts)
-
       options = {
         :show_filters => Defaults::SHOW_FILTER,
         :upper_pagination_panel => Defaults::SHOW_UPPER_PAGINATION_PANEL,

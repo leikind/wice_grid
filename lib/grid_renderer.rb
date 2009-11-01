@@ -228,10 +228,6 @@ module Wice
         :allow_multiple_selection => Defaults::ALLOW_MULTIPLE_SELECTION
       }
 
-      Wice.deprecated_call(:filter_options, :custom_filter, opts)
-      Wice.deprecated_call(:column_label, :column_name, opts)
-      Wice.deprecated_call(:td_html_options, :td_html_attrs, opts)
-
       options.merge!(opts)
 
       unless options[:model_class].nil?
