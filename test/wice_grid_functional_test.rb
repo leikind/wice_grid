@@ -29,13 +29,13 @@ class ProjectsController < TestControllerBase
 
 end
 
-class TasksController < TestControllerBase
-  
-  def index
-    @grid = initialize_grid(Task, :include => [{:project => :person}, :person])
-  end
-
-end
+# class TasksController < TestControllerBase
+#   
+#   def index
+#     @grid = initialize_grid(Task, :include => [{:project => :person}, :person])
+#   end
+# 
+# end
 
 class WiceGridFunctionalTest < ActionController::TestCase
   

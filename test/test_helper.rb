@@ -82,5 +82,8 @@ end
 NUM_TASKS.times do |i|
   project = Project.find(:first, :order => 'RAND()')
   owner = Person.find(:first, :order => 'RAND()')
-  Task.create!(:name => "Task%03d" % i, :description => "Description%03d" % i, :person => Person.all[i % NUM_PEOPLE], :project => Project.all[i % NUM_PROJECTS])
+  Task.create!(:name => "Task%03d" % i, 
+               :description => "Description%03d" % i, 
+               :person => Person.all[i % NUM_PEOPLE], 
+               :project => Project.all[i % NUM_PROJECTS])
 end
