@@ -35,13 +35,10 @@ module Wice
     #   is a column of the main table (the table of the main ActiveRecord model, the first parameter of <tt>initialize_grid</tt>),
     #   or a fully qualified name with the name of the table.
     # * <tt>:order_direction</tt> - <tt>:asc</tt> for ascending or <tt>:desc</tt> for descending. The default is <tt>:asc</tt>.
-    # * <tt>name</tt> - name of the grid. Only needed if there is a second grid on a page. The name serves as the base name for
+    # * <tt>:name</tt> - name of the grid. Only needed if there is a second grid on a page. The name serves as the base name for
     #   HTTP parametes, DOM IDs, etc. The shorter the name, the shorter the GET request is. The name can only contain alphanumeruc characters.
     # * <tt>:enable_export_to_csv</tt> - <Enable export of the table to CSV. Read the How-To to learn what else is needed to enable CSV export.
     # * <tt>:csv_file_name</tt> - Name of the exported CSV file. If the parameter is missing, the name of the grid will be used instead.
-    # * <tt>:filter</tt> - name of the method or a Proc object to be called so set up the callback to intercept the current selection of objects
-    #   set up by the user with filters. The parameter to the method or the Proc  object is a Proc object which would return the
-    #   current selection of object once it's called. See section "Integration With The Application" in the README.
     # * <tt>:custom_order</tt> - used for overriding the ORDER BY clause with custom sql code (for example, including a function).
     #   The value of the parameter is a hash where keys are fully qualified names
     #   of database columns, and values the required chunks of SQL to use in the ORDER BY clause, either as strings or Proc object

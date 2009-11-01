@@ -33,38 +33,47 @@ module Wice
     def initialize(klass, controller, opts = {})  #:nodoc:
       @controller = controller
 
-      raise WiceGridArgumentError.new(":after must be either a Proc a Symbol object") unless [NilClass, Symbol, Proc].index opts[:after].class
-
-      raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base") unless klass.kind_of? Class and klass.ancestors.index(ActiveRecord::Base)
+      # check for will_paginate
       raise WiceGridException.new("Plugin will_paginate not found! wice_grid requires will_paginate.") unless klass.respond_to?(:paginate)
 
+      unless klass.kind_of?(Class) && klass.ancestors.index(ActiveRecord::Base)
+        raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
+      end
+      
+      # validate :after
+      unless [NilClass, Symbol, Proc].index(opts[:after].class)
+        raise WiceGridArgumentError.new(":after must be either a Proc or Symbol object") 
+      end
+
       opts[:order_direction].downcase! if opts[:order_direction].kind_of?(String)
-      if opts[:order_direction] and not (opts[:order_direction] == 'asc' or opts[:order_direction] == :asc or
-          opts[:order_direction] == 'desc' or opts[:order_direction] == :desc)
+      
+      # validate :order_direction
+      if opts[:order_direction] && ! (opts[:order_direction] == 'asc'  || 
+                                      opts[:order_direction] == :asc   ||
+                                      opts[:order_direction] == 'desc' || 
+                                      opts[:order_direction] == :desc)
         raise WiceGridArgumentError.new(":order_direction must be either 'asc' or 'desc'.")
       end
 
       # options that are understood
       @options = {
-        :per_page => Defaults::PER_PAGE,
-        :order_direction => Defaults::ORDER_DIRECTION,
-        :name => Defaults::GRID_NAME,
-        :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
-        :csv_file_name => nil,
-        :columns => nil,
-        :order => nil,
-        :page => 1,
-        :joins => nil,
-        :include => nil,
-        :conditions => nil,
-        :custom_order => {},
         :after => nil,
+        :conditions => nil,
+        :csv_file_name => nil,
+        :custom_order => {},
+        :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
+        :include => nil,
+        :joins => nil,
+        :name => Defaults::GRID_NAME,
+        :order => nil,
+        :order_direction => Defaults::ORDER_DIRECTION,
+        :page => 1,
+        :per_page => Defaults::PER_PAGE,
         :saved_query => nil
       }
 
-      if opts.has_key?(:erb_mode)
-        STDERR.puts "WiceGrid: Parameter erb_mode has been moved to the view helper and is therefore ignored"
-      end
+      # validate parameters
+      opts.assert_valid_keys(@options.keys)
 
       @options.merge!(opts)
       @export_to_csv_enabled = @options[:enable_export_to_csv]
@@ -93,7 +102,6 @@ module Wice
         @options[:order] = @options[:order].to_s
         @options[:order_direction] = @options[:order_direction].to_s
 
-
         @status[:order_direction] = @options[:order_direction]
         @status[:order] = @options[:order]
 
@@ -107,7 +115,6 @@ module Wice
       process_params
 
       @ar_options_formed = false
-
     end
 
 
@@ -215,7 +222,7 @@ module Wice
 
     def filter_params(view_column)  #:nodoc:
       column_name = view_column.attribute_name_fully_qualified_for_all_but_main_table_columns
-      if @status[:f] and @status[:f][column_name]
+      if @status[:f] && @status[:f][column_name]
         @status[:f][column_name]
       else
         {}
