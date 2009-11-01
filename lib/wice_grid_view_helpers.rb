@@ -1,97 +1,6 @@
 module Wice
   module GridViewHelper
 
-    # This method dumps all HTTP parameters related to filtering and ordering of a certain grid as hidden form fields.
-    # This might be required if you want to keep the state of a grid while reloading the page using other forms.
-    #
-    # The only parameter is a grid object returned by +initialize_grid+ in the controller.
-    def dump_filter_parameters_as_hidden_fields(grid)
-      unless grid.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("dump_filter_parameters_as_hidden_fields: the parameter must be a WiceGrid instance.")
-      end
-
-      grid.get_state_as_parameter_value_pairs(true).collect{|param_name, value|
-        hidden_field_tag(param_name, value)
-      }.join("\n")
-    end
-
-    def dump_state(grid)  #:nodoc:
-      debug(grid.get_state_as_parameter_value_pairs)
-    end
-
-    # View helper to render the list of saved queries and the form to create a new query.
-    # Parameters:
-    # * <tt>:extra_parameters</tt> -  a hash of additional parameters to use when creating a new query object.
-    # Read section "Adding Application Specific Logic to Saving/Restoring Queries" in README for more details.
-    def saved_queries_panel(grid, opts = {})
-      unless grid.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("saved_queries_panel: the parameter must be a WiceGrid instance.")
-      end
-
-      options = {:extra_parameters => {}}
-      options.merge!(opts)
-
-      grid_name = grid.name
-      id_and_name = "#{grid_name}_saved_query_name"
-      base_path_to_query_controller = create_serialized_query_url(:grid_name => grid_name)
-
-      parameters = grid.get_state_as_parameter_value_pairs
-
-      options[:extra_parameters].each do |k, v|
-        parameters << [ CGI.unescape({:extra => {k => ''}}.to_query.sub(/=$/,'')) , v.to_s ]
-      end
-      parameters <<  ['authenticity_token', form_authenticity_token]
-      %! <div class="wice_grid_query_panel"><h3>#{Defaults::SAVED_QUERY_PANEL_TITLE}</h3>! +
-        saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
-        %!<div id="#{grid_name}_notification_messages"  onmouseover="new Effect.Fade(this)"></div>! +
-        if block_given?
-          view, ids = yield
-          view
-        else
-          ''
-        end +
-        javascript_tag do
-          %/
-          function #{grid_name}_save_query(){
-            if ( typeof(#{grid_name}) != "undefined")
-                #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})
-          } /
-        end +
-        text_field_tag(id_and_name,  '', 
-          :size => 20, :onkeydown=>'', :id => id_and_name, 
-          :onkeydown=>"if (event.keyCode == 13) {#{grid_name}_save_query()}") +
-        button_to_function(Defaults::SAVE_QUERY_BUTTON_LABEL,  "#{grid_name}_save_query()" ) +  '</div>'
-    end
-
-
-    def saved_queries_list(grid_name, saved_query = nil, extra_parameters = nil)  #:nodoc:
-      query_store_model = ::Wice::get_query_store_model
-      currently_loaded_query_id = saved_query ? saved_query.id : nil
-      with = extra_parameters.nil? ? nil : "'"  + {:extra => extra_parameters}.to_query + "'"
-      
-      %!<ul id="#{grid_name}_query_list" class="query_list"> ! +
-      query_store_model.list(grid_name, controller).collect do |sq|
-        link_opts = {:class => 'query_load_link', :title => "#{Defaults::SAVED_QUERY_LINK_TITLE} #{sq.name}"}
-        link_opts[:class] += ' current' if saved_query == sq
-        "<li>"+
-        link_to_remote(image_tag(Defaults::DELETE_QUERY_ICON),
-          {:url => delete_serialized_query_path(:grid_name => grid_name, :id => sq.id, :current => currently_loaded_query_id ),
-            :confirm => Defaults::SAVED_QUERY_DELETION_CONFIRMATION, :with => with},
-          {:title => "#{Defaults::SAVED_QUERY_DELETION_LINK_TITLE} #{sq.name}"} )  + ' &nbsp; ' +
-        link_to_function(h(sq.name), 
-          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.load_query(#{sq.id}) /, 
-          link_opts) + 
-        if sq.respond_to? :description
-          desc = sq.description 
-          desc.blank? ? '' : " <i>#{desc}</i>"
-        else
-          ''
-        end +
-        '</li>'
-      end.join('') + '</ul>'
-    end    
-
-
     # View helper for rendering the grid.
     #
     # The first parameter is a grid object returned by +initialize_grid+ in the controller.
@@ -269,29 +178,6 @@ module Wice
       end      
     end
 
-    # secret but stupid weapon
-    def scaffolded_grid(grid_obj, opts = {}) #:nodoc:
-      unless grid_obj.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("scaffolded_grid: the parameter must be a WiceGrid instance.")
-      end
-      
-      # debug grid.klass.column_names
-      columns = grid_obj.klass.column_names
-      if opts[:reject_attributes].is_a? Proc
-        columns = columns.reject{|c| opts[:reject_attributes].call(c)}
-        opts.delete(:reject_attributes)
-      elsif
-        columns = columns.reject{|c| c =~ opts[:reject_attributes]}
-        opts.delete(:reject_attributes)
-      end
-      grid(grid_obj, opts) do |g|
-        columns.each do |column_name|
-          g.column :column_name => column_name.humanize, :attribute_name => column_name  do |ar|
-            ar.send(column_name)
-          end
-        end
-      end
-    end
 
     def generate_blank_slate(grid, rendering) #:nodoc:
       buff = GridOutputBuffer.new
@@ -676,7 +562,6 @@ module Wice
       "#{grid.name}.reset()"
     end
 
-
     def grid_csv(grid, rendering) #:nodoc:
 
 
@@ -706,65 +591,6 @@ module Wice
       spreadsheet.close
       return spreadsheet.path
     end
-
-    # View helper to include all stylesheets and javascript files needed for WiceGrid to function. Add it to template/layout in the
-    # page header section.
-    #
-    # By default the helper returns WiceGrid javascripts and stylesheets include statements only on demand, that is, only if at least one initialize_grid has been 
-    # called in the controller. Otherwise the helper returns an empty string. However, you can force the old unconditioned behavior if you need by submitting
-    # parameter <tt>:load_on_demand</tt> set to +false+:
-    #     <%= include_wice_grid_assets(:load_on_demand => false) %>    
-    #
-    # By default +include_wice_grid_assets+ adds include statements for the javascript calendar widget used for date/datetime filters,
-    # but it's possible not to include them setting parameter +include_calendar+ to false:
-    #     <%= include_wice_grid_assets(:include_calendar => false) %>
-    def include_wice_grid_assets(options = {})
-
-      opts = {:include_calendar => true, :load_on_demand => true}
-      opts.merge!(options)
-      
-      if @__wice_grid_on_page || ! opts[:load_on_demand]
-        javascript_include_tag('wice_grid') +
-        stylesheet_link_tag('wice_grid') +
-        if opts[:include_calendar]
-          stylesheet_link_tag("calendarview.css") + javascript_include_tag("calendarview.js")
-        else
-          ''
-        end
-      end
-    end
-
-    #  Returns a list of names of javascript files for WiceGrid thus providing compatibility with Rails asset caching. 
-    #  Mind the parameters, and the fact that Prototype has to be loaded before WiceGrid javascripts:
-    # 
-    #    <%= javascript_include_tag *([:defaults] + names_of_wice_grid_javascripts + [ 'ui', 'swfobject', {:cache => true}]) %> 
-    #
-    #  By default +names_of_wice_grid_javascripts+ returns all javascripts, but it's possible not to include calendar widget javascripts by 
-    #  setting parameter <tt>:include_calendar</tt>  to +false+.
-    def names_of_wice_grid_javascripts(options = {})
-      opts = {:include_calendar => true}
-      opts.merge!(options)
-      res = ['wice_grid']
-      res <<  'calendarview.js' if opts[:include_calendar]
-      res
-    end
-
-    #  Returns a list of names of stylesheet files for WiceGrid thus providing compatibility with Rails asset caching. 
-    #  Mind the parameters, for example: 
-    # 
-    #    <%= stylesheet_link_tag *(['core',  'modalbox'] + names_of_wice_grid_stylesheets + [ {:cache => true}]) %>
-    #
-    #  By default +names_of_wice_grid_stylesheets+ returns all javascripts, but it's possible not to include calendar widget javascripts by 
-    #  setting parameter <tt>:include_calendar</tt>  to +false+.
-    def names_of_wice_grid_stylesheets(options = {})
-      opts = {:include_calendar => true}
-      opts.merge!(options)
-      res = ['wice_grid']
-      res << "calendarview.css" if opts[:include_calendar]
-      res
-    end
-
-
 
     def pagination_panel_content(grid, extra_request_parameters, allow_showing_all_records) #:nodoc:
       extra_request_parameters = extra_request_parameters.clone
