@@ -27,6 +27,8 @@ module Wice
     #   column will have the same style (color).
     # * <tt>:erb_mode</tt> - can be <tt>true</tt> or <tt>false</tt>. Defines the style of the helper method in the view. The default is <tt>false</tt>.
     # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
+    # * <tt>:hide_reset_button</tt> - Do not show the Filter Reset button.
+    # * <tt>:hide_submit_button</tt> - Do not show the Filter Submit button.
     #   Please read README for more insights.    
     #
     # The block contains definitions of grid columns using the +column+ method sent to the object yielded into the block. In other words,
@@ -95,29 +97,34 @@ module Wice
     # Pease read documentation about the +column+ method to achieve the enlightenment.
 
     def grid(grid, opts = {}, &block)
-      raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class") unless grid.class == WiceGrid
+      unless grid.class == WiceGrid
+        raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class") 
+      end
 
       if grid.output_buffer
         if grid.output_buffer == true
-          raise  WiceGridException.new("Second occurence of grid helper with the same grid object. Did you intend to use detached filters and forget to define them?")
+          raise  WiceGridException.new("Second occurence of grid helper with the same grid object. " + 
+                                "Did you intend to use detached filters and forget to define them?")
         else
-          return grid.output_buffer 
+          return grid.output_buffer
         end
       end
 
       options = {
-        :show_filters => Defaults::SHOW_FILTER,
-        :upper_pagination_panel => Defaults::SHOW_UPPER_PAGINATION_PANEL,
+        :allow_showing_all_records     => Defaults::ALLOW_SHOWING_ALL_QUERIES,
+        :class                         => nil,
+        :erb_mode                      => Defaults::ERB_MODE,
+        :extra_request_parameters      => {},
+        :header_tr_html_attrs          => {},
+        :hide_reset_button             => false,
+        :hide_submit_button            => false,
+        :show_filters                  => Defaults::SHOW_FILTER,
         :sorting_dependant_row_cycling => false,
-        :erb_mode => Defaults::ERB_MODE,
-        :hide_submit_button => false,
-        :hide_reset_button => false,
-        :class => nil,
-        :extra_request_parameters => {},
-        :table_html_attrs => {},
-        :header_tr_html_attrs => {},
-        :allow_showing_all_records => Defaults::ALLOW_SHOWING_ALL_QUERIES
+        :table_html_attrs              => {},
+        :upper_pagination_panel        => Defaults::SHOW_UPPER_PAGINATION_PANEL
       }
+
+      opts.assert_valid_keys(options.keys)
 
       options.merge!(opts)
 

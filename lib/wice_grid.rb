@@ -55,19 +55,19 @@ module Wice
 
       # options that are understood
       @options = {
-        :after => nil,
-        :conditions => nil,
-        :csv_file_name => nil,
-        :custom_order => {},
+        :after                => nil,
+        :conditions           => nil,
+        :csv_file_name        => nil,
+        :custom_order         => {},
         :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
-        :include => nil,
-        :joins => nil,
-        :name => Defaults::GRID_NAME,
-        :order => nil,
-        :order_direction => Defaults::ORDER_DIRECTION,
-        :page => 1,
-        :per_page => Defaults::PER_PAGE,
-        :saved_query => nil
+        :include              => nil,
+        :joins                => nil,
+        :name                 => Defaults::GRID_NAME,
+        :order                => nil,
+        :order_direction      => Defaults::ORDER_DIRECTION,
+        :page                 => 1,
+        :per_page             => Defaults::PER_PAGE,
+        :saved_query          => nil
       }
 
       # validate parameters

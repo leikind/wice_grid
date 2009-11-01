@@ -207,27 +207,28 @@ module Wice
 
     def column(opts = {}, &block)
       options = {
-        :column_name        => '',
-        :td_html_attrs      => {},
-        :class              => nil,
-        :model_class        => nil,
-        :attribute_name     => nil,
-        :no_filter          => false,
-        :custom_filter      => nil,
-        :in_csv             => true,
-        :in_html            => true,
-        :boolean_filter_true_label  => Defaults::BOOLEAN_FILTER_TRUE_LABEL,
+        :allow_multiple_selection   => Defaults::ALLOW_MULTIPLE_SELECTION,
+        :allow_ordering             => true,
+        :attribute_name             => nil,
         :boolean_filter_false_label => Defaults::BOOLEAN_FILTER_FALSE_LABEL,
-        :filter_all_label   => Defaults::CUSTOM_FILTER_ALL_LABEL,
-        :custom_order       => nil,
-        :helper_style       => Defaults::HELPER_STYLE,
-        :table_alias        => nil,
-        :negation_in_filter => Defaults::NEGATION_IN_STRING_FILTERS,
-        :detach_with_id     => nil,
-        :allow_ordering     => true,
-        :allow_multiple_selection => Defaults::ALLOW_MULTIPLE_SELECTION
+        :boolean_filter_true_label  => Defaults::BOOLEAN_FILTER_TRUE_LABEL,
+        :class                      => nil,
+        :column_name                => '',
+        :custom_filter              => nil,
+        :custom_order               => nil,
+        :detach_with_id             => nil,
+        :filter_all_label           => Defaults::CUSTOM_FILTER_ALL_LABEL,
+        :helper_style               => Defaults::HELPER_STYLE,
+        :in_csv                     => true,
+        :in_html                    => true,
+        :model_class                => nil,
+        :negation_in_filter         => Defaults::NEGATION_IN_STRING_FILTERS,
+        :no_filter                  => false,
+        :table_alias                => nil,
+        :td_html_attrs              => {}
       }
 
+      opts.assert_valid_keys(options.keys)
       options.merge!(opts)
 
       unless options[:model_class].nil?
