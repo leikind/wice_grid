@@ -11,6 +11,7 @@ module Wice
       end
 
       options = {:extra_parameters => {}}
+      opts.assert_valid_keys(options.keys)
       options.merge!(opts)
 
       grid_name = grid.name

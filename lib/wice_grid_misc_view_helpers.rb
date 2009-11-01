@@ -60,6 +60,7 @@ module Wice
     def include_wice_grid_assets(options = {})
 
       opts = {:include_calendar => true, :load_on_demand => true}
+      options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       
       if @__wice_grid_on_page || ! opts[:load_on_demand]
@@ -82,6 +83,7 @@ module Wice
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_javascripts(options = {})
       opts = {:include_calendar => true}
+      options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       res = ['wice_grid']
       res <<  'calendarview.js' if opts[:include_calendar]
@@ -97,6 +99,7 @@ module Wice
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_stylesheets(options = {})
       opts = {:include_calendar => true}
+      options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       res = ['wice_grid']
       res << "calendarview.css" if opts[:include_calendar]
