@@ -156,14 +156,17 @@ module Wice
         table_name = model_class.table_name
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
-        raise WiceGridArgumentError.new("Сolumn '#{column_name}' is not found in table '#{@klass.table_name}'! If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising the grid, and specify :model_class in column declaration.") if column.nil?
-
+        if column.nil?
+          raise WiceGridArgumentError.new("Сolumn '#{column_name}' is not found in table '#{@klass.table_name}'! " +
+            "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " +
+            "the grid, and specify :model_class in column declaration.") 
+        end
         main_table = true
         table_name = @table_column_matrix.default_model_class.table_name
       end
 
       if column
-        conditions, current_parameter_name = column.initialize_request_parameters(@status[:f], main_table, table_alias, custom_filter_active)
+        conditions, current_parameter_name = column.wg_initialize_request_parameters(@status[:f], main_table, table_alias, custom_filter_active)
         if @status[:f] && conditions.blank?
           @status[:f].delete(current_parameter_name)
         end
@@ -424,234 +427,258 @@ module Wice
 
 
   end
-end
 
-module ActiveRecord #:nodoc:
-  module ConnectionAdapters #:nodoc:
-    class Column #:nodoc:
-
-      # TO DO: Move into this module what can be moved not to pollute the namespace
-      module GridTools   #:nodoc:
-        class << self
-          def special_value(str)   #:nodoc:
-            str =~ /^\s*(not\s+)?null\s*$/i
-          end
-        end
+  # routines called from WiceGridExtentionToActiveRecordColumn (ActiveRecord::ConnectionAdapters::Column) or FilterConditionsGenerator classes
+  module GridTools   #:nodoc:
+    class << self
+      def special_value(str)   #:nodoc:
+        str =~ /^\s*(not\s+)?null\s*$/i
       end
-      attr_accessor :model_klass
+    end
 
-      def initialize_request_parameters(all_filter_params, main_table, table_alias, custom_filter_active)  #:nodoc:
-        @request_params = nil
-        return if all_filter_params.nil?
+    # create a Time instance out of parameters
+    def params_2_datetime(par)   #:nodoc:
+      return nil if par.blank?
+      params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect{|v| v.blank? ? nil : v.to_i}
+      Time.local(*params)
+    end
 
-        # if the parameter does not specify the table name we only allow columns in the default table to use these parameters
-        if main_table && @request_params  = all_filter_params[self.name]
-          current_parameter_name = self.name
-        elsif @request_params = all_filter_params[alias_or_table_name(table_alias) + '.' + self.name]
-          current_parameter_name = alias_or_table_name(table_alias) + '.' + self.name
-        end
+    # create a Date instance out of parameters
+    def params_2_date(par)   #:nodoc:
+      return nil if par.blank?
+      params =  [par[:year], par[:month], par[:day]].collect{|v| v.blank? ? nil : v.to_i}
+      Date.civil(*params)
+    end
+  end
+  
+  # to be mixed in into ActiveRecord::ConnectionAdapters::Column
+  module WiceGridExtentionToActiveRecordColumn #:nodoc:
 
-        if @request_params
-          if self.type == :datetime || self.type == :timestamp
-            [:fr, :to].each do |sym|
-              if @request_params[sym]
-                if @request_params[sym].is_a?(String)
-                  @request_params[sym] = Wice::Defaults::DATETIME_PARSER.call(@request_params[sym])
-                elsif @request_params[sym].is_a?(Hash)
-                  @request_params[sym] = Column.params_2_datetime(@request_params[sym])
-                end
+    attr_accessor :model_klass
+
+    def alias_or_table_name(table_alias)
+      table_alias || self.model_klass.table_name
+    end
+
+    def wg_initialize_request_parameters(all_filter_params, main_table, table_alias, custom_filter_active)  #:nodoc:
+      @request_params = nil
+      return if all_filter_params.nil?
+
+      # if the parameter does not specify the table name we only allow columns in the default table to use these parameters
+      if main_table && @request_params  = all_filter_params[self.name]
+        current_parameter_name = self.name
+      elsif @request_params = all_filter_params[alias_or_table_name(table_alias) + '.' + self.name]
+        current_parameter_name = alias_or_table_name(table_alias) + '.' + self.name
+      end
+
+      if @request_params
+        if self.type == :datetime || self.type == :timestamp
+          [:fr, :to].each do |sym|
+            if @request_params[sym]
+              if @request_params[sym].is_a?(String)
+                @request_params[sym] = Wice::Defaults::DATETIME_PARSER.call(@request_params[sym])
+              elsif @request_params[sym].is_a?(Hash)
+                @request_params[sym] = ::Wice::GridTools.params_2_datetime(@request_params[sym])
               end
             end
-
           end
 
-          if self.type == :date
+        end
 
-            [:fr, :to].each do |sym|
-              if @request_params[sym]
-                if @request_params[sym].is_a?(String)
-                  @request_params[sym] = Wice::Defaults::DATE_PARSER.call(@request_params[sym])
-                elsif @request_params[sym].is_a?(Hash)
-                  @request_params[sym] = Column.params_2_date(@request_params[sym])
-                end
+        if self.type == :date
+
+          [:fr, :to].each do |sym|
+            if @request_params[sym]
+              if @request_params[sym].is_a?(String)
+                @request_params[sym] = Wice::Defaults::DATE_PARSER.call(@request_params[sym])
+              elsif @request_params[sym].is_a?(Hash)
+                @request_params[sym] = ::Wice::GridTools.params_2_date(@request_params[sym])
               end
             end
           end
         end
-
-        return generate_conditions(table_alias, custom_filter_active), current_parameter_name
       end
 
-      def generate_conditions(table_alias, custom_filter_active)  #:nodoc:
-        return nil if @request_params.nil?
+      return wg_generate_conditions(table_alias, custom_filter_active), current_parameter_name
+    end
 
-        if custom_filter_active
-          return generate_conditions_custom_filter_options(table_alias, @request_params)
-        end
-        method_name = 'generate_conditions_' + self.type.to_s
-        if self.respond_to?(method_name)
-          return self.send('generate_conditions_' + self.type.to_s, table_alias, @request_params)
-        else
-          nil
-        end
+    def wg_generate_conditions(table_alias, custom_filter_active)  #:nodoc:
+      return nil if @request_params.nil?
+
+      if custom_filter_active
+        return ::Wice::FilterConditionsGeneratorCustomFilter.new(self).generate_conditions(table_alias, @request_params)
       end
+      
+      column_type = self.type.to_s
 
-      protected
-
-      def alias_or_table_name(table_alias)
-        table_alias || model_klass.table_name
+      processor_class = ::Wice::FilterConditionsGenerator.handled_type[column_type]
+      
+      if processor_class
+        return processor_class.new(self).generate_conditions(table_alias, @request_params)
+      else
+        Wice.log("No processor for database type #{column_type}!!!")
+        nil
       end
+    end
 
-      def generate_conditions_string(table_alias, opts)   #:nodoc:
-        if opts.kind_of? String
-          string_fragment = opts
-          negation = ''
-        elsif (opts.kind_of? Hash) && opts.has_key?(:v)
-          string_fragment = opts[:v]
-          negation = opts[:n] == '1' ? 'NOT' : ''
-        else
-          Wice.log "invalid parameters for the grid string filter - must be a string: #{opts.inspect} or a Hash with keys :v and :n"
-          return false
-        end
-        if string_fragment.empty?
-          Wice.log "invalid parameters for the grid string filter - empty string"
-          return false
-        end
-        [" #{negation}  #{alias_or_table_name(table_alias)}.#{self.name} #{::Wice.get_string_matching_operators(model_klass)} ?",
-            '%' + string_fragment + '%']
+  end
+  
+  class FilterConditionsGenerator   #:nodoc:
+
+    cattr_accessor :handled_type
+    @@handled_type = HashWithIndifferentAccess.new
+
+    def initialize(column)   #:nodoc:
+      @column = column
+    end
+  end
+  
+  class FilterConditionsGeneratorCustomFilter < FilterConditionsGenerator #:nodoc:
+
+    def generate_conditions(table_alias, opts)   #:nodoc:
+      if opts.empty?
+        Wice.log "empty parameters for the grid custom filter"
+        return false
       end
-
-      alias_method :generate_conditions_text, :generate_conditions_string
-
-
-      def  generate_conditions_custom_filter_options(table_alias, opts)   #:nodoc:
-        if opts.empty?
-          Wice.log "empty parameters for the grid custom filter"
-          return false
-        end
-        opts = (opts.kind_of?(Array) && opts.size == 1) ? opts[0] : opts
+      opts = (opts.kind_of?(Array) && opts.size == 1) ? opts[0] : opts
+      
+      if opts.kind_of?(Array)
+        opts_with_special_values, normal_opts = opts.partition{|v| ::Wice::GridTools.special_value(v)}
         
-        if opts.kind_of?(Array)
-          opts_with_special_values, normal_opts = opts.partition{|v| GridTools.special_value(v)}
+        conditions_ar = if normal_opts.size > 0 
+          [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
+        else
+          []
+        end
           
-          conditions_ar = if normal_opts.size > 0 
-            [" #{alias_or_table_name(table_alias)}.#{self.name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
+        if opts_with_special_values.size > 0
+          special_conditions = opts_with_special_values.collect{|v| " #{@column.alias_or_table_name(table_alias)}.#{@column.name} is " + v}.join(' or ')
+          if conditions_ar.size > 0
+            conditions_ar[0] = " (#{conditions_ar[0]} or #{special_conditions} ) "
           else
-            []
-          end
-            
-          if opts_with_special_values.size > 0
-            special_conditions = opts_with_special_values.collect{|v| " #{alias_or_table_name(table_alias)}.#{self.name} is " + v}.join(' or ')
-            if conditions_ar.size > 0
-              conditions_ar[0] = " (#{conditions_ar[0]} or #{special_conditions} ) "
-            else
-              conditions_ar = " ( #{special_conditions} ) "
-            end
-          end
-          conditions_ar
-        else
-          if GridTools.special_value(opts)
-            " #{alias_or_table_name(table_alias)}.#{self.name} is " + opts
-          else 
-            [" #{alias_or_table_name(table_alias)}.#{self.name} = ?", opts]
+            conditions_ar = " ( #{special_conditions} ) "
           end
         end
-      end
-
-
-      def  generate_conditions_decimal(table_alias, opts)   #:nodoc:
-        generate_conditions_integer(table_alias, opts)
-      end
-      
-      alias_method :generate_conditions_float, :generate_conditions_decimal
-
-      def  generate_conditions_integer(table_alias, opts)   #:nodoc:
-        unless opts.kind_of? Hash
-          Wice.log "invalid parameters for the grid integer filter - must be a hash"
-          return false
-        end
-        conditions = [[]]
-        if opts[:fr]
-          if opts[:fr] =~ /\d/
-            conditions[0] << " #{alias_or_table_name(table_alias)}.#{self.name} >= ? "
-            conditions << opts[:fr]
-          else
-            opts.delete(:fr)
-          end
-        end
-
-        if opts[:to]
-          if opts[:to] =~ /\d/
-            conditions[0] << " #{alias_or_table_name(table_alias)}.#{self.name} <= ? "
-            conditions << opts[:to]
-          else
-            opts.delete(:to)
-          end
-        end
-
-        if conditions.size == 1
-          Wice.log "invalid parameters for the grid integer filter - either range limits are not supplied or they are not numeric"
-          return false
-        end
-
-        conditions[0] = conditions[0].join(' and ')
-
-        return conditions
-      end
-
-      def  generate_conditions_boolean(table_alias, opts)   #:nodoc:
-        unless (opts.kind_of?(Array) && opts.size == 1)
-          Wice.log "invalid parameters for the grid boolean filter - must be an one item array: #{opts.inspect}"
-          return false
-        end
-        opts = opts[0]
-        if opts == 'f'
-          [" #{alias_or_table_name(table_alias)}.#{self.name} = ? or #{alias_or_table_name(table_alias)}.#{self.name} is null ", false]
-        elsif opts == 't'
-          [" #{alias_or_table_name(table_alias)}.#{self.name} = ?", true]
-        else
-          nil
+        conditions_ar
+      else
+        if ::Wice::GridTools.special_value(opts)
+          " #{@column.alias_or_table_name(table_alias)}.#{@column.name} is " + opts
+        else 
+          [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ?", opts]
         end
       end
+    end
 
-      def  generate_conditions_datetime(table_alias, opts)  #:nodoc:
-        generate_conditions_date(table_alias, opts)
+  end
+  
+  class FilterConditionsGeneratorBoolean < FilterConditionsGenerator  #:nodoc:
+    @@handled_type[:boolean] = self
+    
+    def  generate_conditions(table_alias, opts)   #:nodoc:
+      unless (opts.kind_of?(Array) && opts.size == 1)
+        Wice.log "invalid parameters for the grid boolean filter - must be an one item array: #{opts.inspect}"
+        return false
       end
-      
-      alias_method :generate_conditions_timestamp, :generate_conditions_datetime
-
-      def generate_conditions_date(table_alias, opts)   #:nodoc:
-        conditions = [[]]
-        if opts[:fr]
-          conditions[0] << " #{alias_or_table_name(table_alias)}.#{self.name} >= ? "
-          conditions << opts[:fr]
-        end
-
-        if opts[:to]
-          conditions[0] << " #{alias_or_table_name(table_alias)}.#{self.name} <= ? "
-          conditions << opts[:to]
-        end
-
-        return false if conditions.size == 1
-
-        conditions[0] = conditions[0].join(' and ')
-        return conditions
-      end
-
-
-      def self.params_2_datetime(par)   #:nodoc:
-        return nil if par.blank?
-        params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect{|v| v.blank? ? nil : v.to_i}
-        Time.local(*params)
-      end
-
-      def self.params_2_date(par)   #:nodoc:
-        return nil if par.blank?
-        params =  [par[:year], par[:month], par[:day]].collect{|v| v.blank? ? nil : v.to_i}
-        Date.civil(*params)
+      opts = opts[0]
+      if opts == 'f'
+        [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ? or #{@column.alias_or_table_name(table_alias)}.#{@column.name} is null ", false]
+      elsif opts == 't'
+        [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ?", true]
+      else
+        nil
       end
     end
   end
+
+  class FilterConditionsGeneratorString < FilterConditionsGenerator  #:nodoc:
+    @@handled_type[:string] = self
+    @@handled_type[:text]   = self
+    
+    def generate_conditions(table_alias, opts)   #:nodoc:
+      if opts.kind_of? String
+        string_fragment = opts
+        negation = ''
+      elsif (opts.kind_of? Hash) && opts.has_key?(:v)
+        string_fragment = opts[:v]
+        negation = opts[:n] == '1' ? 'NOT' : ''
+      else
+        Wice.log "invalid parameters for the grid string filter - must be a string: #{opts.inspect} or a Hash with keys :v and :n"
+        return false
+      end
+      if string_fragment.empty?
+        Wice.log "invalid parameters for the grid string filter - empty string"
+        return false
+      end
+      [" #{negation}  #{@column.alias_or_table_name(table_alias)}.#{@column.name} #{::Wice.get_string_matching_operators(@column.model_klass)} ?",
+          '%' + string_fragment + '%']
+    end
+
+  end
+
+  class FilterConditionsGeneratorInteger < FilterConditionsGenerator  #:nodoc:
+    @@handled_type[:integer] = self
+    @@handled_type[:float]   = self
+    @@handled_type[:decimal] = self
+    
+    def  generate_conditions(table_alias, opts)   #:nodoc:
+      unless opts.kind_of? Hash
+        Wice.log "invalid parameters for the grid integer filter - must be a hash"
+        return false
+      end
+      conditions = [[]]
+      if opts[:fr]
+        if opts[:fr] =~ /\d/
+          conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} >= ? "
+          conditions << opts[:fr]
+        else
+          opts.delete(:fr)
+        end
+      end
+
+      if opts[:to]
+        if opts[:to] =~ /\d/
+          conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} <= ? "
+          conditions << opts[:to]
+        else
+          opts.delete(:to)
+        end
+      end
+
+      if conditions.size == 1
+        Wice.log "invalid parameters for the grid integer filter - either range limits are not supplied or they are not numeric"
+        return false
+      end
+
+      conditions[0] = conditions[0].join(' and ')
+
+      return conditions
+    end
+  end
+
+  class FilterConditionsGeneratorDate < FilterConditionsGenerator  #:nodoc:
+    @@handled_type[:date]      = self
+    @@handled_type[:datetime]  = self
+    @@handled_type[:timestamp] = self
+
+    def generate_conditions(table_alias, opts)   #:nodoc:
+      conditions = [[]]
+      if opts[:fr]
+        conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} >= ? "
+        conditions << opts[:fr]
+      end
+
+      if opts[:to]
+        conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} <= ? "
+        conditions << opts[:to]
+      end
+
+      return false if conditions.size == 1
+
+      conditions[0] = conditions[0].join(' and ')
+      return conditions
+    end
+  end
+
 end
 
-
+ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
