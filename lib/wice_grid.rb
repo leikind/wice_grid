@@ -6,7 +6,7 @@ require 'table_column_matrix.rb'
 require 'wice_grid_view_helpers.rb'
 require 'view_columns.rb'
 require 'grid_output_buffer.rb'
-require 'controller.rb'
+require 'wice_grid_controller.rb'
 require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
 
