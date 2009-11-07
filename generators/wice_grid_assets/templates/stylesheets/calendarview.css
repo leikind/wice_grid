@@ -3,6 +3,7 @@ div.calendar
 {
   font-size: smaller;
   color: #000;
+  z-index: 5;
 }
 
 div.calendar.popup
@@ -51,7 +52,7 @@ div.calendar tr.days td {
 }
 
 div.calendar tr.days td:hover,
-div.calendar td.button:hover
+div.calendar td.cvbutton:hover
 {
   background-color: #34ABFA;
   cursor: pointer;
@@ -66,7 +67,7 @@ div.calendar tr td.closeButton:hover
 
 
 div.calendar tr.days td:active
-div.calendar td.button:active
+div.calendar td.cvbutton:active
 {
   background-color: #cde;
 }

@@ -25,6 +25,9 @@ The differences from the original are
 * Support for time in the form of two dropdowns for hours and minutes. Can be turned off/on.
 * Draggable popup calendars (which introduces new dependancies: script.aculo.us effects.js and dragdrop.js)
 * Close button
+* Ability to unset the date by clicking on the active date
+* Simple I18n support
+* Removed all ambiguity in the API
 * Popup calendars  are not created every time they pop up, on the contrary, they are created once just like
   embedded calendars, and then shown or hidden.
 * Possible to have many popup calendars on page. The behavior of the original calendarview when a popup
@@ -34,6 +37,14 @@ The differences from the original are
 
 */
 
+
+/*
+extraOutputDateFields -> outputFields
+dateField removed
+initialDate added
+parentElement -> embedAt
+triggerElement -> popupTriggerElement
+*/
 
 
 var Calendar = Class.create({
@@ -55,23 +66,31 @@ var Calendar = Class.create({
 
   initialize: function(params){
 
-    parentElement        = params.parentElement        || null; // just getting rid of undefined 'values' :)
-    withTime             = params.withTime             || null;
-    dateFormat           = params.dateFormat           || null;
-    dateField            = params.dateField            || null;
-    triggerElement       = params.triggerElement       || null;
-    this.onHideCallback  = params.onHideCallback           || function(date, calendar){};
+    if (! Calendar.init_done){
+      Calendar.init();
+    }
+
+    embedAt                   = params.embedAt              || null;
+    withTime                  = params.withTime             || null;
+    dateFormat                = params.dateFormat           || null;
+    initialDate               = params.initialDate          || null;
+    popupTriggerElement       = params.popupTriggerElement        || null;
+    this.onHideCallback       = params.onHideCallback             || function(date, calendar){};
     this.onDateChangedCallback     = params.onDateChangedCallback || function(date, calendar){};
     this.minuteStep                = params.minuteStep            || 5;
     this.hideOnClickOnDay          = params.hideOnClickOnDay      || false;
     this.hideOnClickElsewhere      = params.hideOnClickElsewhere  || false;
-    this.extraOutputDateFields     = params.extraOutputDateFields || $A();
+    this.outputFields              = params.outputFields          || $A();
 
-    if (parentElement){
-      this.parentElement = $(parentElement);
-      this.parentElement._calendar = this;
+    this.outputFields = $A(this.outputFields).collect(function(f){
+      return $(f);
+    });
+
+    if (embedAt){
+      this.embedAt = $(embedAt);
+      this.embedAt._calendar = this;
     }else{
-      this.parentElement = null;
+      this.embedAt = null;
     }
 
     this.withTime      = withTime;
@@ -86,36 +105,40 @@ var Calendar = Class.create({
       }
     }
 
-    this.build();
+    this.dateFormatForHiddenField = params.dateFormatForHiddenField || this.dateFormat;
 
-    if (dateField) {
-      this.dateField = $(dateField);
-      this.parseDate(this.dateField.innerHTML || this.dateField.value);
+
+    if (initialDate) {
+      this.date = this.parseDate(initialDate);
     }
 
+    this.build();
 
     if (this.isPopup) { //Popup Calendars
-      var triggerElement = $(triggerElement || dateField);
-      triggerElement._calendar = this;
+      var popupTriggerElement = $(popupTriggerElement);
+      popupTriggerElement._calendar = this;
       
-      triggerElement.onclick = function() {
-        this.showAtElement(triggerElement);
+      popupTriggerElement.onclick = function() {
+        this.showAtElement(popupTriggerElement);
       }.bind(this);
 
     } else{ // In-Page Calendar
       this.show();
     }
 
+    if (params.updateOuterFieldsOnInit){
+      this.updateOuterFieldWithoutCallback(); // Just for the sake of localization and DatePicker
+    }
   },
 
   // Build the DOM structure
   build: function(){
     // If no parent was specified, assume that we are creating a popup calendar.
-    if (this.parentElement) {
-      var parentForCalendarTable = this.parentElement;
+    if (this.embedAt) {
+      var parentForCalendarTable = this.embedAt;
       this.isPopup = false;
     } else {
-      parentForCalendarTable = document.getElementsByTagName('body')[0];
+      var parentForCalendarTable = document.getElementsByTagName('body')[0];
       this.isPopup = true;
     }
 
@@ -165,7 +188,7 @@ var Calendar = Class.create({
     var row = new Element('tr')
     this._drawButtonCell(row, '&#x00ab;', 1, Calendar.NAV_PREVIOUS_YEAR);
     this._drawButtonCell(row, '&#x2039;', 1, Calendar.NAV_PREVIOUS_MONTH);
-    this._drawButtonCell(row, 'Today',    3, Calendar.NAV_TODAY);
+    this._drawButtonCell(row,   Calendar.getMessageFor('today'),    3, Calendar.NAV_TODAY);
     this._drawButtonCell(row, '&#x203a;', 1, Calendar.NAV_NEXT_MONTH);
     this._drawButtonCell(row, '&#x00bb;', 1, Calendar.NAV_NEXT_YEAR);
     thead.appendChild(row)
@@ -201,6 +224,7 @@ var Calendar = Class.create({
       for (var i = 0; i < 24; i++) {
         hourSelect.appendChild(new Element('option', {value : i}).update(i));
       }
+      this.hourSelect = hourSelect;
 
       cell.appendChild(new Element('span')).update(' : ');
 
@@ -208,8 +232,10 @@ var Calendar = Class.create({
       for (var i = 0; i < 60; i += this.minuteStep) {
         minuteSelect.appendChild(new Element('option', {value : i}).update(i));
       }
-
+      this.minuteSelect = minuteSelect;
+      
       hourSelect.observe('change', function(event){
+        if (! this.date) return;        
         var elem = event.element();
         var selectedIndex = elem.selectedIndex;
         if ((typeof selectedIndex != 'undefined') && selectedIndex != null){
@@ -219,13 +245,14 @@ var Calendar = Class.create({
       }.bind(this));
 
       minuteSelect.observe('change', function(event){
+        if (! this.date) return;
         var elem = event.element();
         var selectedIndex = elem.selectedIndex;
         if ((typeof selectedIndex != 'undefined') && selectedIndex != null){
           this.date.setMinutes(elem.options[selectedIndex].value);
           this.updateOuterField();
         }
-      }.bind(this))
+      }.bind(this));
 
     }
 
@@ -239,7 +266,7 @@ var Calendar = Class.create({
     this.container.appendChild(table)
 
     // Initialize Calendar
-    this.update(this.date)
+    this.update(this.date);
 
     // Observe the container for mousedown events
     Event.observe(this.container, 'mousedown', Calendar.handleMouseDownEvent)
@@ -250,23 +277,38 @@ var Calendar = Class.create({
     if (this.isPopup){
       new Draggable(table, {handle : firstRow });
     }
-
   },
 
   updateOuterFieldReal: function(element){
     if (element.tagName == 'DIV' || element.tagName == 'SPAN') {
-      element.update(this.date.print(this.dateFormat))
+      formatted = this.date ? this.date.print(this.dateFormat) : ''
+      element.update(formatted);
     } else if (element.tagName == 'INPUT') {
-      element.value = this.date.print(this.dateFormat)
+      formatted = this.date ? this.date.print(this.dateFormatForHiddenField) : '';
+      element.value = formatted;
     }
   },
 
-  updateOuterField: function(){
-    this.updateOuterFieldReal(this.dateField);
-    this.extraOutputDateFields.each(function(field){
-      this.updateOuterFieldReal($(field));
+  updateOuterFieldWithoutCallback: function(){
+    this.outputFields.each(function(field){
+      this.updateOuterFieldReal(field);
     }.bind(this));
-    this.onDateChangedCallback(this.date, this);    
+  },
+
+
+  updateOuterField: function(){
+    this.updateOuterFieldWithoutCallback();
+    this.onDateChangedCallback(this.date, this);
+  },
+
+  viewOutputFields: function(){
+    return this.outputFields.findAll(function(element){
+      if (element.tagName == 'DIV' || element.tagName == 'SPAN'){
+        return true;
+      }else{
+        return false;
+      }
+    });
   },
 
 
@@ -275,11 +317,11 @@ var Calendar = Class.create({
   //----------------------------------------------------------------------------
 
   update: function(date) {
-    var calendar   = this
-    var today      = new Date()
-    var thisYear   = today.getFullYear()
-    var thisMonth  = today.getMonth()
-    var thisDay    = today.getDate()
+    
+    var today      = new Date();
+    var thisYear   = today.getFullYear();
+    var thisMonth  = today.getMonth();
+    var thisDay    = today.getDate();
     var month      = date.getMonth();
     var dayOfMonth = date.getDate();
     var hour       = date.getHours();
@@ -291,7 +333,11 @@ var Calendar = Class.create({
     else if (date.getFullYear() > this.maxYear)
       date.__setFullYear(this.maxYear)
 
-    this.date = new Date(date);
+    if (this.isBackedUp()){
+      this.dateBackedUp = new Date(date);
+    }else{
+      this.date = new Date(date);
+    }
 
     // Calculate the first day to display (including the previous month)
     date.setDate(1)
@@ -319,9 +365,11 @@ var Calendar = Class.create({
               rowHasDays = true
 
             // Ensure the current day is selected
-            if (isCurrentMonth && day == dayOfMonth) {
-              cell.addClassName('selected')
-              calendar.currentDateElement = cell
+            
+            
+            if ((! this.isBackedUp()) && isCurrentMonth && day == dayOfMonth) {
+              cell.addClassName('selected');
+              this.currentDateElement = cell;
             }
 
             // Today
@@ -334,11 +382,11 @@ var Calendar = Class.create({
 
             // Set the date to tommorrow
             date.setDate(day + 1)
-          }
+          }.bind(this)
         )
         // Hide the extra row if it contains only days from another month
         !rowHasDays ? row.hide() : row.show()
-      }
+      }.bind(this)
     )
 
     Element.getElementsBySelector(this.container, 'tfoot tr td select').each(
@@ -356,8 +404,9 @@ var Calendar = Class.create({
     )
 
     this.container.getElementsBySelector('td.title')[0].update(
-      Calendar.MONTH_NAMES[month] + ' ' + this.date.getFullYear()
+      Calendar.MONTH_NAMES[month] + ' ' + this.dateOrDateBackedUp().getFullYear()
     )
+    
   },
 
 
@@ -388,7 +437,7 @@ var Calendar = Class.create({
   _drawButtonCell: function(parentForCell, text, colSpan, navAction) {
     var cell          = new Element('td')
     if (colSpan > 1) cell.colSpan = colSpan
-    cell.className    = 'button'
+    cell.className    = 'cvbutton'
     cell.calendar     = this
     cell.navAction    = navAction
     cell.innerHTML    = text
@@ -439,16 +488,64 @@ var Calendar = Class.create({
   // Tries to identify the date represented in a string.  If successful it also
   // calls this.updateIfDateDifferent which moves the calendar to the given date.
   parseDate: function(str, format){
-    if (!format)
+    if (!format){
       format = this.dateFormat
-    this.updateIfDateDifferent(Date.parseDate(str, format))
+    }
+    var res = Date.parseDate(str, format);
+    return res;
   },
 
+
+  dateOrDateBackedUp: function(){
+    return this.date || this.dateBackedUp;
+  },
 
   updateIfDateDifferent: function(date) {
-    if (!date.equalsTo(this.date))
+    if (!date.equalsTo(this.dateOrDateBackedUp())){
       this.update(date);
+    }
   },
+  
+  backupDateAndCurrentElement: function(){
+    if (this.minuteSelect){
+      this.minuteSelect.disable();
+    }
+    if (this.hourSelect){
+      this.hourSelect.disable();
+    }
+    
+    this.currentDateElementBackedUp = this.currentDateElement;
+    this.currentDateElement = null;
+    
+    this.dateBackedUp = this.date;
+    this.date = null;
+  },
+
+  restoreDateAndCurrentElement: function(){
+    if (this.minuteSelect){
+      this.minuteSelect.enable();
+    }
+    if (this.hourSelect){
+      this.hourSelect.enable();
+    }
+    
+    this.currentDateElement = this.currentDateElementBackedUp;
+    this.currentDateElementBackedUp = null;
+    
+    this.date = this.dateBackedUp;
+    this.dateBackedUp = null;
+  },
+
+  isBackedUp: function(){
+    return ((this.date == null) && this.dateBackedUp);
+  },
+
+  dumpDates: function(){
+    console.log('date: ' + this.date);
+    console.log('dateBackedUp: ' + this.dateBackedUp);
+  },
+
+
 
 
   setRange: function(minYear, maxYear) {
@@ -463,29 +560,213 @@ var Calendar = Class.create({
 // Constants
 //------------------------------------------------------------------------------
 
-Calendar.VERSION = '1.2';
+// Delete or add new locales from I18n.js according to your needs
+Calendar.messagebundle = $H({'en' :
+  $H({
+    'monday' : 'Monday', 
+    'tuesday' : 'Tuesday', 
+    'wednesday' : 'Wednesday', 
+    'thursday' : 'Thursday', 
+    'friday' : 'Friday', 
+    'saturday' : 'Saturday',
+    'sunday' : 'Sunday',
+
+    'monday_short' : 'M', 
+    'tuesday_short' : 'T', 
+    'wednesday_short' : 'W', 
+    'thursday_short' : 'T', 
+    'friday_short' : 'F', 
+    'saturday_short' : 'S',
+    'sunday_short' : 'S',
+
+    'january' : 'January', 
+    'february' : 'February', 
+    'march' : 'March', 
+    'april' : 'April', 
+    'may' : 'May', 
+    'june' : 'June', 
+    'july'  : 'July', 
+    'august' : 'August',
+    'september'  : 'September', 
+    'october' : 'October', 
+    'november' : 'November', 
+    'december' : 'December',
+
+    'january_short' : 'Jan', 
+    'february_short' : 'Feb', 
+    'march_short' : 'Mar', 
+    'april_short' : 'Apr', 
+    'may_short' : 'May', 
+    'june_short' : 'Jun', 
+    'july_short'  : 'Jul', 
+    'august_short' : 'Aug',
+    'september_short'  : 'Sep', 
+    'october_short' : 'Oct', 
+    'november_short' : 'Nov', 
+    'december_short' : 'Dec',
+
+    'today' : 'Today'
+  }),
+  'fr' :
+    $H({
+      'monday' : 'Lundi', 
+      'tuesday' : 'Mardi', 
+      'wednesday' : 'Mercredi', 
+      'thursday' : 'Jeudi', 
+      'friday' : 'Vendredi', 
+      'saturday' : 'Samedi',
+      'sunday' : 'Dimanche',
+
+      'monday_short' : 'Lu', 
+      'tuesday_short' : 'Ma', 
+      'wednesday_short' : 'Me', 
+      'thursday_short' : 'Je', 
+      'friday_short' : 'Ve', 
+      'saturday_short' : 'Sa',
+      'sunday_short' : 'Di',
+
+      'january' : 'janvier', 
+      'february' : 'février', 
+      'march' : 'mars', 
+      'april' : 'avril', 
+      'may' : 'mai', 
+      'june' : 'juin', 
+      'july'  : 'juillet', 
+      'august' : 'août',
+      'september'  : 'septembre', 
+      'october' : 'octobre', 
+      'november' : 'novembre', 
+      'december' : 'décembre',
+
+      'january_short' : 'jan', 
+      'february_short' : 'fév', 
+      'march_short' : 'mar', 
+      'april_short' : 'avr', 
+      'may_short' : 'mai', 
+      'june_short' : 'jun', 
+      'july_short'  : 'jul', 
+      'august_short' : 'aoû',
+      'september_short'  : 'sep', 
+      'october_short' : 'oct', 
+      'november_short' : 'nov', 
+      'december_short' : 'dec',
+
+      'today' : 'aujourd\'hui'
+    }),
+    'nl' :
+      $H({
+        'monday' : 'maandag', 
+        'tuesday' : 'dinsdag', 
+        'wednesday' : 'woensdag', 
+        'thursday' : 'donderdag', 
+        'friday' : 'vrijdag', 
+        'saturday' : 'zaterdag',
+        'sunday' : 'zondag',
+
+        'monday_short' : 'Ma', 
+        'tuesday_short' : 'Di', 
+        'wednesday_short' : 'Wo', 
+        'thursday_short' : 'Do', 
+        'friday_short' : 'Vr', 
+        'saturday_short' : 'Za',
+        'sunday_short' : 'Zo',
+
+        'january' : 'januari', 
+        'february' : 'februari', 
+        'march' : 'maart', 
+        'april' : 'april', 
+        'may' : 'mei', 
+        'june' : 'juni', 
+        'july'  : 'juli', 
+        'august' : 'augustus',
+        'september'  : 'september', 
+        'october' : 'oktober', 
+        'november' : 'november', 
+        'december' : 'december',
+
+        'january_short' : 'jan', 
+        'february_short' : 'feb', 
+        'march_short' : 'mrt', 
+        'april_short' : 'apr', 
+        'may_short' : 'mei', 
+        'june_short' : 'jun', 
+        'july_short'  : 'jul', 
+        'august_short' : 'aug',
+        'september_short'  : 'sep', 
+        'october_short' : 'okt', 
+        'november_short' : 'nov', 
+        'december_short' : 'dec',
+
+        'today' : 'vandaag'
+      })  
+});
+
+
+Calendar.getMessageFor = function(key){
+
+  var lang = Calendar.language || 'en';
+  return Calendar.messagebundle.get(lang).get(key);
+};
+
+Calendar.VERSION = '1.3';
 
 Calendar.defaultDateFormat = '%Y-%m-%d';
 Calendar.defaultDateTimeFormat = '%Y-%m-%d %H:%M';
 
-Calendar.DAY_NAMES = new Array(
-  'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
-  'Sunday'
-);
+// we need to postpone the initialization of these structures to let the page define the language of the page
+Calendar.init =  function(){
 
-Calendar.SHORT_DAY_NAMES = new Array(
-  'S', 'M', 'T', 'W', 'T', 'F', 'S', 'S'
-);
+  Calendar.DAY_NAMES = new Array(
+    Calendar.getMessageFor('monday'),
+    Calendar.getMessageFor('tuesday'),
+    Calendar.getMessageFor('wednesday'),
+    Calendar.getMessageFor('thursday'),
+    Calendar.getMessageFor('friday'),
+    Calendar.getMessageFor('saturday'),
+    Calendar.getMessageFor('sunday')
+  );
 
-Calendar.MONTH_NAMES = new Array(
-  'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-  'September', 'October', 'November', 'December'
-);
+  Calendar.SHORT_DAY_NAMES = new Array(
+    Calendar.getMessageFor('monday_short'),
+    Calendar.getMessageFor('tuesday_short'),
+    Calendar.getMessageFor('wednesday_short'),
+    Calendar.getMessageFor('thursday_short'),
+    Calendar.getMessageFor('friday_short'),
+    Calendar.getMessageFor('saturday_short'),
+    Calendar.getMessageFor('sunday_short')
+  );
 
-Calendar.SHORT_MONTH_NAMES = new Array(
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
-  'Dec'
-);
+  Calendar.MONTH_NAMES = new Array(
+    Calendar.getMessageFor('january'),
+    Calendar.getMessageFor('february'),
+    Calendar.getMessageFor('march'),
+    Calendar.getMessageFor('april'),
+    Calendar.getMessageFor('may'),
+    Calendar.getMessageFor('june'),
+    Calendar.getMessageFor('july'),
+    Calendar.getMessageFor('august'),
+    Calendar.getMessageFor('september'),
+    Calendar.getMessageFor('october'),
+    Calendar.getMessageFor('november'),
+    Calendar.getMessageFor('december')
+  );
+
+  Calendar.SHORT_MONTH_NAMES = new Array(
+    Calendar.getMessageFor('january_short'),
+    Calendar.getMessageFor('february_short'),
+    Calendar.getMessageFor('march_short'),
+    Calendar.getMessageFor('april_short'),
+    Calendar.getMessageFor('may_short'),
+    Calendar.getMessageFor('june_short'),
+    Calendar.getMessageFor('july_short'),
+    Calendar.getMessageFor('august_short'),
+    Calendar.getMessageFor('september_short'),
+    Calendar.getMessageFor('october_short'),
+    Calendar.getMessageFor('november_short'),
+    Calendar.getMessageFor('december_short')
+  );
+  Calendar.init_done = true;
+};
 
 Calendar.NAV_PREVIOUS_YEAR  = -2;
 Calendar.NAV_PREVIOUS_MONTH = -1;
@@ -517,18 +798,17 @@ Calendar._checkCalendar = function(event) {
 
 Calendar.handleMouseDownEvent = function(event){
   if (event.element().type == 'select-one'){ // ignore select elements - not escaping this in Safari leaves select boxes non-functional
-    return true
+    return true;
   }
   Event.observe(document, 'mouseup', Calendar.handleMouseUpEvent)
   Event.stop(event)
 }
 
-// XXX I am not happy with how clicks of different actions are handled. Need to
-// clean this up!
 Calendar.handleMouseUpEvent = function(event){
-  var el        = Event.element(event)
-  var calendar  = el.calendar
-  var isNewDate = false
+  var el        = Event.element(event);
+  var calendar  = el.calendar;
+  var isNewDate = false;
+  
 
   // If the element that was clicked on does not have an associated Calendar
   // object, return as we have nothing to do.
@@ -536,18 +816,41 @@ Calendar.handleMouseUpEvent = function(event){
 
   // Clicked on a day
   if (typeof el.navAction == 'undefined') {
+    
+    var dateWasDefined = true;
+    if (calendar.date == null){
+      dateWasDefined = false;
+      calendar.restoreDateAndCurrentElement();
+    }
+    
+    
     if (calendar.currentDateElement) {
       Element.removeClassName(calendar.currentDateElement, 'selected');
+
+      if (dateWasDefined && el == calendar.currentDateElement){
+        calendar.backupDateAndCurrentElement();
+        
+        calendar.updateOuterField();
+        
+        Event.stopObserving(document, 'mouseup', Calendar.handleMouseUpEvent);
+        return Event.stop(event);
+      }
+
       Element.addClassName(el, 'selected');
+      
       calendar.shouldClose = (calendar.currentDateElement == el);
 
       if (!calendar.shouldClose) {
+
         calendar.currentDateElement = el;
       }
     }
-    calendar.date.setDateOnly(el.date)
-    isNewDate = true
+    calendar.date.setDateOnly(el.date);
+    isNewDate = true;
+
     calendar.shouldClose = !el.hasClassName('otherDay');
+
+
     var isOtherMonth     = !calendar.shouldClose;
     if (isOtherMonth) {
       calendar.update(calendar.date)
@@ -558,20 +861,23 @@ Calendar.handleMouseUpEvent = function(event){
     }
 
   } else { // Clicked on an action button
-    var date = new Date(calendar.date)
-
+    
+    var date = new Date(calendar.dateOrDateBackedUp());
+    
     if (el.navAction == Calendar.NAV_TODAY){
       date.setDateOnly(new Date());
     }
 
-    var year = date.getFullYear()
-    var mon = date.getMonth()
+    var year = date.getFullYear();
+    var mon = date.getMonth();
+
     function setMonth(m) {
       var day = date.getDate();
       var max = date.getMonthDays(m);
       if (day > max) date.setDate(max);
       date.setMonth(m)
     }
+
     switch (el.navAction) {
 
       // Previous Year
@@ -589,7 +895,7 @@ Calendar.handleMouseUpEvent = function(event){
           date.__setFullYear(year);
           setMonth(11);
         }
-        break
+        break;
 
       // Today
       case Calendar.NAV_TODAY:
@@ -613,34 +919,31 @@ Calendar.handleMouseUpEvent = function(event){
         break;
     }
 
-    if (!date.equalsTo(calendar.date)) {
-      calendar.updateIfDateDifferent(date)
+    if (!date.equalsTo(calendar.dateOrDateBackedUp())) {
+      calendar.updateIfDateDifferent(date);
       isNewDate = true;
-    } else if (el.navAction == 0) {
-      isNewDate = (calendar.shouldClose = true);
-    }
+    } // else if (el.navAction == 0) {
+    //   isNewDate = (calendar.shouldClose = true);
+    // } // Hm, what did I mean with this code?
+  }
+  
+  if (isNewDate && event) {
+    Calendar.selectHandler(calendar);
+  }
+  
+  if (calendar.shouldClose && event) {
+    Calendar.closeHandler(calendar);
   }
 
-  if (isNewDate) event && Calendar.selectHandler(calendar, calendar.date.print(calendar.dateFormat));
-  if (calendar.shouldClose) event && Calendar.closeHandler(calendar);
-
   Event.stopObserving(document, 'mouseup', Calendar.handleMouseUpEvent);
-
   return Event.stop(event);
 }
 
 Calendar.selectHandler = function(calendar){
-  if (!calendar.dateField) {
-    return false;
-  }
 
   // Update dateField value
   calendar.updateOuterField();
 
-  // Trigger the onchange callback on the dateField, if one has been defined
-  if (typeof calendar.dateField.onchange == 'function'){
-    calendar.dateField.onchange();
-  }
 
   // Call the close handler, if necessary
   if (calendar.shouldClose) {
@@ -914,4 +1217,6 @@ Date.prototype.__setFullYear = function(y) {
   if (d.getMonth() != this.getMonth())
     this.setDate(28);
   this.setFullYear(y);
-}
+};
+
+
