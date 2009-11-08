@@ -2,8 +2,9 @@
 
 Version:: 0.5
 Author::  Yuri Leikind
-Website:: http://leikind.org/pages/wicegrid
+Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
+News:: http://leikind.org/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 == Intro
@@ -642,6 +643,25 @@ Or a partial:
   
   g.blank_slate :partial => "partial_name"
 
+
+=== Localization
+
+Versions of WiceGrid newer than version 0.5 support localization via Rails I18n, however, without breaking
+compatibility with pre-I18n versions of Rails (2.1.0 and older).
+
+Running 
+
+   ./script/generate wice_grid_assets
+
+will copy file <tt>wice_grid.yml</tt> to <tt>config/locales</tt>.
+
+The current locale is taken from <tt>I18n.locale</tt>. The locale also propagates to the javascript calendar
+widget (see <tt>Calendar.messagebundle</tt> in <tt>calendarview.js</tt> to add languages).
+
+If the messages are not found, or I18n is missing, WiceGrid will fall back to the hardcoded messages in
+<tt>config/initializers/wice_grid_config.rb</tt>.
+
+Currently supported languages are English, Dutch, French, and Russian.
 
 === ERB mode
 
