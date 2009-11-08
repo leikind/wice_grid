@@ -16,7 +16,7 @@ module Wice
       @first_output = false
       @stubborn_output_mode = false
     end
-    
+
     def to_s
       if @first_output || ! @stubborn_output_mode
         super
@@ -36,7 +36,7 @@ module Wice
         if @return_empty_strings_for_nonexistent_filters
           return ''
         else
-          raise  WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!") 
+          raise  WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!")
         end
       end
       raise  WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page") if @filters[detach_with_id] == false

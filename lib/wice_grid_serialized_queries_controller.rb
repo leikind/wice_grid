@@ -70,7 +70,7 @@ module Wice
       @grid_name = params[:grid_name]
       @notification_messages_dom_id = "#{@grid_name}_notification_messages"
       @query_list_dom_id = "#{@grid_name}_query_list"
-      
+
     end
   end
 end

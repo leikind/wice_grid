@@ -40,8 +40,8 @@ module Wice
                 #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})
           } /
         end +
-        text_field_tag(id_and_name,  '', 
-          :size => 20, :onkeydown=>'', :id => id_and_name, 
+        text_field_tag(id_and_name,  '',
+          :size => 20, :onkeydown=>'', :id => id_and_name,
           :onkeydown=>"if (event.keyCode == 13) {#{grid_name}_save_query()}") +
         button_to_function(Defaults::SAVE_QUERY_BUTTON_LABEL,  "#{grid_name}_save_query()" ) +  '</div>'
     end
@@ -51,7 +51,7 @@ module Wice
       query_store_model = ::Wice::get_query_store_model
       currently_loaded_query_id = saved_query ? saved_query.id : nil
       with = extra_parameters.nil? ? nil : "'"  + {:extra => extra_parameters}.to_query + "'"
-      
+
       %!<ul id="#{grid_name}_query_list" class="query_list"> ! +
       query_store_model.list(grid_name, controller).collect do |sq|
         link_opts = {:class => 'query_load_link', :title => "#{Defaults::SAVED_QUERY_LINK_TITLE} #{sq.name}"}
@@ -61,18 +61,18 @@ module Wice
           {:url => delete_serialized_query_path(:grid_name => grid_name, :id => sq.id, :current => currently_loaded_query_id ),
             :confirm => Defaults::SAVED_QUERY_DELETION_CONFIRMATION, :with => with},
           {:title => "#{Defaults::SAVED_QUERY_DELETION_LINK_TITLE} #{sq.name}"} )  + ' &nbsp; ' +
-        link_to_function(h(sq.name), 
-          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.load_query(#{sq.id}) /, 
-          link_opts) + 
+        link_to_function(h(sq.name),
+          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.load_query(#{sq.id}) /,
+          link_opts) +
         if sq.respond_to? :description
-          desc = sq.description 
+          desc = sq.description
           desc.blank? ? '' : " <i>#{desc}</i>"
         else
           ''
         end +
         '</li>'
       end.join('') + '</ul>'
-    end    
+    end
 
   end
 end

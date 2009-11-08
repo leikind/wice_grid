@@ -14,7 +14,7 @@ require 'wice_grid_serialized_queries_controller.rb'
 
 module Wice
 
-  class WiceGrid 
+  class WiceGrid
 
     attr_reader :klass, :name, :resultset, :custom_order, :after, :query_store_model
     attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :saved_query
@@ -27,28 +27,28 @@ module Wice
       @controller = controller
 
       # check for will_paginate
-      # raise WiceGridException.new("Plugin will_paginate not found! wice_grid requires will_paginate.") 
+      # raise WiceGridException.new("Plugin will_paginate not found! wice_grid requires will_paginate.")
       unless klass.respond_to?(:paginate)
-        raise Wice::WiceGridException.new('will_paginate not found, WiceGrid cannot proceed. Please install gem mislav-will_paginate. ' + 
-                                          'You might need to add github.com as the gem source before you install the gem: ' + 
+        raise Wice::WiceGridException.new('will_paginate not found, WiceGrid cannot proceed. Please install gem mislav-will_paginate. ' +
+                                          'You might need to add github.com as the gem source before you install the gem: ' +
                                           'gem sources -a http://gems.github.com')
       end
 
       unless klass.kind_of?(Class) && klass.ancestors.index(ActiveRecord::Base)
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
       end
-      
+
       # validate :after
       unless [NilClass, Symbol, Proc].index(opts[:after].class)
-        raise WiceGridArgumentError.new(":after must be either a Proc or Symbol object") 
+        raise WiceGridArgumentError.new(":after must be either a Proc or Symbol object")
       end
 
       opts[:order_direction].downcase! if opts[:order_direction].kind_of?(String)
-      
+
       # validate :order_direction
-      if opts[:order_direction] && ! (opts[:order_direction] == 'asc'  || 
+      if opts[:order_direction] && ! (opts[:order_direction] == 'asc'  ||
                                       opts[:order_direction] == :asc   ||
-                                      opts[:order_direction] == 'desc' || 
+                                      opts[:order_direction] == 'desc' ||
                                       opts[:order_direction] == :desc)
         raise WiceGridArgumentError.new(":order_direction must be either 'asc' or 'desc'.")
       end
@@ -78,7 +78,7 @@ module Wice
       @csv_file_name = @options[:csv_file_name]
 
       @after = @options[:after]
-      
+
       case @name = @options[:name]
       when String
       when Symbol
@@ -161,7 +161,7 @@ module Wice
         if column.nil?
           raise WiceGridArgumentError.new("Сolumn '#{column_name}' is not found in table '#{@klass.table_name}'! " +
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " +
-            "the grid, and specify :model_class in column declaration.") 
+            "the grid, and specify :model_class in column declaration.")
         end
         main_table = true
         table_name = @table_column_matrix.default_model_class.table_name
@@ -346,23 +346,23 @@ module Wice
     def all_record_mode? #:nodoc:
       @status[:pp]
     end
-        
+
     def dump_status #:nodoc:
       "   params: #{params[name].inspect}\n"  +
       "   status: #{@status.inspect}\n" +
       "   ar_options #{@ar_options.inspect}\n"
     end
-    
-    
-    # Returns a list of all records of the current selection throughout all pages. 
+
+
+    # Returns a list of all records of the current selection throughout all pages.
     # Can be called only after the view helper.
     # See section "Integration With The Application" in the README.
     def selected_records
       raise WiceGridException.new("all_records can only be called only after the grid view helper") unless self.view_helper_finished
       resultset_without_paging_with_user_filters
     end
-    
-    
+
+
     protected
 
     def add_custom_order_sql(fully_qualified_column_name) #:nodoc:
@@ -418,7 +418,7 @@ module Wice
                         :conditions => @ar_options[:conditions],
                         :order      => @ar_options[:order])
     end
-    
+
 
     def load_query(query_id) #:nodoc:
       @query_store_model ||= Wice::get_query_store_model
@@ -452,7 +452,7 @@ module Wice
       Date.civil(*params)
     end
   end
-  
+
   # to be mixed in into ActiveRecord::ConnectionAdapters::Column
   module WiceGridExtentionToActiveRecordColumn #:nodoc:
 
@@ -510,11 +510,11 @@ module Wice
       if custom_filter_active
         return ::Wice::FilterConditionsGeneratorCustomFilter.new(self).generate_conditions(table_alias, @request_params)
       end
-      
+
       column_type = self.type.to_s
 
       processor_class = ::Wice::FilterConditionsGenerator.handled_type[column_type]
-      
+
       if processor_class
         return processor_class.new(self).generate_conditions(table_alias, @request_params)
       else
@@ -524,7 +524,7 @@ module Wice
     end
 
   end
-  
+
   class FilterConditionsGenerator   #:nodoc:
 
     cattr_accessor :handled_type
@@ -534,7 +534,7 @@ module Wice
       @column = column
     end
   end
-  
+
   class FilterConditionsGeneratorCustomFilter < FilterConditionsGenerator #:nodoc:
 
     def generate_conditions(table_alias, opts)   #:nodoc:
@@ -543,16 +543,16 @@ module Wice
         return false
       end
       opts = (opts.kind_of?(Array) && opts.size == 1) ? opts[0] : opts
-      
+
       if opts.kind_of?(Array)
         opts_with_special_values, normal_opts = opts.partition{|v| ::Wice::GridTools.special_value(v)}
-        
-        conditions_ar = if normal_opts.size > 0 
+
+        conditions_ar = if normal_opts.size > 0
           [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
         else
           []
         end
-          
+
         if opts_with_special_values.size > 0
           special_conditions = opts_with_special_values.collect{|v| " #{@column.alias_or_table_name(table_alias)}.#{@column.name} is " + v}.join(' or ')
           if conditions_ar.size > 0
@@ -565,17 +565,17 @@ module Wice
       else
         if ::Wice::GridTools.special_value(opts)
           " #{@column.alias_or_table_name(table_alias)}.#{@column.name} is " + opts
-        else 
+        else
           [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ?", opts]
         end
       end
     end
 
   end
-  
+
   class FilterConditionsGeneratorBoolean < FilterConditionsGenerator  #:nodoc:
     @@handled_type[:boolean] = self
-    
+
     def  generate_conditions(table_alias, opts)   #:nodoc:
       unless (opts.kind_of?(Array) && opts.size == 1)
         Wice.log "invalid parameters for the grid boolean filter - must be an one item array: #{opts.inspect}"
@@ -595,7 +595,7 @@ module Wice
   class FilterConditionsGeneratorString < FilterConditionsGenerator  #:nodoc:
     @@handled_type[:string] = self
     @@handled_type[:text]   = self
-    
+
     def generate_conditions(table_alias, opts)   #:nodoc:
       if opts.kind_of? String
         string_fragment = opts
@@ -621,7 +621,7 @@ module Wice
     @@handled_type[:integer] = self
     @@handled_type[:float]   = self
     @@handled_type[:decimal] = self
-    
+
     def  generate_conditions(table_alias, opts)   #:nodoc:
       unless opts.kind_of? Hash
         Wice.log "invalid parameters for the grid integer filter - must be a hash"

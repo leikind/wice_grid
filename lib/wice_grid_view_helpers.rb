@@ -29,7 +29,7 @@ module Wice
     # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
     # * <tt>:hide_reset_button</tt> - Do not show the Filter Reset button.
     # * <tt>:hide_submit_button</tt> - Do not show the Filter Submit button.
-    #   Please read README for more insights.    
+    #   Please read README for more insights.
     #
     # The block contains definitions of grid columns using the +column+ method sent to the object yielded into the block. In other words,
     # the value returned by each of the blocks defines the content of a cell, the first block is called for cells of the first column
@@ -98,12 +98,12 @@ module Wice
 
     def grid(grid, opts = {}, &block)
       unless grid.class == WiceGrid
-        raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class") 
+        raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class")
       end
 
       if grid.output_buffer
         if grid.output_buffer == true
-          raise  WiceGridException.new("Second occurence of grid helper with the same grid object. " + 
+          raise  WiceGridException.new("Second occurence of grid helper with the same grid object. " +
                                 "Did you intend to use detached filters and forget to define them?")
         else
           return grid.output_buffer
@@ -140,7 +140,7 @@ module Wice
 
       block.call(rendering) # calling block containing column() calls
 
-      reuse_last_column_for_filter_buttons = 
+      reuse_last_column_for_filter_buttons =
         Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS && rendering.last_column_for_html.capable_of_hosting_filter_related_icons?
 
       if grid.output_csv?
@@ -151,7 +151,7 @@ module Wice
           content = generate_blank_slate(grid, rendering)
           return prepare_result(rendering, grid, content, block)
         end
-        
+
         content = grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons)
       end
 
@@ -182,7 +182,7 @@ module Wice
         end
       else
         return content
-      end      
+      end
     end
 
 
@@ -196,7 +196,7 @@ module Wice
       else
         rendering.blank_slate_handler
       end
-      
+
       if rendering.find_one_for(:in_html){|column| column.detach_with_id}
         buff.stubborn_output_mode = true
         buff.return_empty_strings_for_nonexistent_filters = true
@@ -211,7 +211,7 @@ module Wice
       else
         block.call(ar)
       end
-    end    
+    end
 
     # the longest method? :(
     def grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons) #:nodoc:
@@ -222,24 +222,24 @@ module Wice
       sorting_dependant_row_cycling = options[:sorting_dependant_row_cycling]
 
       content = GridOutputBuffer.new
-      
+
       content << %!<div class="wice_grid_container"><h3 id="#{grid.name}_title">!
       content << h(grid.saved_query.name) if grid.saved_query
       content << "</h3><table #{tag_options(table_html_attrs, true)}>"
       content << "<thead>"
-      
+
       no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?) ? true: false
-      
+
       if no_filters_at_all
         no_rightmost_column = no_filter_row = no_filters_at_all
       else
         no_rightmost_column = no_filter_row = (options[:show_filters] == :no || rendering.no_filter_needed_in_main_table?) ? true: false
       end
-      
+
       no_rightmost_column = true if reuse_last_column_for_filter_buttons
-      
+
       if options[:upper_pagination_panel]
-        content << rendering.pagination_panel(no_rightmost_column){ 
+        content << rendering.pagination_panel(no_rightmost_column){
           pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
         }
       end
@@ -252,16 +252,16 @@ module Wice
       filter_row_id = grid.name + '_filter_row'
 
       # first row of column labels with sorting links
-      
+
       filter_shown = if options[:show_filters] == :when_filtered
         grid.filtering_on?
       elsif options[:show_filters] == :always
         true
       end
-      
+
       rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
         if column.attribute_name && column.allow_ordering
-          
+
 
           css_class = grid.filtered_by?(column) ? 'active_filter' : nil
 
@@ -281,7 +281,7 @@ module Wice
           column.css_class = css_class
         else
           if reuse_last_column_for_filter_buttons && last
-            content << content_tag(:th, 
+            content << content_tag(:th,
               hide_show_icon(filter_row_id, grid.name, filter_shown, no_filter_row, options[:show_filters]),
               :class => 'hide_show_icon'
             )
@@ -291,11 +291,11 @@ module Wice
         end
       end
 
-      content << content_tag(:th, 
+      content << content_tag(:th,
         hide_show_icon(filter_row_id, grid.name, filter_shown, no_filter_row, options[:show_filters]),
         :class => 'hide_show_icon'
       ) unless no_rightmost_column
-      
+
       content << '</tr>'
       # rendering first row end
 
@@ -312,13 +312,13 @@ module Wice
               content.add_filter(column.detach_with_id, filter_html_code)
             end
           end
-          
+
         else # some filters are present in the table
-          
+
           filter_row_attrs = header_tr_html_attrs.clone
           filter_row_attrs.add_or_append_class_value!('wice_grid_filter_row', true)
           filter_row_attrs['id'] = filter_row_id
-          
+
           content << %!<tr #{tag_options(filter_row_attrs, true)}" !
           content << 'style="display:none"' unless filter_shown
           content << '>'
@@ -337,8 +337,8 @@ module Wice
               end
             else
               if reuse_last_column_for_filter_buttons && last
-                content << content_tag(:th, 
-                  reset_submit_buttons(options, grid), 
+                content << content_tag(:th,
+                  reset_submit_buttons(options, grid),
                   Hash.make_hash(:class, column.css_class).add_or_append_class_value!('filter_icons')
                 )
               else
@@ -359,15 +359,15 @@ module Wice
       end
 
       content << '</thead><tfoot>'
-      content << rendering.pagination_panel(no_rightmost_column){ 
-        pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records]) 
+      content << rendering.pagination_panel(no_rightmost_column){
+        pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
       }
       content << '</tfoot><tbody>'
-      
+
       # rendering  rows
       cell_value_of_the_ordered_column = nil
       previous_cell_value_of_the_ordered_column = nil
-            
+
       grid.each do |ar| # rows
 
         before_row_output = if rendering.before_row_handler
@@ -388,7 +388,7 @@ module Wice
 
           opts = column.td_html_attrs.clone
           column_block_output = call_block_as_erb_or_ruby(rendering, cell_block, ar)
-          
+
           if column_block_output.kind_of?(Array)
 
             unless column_block_output.size == 2
@@ -434,51 +434,51 @@ module Wice
         content << before_row_output if before_row_output
         content << "<tr #{tag_options(row_attributes)}>#{row_content}"
         content << content_tag(:td, '') unless no_rightmost_column
-        content << after_row_output if after_row_output        
+        content << after_row_output if after_row_output
         content << '</tr>'
       end
 
       content << '</tbody></table></div>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
-      
+
       link_for_export      = rendering.link_for_export(controller, 'csv', options[:extra_request_parameters])
 
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
 
       prototype_and_js_version_check = ENV['RAILS_ENV'] == 'development' ? %$
         if (typeof(WiceGridProcessor) == "undefined"){
-          alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' + 
+          alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' +
             'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +
-            'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' + 
+            'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +
             'for WiceGrid javascripts and assets.')
         } else {
           if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {
             alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets\\nto update it.");
           }
         } $ : ''
-        
 
-      content << javascript_tag( 
-        %$document.observe("dom:loaded", function() { 
+
+      content << javascript_tag(
+        %$document.observe("dom:loaded", function() {
         #{prototype_and_js_version_check}
-        #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}', 
+        #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',
           '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n $ +
         rendering.select_for(:in_html){|vc|vc.attribute_name and not vc.no_filter}.collect{|column|  column.yield_javascript}.join("\n") +
         "\n" + cached_javascript.compact.join("\n") +
         '})'
       )
-      
+
       if content.stubborn_output_mode
         grid.output_buffer = content
       else
-        # this will serve as a flag that the grid helper has already processed the grid but in a normal mode, 
+        # this will serve as a flag that the grid helper has already processed the grid but in a normal mode,
         # not in the mode with detached filters.
         grid.output_buffer = true
       end
       return content
     end
-    
+
 
     def hide_show_icon(filter_row_id, grid_name, filter_shown, no_filter_row, show_filters)  #:nodoc:
 
@@ -518,7 +518,7 @@ module Wice
     end
 
     def reset_submit_buttons(options, grid)  #:nodoc:
-      if options[:hide_submit_button] 
+      if options[:hide_submit_button]
         ''
       else
         link_to_function(image_tag(Defaults::FILTER_ICON, :title => Defaults::FILTER_TOOLTIP,
@@ -531,8 +531,8 @@ module Wice
           :alt => Defaults::RESET_FILTER_TOOLTIP), reset_grid_javascript(grid))
       end
     end
-    
-    
+
+
     # Renders a detached filter. The parameters are:
     # * +grid+ the WiceGrid object
     # * +filter_key+ an identifier of the filter specified in the column declaration by parameter +:detach_with_id+
@@ -546,7 +546,7 @@ module Wice
       if grid.output_buffer == true
         raise WiceGridArgumentError.new("grid_filter: You have defined no detached filters. Read about detached filters in the documentation.")
       end
-      
+
       grid.output_buffer.filter_for filter_key
     end
 
@@ -555,17 +555,17 @@ module Wice
     def submit_grid_javascript(grid)
       unless grid.kind_of? WiceGrid
         raise WiceGridArgumentError.new("submit_grid_javascript: the parameter must be a WiceGrid instance.")
-      end      
+      end
       "#{grid.name}.process()"
     end
 
-    # Returns javascript which resets the grid, clearing the state of filters. 
+    # Returns javascript which resets the grid, clearing the state of filters.
     # The parameter is a WiceGrid instance. Use it with +button_to_function+ to create
-    # your Reset button.    
+    # your Reset button.
     def reset_grid_javascript(grid)
       unless grid.kind_of? WiceGrid
         raise WiceGridArgumentError.new("reset_grid_javascript: the parameter must be a WiceGrid instance.")
-      end      
+      end
       "#{grid.name}.reset()"
     end
 
@@ -586,7 +586,7 @@ module Wice
           cell_block = column.cell_rendering_block
 
           column_block_output = call_block_as_erb_or_ruby(rendering, cell_block, ar)
-          
+
           if column_block_output.kind_of?(Array)
             column_block_output, additional_opts = column_block_output
           end
@@ -614,16 +614,16 @@ module Wice
     def show_all_link(collection_total_entries, parameters, grid_name) #:nodoc:
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{Defaults::ALL_QUERIES_WARNING}'))" : ''
       '<span class="show_all_link">' +
-        link_to_function(Defaults::SHOW_ALL_RECORDS_LABEL, 
+        link_to_function(Defaults::SHOW_ALL_RECORDS_LABEL,
         "#{confirmation} #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})",
-        :title => Defaults::SHOW_ALL_RECORDS_TOOLTIP) + '</span>'      
+        :title => Defaults::SHOW_ALL_RECORDS_TOOLTIP) + '</span>'
     end
-    
+
     def back_to_pagination_link(parameters, grid_name) #:nodoc:
       pagination_override_parameter_name = "#{grid_name}[pp]"
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
-      ' <span class="show_all_link">' + 
-        link_to_function(Defaults::SWITCH_BACK_TO_PAGINATED_MODE_LABEL, 
+      ' <span class="show_all_link">' +
+        link_to_function(Defaults::SWITCH_BACK_TO_PAGINATED_MODE_LABEL,
           "#{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})",
           :tooltip => Defaults::SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP) +
         '</span>'
@@ -631,7 +631,7 @@ module Wice
 
     def pagination_info(grid, allow_showing_all_records)  #:nodoc:
       collection = grid.resultset
-      
+
       collection_total_entries = collection.total_entries
       collection_total_entries_str = collection_total_entries.to_s
       parameters = grid.get_state_as_parameter_value_pairs
@@ -647,7 +647,7 @@ module Wice
           else
             show_all_link(collection_total_entries, parameters, grid.name)
           end
-      end + 
+      end +
       if grid.all_record_mode?
         back_to_pagination_link(parameters, grid.name)
       else

@@ -117,7 +117,7 @@ module Wice
     #
     # * <tt>:column_name</tt> - Name of the column.
     # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
-    # * <tt>:class</tt> - a shortcut for <tt>:td_html_attrs => {:class => 'css_class'}</tt>    
+    # * <tt>:class</tt> - a shortcut for <tt>:td_html_attrs => {:class => 'css_class'}</tt>
     # * <tt>:attribute_name</tt> - name of a database column (which normally correspond to a model attribute with the same name). By default the
     #   field is assumed to belong to the default table (see documentation for the +initialize_grid+ method). Parameter <tt>:model_class</tt>
     #   allows to specify another table. Presence of this parameter
@@ -140,11 +140,11 @@ module Wice
     #   and filter by columns belonging to different associatiations  but originating from the same table without confusion. See README for an example.
     # * <tt>:custom_filter</tt> - Allows to construct a custom dropdown filter. Depending on the value of <tt>:custom_filter</tt> different
     #   modes are available:
-    #   * array of strings and/or numbers - this is a direct  definition of possible values of the dropdown. 
+    #   * array of strings and/or numbers - this is a direct  definition of possible values of the dropdown.
     #     Every item will be used both as the value of the select option and as its label.
-    #   * Array of two-element arrays - Every first item of the two-element array is used for the label of the select option 
+    #   * Array of two-element arrays - Every first item of the two-element array is used for the label of the select option
     #     while the second element is the value of the select option
-    #   * Hash - The keys of the hash become the labels of the generated dropdown list, 
+    #   * Hash - The keys of the hash become the labels of the generated dropdown list,
     #     while the values will be values of options of the dropdown list:
     #   * <tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the field specified by
     #     <tt>:attribute_name</tt> and <tt>:model_class</tt>.
@@ -160,7 +160,7 @@ module Wice
     #     Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
     #
     #     If the method returns a atomic value like a string or an integer, it is used for both the value and the label of the select option element.
-    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value. 
+    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
     #     Read more in README, section 'Custom dropdown filters'
     #   * An array of symbols (method names) - similar to the mode with a single symbol name. The first method name is sent to the ActiveRecord
     #     object if it responds to this method, the second method name is sent to the
@@ -168,9 +168,9 @@ module Wice
     #     case of an array of symbols where the array contains just one element. Thus the warning about the single method name
     #     mode applies here as well.
     #
-    #     If the last method returns a atomic value like a string or an integer, it is used for both the value and the label of the 
+    #     If the last method returns a atomic value like a string or an integer, it is used for both the value and the label of the
     #     select option element.
-    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value. 
+    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
     #     Read more in README, section 'Custom dropdown filters'
     # * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt> ('+yes+') in the config.
     #   Only has effect in a column with a boolean filter.
@@ -180,10 +180,10 @@ module Wice
     #   custom dropdown boxes. +true+ by default (see +ALLOW_MULTIPLE_SELECTION+ in the configuration file).
     # * <tt>:filter_all_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('<tt>--</tt>') in the config.
     #   Has effect in a column with a boolean filter _or_ a custom filter.
-    # * <tt>:detach_with_id</tt> - allows to detach the filter and render it after or before the grid with the +grid_filter+ helper. 
+    # * <tt>:detach_with_id</tt> - allows to detach the filter and render it after or before the grid with the +grid_filter+ helper.
     #   The value is an arbitrary unique identifier
     #   of the filter. Read section 'Detached Filters' in README for details.
-    #   Has effect in a column with a boolean filter _or_ a custom filter.    
+    #   Has effect in a column with a boolean filter _or_ a custom filter.
     # * <tt>:in_csv</tt> - When CSV export is enabled, all columns are included into the export. Setting <tt>:in_csv</tt> to false will
     #   prohibit the column from inclusion into the export.
     # * <tt>:in_html</tt> - When CSV export is enabled and it is needed to use a column for CSV export only and ignore it in HTML, set
@@ -268,29 +268,29 @@ module Wice
         col_type = db_column.type
 
         if options[:custom_filter]
-          
+
           custom_filter = if options[:custom_filter] == :auto
             lambda{ @grid.distinct_values_for_column(db_column) } # Thank God Ruby has higher order functions!!!
 
           elsif options[:custom_filter].class == Symbol
             lambda{ @grid.distinct_values_for_column_in_resultset([options[:custom_filter]])}
-            
+
           elsif options[:custom_filter].class == Hash
             options[:custom_filter].keys
-            
+
             options[:custom_filter].to_a
-            
+
           elsif options[:custom_filter].class == Array
             if options[:custom_filter].empty?
               []
             elsif options[:custom_filter].all_items_are_of_class(Symbol)
               lambda{ @grid.distinct_values_for_column_in_resultset(options[:custom_filter]) }
-              
+
             elsif options[:custom_filter].all_items_are_of_class(String) || options[:custom_filter].all_items_are_of_class(Numeric)
               options[:custom_filter].map{|i| [i,i]}
-              
+
             elsif options[:custom_filter].all_items_are_of_class(Array)
-              options[:custom_filter]              
+              options[:custom_filter]
             else
               raise WiceGridArgumentError.new(
                 ':custom_filter can equal :auto, an array of string and/or numbers (direct values for the dropdown), ' +
@@ -301,7 +301,7 @@ module Wice
                 )
             end
           end
-          
+
           klass = ViewColumnCustomDropdown
         else
           klass = ViewColumn.handled_type[col_type] || ViewColumn
@@ -309,7 +309,7 @@ module Wice
       end # attribute_name
 
       vc = klass.new(block, options, @grid, table_name, main_table, custom_filter)
-      
+
       vc.negation    = options[:negation_in_filter] if vc.respond_to? :negation=
 
       vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(ViewColumnCustomDropdown)
@@ -390,10 +390,10 @@ module Wice
 
       new_params[:only_path] = false
       base_link_with_pp_info = controller.url_for(new_params).gsub(/\?+$/,'')
-      
+
       if new_params[@grid.name]
         new_params[@grid.name].delete(:pp)    # and reset back to pagination if show all mode is on
-      end      
+      end
       [base_link_with_pp_info, controller.url_for(new_params).gsub(/\?+$/,'')]
     end
 

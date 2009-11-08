@@ -1,25 +1,25 @@
 module Wice
 
-  class ViewColumn 
+  class ViewColumn
     include ActionView::Helpers::FormTagHelper
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::JavaScriptHelper
-    
+
     # fields defined from the options parameter
     FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
               :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering]
-    
+
     attr_accessor *FIELDS
-    
+
     attr_accessor :cell_rendering_block, :grid, :css_class, :table_name, :main_table, :model_class, :custom_filter
-    
+
     def initialize(block, options, grid_obj, tname, mtable, cfilter)  #:nodoc:
       self.cell_rendering_block = block
       self.grid           = grid_obj
       self.table_name     = tname
       self.main_table     = mtable
       self.custom_filter  = cfilter
-      
+
       FIELDS.each do |field|
         self.send(field.to_s + '=', options[field])
       end
@@ -39,7 +39,7 @@ module Wice
     def yield_declaration_of_column_filter #:nodoc:
       nil
     end
-        
+
     def detachness #:nodoc:
       (! detach_with_id.blank?).to_s
     end
@@ -88,11 +88,11 @@ module Wice
     def filter_shown? #:nodoc:
       self.attribute_name && ! self.no_filter
     end
-    
+
     def filter_shown_in_main_table? #:nodoc:
       filter_shown? && ! self.detach_with_id
     end
-    
+
 
     def table_alias_or_table_name  #:nodoc:
       table_alias || table_name
@@ -163,7 +163,7 @@ module Wice
         @custom_filter = [[@filter_all_label, nil]] + @custom_filter.map{|label, value|
           [label.to_s, value.to_s]
         }
-        
+
       end
 
       select_options = {:name => @parameter_name, :id => @dom_id}
@@ -296,10 +296,10 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
-      
+
       html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1}, :title => Defaults::DATE_SELECTOR_TOOLTIP_FROM)
       html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2}, :title => Defaults::DATE_SELECTOR_TOOLTIP_TO)
-      
+
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
   end
@@ -317,7 +317,7 @@ module Wice
       if negation
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:v => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:n => '')
-        
+
         '<div class="text_filter_container">' +
           text_field_tag(parameter_name, params[:v], :size => 8, :onkeydown=>enter_key_handler, :id => @dom_id) +
           if defined?(::Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! ::Wice::Defaults::NEGATION_CHECKBOX_LABEL.blank?
@@ -325,9 +325,9 @@ module Wice
           else
             ''
           end +
-          check_box_tag(parameter_name2, '1', (params[:n] == '1'), 
-            :id => @dom_id2, 
-            :title => ::Wice::Defaults::NEGATION_CHECKBOX_TITLE, 
+          check_box_tag(parameter_name2, '1', (params[:n] == '1'),
+            :id => @dom_id2,
+            :title => ::Wice::Defaults::NEGATION_CHECKBOX_TITLE,
             :class => 'negation_checkbox') +
           '</div>'
       else

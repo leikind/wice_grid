@@ -3,8 +3,8 @@ module Wice
   class << self
 
     @@model_validated = false
-    
-    
+
+
     # checks whether the class is a valid storage for saved queries
     def validate_query_model(query_store_model)  #:nodoc:
       unless query_store_model.respond_to?(:list)
@@ -26,7 +26,7 @@ module Wice
       validate_query_model(query_store_model) unless @@model_validated
       query_store_model
     end
-    
+
     def get_string_matching_operators(model)   #:nodoc:
       if defined?(Wice::Defaults::STRING_MATCHING_OPERATORS) && Wice::Defaults::STRING_MATCHING_OPERATORS.is_a?(Hash) &&
           str_matching_operator = Wice::Defaults::STRING_MATCHING_OPERATORS[model.connection.class.to_s]
@@ -53,7 +53,7 @@ module Wice
     # unites two conditions into one
     # unite_conditions(['name = ?', 'yuri'], ['age > ?', 30]) #=> ['name = ? and age > ?', 'yuri', 30]
     # or
-    # unite_conditions('name is not null', ['age > ?', 30]) #=> ['name is not null and age > ?',  30]    
+    # unite_conditions('name is not null', ['age > ?', 30]) #=> ['name is not null and age > ?',  30]
     def unite_conditions(c1, c2)  #:nodoc:
       raise WiceGridException.new('invalid call to unite_conditions') if c1.blank? && c2.blank?
       return c1 if c2.blank?
@@ -72,11 +72,11 @@ module Wice
 
   module Defaults  #:nodoc:
   end
-  
+
   module ExceptionsMixin  #:nodoc:
     def initialize(str)  #:nodoc:
       super("WiceGrid: " + str)
-    end    
+    end
   end
   class WiceGridArgumentError < ArgumentError #:nodoc:
     include ExceptionsMixin
