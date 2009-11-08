@@ -37,16 +37,6 @@ The differences from the original are
 
 */
 
-
-/*
-extraOutputDateFields -> outputFields
-dateField removed
-initialDate added
-parentElement -> embedAt
-triggerElement -> popupTriggerElement
-*/
-
-
 var Calendar = Class.create({
 
   // The HTML Container Element
@@ -705,10 +695,14 @@ Calendar.messagebundle = $H({'en' :
 Calendar.getMessageFor = function(key){
 
   var lang = Calendar.language || 'en';
+  
+  if (! Calendar.messagebundle.get(lang)){
+    lang = 'en';
+  }
   return Calendar.messagebundle.get(lang).get(key);
 };
 
-Calendar.VERSION = '1.3';
+Calendar.VERSION = '1.4';
 
 Calendar.defaultDateFormat = '%Y-%m-%d';
 Calendar.defaultDateTimeFormat = '%Y-%m-%d %H:%M';
