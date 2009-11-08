@@ -392,13 +392,15 @@ module Wice
           if column_block_output.kind_of?(Array)
 
             unless column_block_output.size == 2
-              raise WiceGridArgumentError.new("When WiceGrid column block returns an array it is expected to contain 2 elements only - the first is the contents of the table cell and the second is a hash containing HTML attributes for the <td> tag.")
+              raise WiceGridArgumentError.new('When WiceGrid column block returns an array it is expected to contain 2 elements only - '+
+                'the first is the contents of the table cell and the second is a hash containing HTML attributes for the <td> tag.')
             end
 
             column_block_output, additional_opts = column_block_output
 
             unless additional_opts.is_a?(Hash)
-              raise WiceGridArgumentError.new("When WiceGrid column block returns an array its second element is expected to be a hash containing HTML attributes for the <td> tag. The returned value is #{additional_opts.inspect}. Read documentation.")
+              raise WiceGridArgumentError.new('When WiceGrid column block returns an array its second element is expected to be a ' +
+                "hash containing HTML attributes for the <td> tag. The returned value is #{additional_opts.inspect}. Read documentation.")
             end
 
             additional_css_class = nil
@@ -493,22 +495,25 @@ module Wice
       else
         hide_icon_id = grid_name + '_hide_icon'
         show_icon_id = grid_name + '_show_icon'
-
+        
+        filter_tooltip = WiceGridNlMessageProvider.get_message(:SHOW_HIDE_FILTER_ICON)
         hide_icon = content_tag(:span,
           link_to_function(
             image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-              :title => Defaults::HIDE_FILTER_TOOLTIP,
-              :alt => Defaults::HIDE_FILTER_TOOLTIP),
+              :title => filter_tooltip,
+              :alt   => filter_tooltip),
             "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').hide()" ),
           :id => hide_icon_id,
           :style => styles[0]
         )
 
+        filter_tooltip = WiceGridNlMessageProvider.get_message(:SHOW_FILTER_TOOLTIP)
+
         show_icon = content_tag(:span,
           link_to_function(
             image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-              :title => Defaults::SHOW_FILTER_TOOLTIP,
-              :alt => Defaults::SHOW_FILTER_TOOLTIP),
+              :title => filter_tooltip,
+              :alt   => filter_tooltip),
             "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').show()" ),
           :id => show_icon_id,
           :style => styles[1]
@@ -521,14 +526,14 @@ module Wice
       if options[:hide_submit_button]
         ''
       else
-        link_to_function(image_tag(Defaults::FILTER_ICON, :title => Defaults::FILTER_TOOLTIP,
-          :alt => Defaults::FILTER_TOOLTIP),submit_grid_javascript(grid))
+        filter_tooltip = WiceGridNlMessageProvider.get_message(:FILTER_TOOLTIP)
+        link_to_function(image_tag(Defaults::FILTER_ICON, :title => filter_tooltip, :alt => filter_tooltip), submit_grid_javascript(grid))
       end + ' ' +
       if options[:hide_reset_button]
         ''
       else
-        link_to_function(image_tag(Defaults::RESET_ICON, :title => Defaults::RESET_FILTER_TOOLTIP,
-          :alt => Defaults::RESET_FILTER_TOOLTIP), reset_grid_javascript(grid))
+        filter_tooltip = WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP)
+        link_to_function(image_tag(Defaults::RESET_ICON, :title => filter_tooltip, :alt => filter_tooltip), reset_grid_javascript(grid))
       end
     end
 
@@ -605,27 +610,33 @@ module Wice
         extra_request_parameters["#{grid.name}[q]"] = grid.saved_query.id
       end
 
-      will_paginate(grid.resultset, :previous_label => Defaults::PREVIOUS_LABEL, :next_label => Defaults::NEXT_LABEL,
-      :param_name => "#{grid.name}[page]", :params => extra_request_parameters).to_s +
+      will_paginate(grid.resultset, 
+        :previous_label => WiceGridNlMessageProvider.get_message(:PREVIOUS_LABEL),
+        :next_label     => WiceGridNlMessageProvider.get_message(:NEXT_LABEL),
+        :param_name     => "#{grid.name}[page]", 
+        :params         => extra_request_parameters).to_s +
       ' <div class="pagination_status">' + pagination_info(grid, allow_showing_all_records) + '</div>'
     end
 
 
     def show_all_link(collection_total_entries, parameters, grid_name) #:nodoc:
-      confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{Defaults::ALL_QUERIES_WARNING}'))" : ''
+      
+      message = WiceGridNlMessageProvider.get_message(:ALL_QUERIES_WARNING)
+      
+      confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{message}'))" : ''
       '<span class="show_all_link">' +
-        link_to_function(Defaults::SHOW_ALL_RECORDS_LABEL,
+        link_to_function(WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_LABEL),
         "#{confirmation} #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})",
-        :title => Defaults::SHOW_ALL_RECORDS_TOOLTIP) + '</span>'
+        :title => WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_TOOLTIP)) + '</span>'
     end
 
     def back_to_pagination_link(parameters, grid_name) #:nodoc:
       pagination_override_parameter_name = "#{grid_name}[pp]"
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
       ' <span class="show_all_link">' +
-        link_to_function(Defaults::SWITCH_BACK_TO_PAGINATED_MODE_LABEL,
+        link_to_function(WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_LABEL),
           "#{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})",
-          :tooltip => Defaults::SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP) +
+          :tooltip => WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP)) +
         '</span>'
     end
 

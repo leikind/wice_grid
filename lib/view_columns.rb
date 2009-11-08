@@ -258,8 +258,10 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
-      html1, js1 = datetime_calendar(params[:fr], {:include_blank => true, :prefix => @name1, :id => @dom_id}, :title => Defaults::DATE_SELECTOR_TOOLTIP_FROM)
-      html2, js2 = datetime_calendar(params[:to], {:include_blank => true, :prefix => @name2, :id => @dom_id2}, :title => Defaults::DATE_SELECTOR_TOOLTIP_TO)
+      html1, js1 = datetime_calendar(params[:fr], {:include_blank => true, :prefix => @name1, :id => @dom_id}, 
+        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
+      html2, js2 = datetime_calendar(params[:to], {:include_blank => true, :prefix => @name2, :id => @dom_id2}, 
+        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
 
@@ -297,8 +299,10 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
 
-      html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1}, :title => Defaults::DATE_SELECTOR_TOOLTIP_FROM)
-      html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2}, :title => Defaults::DATE_SELECTOR_TOOLTIP_TO)
+      html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1}, 
+        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
+      html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2}, 
+        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
@@ -327,7 +331,7 @@ module Wice
           end +
           check_box_tag(parameter_name2, '1', (params[:n] == '1'),
             :id => @dom_id2,
-            :title => ::Wice::Defaults::NEGATION_CHECKBOX_TITLE,
+            :title => WiceGridNlMessageProvider.get_message(:NEGATION_CHECKBOX_TITLE),
             :class => 'negation_checkbox') +
           '</div>'
       else

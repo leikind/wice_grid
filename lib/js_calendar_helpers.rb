@@ -3,7 +3,28 @@ module Wice
 
     include ActionView::Helpers::AssetTagHelper
 
-    def calendar_constructor(popup_trigger_icon_id, dom_id, date_format, date_span_id, with_time) #:nodoc:
+    def calendar_constructor(popup_trigger_icon_id, dom_id, date_format, date_span_id, with_time)
+
+      javascript = ''
+
+      unless @_wg_date_picker_language_initialized
+        lang = Object.const_defined?(:I18n) ? I18n.locale : nil
+        javascript << %|    Calendar.language = '#{lang}';\n| unless lang.blank?
+        @_wg_date_picker_language_initialized = true
+      end
+
+      javascript <<  %|    new Calendar({\n |
+      javascript << %|      popupTriggerElement : "#{popup_trigger_icon_id}",\n |
+      javascript << %|      initialDate : $('#{dom_id}').value,\n |
+      javascript << %|      dateFormat : "#{date_format}",\n|
+      if with_time
+        javascript << %|        withTime : true,\n|
+      end
+      javascript << %|      outputFields : $A(['#{date_span_id}', '#{dom_id}'])\n |
+      javascript << %|    });\n|
+      
+      javascript
+    end
 
     def select_date_datetime_common(initial_date, opts, html_opts, with_time, date_format)  #:nodoc:
       options = {:prefix => 'date'}
@@ -25,7 +46,7 @@ module Wice
         content_tag(:span, date_string, :id => date_span_id),
         %! $('#{date_span_id}').innerHTML = ''; $('#{dom_id}').value = ''; !,
         :class => 'date_label',
-        :title => Defaults::DATE_STRING_TOOLTIP) + ' ' +
+        :title => WiceGridNlMessageProvider.get_message(:DATE_STRING_TOOLTIP)) + ' ' +
 
         hidden_field_tag(name, date_string, :class => 'text-input', :id => dom_id)
 

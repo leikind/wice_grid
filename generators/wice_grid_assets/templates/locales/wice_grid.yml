@@ -1,0 +1,155 @@
+en:
+  wice_grid:
+    show_filter_tooltip: Show filter
+    hide_filter_tooltip: Hide filter
+    csv_export_tooltip: Export to CSV
+    filter_tooltip: Filter
+    reset_filter_tooltip: Reset
+    boolean_filter_true_label: yes
+    boolean_filter_false_label: no
+    previous_label: « Previous
+    next_label: Next »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: From
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: To
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Exclude
+    # link to switch to show all records
+    show_all_records_label: show all
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Show all records
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Are you sure you want to display all records?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: back to paginated view
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Switch back to the view with pages
+    # Title of the date string.
+    date_string_tooltip: Click to delete
+    saved_query_panel_title: Saved Queries
+    save_query_button_label: Save the state of filters
+    saved_query_deletion_confirmation: Are you sure?
+    saved_query_deletion_link_title: Delete query
+    saved_query_link_title: Load query
+    validates_uniqueness_error: A query with this name already exists
+    validates_presence_error: Please sumbit the name of the custom query
+    query_deleted_message: Saved query deleted.
+    query_saved_message: Query saved.
+
+nl:
+  wice_grid:
+    show_filter_tooltip: Filter tonen
+    hide_filter_tooltip: Filter verbergen
+    csv_export_tooltip: Als CSV exporteren
+    filter_tooltip: Filter
+    reset_filter_tooltip: Terugstellen
+    boolean_filter_true_label: ja
+    boolean_filter_false_label: neen
+    previous_label: « Vorige
+    next_label: Volgende »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Vanaf
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Tot
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Uitsluiten
+    # link to switch to show all records
+    show_all_records_label: Alle rijen tonen
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Alle rijen tonen
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Bent u zeker dat u alle rijen wilt tonen?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Terug naar pagina's
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Terug naar pagina's
+    # Title of the date string.
+    date_string_tooltip: Klik om te verwijderen
+    saved_query_panel_title: Opgeslagen query's
+    save_query_button_label: Query opslaan
+    saved_query_deletion_confirmation: Bent u zeker?
+    saved_query_deletion_link_title: Query verwijderen
+    saved_query_link_title: Query laden
+    validates_uniqueness_error: Deze query bestaat reeds
+    validates_presence_error: Gelieve de naam van de query in te vullen
+    query_deleted_message: Opgeslagen query verwijderd.
+    query_saved_message: Query opgeslagen
+
+fr:
+  wice_grid:
+    show_filter_tooltip: Afficher le filtre
+    hide_filter_tooltip: Cacher le filtrer
+    csv_export_tooltip: Exporter en CSV
+    filter_tooltip: Filtrer
+    reset_filter_tooltip: Reset
+    boolean_filter_true_label: oui
+    boolean_filter_false_label: non
+    previous_label: « Page précédente
+    next_label: Page suivante »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: De
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: à
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Exclure
+    # link to switch to show all records
+    show_all_records_label: Voir tous
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Voir tous les enregistrements
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Etes-vous certain de vouloir afficher tous les enregistrements?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Retour à la vue paginée
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Retour à la vue par pages
+    # Title of the date string.
+    date_string_tooltip: Cliquez pour effacer
+    saved_query_panel_title: Requêtes sauvées
+    save_query_button_label: Sauver l'état des filtres
+    saved_query_deletion_confirmation: Etes vous sûr?
+    saved_query_deletion_link_title: Effacer la requête
+    saved_query_link_title: Charger la requête
+    validates_uniqueness_error: Un requête existante porte déjà ce nom
+    validates_presence_error: Veuillez indiquer le nom de la requête que vous souhaitez sauver
+    query_deleted_message: La requête a été effacée.
+    query_saved_message: La requête a été sauvée.
+
+ru:
+  wice_grid:
+    show_filter_tooltip: Показать фильтр
+    hide_filter_tooltip: Спрятать фильтр
+    csv_export_tooltip: Экспорт в CSV
+    filter_tooltip: Фильтровать
+    reset_filter_tooltip: Сброс
+    boolean_filter_true_label: да
+    boolean_filter_false_label: нет
+    previous_label: « Предыдущая
+    next_label: Следующая »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: С
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: До
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Исключая строки
+    # link to switch to show all records
+    show_all_records_label: показать все
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Показать все записи
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Вы уверены в том, что хотите отобразить все записи?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Назад к постраничному выводу
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Назад к постраничному выводу
+    # Title of the date string.
+    date_string_tooltip: Кликните, чтобы удалить дату
+    saved_query_panel_title: Сохранённые фильтры
+    save_query_button_label: Сохранить фильтр
+    saved_query_deletion_confirmation: Вы уверены?
+    saved_query_deletion_link_title: Удалить сохранённый фильтр
+    saved_query_link_title: Загрузить сохранённый фильтр
+    validates_uniqueness_error: Сохранённый фильтр с таким именем уже существует
+    validates_presence_error: Пожалуйста введите имя сохраняемого фильтра
+    query_deleted_message: Сохранённый фильтр удалён.
+    query_saved_message: Сохранённый фильтр сохранён.

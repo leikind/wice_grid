@@ -5,9 +5,8 @@ if defined?(Wice::Defaults)
   # +true+ will allow to embed erb content in column (cell) definitions.
   Wice::Defaults::ERB_MODE = false
 
-
   # Default number of rows to show per page.
-  Wice::Defaults::PER_PAGE = 10
+  Wice::Defaults::PER_PAGE = 20
 
   # Default order direction
   Wice::Defaults::ORDER_DIRECTION = 'asc'
@@ -23,9 +22,6 @@ if defined?(Wice::Defaults)
 
   Wice::Defaults::SHOW_HIDE_FILTER_ICON = 'icons/grid/page_white_find.png'
 
-  Wice::Defaults::SHOW_FILTER_TOOLTIP = 'Show filter'
-  Wice::Defaults::HIDE_FILTER_TOOLTIP = 'Hide filter'
-  Wice::Defaults::CSV_EXPORT_TOOLTIP  = 'Export to CSV'
 
   # Icon to trigger filtering.
   Wice::Defaults::FILTER_ICON = 'icons/grid/table_refresh.png'
@@ -40,14 +36,10 @@ if defined?(Wice::Defaults)
   Wice::Defaults::CSV_EXPORT_ICON = "/images/icons/grid/page_white_excel.png"
 
 
-  Wice::Defaults::FILTER_TOOLTIP = "Filter"
-  Wice::Defaults::RESET_FILTER_TOOLTIP = "Reset"
 
   # The label of the first option of a custom dropdown list meaning 'All items'
   Wice::Defaults::CUSTOM_FILTER_ALL_LABEL = '--'
 
-  Wice::Defaults::BOOLEAN_FILTER_TRUE_LABEL  = 'yes'
-  Wice::Defaults::BOOLEAN_FILTER_FALSE_LABEL = 'no'
 
   # Allow switching between a single and multiple selection modes in custom filters (dropdown boxes)
   Wice::Defaults::ALLOW_MULTIPLE_SELECTION = true
@@ -63,7 +55,7 @@ if defined?(Wice::Defaults)
   # * <tt>:when_filtered</tt> - when the table is the result of filtering
   # * <tt>:always</tt>        - show the filter always
   # * <tt>:no</tt>            - never show the filter
-  Wice::Defaults::SHOW_FILTER = :when_filtered
+  Wice::Defaults::SHOW_FILTER = :always
   
   # SQL operator used for matching strings in string filters.
   Wice::Defaults::STRING_MATCHING_OPERATOR = 'LIKE'
@@ -78,20 +70,14 @@ if defined?(Wice::Defaults)
     'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
   }
 
-  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-  #                                will_paginate                              #
 
-  Wice::Defaults::PREVIOUS_LABEL = '« Previous'
-  Wice::Defaults::NEXT_LABEL     = 'Next »'
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                              Advanced Filters                             #
 
   # Switch of the negation checkbox in all text filters
-  Wice::Defaults::NEGATION_IN_STRING_FILTERS = true
+  Wice::Defaults::NEGATION_IN_STRING_FILTERS = false
 
-  # The title of the checkox to turn on negation
-  Wice::Defaults::NEGATION_CHECKBOX_TITLE = 'Exclude'
 
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -103,20 +89,6 @@ if defined?(Wice::Defaults)
   # If number of all queries is more than this value, the user will be given a warning message
   Wice::Defaults::START_SHOWING_WARNING_FROM = 100
   
-  # link to switch to "ahow all records"
-  Wice::Defaults::SHOW_ALL_RECORDS_LABEL = 'show all'
-
-  # tooltip for the link to switch to "ahow all records"
-  Wice::Defaults::SHOW_ALL_RECORDS_TOOLTIP = 'Show all records'
-  
-  # Warning message shown when the user wants to switch to all-records mode
-  Wice::Defaults::ALL_QUERIES_WARNING = 'Are you sure you want to display all records?'
-
-  # link to paginated view
-  Wice::Defaults::SWITCH_BACK_TO_PAGINATED_MODE_LABEL = "back to paginated view"
-  
-  # tooltip for the link to paginated view
-  Wice::Defaults::SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP = "Switch back to the view with pages"
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                               Saving Queries                              #
@@ -128,18 +100,6 @@ if defined?(Wice::Defaults)
   # QUERY_STORE_MODEL = 'WiceGridSerializedQuery'
   Wice::Defaults::QUERY_STORE_MODEL = 'SavedQuery'
   
-  Wice::Defaults::SAVED_QUERY_PANEL_TITLE = 'Saved Queries'
-  Wice::Defaults::SAVE_QUERY_BUTTON_LABEL = 'Save the state of filters'
-  
-  Wice::Defaults::SAVED_QUERY_DELETION_CONFIRMATION = 'Are you sure?'
-  Wice::Defaults::SAVED_QUERY_DELETION_LINK_TITLE   = 'Delete query'
-  Wice::Defaults::SAVED_QUERY_LINK_TITLE            = 'Load query'
-  
-  Wice::Defaults::VALIDATES_UNIQUENESS_ERROR = "A query with this name already exists"
-  Wice::Defaults::VALIDATES_PRESENCE_ERROR   = "Please sumbit the name of the custom query"
-
-  Wice::Defaults::QUERY_DELETED_MESSAGE = "Saved query deleted."
-  Wice::Defaults::QUERY_SAVED_MESSAGE   = "Query saved."
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #            Here go settings related to the calendar helpers               #
@@ -172,11 +132,64 @@ if defined?(Wice::Defaults)
   # Icon to popup the calendar.
   Wice::Defaults::CALENDAR_ICON = "/images/icons/grid/calendar_view_month.png"
 
+
+
+  ########    Messages      ########
+
+  Wice::Defaults::SHOW_FILTER_TOOLTIP = 'Show filter'
+  Wice::Defaults::HIDE_FILTER_TOOLTIP = 'Hide filter'
+  Wice::Defaults::CSV_EXPORT_TOOLTIP  = 'Export to CSV'
+
+  Wice::Defaults::FILTER_TOOLTIP = "Filter"
+  Wice::Defaults::RESET_FILTER_TOOLTIP = "Reset"
+    
+  Wice::Defaults::BOOLEAN_FILTER_TRUE_LABEL  = 'yes'
+  Wice::Defaults::BOOLEAN_FILTER_FALSE_LABEL = 'no'
+
+  Wice::Defaults::PREVIOUS_LABEL = '« Previous'
+  Wice::Defaults::NEXT_LABEL     = 'Next »'
+
   # Title of the icon clicking on which will show the calendar to set the FROM date.
   Wice::Defaults::DATE_SELECTOR_TOOLTIP_FROM = 'From'
   # Title of the icon clicking on which will show the calendar to set the TO date.
   Wice::Defaults::DATE_SELECTOR_TOOLTIP_TO = 'To'
 
+  # The title of the checkox to turn on negation
+  Wice::Defaults::NEGATION_CHECKBOX_TITLE = 'Exclude'
+
+  # link to switch to "show all records"
+  Wice::Defaults::SHOW_ALL_RECORDS_LABEL = 'show all'
+
+  # tooltip for the link to switch to "show all records"
+  Wice::Defaults::SHOW_ALL_RECORDS_TOOLTIP = 'Show all records'
+  
+  # Warning message shown when the user wants to switch to all-records mode
+  Wice::Defaults::ALL_QUERIES_WARNING = 'Are you sure you want to display all records?'
+
+  # link to paginated view
+  Wice::Defaults::SWITCH_BACK_TO_PAGINATED_MODE_LABEL = "back to paginated view"
+  
+  # tooltip for the link to paginated view
+  Wice::Defaults::SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP = "Switch back to the view with pages"
+
   # Title of the date string.
   Wice::Defaults::DATE_STRING_TOOLTIP = 'Click to delete'
+
+
+  Wice::Defaults::SAVED_QUERY_PANEL_TITLE = 'Saved Queries'
+  Wice::Defaults::SAVE_QUERY_BUTTON_LABEL = 'Save the state of filters'
+  
+  Wice::Defaults::SAVED_QUERY_DELETION_CONFIRMATION = 'Are you sure?'
+  Wice::Defaults::SAVED_QUERY_DELETION_LINK_TITLE   = 'Delete query'
+  Wice::Defaults::SAVED_QUERY_LINK_TITLE            = 'Load query'
+  
+  Wice::Defaults::VALIDATES_UNIQUENESS_ERROR = "A query with this name already exists"
+  Wice::Defaults::VALIDATES_PRESENCE_ERROR   = "Please sumbit the name of the custom query"
+
+  Wice::Defaults::QUERY_DELETED_MESSAGE = "Saved query deleted."
+  Wice::Defaults::QUERY_SAVED_MESSAGE   = "Query saved."
+
+  ########    Messages END      ########
+
+
 end

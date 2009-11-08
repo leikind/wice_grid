@@ -27,7 +27,7 @@ module Wice
           if params[:current]
             @current = @query_store_model.find_by_id_and_grid_name(params[:current], @grid_name)
           end
-          @notification_messages = ::Wice::Defaults::QUERY_DELETED_MESSAGE
+          @notification_messages = WiceGridNlMessageProvider.get_message(:QUERY_DELETED_MESSAGE)
         else
           @error_messages = sq.errors.full_raw_messages.join(' ')
         end
@@ -50,7 +50,7 @@ module Wice
 
       if @saved_query.save
         @grid_title_id = "#{@grid_name}_title"
-        @notification_messages = ::Wice::Defaults::QUERY_SAVED_MESSAGE
+        @notification_messages = WiceGridNlMessageProvider.get_message(:QUERY_SAVED_MESSAGE)
       else
         @error_messages = @saved_query.errors.map{ |_, msg| msg }.join(' ')
       end

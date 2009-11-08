@@ -79,10 +79,11 @@ module Wice
 
     def csv_export_icon #:nodoc:
       if @grid.export_to_csv_enabled
+        tooltip = WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP)
         link_to_function(
           image_tag(Defaults::CSV_EXPORT_ICON,
-            :title => Defaults::CSV_EXPORT_TOOLTIP,
-            :alt => Defaults::CSV_EXPORT_TOOLTIP), "#{grid.name}.export_to_csv()")
+            :title => tooltip,
+            :alt   => tooltip), "#{grid.name}.export_to_csv()")
       else
         nil
       end
@@ -210,8 +211,8 @@ module Wice
         :allow_multiple_selection   => Defaults::ALLOW_MULTIPLE_SELECTION,
         :allow_ordering             => true,
         :attribute_name             => nil,
-        :boolean_filter_false_label => Defaults::BOOLEAN_FILTER_FALSE_LABEL,
-        :boolean_filter_true_label  => Defaults::BOOLEAN_FILTER_TRUE_LABEL,
+        :boolean_filter_false_label => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_FALSE_LABEL),
+        :boolean_filter_true_label  => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_TRUE_LABEL),
         :class                      => nil,
         :column_name                => '',
         :custom_filter              => nil,

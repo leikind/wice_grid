@@ -5,6 +5,10 @@ class WiceGridAssetsGenerator < Rails::Generator::Base
       m.directory "config/initializers"
       m.file "initializers/wice_grid_config.rb",  "config/initializers/wice_grid_config.rb"
 
+      # wice_grid locales
+      m.directory "config/locales"
+      m.file "locales/wice_grid.yml",  "config/locales/wice_grid.yml"
+
       # wice_grid js & css
       m.file "javascripts/wice_grid.js",  "public/javascripts/wice_grid.js"
       m.file "stylesheets/wice_grid.css",  "public/stylesheets/wice_grid.css"

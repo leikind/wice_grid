@@ -24,7 +24,7 @@ module Wice
         parameters << [ CGI.unescape({:extra => {k => ''}}.to_query.sub(/=$/,'')) , v.to_s ]
       end
       parameters <<  ['authenticity_token', form_authenticity_token]
-      %! <div class="wice_grid_query_panel"><h3>#{Defaults::SAVED_QUERY_PANEL_TITLE}</h3>! +
+      %! <div class="wice_grid_query_panel"><h3>#{WiceGridNlMessageProvider.get_message(:SAVED_QUERY_PANEL_TITLE)}</h3>! +
         saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
         %!<div id="#{grid_name}_notification_messages"  onmouseover="new Effect.Fade(this)"></div>! +
         if block_given?
@@ -43,24 +43,29 @@ module Wice
         text_field_tag(id_and_name,  '',
           :size => 20, :onkeydown=>'', :id => id_and_name,
           :onkeydown=>"if (event.keyCode == 13) {#{grid_name}_save_query()}") +
-        button_to_function(Defaults::SAVE_QUERY_BUTTON_LABEL,  "#{grid_name}_save_query()" ) +  '</div>'
+        button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +  '</div>'
     end
 
 
     def saved_queries_list(grid_name, saved_query = nil, extra_parameters = nil)  #:nodoc:
+      
+      link_title            = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_LINK_TITLE)
+      deletion_confirmation = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_DELETION_CONFIRMATION)
+      deletion_link_title   = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_DELETION_LINK_TITLE)
+      
       query_store_model = ::Wice::get_query_store_model
       currently_loaded_query_id = saved_query ? saved_query.id : nil
       with = extra_parameters.nil? ? nil : "'"  + {:extra => extra_parameters}.to_query + "'"
 
       %!<ul id="#{grid_name}_query_list" class="query_list"> ! +
       query_store_model.list(grid_name, controller).collect do |sq|
-        link_opts = {:class => 'query_load_link', :title => "#{Defaults::SAVED_QUERY_LINK_TITLE} #{sq.name}"}
+        link_opts = {:class => 'query_load_link', :title => "#{link_title} #{sq.name}"}
         link_opts[:class] += ' current' if saved_query == sq
         "<li>"+
         link_to_remote(image_tag(Defaults::DELETE_QUERY_ICON),
           {:url => delete_serialized_query_path(:grid_name => grid_name, :id => sq.id, :current => currently_loaded_query_id ),
-            :confirm => Defaults::SAVED_QUERY_DELETION_CONFIRMATION, :with => with},
-          {:title => "#{Defaults::SAVED_QUERY_DELETION_LINK_TITLE} #{sq.name}"} )  + ' &nbsp; ' +
+            :confirm => deletion_confirmation, :with => with},
+          {:title => "#{deletion_link_title} #{sq.name}"} )  + ' &nbsp; ' +
         link_to_function(h(sq.name),
           %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.load_query(#{sq.id}) /,
           link_opts) +

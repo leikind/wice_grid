@@ -70,6 +70,39 @@ module Wice
     end
   end
 
+
+  # The point of this module is to provide a thin layer between 
+  # Rails Internationalization API and WiceGrid, enabling a fallback
+  # to the old hardcoded messages if no translations are available
+  # or I18n is not present (Rails 2.1.0 and older).
+  module WiceGridNlMessageProvider #:nodoc:
+    class << self
+
+      def get_from_hardcoded_constants(key) #:nodoc:
+        if Wice::Defaults.const_defined?(key)
+          Wice::Defaults.const_get(key)
+        else
+          return "message for key #{key} not found!"
+        end
+      end
+      
+      if Object.const_defined?(:I18n) # Rails with :I18n
+
+        def get_message(key) #:nodoc:
+          translated = I18n.t(key.to_s.downcase, :scope => 'wice_grid', :default => '_')
+          if translated == '_'
+            get_from_hardcoded_constants(key)
+          else
+            translated
+          end
+        end
+        
+      else # Rails without :I18n
+        alias_method :get_message, :get_from_hardcoded_constants
+      end
+    end
+  end
+
   module Defaults  #:nodoc:
   end
 
