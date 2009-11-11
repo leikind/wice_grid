@@ -47,7 +47,10 @@ module Wice
     #   Read section "Saving Queries How-To" in README for more details.
     # * <tt>:after</tt> - defined a name of a controller method which would be called by the grid after all user input has been processed,
     #   with a single parameter which is a Proc object. Once called, the object returns a list of all records of the current selection
-    #  throughout all pages. See section "Integration With The Application" in the README.
+    #   throughout all pages. See section "Integration With The Application" in the README.
+    # * <tt>:total_entries</tt> - If not specified, <tt>will_paginate</tt> will run a <tt>select count</tt>
+    #   query to calculate the total number of entries. If specified, the value is passed on to <tt>:total_entries</tt> of 
+    #   will_paginate's <tt>paginate</tt> method.    
     #
     # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting

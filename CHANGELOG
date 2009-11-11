@@ -1,4 +1,6 @@
 
+:total_entries parameter added to initialize_grid (will_paginate)
+
 Localization
 
 assert_keys wherever possible

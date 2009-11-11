@@ -67,7 +67,8 @@ module Wice
         :order_direction      => Defaults::ORDER_DIRECTION,
         :page                 => 1,
         :per_page             => Defaults::PER_PAGE,
-        :saved_query          => nil
+        :saved_query          => nil,
+        :total_entries        => nil
       }
 
       # validate parameters
@@ -104,6 +105,7 @@ module Wice
         @status[:order] = @options[:order]
 
       end
+      @status[:total_entries] = @options[:total_entries]
       @status[:per_page] = @options[:per_page]
       @status[:page] = @options[:page]
       @status[:conditions] = @options[:conditions]
@@ -187,7 +189,6 @@ module Wice
 
       @ar_options[:conditions] = @status[:conditions]
 
-
       if @table_column_matrix.generated_conditions.size == 0
         @status.delete(:f)
       end
@@ -205,6 +206,7 @@ module Wice
       if self.output_html?
         @ar_options[:per_page] = @status[:pp] || @status[:per_page]
         @ar_options[:page] = @status[:page]
+        @ar_options[:total_entries] = @status[:total_entries] if @status[:total_entries]
       end
 
       @ar_options[:joins]   = @options[:joins]
@@ -213,7 +215,6 @@ module Wice
 
     def read  #:nodoc:
       form_ar_options
-      # Wice.log(@ar_options.to_yaml)
       @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
     end
 
