@@ -319,7 +319,7 @@ module Wice
           filter_row_attrs.add_or_append_class_value!('wice_grid_filter_row', true)
           filter_row_attrs['id'] = filter_row_id
 
-          content << %!<tr #{tag_options(filter_row_attrs, true)}" !
+          content << %!<tr #{tag_options(filter_row_attrs, true)} !
           content << 'style="display:none"' unless filter_shown
           content << '>'
 
