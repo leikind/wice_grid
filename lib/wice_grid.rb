@@ -115,6 +115,8 @@ module Wice
       process_params
 
       @ar_options_formed = false
+      
+      @method_scoping = @klass.send(:scoped_methods)[-1]
     end
 
 
@@ -215,7 +217,9 @@ module Wice
 
     def read  #:nodoc:
       form_ar_options
-      @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
+      with_exclusive_scope do
+        @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
+      end
     end
 
     # core workflow methods END
@@ -366,6 +370,17 @@ module Wice
 
     protected
 
+    def with_exclusive_scope #:nodoc:
+      if @method_scoping
+        @klass.send(:with_exclusive_scope, @method_scoping) do
+          yield
+        end
+      else
+        yield
+      end
+    end
+
+
     def add_custom_order_sql(fully_qualified_column_name) #:nodoc:
       custom_order = if @options[:custom_order].has_key?(fully_qualified_column_name)
         @options[:custom_order][fully_qualified_column_name]
@@ -409,15 +424,21 @@ module Wice
 
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
-      @klass.find(:all, :joins => @ar_options[:joins], :include => @ar_options[:include], :conditions => @options[:conditions])
+      with_exclusive_scope do
+        @klass.find(:all, :joins => @ar_options[:joins], 
+                          :include => @ar_options[:include], 
+                          :conditions => @options[:conditions])
+      end
     end
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       form_ar_options
-      @klass.find(:all, :joins      => @ar_options[:joins],
-                        :include    => @ar_options[:include],
-                        :conditions => @ar_options[:conditions],
-                        :order      => @ar_options[:order])
+      with_exclusive_scope do
+        @klass.find(:all, :joins      => @ar_options[:joins],
+                          :include    => @ar_options[:include],
+                          :conditions => @ar_options[:conditions],
+                          :order      => @ar_options[:order])
+      end
     end
 
 

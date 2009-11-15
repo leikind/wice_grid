@@ -1,4 +1,6 @@
 
+support for with_scope and with_exclusive_scope
+
 :total_entries parameter added to initialize_grid (will_paginate)
 
 Localization
