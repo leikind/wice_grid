@@ -18,7 +18,7 @@
 //
 
 
-/* This fork by Yuri Leikind ( git://github.com/leikind/calendarview.git ) adds the following features/changes:
+/* This fork by Yuri Leikind ( git://github.com/leikind/calendarview.git ) adds a number of features.
 
 The differences from the original are
 
@@ -28,6 +28,8 @@ The differences from the original are
 * Ability to unset the date by clicking on the active date
 * Simple I18n support
 * Removed all ambiguity in the API
+* Two strategies in positioning of popup calendars: relative to the popup trigger element (original behavior),
+  and is relative to the mouse pointer (can be configured)
 * Popup calendars  are not created every time they pop up, on the contrary, they are created once just like
   embedded calendars, and then shown or hidden.
 * Possible to have many popup calendars on page. The behavior of the original calendarview when a popup
@@ -39,18 +41,14 @@ The differences from the original are
 
 var Calendar = Class.create({
 
-  // The HTML Container Element
   container: null,
 
-  // Configuration
   minYear: 1900,
   maxYear: 2100,
 
-  // Dates
   date: new Date(),
   currentDateElement: null,
 
-  // Status
   shouldClose: false,
   isPopup: true,
 
@@ -71,6 +69,9 @@ var Calendar = Class.create({
     this.hideOnClickOnDay          = params.hideOnClickOnDay      || false;
     this.hideOnClickElsewhere      = params.hideOnClickElsewhere  || false;
     this.outputFields              = params.outputFields          || $A();
+    this.popupPositioningStrategy  = params.popupPositioningStrategy || 'trigger'; // or 'pointer'
+    this.x = params.x || 0;
+    this.y = params.y || 0.6;
 
     this.outputFields = $A(this.outputFields).collect(function(f){
       return $(f);
@@ -107,10 +108,10 @@ var Calendar = Class.create({
     if (this.isPopup) { //Popup Calendars
       var popupTriggerElement = $(popupTriggerElement);
       popupTriggerElement._calendar = this;
-      
-      popupTriggerElement.onclick = function() {
-        this.showAtElement(popupTriggerElement);
-      }.bind(this);
+
+      popupTriggerElement.observe('click', function(event){
+        this.showAtElement(event, popupTriggerElement);
+      }.bind(this) );
 
     } else{ // In-Page Calendar
       this.show();
@@ -121,9 +122,7 @@ var Calendar = Class.create({
     }
   },
 
-  // Build the DOM structure
   build: function(){
-    // If no parent was specified, assume that we are creating a popup calendar.
     if (this.embedAt) {
       var parentForCalendarTable = this.embedAt;
       this.isPopup = false;
@@ -133,16 +132,12 @@ var Calendar = Class.create({
     }
 
 
-    // Calendar Table
     var table = new Element('table');
 
-    // Calendar Header
     var thead = new Element('thead');
-    table.appendChild(thead)
+    table.appendChild(thead);
 
-    // Title Placeholder
     var firstRow  = new Element('tr');
-
 
     if (this.isPopup){
       var cell = new Element('td');
@@ -164,7 +159,6 @@ var Calendar = Class.create({
       }.bind(this));
 
 
-
     }else{
       var cell = new Element('td', { colSpan: 7 } );
       firstRow.appendChild(cell);
@@ -174,7 +168,6 @@ var Calendar = Class.create({
 
     thead.appendChild(firstRow);
 
-    // Calendar Navigation
     var row = new Element('tr')
     this._drawButtonCell(row, '&#x00ab;', 1, Calendar.NAV_PREVIOUS_YEAR);
     this._drawButtonCell(row, '&#x2039;', 1, Calendar.NAV_PREVIOUS_MONTH);
@@ -184,22 +177,23 @@ var Calendar = Class.create({
     thead.appendChild(row)
 
     // Day Names
-    row = new Element('tr')
+    row = new Element('tr');
     for (var i = 0; i < 7; ++i) {
-      cell = new Element('th').update(Calendar.SHORT_DAY_NAMES[i])
-      if (i == 0 || i == 6)
-        cell.addClassName('weekend')
-      row.appendChild(cell)
+      cell = new Element('th').update(Calendar.SHORT_DAY_NAMES[i]);
+      if (i == 0 || i == 6){
+        cell.addClassName('weekend');
+      }
+      row.appendChild(cell);
     }
-    thead.appendChild(row)
+    thead.appendChild(row);
 
     // Calendar Days
     var tbody = table.appendChild(new Element('tbody'));
     for (i = 6; i > 0; --i) {
-      row = tbody.appendChild(new Element('tr'))
+      row = tbody.appendChild(new Element('tr'));
       row.addClassName('days');
       for (var j = 7; j > 0; --j) {
-        cell = row.appendChild(new Element('td'))
+        cell = row.appendChild(new Element('td'));
         cell.calendar = this;
       }
     }
@@ -223,9 +217,9 @@ var Calendar = Class.create({
         minuteSelect.appendChild(new Element('option', {value : i}).update(i));
       }
       this.minuteSelect = minuteSelect;
-      
+
       hourSelect.observe('change', function(event){
-        if (! this.date) return;        
+        if (! this.date) return;
         var elem = event.element();
         var selectedIndex = elem.selectedIndex;
         if ((typeof selectedIndex != 'undefined') && selectedIndex != null){
@@ -242,27 +236,23 @@ var Calendar = Class.create({
           this.date.setMinutes(elem.options[selectedIndex].value);
           this.updateOuterField();
         }
-      }.bind(this));
-
+      }.bind(this))
     }
 
     // Calendar Container (div)
-    this.container = new Element('div')
-    this.container.addClassName('calendar')
+    this.container = new Element('div');
+    this.container.addClassName('calendar');
     if (this.isPopup) {
-      this.container.setStyle({ position: 'absolute', display: 'none' })
-      this.container.addClassName('popup')
+      this.container.setStyle({ position: 'absolute', display: 'none' });
+      this.container.addClassName('popup');
     }
-    this.container.appendChild(table)
+    this.container.appendChild(table);
 
-    // Initialize Calendar
     this.update(this.date);
 
-    // Observe the container for mousedown events
-    Event.observe(this.container, 'mousedown', Calendar.handleMouseDownEvent)
+    Event.observe(this.container, 'mousedown', Calendar.handleMouseDownEvent);
 
-    // Append to parent element
-    parentForCalendarTable.appendChild(this.container)
+    parentForCalendarTable.appendChild(this.container);
 
     if (this.isPopup){
       new Draggable(table, {handle : firstRow });
@@ -271,7 +261,7 @@ var Calendar = Class.create({
 
   updateOuterFieldReal: function(element){
     if (element.tagName == 'DIV' || element.tagName == 'SPAN') {
-      formatted = this.date ? this.date.print(this.dateFormat) : ''
+      formatted = this.date ? this.date.print(this.dateFormat) : '';
       element.update(formatted);
     } else if (element.tagName == 'INPUT') {
       formatted = this.date ? this.date.print(this.dateFormatForHiddenField) : '';
@@ -284,7 +274,6 @@ var Calendar = Class.create({
       this.updateOuterFieldReal(field);
     }.bind(this));
   },
-
 
   updateOuterField: function(){
     this.updateOuterFieldWithoutCallback();
@@ -307,7 +296,7 @@ var Calendar = Class.create({
   //----------------------------------------------------------------------------
 
   update: function(date) {
-    
+
     var today      = new Date();
     var thisYear   = today.getFullYear();
     var thisMonth  = today.getMonth();
@@ -319,9 +308,9 @@ var Calendar = Class.create({
 
     // Ensure date is within the defined range
     if (date.getFullYear() < this.minYear)
-      date.__setFullYear(this.minYear)
+      date.__setFullYear(this.minYear);
     else if (date.getFullYear() > this.maxYear)
-      date.__setFullYear(this.maxYear)
+      date.__setFullYear(this.maxYear);
 
     if (this.isBackedUp()){
       this.dateBackedUp = new Date(date);
@@ -336,27 +325,25 @@ var Calendar = Class.create({
     // Fill in the days of the month
     Element.getElementsBySelector(this.container, 'tbody tr').each(
       function(row, i) {
-        var rowHasDays = false
+        var rowHasDays = false;
         row.immediateDescendants().each(
           function(cell, j) {
-            var day            = date.getDate()
-            var dayOfWeek      = date.getDay()
-            var isCurrentMonth = (date.getMonth() == month)
+            var day            = date.getDate();
+            var dayOfWeek      = date.getDay();
+            var isCurrentMonth = (date.getMonth() == month);
 
             // Reset classes on the cell
-            cell.className = ''
-            cell.date = new Date(date)
-            cell.update(day)
+            cell.className = '';
+            cell.date = new Date(date);
+            cell.update(day);
 
             // Account for days of the month other than the current month
             if (!isCurrentMonth)
-              cell.addClassName('otherDay')
+              cell.addClassName('otherDay');
             else
-              rowHasDays = true
+              rowHasDays = true;
 
             // Ensure the current day is selected
-            
-            
             if ((! this.isBackedUp()) && isCurrentMonth && day == dayOfMonth) {
               cell.addClassName('selected');
               this.currentDateElement = cell;
@@ -364,18 +351,18 @@ var Calendar = Class.create({
 
             // Today
             if (date.getFullYear() == thisYear && date.getMonth() == thisMonth && day == thisDay)
-              cell.addClassName('today')
+              cell.addClassName('today');
 
             // Weekend
             if ([0, 6].indexOf(dayOfWeek) != -1)
-              cell.addClassName('weekend')
+              cell.addClassName('weekend');
 
             // Set the date to tommorrow
-            date.setDate(day + 1)
+            date.setDate(day + 1);
           }.bind(this)
         )
         // Hide the extra row if it contains only days from another month
-        !rowHasDays ? row.hide() : row.show()
+        !rowHasDays ? row.hide() : row.show();
       }.bind(this)
     )
 
@@ -396,7 +383,7 @@ var Calendar = Class.create({
     this.container.getElementsBySelector('td.title')[0].update(
       Calendar.MONTH_NAMES[month] + ' ' + this.dateOrDateBackedUp().getFullYear()
     )
-    
+
   },
 
 
@@ -407,13 +394,13 @@ var Calendar = Class.create({
     var lowest = ((val / this.minuteStep).floor() * this.minuteStep);
     var distance = val % this.minuteStep;
     var minuteValueToShow;
-    
+
     if (distance <= (this.minuteStep / 2)){
       minuteValueToShow = lowest;
     }else{
       minuteValueToShow = lowest + this.minuteStep;
     }
-    
+
     if (minuteValueToShow == 0){
       return minuteValueToShow;
     }else if(minuteValueToShow >= 60){
@@ -423,17 +410,16 @@ var Calendar = Class.create({
     }
   },
 
-
   _drawButtonCell: function(parentForCell, text, colSpan, navAction) {
-    var cell          = new Element('td')
-    if (colSpan > 1) cell.colSpan = colSpan
-    cell.className    = 'cvbutton'
-    cell.calendar     = this
-    cell.navAction    = navAction
-    cell.innerHTML    = text
-    cell.unselectable = 'on' // IE
-    parentForCell.appendChild(cell)
-    return cell
+    var cell          = new Element('td');
+    if (colSpan > 1) cell.colSpan = colSpan;
+    cell.className    = 'cvbutton';
+    cell.calendar     = this;
+    cell.navAction    = navAction;
+    cell.innerHTML    = text;
+    cell.unselectable = 'on'; // IE
+    parentForCell.appendChild(cell);
+    return cell;
   },
 
 
@@ -442,7 +428,7 @@ var Calendar = Class.create({
   //------------------------------------------------------------------------------
 
   show: function(){
-    this.container.show()
+    this.container.show();
     if (this.isPopup) {
       if (this.hideOnClickElsewhere){
         window._popupCalendar = this;
@@ -451,24 +437,31 @@ var Calendar = Class.create({
     }
   },
 
-  // Shows the calendar at the given absolute position
   showAt: function (x, y) {
     this.container.setStyle({ left: x + 'px', top: y + 'px' });
     this.show();
   },
 
-  // Shows the Calendar at the coordinates of the provided element
-  showAtElement: function(element) {
-    var pos = Position.cumulativeOffset(element);
 
+  showAtElement: function(event, element) {
     this.container.show();
-    this.showAt(pos[0], pos[1]  + (this.container.offsetHeight * 0.75));
+    var x, y;
+    if (this.popupPositioningStrategy == 'pointer'){ // follow the mouse pointer
+      var pos = Event.pointer(event);
+      var containerWidth = this.container.getWidth();
+      x = containerWidth * this.x + pos.x;
+      y = containerWidth * this.y + pos.y;
+    }else{ // 'container' - container of the trigger elements
+      var pos = Position.cumulativeOffset(element);
+      x = pos[0];
+      y = this.container.offsetHeight * 0.75 + pos[1];
+    }
+    this.showAt(x, y);
   },
 
-  // Hides the Calendar
   hide: function() {
     if (this.isPopup){
-      Event.stopObserving(document, 'mousedown', Calendar._checkCalendar)
+      Event.stopObserving(document, 'mousedown', Calendar._checkCalendar);
     }
     this.container.hide();
     this.onHideCallback(this.date, this);
@@ -479,7 +472,7 @@ var Calendar = Class.create({
   // calls this.updateIfDateDifferent which moves the calendar to the given date.
   parseDate: function(str, format){
     if (!format){
-      format = this.dateFormat
+      format = this.dateFormat;
     }
     var res = Date.parseDate(str, format);
     return res;
@@ -495,7 +488,7 @@ var Calendar = Class.create({
       this.update(date);
     }
   },
-  
+
   backupDateAndCurrentElement: function(){
     if (this.minuteSelect){
       this.minuteSelect.disable();
@@ -503,10 +496,10 @@ var Calendar = Class.create({
     if (this.hourSelect){
       this.hourSelect.disable();
     }
-    
+
     this.currentDateElementBackedUp = this.currentDateElement;
     this.currentDateElement = null;
-    
+
     this.dateBackedUp = this.date;
     this.date = null;
   },
@@ -518,10 +511,10 @@ var Calendar = Class.create({
     if (this.hourSelect){
       this.hourSelect.enable();
     }
-    
+
     this.currentDateElement = this.currentDateElementBackedUp;
     this.currentDateElementBackedUp = null;
-    
+
     this.date = this.dateBackedUp;
     this.dateBackedUp = null;
   },
@@ -536,166 +529,157 @@ var Calendar = Class.create({
   },
 
 
-
-
   setRange: function(minYear, maxYear) {
     this.minYear = minYear;
     this.maxYear = maxYear;
   }
 })
 
-
-
-//------------------------------------------------------------------------------
-// Constants
-//------------------------------------------------------------------------------
-
 // Delete or add new locales from I18n.js according to your needs
 Calendar.messagebundle = $H({'en' :
   $H({
-    'monday' : 'Monday', 
-    'tuesday' : 'Tuesday', 
-    'wednesday' : 'Wednesday', 
-    'thursday' : 'Thursday', 
-    'friday' : 'Friday', 
+    'monday' : 'Monday',
+    'tuesday' : 'Tuesday',
+    'wednesday' : 'Wednesday',
+    'thursday' : 'Thursday',
+    'friday' : 'Friday',
     'saturday' : 'Saturday',
     'sunday' : 'Sunday',
 
-    'monday_short' : 'M', 
-    'tuesday_short' : 'T', 
-    'wednesday_short' : 'W', 
-    'thursday_short' : 'T', 
-    'friday_short' : 'F', 
+    'monday_short' : 'M',
+    'tuesday_short' : 'T',
+    'wednesday_short' : 'W',
+    'thursday_short' : 'T',
+    'friday_short' : 'F',
     'saturday_short' : 'S',
     'sunday_short' : 'S',
 
-    'january' : 'January', 
-    'february' : 'February', 
-    'march' : 'March', 
-    'april' : 'April', 
-    'may' : 'May', 
-    'june' : 'June', 
-    'july'  : 'July', 
+    'january' : 'January',
+    'february' : 'February',
+    'march' : 'March',
+    'april' : 'April',
+    'may' : 'May',
+    'june' : 'June',
+    'july'  : 'July',
     'august' : 'August',
-    'september'  : 'September', 
-    'october' : 'October', 
-    'november' : 'November', 
+    'september'  : 'September',
+    'october' : 'October',
+    'november' : 'November',
     'december' : 'December',
 
-    'january_short' : 'Jan', 
-    'february_short' : 'Feb', 
-    'march_short' : 'Mar', 
-    'april_short' : 'Apr', 
-    'may_short' : 'May', 
-    'june_short' : 'Jun', 
-    'july_short'  : 'Jul', 
+    'january_short' : 'Jan',
+    'february_short' : 'Feb',
+    'march_short' : 'Mar',
+    'april_short' : 'Apr',
+    'may_short' : 'May',
+    'june_short' : 'Jun',
+    'july_short'  : 'Jul',
     'august_short' : 'Aug',
-    'september_short'  : 'Sep', 
-    'october_short' : 'Oct', 
-    'november_short' : 'Nov', 
+    'september_short'  : 'Sep',
+    'october_short' : 'Oct',
+    'november_short' : 'Nov',
     'december_short' : 'Dec',
 
     'today' : 'Today'
   }),
   'fr' :
     $H({
-      'monday' : 'Lundi', 
-      'tuesday' : 'Mardi', 
-      'wednesday' : 'Mercredi', 
-      'thursday' : 'Jeudi', 
-      'friday' : 'Vendredi', 
+      'monday' : 'Lundi',
+      'tuesday' : 'Mardi',
+      'wednesday' : 'Mercredi',
+      'thursday' : 'Jeudi',
+      'friday' : 'Vendredi',
       'saturday' : 'Samedi',
       'sunday' : 'Dimanche',
 
-      'monday_short' : 'Lu', 
-      'tuesday_short' : 'Ma', 
-      'wednesday_short' : 'Me', 
-      'thursday_short' : 'Je', 
-      'friday_short' : 'Ve', 
+      'monday_short' : 'Lu',
+      'tuesday_short' : 'Ma',
+      'wednesday_short' : 'Me',
+      'thursday_short' : 'Je',
+      'friday_short' : 'Ve',
       'saturday_short' : 'Sa',
       'sunday_short' : 'Di',
 
-      'january' : 'janvier', 
-      'february' : 'février', 
-      'march' : 'mars', 
-      'april' : 'avril', 
-      'may' : 'mai', 
-      'june' : 'juin', 
-      'july'  : 'juillet', 
+      'january' : 'janvier',
+      'february' : 'février',
+      'march' : 'mars',
+      'april' : 'avril',
+      'may' : 'mai',
+      'june' : 'juin',
+      'july'  : 'juillet',
       'august' : 'août',
-      'september'  : 'septembre', 
-      'october' : 'octobre', 
-      'november' : 'novembre', 
+      'september'  : 'septembre',
+      'october' : 'octobre',
+      'november' : 'novembre',
       'december' : 'décembre',
 
-      'january_short' : 'jan', 
-      'february_short' : 'fév', 
-      'march_short' : 'mar', 
-      'april_short' : 'avr', 
-      'may_short' : 'mai', 
-      'june_short' : 'jun', 
-      'july_short'  : 'jul', 
+      'january_short' : 'jan',
+      'february_short' : 'fév',
+      'march_short' : 'mar',
+      'april_short' : 'avr',
+      'may_short' : 'mai',
+      'june_short' : 'jun',
+      'july_short'  : 'jul',
       'august_short' : 'aoû',
-      'september_short'  : 'sep', 
-      'october_short' : 'oct', 
-      'november_short' : 'nov', 
+      'september_short'  : 'sep',
+      'october_short' : 'oct',
+      'november_short' : 'nov',
       'december_short' : 'dec',
 
       'today' : 'aujourd\'hui'
     }),
     'nl' :
       $H({
-        'monday' : 'maandag', 
-        'tuesday' : 'dinsdag', 
-        'wednesday' : 'woensdag', 
-        'thursday' : 'donderdag', 
-        'friday' : 'vrijdag', 
+        'monday' : 'maandag',
+        'tuesday' : 'dinsdag',
+        'wednesday' : 'woensdag',
+        'thursday' : 'donderdag',
+        'friday' : 'vrijdag',
         'saturday' : 'zaterdag',
         'sunday' : 'zondag',
 
-        'monday_short' : 'Ma', 
-        'tuesday_short' : 'Di', 
-        'wednesday_short' : 'Wo', 
-        'thursday_short' : 'Do', 
-        'friday_short' : 'Vr', 
+        'monday_short' : 'Ma',
+        'tuesday_short' : 'Di',
+        'wednesday_short' : 'Wo',
+        'thursday_short' : 'Do',
+        'friday_short' : 'Vr',
         'saturday_short' : 'Za',
         'sunday_short' : 'Zo',
 
-        'january' : 'januari', 
-        'february' : 'februari', 
-        'march' : 'maart', 
-        'april' : 'april', 
-        'may' : 'mei', 
-        'june' : 'juni', 
-        'july'  : 'juli', 
+        'january' : 'januari',
+        'february' : 'februari',
+        'march' : 'maart',
+        'april' : 'april',
+        'may' : 'mei',
+        'june' : 'juni',
+        'july'  : 'juli',
         'august' : 'augustus',
-        'september'  : 'september', 
-        'october' : 'oktober', 
-        'november' : 'november', 
+        'september'  : 'september',
+        'october' : 'oktober',
+        'november' : 'november',
         'december' : 'december',
 
-        'january_short' : 'jan', 
-        'february_short' : 'feb', 
-        'march_short' : 'mrt', 
-        'april_short' : 'apr', 
-        'may_short' : 'mei', 
-        'june_short' : 'jun', 
-        'july_short'  : 'jul', 
+        'january_short' : 'jan',
+        'february_short' : 'feb',
+        'march_short' : 'mrt',
+        'april_short' : 'apr',
+        'may_short' : 'mei',
+        'june_short' : 'jun',
+        'july_short'  : 'jul',
         'august_short' : 'aug',
-        'september_short'  : 'sep', 
-        'october_short' : 'okt', 
-        'november_short' : 'nov', 
+        'september_short'  : 'sep',
+        'october_short' : 'okt',
+        'november_short' : 'nov',
         'december_short' : 'dec',
 
         'today' : 'vandaag'
-      })  
+      })
 });
 
 
 Calendar.getMessageFor = function(key){
 
   var lang = Calendar.language || 'en';
-  
   if (! Calendar.messagebundle.get(lang)){
     lang = 'en';
   }
@@ -783,7 +767,7 @@ Calendar._checkCalendar = function(event) {
     return;
   }
   Calendar.closeHandler(window._popupCalendar);
-  return Event.stop(event)
+  return Event.stop(event);
 }
 
 //------------------------------------------------------------------------------
@@ -794,7 +778,7 @@ Calendar.handleMouseDownEvent = function(event){
   if (event.element().type == 'select-one'){ // ignore select elements - not escaping this in Safari leaves select boxes non-functional
     return true;
   }
-  Event.observe(document, 'mouseup', Calendar.handleMouseUpEvent)
+  Event.observe(document, 'mouseup', Calendar.handleMouseUpEvent);
   Event.stop(event)
 }
 
@@ -802,36 +786,36 @@ Calendar.handleMouseUpEvent = function(event){
   var el        = Event.element(event);
   var calendar  = el.calendar;
   var isNewDate = false;
-  
+
 
   // If the element that was clicked on does not have an associated Calendar
   // object, return as we have nothing to do.
-  if (!calendar) return false
+  if (!calendar) return false;
 
   // Clicked on a day
   if (typeof el.navAction == 'undefined') {
-    
+
     var dateWasDefined = true;
     if (calendar.date == null){
       dateWasDefined = false;
       calendar.restoreDateAndCurrentElement();
     }
-    
-    
+
+
     if (calendar.currentDateElement) {
       Element.removeClassName(calendar.currentDateElement, 'selected');
 
       if (dateWasDefined && el == calendar.currentDateElement){
         calendar.backupDateAndCurrentElement();
-        
+
         calendar.updateOuterField();
-        
+
         Event.stopObserving(document, 'mouseup', Calendar.handleMouseUpEvent);
         return Event.stop(event);
       }
 
       Element.addClassName(el, 'selected');
-      
+
       calendar.shouldClose = (calendar.currentDateElement == el);
 
       if (!calendar.shouldClose) {
@@ -847,7 +831,7 @@ Calendar.handleMouseUpEvent = function(event){
 
     var isOtherMonth     = !calendar.shouldClose;
     if (isOtherMonth) {
-      calendar.update(calendar.date)
+      calendar.update(calendar.date);
     }
 
     if (! calendar.hideOnClickOnDay){ // override closing if calendar.hideOnClickOnDay is false
@@ -855,9 +839,9 @@ Calendar.handleMouseUpEvent = function(event){
     }
 
   } else { // Clicked on an action button
-    
+
     var date = new Date(calendar.dateOrDateBackedUp());
-    
+
     if (el.navAction == Calendar.NAV_TODAY){
       date.setDateOnly(new Date());
     }
@@ -869,7 +853,7 @@ Calendar.handleMouseUpEvent = function(event){
       var day = date.getDate();
       var max = date.getMonthDays(m);
       if (day > max) date.setDate(max);
-      date.setMonth(m)
+      date.setMonth(m);
     }
 
     switch (el.navAction) {
@@ -878,7 +862,7 @@ Calendar.handleMouseUpEvent = function(event){
       case Calendar.NAV_PREVIOUS_YEAR:
         if (year > calendar.minYear)
           date.__setFullYear(year - 1);
-        break
+        break;
 
       // Previous Month
       case Calendar.NAV_PREVIOUS_MONTH:
@@ -893,22 +877,22 @@ Calendar.handleMouseUpEvent = function(event){
 
       // Today
       case Calendar.NAV_TODAY:
-        break
+        break;
 
       // Next Month
       case Calendar.NAV_NEXT_MONTH:
         if (mon < 11) {
-          setMonth(mon + 1)
+          setMonth(mon + 1);
         }else if (year < calendar.maxYear) {
           date.__setFullYear(year + 1);
           setMonth(0);
         }
-        break
+        break;
 
       // Next Year
       case Calendar.NAV_NEXT_YEAR:
         if (year < calendar.maxYear){
-          date.__setFullYear(year + 1)
+          date.__setFullYear(year + 1);
         }
         break;
     }
@@ -920,11 +904,11 @@ Calendar.handleMouseUpEvent = function(event){
     //   isNewDate = (calendar.shouldClose = true);
     // } // Hm, what did I mean with this code?
   }
-  
+
   if (isNewDate && event) {
     Calendar.selectHandler(calendar);
   }
-  
+
   if (calendar.shouldClose && event) {
     Calendar.closeHandler(calendar);
   }
@@ -952,39 +936,8 @@ Calendar.closeHandler = function(calendar){
 
 
 
-//------------------------------------------------------------------------------
-// Calendar Instance
-//------------------------------------------------------------------------------
-
 // global object that remembers the calendar
 window._popupCalendar = null;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //==============================================================================
@@ -1212,5 +1165,4 @@ Date.prototype.__setFullYear = function(y) {
     this.setDate(28);
   this.setFullYear(y);
 };
-
 
