@@ -17,6 +17,9 @@ module Wice
       javascript << %|      popupTriggerElement : "#{popup_trigger_icon_id}",\n |
       javascript << %|      initialDate : $('#{dom_id}').value,\n |
       javascript << %|      dateFormat : "#{date_format}",\n|
+      unless Wice::Defaults::POPUP_PLACEMENT_STRATEGY == :trigger
+        javascript << %|      popupPositioningStrategy : "#{Wice::Defaults::POPUP_PLACEMENT_STRATEGY}",\n|
+      end
       if with_time
         javascript << %|        withTime : true,\n|
       end
