@@ -12,6 +12,10 @@ module Wice
     def add_condition(column, conditions)
       @generated_conditions << [column, conditions] unless conditions.blank?
     end
+    
+    def conditions
+      @generated_conditions.collect{|_, cond| cond}
+    end
 
     alias_method :get, :[]
 

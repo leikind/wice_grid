@@ -44,27 +44,6 @@ module Wice
       end
     end
 
-    # used for processing of parameters to ActiveRecord: transforms a string into a single item array,
-    # or if the parameter is an array, does nothing
-    def string_conditions_to_array_cond(o)  #:nodoc:
-      o.kind_of?(Array) ? o : [o]
-    end
-
-    # unites two conditions into one
-    # unite_conditions(['name = ?', 'yuri'], ['age > ?', 30]) #=> ['name = ? and age > ?', 'yuri', 30]
-    # or
-    # unite_conditions('name is not null', ['age > ?', 30]) #=> ['name is not null and age > ?',  30]
-    def unite_conditions(c1, c2)  #:nodoc:
-      raise WiceGridException.new('invalid call to unite_conditions') if c1.blank? && c2.blank?
-      return c1 if c2.blank?
-      return c2 if c1.blank?
-      c1 = string_conditions_to_array_cond(c1)
-      c2 = string_conditions_to_array_cond(c2)
-      c1[0] += ' and ' + c2[0]
-      c1 += c2[1..-1]
-      c1
-    end
-
     def log(message) #:nodoc:
       ActiveRecord::Base.logger.info('WiceGrid: ' + message)
     end

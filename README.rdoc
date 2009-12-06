@@ -37,6 +37,8 @@ This tutorial is accompanied by a sample application with WiceGrid examples whic
 
 == Requirements
 
+Rails version 2.1.0 or newer.
+
 <tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 2.3.2 or newer.
 
 <tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer.
@@ -246,12 +248,18 @@ The number of rows per page is set with <tt>:per_page</tt>:
 
 === Conditions
 
-The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), but  it can only be in a string or an array format, the hash format is not supported at the moment:
-
+The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed on to the underlying ActiveRecord (via will_paginate), so it can be in any format processable by ActiveRecord:
 
   @tasks_grid = initialize_grid(Task,
     :conditions => ["archived = false and estimated_time > ?", 100]
   )
+
+  @tasks_grid = initialize_grid(Task,
+    :include => :project,
+    :conditions => {:archived => false, :project => {:active => true}}
+  )
+
+
 
 A good example is substituting a common pattern like
 

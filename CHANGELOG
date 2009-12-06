@@ -1,3 +1,10 @@
+using merge_conditions to merge conditions :)
+
+WiceGrid is now compatible with the new Rails XSS behavior which
+will be the default in Rails 3.0 and can be used in Rails 2.3.5
+using the rails_xss plugin.
+Read http://github.com/nzkoz/rails_xss for more
+
 wice_grid_custom_filter_params
 
 support for with_scope and with_exclusive_scope

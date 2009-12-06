@@ -5,27 +5,6 @@ require 'action_controller/test_process'
 
 class WiceGridMiscTest < Test::Unit::TestCase
   
-  def test_string_conditions_to_array_cond
-    assert_equal ["1 = 1"], Wice.string_conditions_to_array_cond("1 = 1")
-    assert_equal ["1 = 1"], Wice.string_conditions_to_array_cond(["1 = 1"])
-  end
-  
-  def test_unite_conditions    
-    assert_equal "foo IS NULL", Wice.unite_conditions("foo IS NULL", nil)
-    assert_equal "foo IS NULL", Wice.unite_conditions(nil, "foo IS NULL")
-    
-    assert_equal "foo IS NULL", Wice.unite_conditions("foo IS NULL", [])
-    assert_equal "foo IS NULL", Wice.unite_conditions('', "foo IS NULL")
-    
-    assert_raise(Wice::WiceGridException) { Wice.unite_conditions('', {})}
-    
-    assert_equal ["foo IS NULL and bar > 5"], Wice.unite_conditions("foo IS NULL", "bar > 5")
-    assert_equal ["foo IS NULL and bar > ?", 5], Wice.unite_conditions("foo IS NULL", ["bar > ?", 5])
-    
-    assert_equal ['name = ? and age > ?', 'yuri', 30], Wice.unite_conditions(['name = ?', 'yuri'], ['age > ?', 30])
-    
-    assert_equal ['name is not null and age > ?',  30], Wice.unite_conditions('name is not null', ['age > ?', 30])
-  end
   
   def test_get_query_store_model
     assert_equal(SavedQuery, Wice.get_query_store_model)

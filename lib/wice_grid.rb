@@ -189,15 +189,13 @@ module Wice
       return if @ar_options_formed
       @ar_options_formed = true unless opts[:forget_generated_options]
 
-      @ar_options[:conditions] = @status[:conditions]
-
+      # conditions
       if @table_column_matrix.generated_conditions.size == 0
         @status.delete(:f)
       end
-
-      @table_column_matrix.generated_conditions.each do |table_column, conditions|
-        @ar_options[:conditions] = Wice::unite_conditions(@ar_options[:conditions], conditions)
-      end
+      
+      @ar_options[:conditions] = klass.merge_conditions(@status[:conditions], * @table_column_matrix.conditions)
+      # conditions processed
 
       if (! opts[:skip_ordering]) && @status[:order]
         @ar_options[:order] = add_custom_order_sql(complete_column_name(@status[:order]))
