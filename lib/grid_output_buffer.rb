@@ -19,7 +19,9 @@ module Wice
 
     def to_s
       if @first_output || ! @stubborn_output_mode
-        super
+        res = super
+        res.html_safe! if res.respond_to?(:html_safe!)
+        res
       else
         @first_output = true
         ''

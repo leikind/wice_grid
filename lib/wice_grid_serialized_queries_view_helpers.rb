@@ -46,7 +46,6 @@ module Wice
         button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +  '</div>'
     end
 
-
     def saved_queries_list(grid_name, saved_query = nil, extra_parameters = nil)  #:nodoc:
       
       link_title            = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_LINK_TITLE)
@@ -77,6 +76,10 @@ module Wice
         end +
         '</li>'
       end.join('') + '</ul>'
+    end
+
+    if self.respond_to?(:safe_helper)
+      safe_helper :saved_queries_panel
     end
 
   end

@@ -171,6 +171,7 @@ module Wice
       if rendering.erb_mode
         # true in this case is a sign that grid_html has run in a normal mode, i.e. without detached filters
         if grid.output_buffer.nil? || grid.output_buffer == true
+          content = content.to_s
           if Rails.respond_to?(:version) && Rails.version.to_f >= 2.2
             return concat(content)
           else
@@ -665,5 +666,10 @@ module Wice
         ''
       end
     end
+
+    if self.respond_to?(:safe_helper)
+      safe_helper :grid_filter
+    end
+
   end
 end

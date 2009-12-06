@@ -142,5 +142,10 @@ module Wice
       res
     end
 
+    if self.respond_to?(:safe_helper)
+      safe_helper :wice_grid_custom_filter_params, :dump_filter_parameters_as_hidden_fields, 
+        :dump_state, :scaffolded_grid, :include_wice_grid_assets, :names_of_wice_grid_javascripts,
+        :names_of_wice_grid_stylesheets
+    end
   end
 end
