@@ -15,6 +15,8 @@ module Wice
     attr_reader :grid
     attr_accessor :erb_mode
 
+    attr_accessor :reset_button_present, :submit_button_present, :show_hide_button_present
+
     @@order_parameter_name = "order"
     @@order_direction_parameter_name = "order_direction"
     @@page_parameter_name = "page"

@@ -224,7 +224,7 @@ module Wice
 
       content = GridOutputBuffer.new
 
-      content << %!<div class="wice_grid_container"><h3 id="#{grid.name}_title">!
+      content << %!<div class="wice_grid_container" id="#{grid.name}"><h3 id="#{grid.name}_title">!
       content << h(grid.saved_query.name) if grid.saved_query
       content << "</h3><table #{tag_options(table_html_attrs, true)}>"
       content << "<thead>"
@@ -239,9 +239,12 @@ module Wice
 
       no_rightmost_column = true if reuse_last_column_for_filter_buttons
 
+      pagination_panel_content_html, pagination_panel_content_js = nil, nil
       if options[:upper_pagination_panel]
         content << rendering.pagination_panel(no_rightmost_column){
-          pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
+          pagination_panel_content_html, pagination_panel_content_js = pagination_panel_content(grid, 
+            options[:extra_request_parameters], options[:allow_showing_all_records])
+          pagination_panel_content_html
         }
       end
 
@@ -283,7 +286,7 @@ module Wice
         else
           if reuse_last_column_for_filter_buttons && last
             content << content_tag(:th,
-              hide_show_icon(filter_row_id, grid.name, filter_shown, no_filter_row, options[:show_filters]),
+              hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering),
               :class => 'hide_show_icon'
             )
           else
@@ -293,7 +296,7 @@ module Wice
       end
 
       content << content_tag(:th,
-        hide_show_icon(filter_row_id, grid.name, filter_shown, no_filter_row, options[:show_filters]),
+        hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering),
         :class => 'hide_show_icon'
       ) unless no_rightmost_column
 
@@ -339,7 +342,7 @@ module Wice
             else
               if reuse_last_column_for_filter_buttons && last
                 content << content_tag(:th,
-                  reset_submit_buttons(options, grid),
+                  reset_submit_buttons(options, grid, rendering),
                   Hash.make_hash(:class, column.css_class).add_or_append_class_value!('filter_icons')
                 )
               else
@@ -347,8 +350,9 @@ module Wice
               end
             end
           end
-
-          content << content_tag(:th, reset_submit_buttons(options, grid), :class => 'filter_icons' ) unless no_rightmost_column
+          unless no_rightmost_column
+            content << content_tag(:th, reset_submit_buttons(options, grid, rendering), :class => 'filter_icons' )
+          end
           content << '</tr>'
         end
       end
@@ -361,9 +365,16 @@ module Wice
 
       content << '</thead><tfoot>'
       content << rendering.pagination_panel(no_rightmost_column){
-        pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
+        if pagination_panel_content_html
+          pagination_panel_content_html
+        else
+          pagination_panel_content_html, pagination_panel_content_js = 
+            pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
+          pagination_panel_content_html
+        end
       }
       content << '</tfoot><tbody>'
+      cached_javascript << pagination_panel_content_js if pagination_panel_content_js
 
       # rendering  rows
       cell_value_of_the_ordered_column = nil
@@ -433,7 +444,6 @@ module Wice
 
         row_attributes.add_or_append_class_value!(cycle_class)
 
-
         content << before_row_output if before_row_output
         content << "<tr #{tag_options(row_attributes)}>#{row_content}"
         content << content_tag(:td, '') unless no_rightmost_column
@@ -449,26 +459,57 @@ module Wice
 
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
 
-      prototype_and_js_version_check = ENV['RAILS_ENV'] == 'development' ? %$
-        if (typeof(WiceGridProcessor) == "undefined"){
-          alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' +
-            'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +
-            'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +
-            'for WiceGrid javascripts and assets.')
-        } else {
-          if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {
-            alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets\\nto update it.");
-          }
-        } $ : ''
+      prototype_and_js_version_check = if ENV['RAILS_ENV'] == 'development'
+        %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
+        %$   alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' +\n$ +
+        %$     'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +\n$ +
+        %$     'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +\n$ +
+        %$     'for WiceGrid javascripts and assets.')\n$ +
+        %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {\n$ +
+        %$    alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets\\nto update it.");\n$ +
+        %$ }\n$
+      else
+        ''
+      end
 
+      if rendering.show_hide_button_present
+        cached_javascript << %/ $('#{grid.name}_show_icon').observe('click', function(){\n/+
+                             %/   Element.toggle('#{grid.name}_show_icon');\n/+
+                             %/   Element.toggle('#{grid.name}_hide_icon');\n/+
+                             %/   $('#{filter_row_id}').show();\n/+
+                             %/ })\n/+
+                             %/ $('#{grid.name}_hide_icon').observe('click', function(){\n/+
+                             %/   Element.toggle('#{grid.name}_show_icon');\n/+
+                             %/   Element.toggle('#{grid.name}_hide_icon');\n/+
+                             %/   $('#{filter_row_id}').hide();\n/+
+                             %/ })\n/
+      end
+
+      if rendering.reset_button_present
+        cached_javascript << %/ $$('div##{grid.name}.wice_grid_container .reset').each(function(e){\n/+
+                             %/   e.observe('click', function(){\n/+
+                             %/     #{reset_grid_javascript(grid)};\n/+
+                             %/   })\n/+
+                             %/ })\n/
+      end
+      
+      if rendering.submit_button_present
+        cached_javascript << %/ $$('div##{grid.name}.wice_grid_container .submit').each(function(e){\n/+
+                             %/   e.observe('click', function(){\n/+
+                             %/     #{submit_grid_javascript(grid)};\n/+
+                             %/   })\n/+
+                             %/ })\n/ 
+      end
 
       content << javascript_tag(
-        %$document.observe("dom:loaded", function() {
-        #{prototype_and_js_version_check}
-        #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',
-          '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n $ +
-        rendering.select_for(:in_html){|vc|vc.attribute_name and not vc.no_filter}.collect{|column|  column.yield_javascript}.join("\n") +
-        "\n" + cached_javascript.compact.join("\n") +
+        %/ document.observe("dom:loaded", function() {\n/ +
+        %/ #{prototype_and_js_version_check}\n/ +
+        %/ #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
+        %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n/ +
+        rendering.select_for(:in_html) do |vc|
+          vc.attribute_name and not vc.no_filter
+        end.collect{|column| column.yield_javascript}.join("\n") +
+        "\n" + cached_javascript.compact.join('') +
         '})'
       )
 
@@ -482,9 +523,8 @@ module Wice
       return content
     end
 
-
-    def hide_show_icon(filter_row_id, grid_name, filter_shown, no_filter_row, show_filters)  #:nodoc:
-
+    def hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, show_filters, rendering)  #:nodoc:
+      grid_name = grid.name
       no_filter_opening_closing_icon = (show_filters == :always) || no_filter_row
 
       styles = ["display: block;", "display: none;"]
@@ -494,50 +534,52 @@ module Wice
       if no_filter_opening_closing_icon
         hide_icon = show_icon = ''
       else
-        hide_icon_id = grid_name + '_hide_icon'
-        show_icon_id = grid_name + '_show_icon'
-        
-        filter_tooltip = WiceGridNlMessageProvider.get_message(:SHOW_HIDE_FILTER_ICON)
+
+
+        rendering.show_hide_button_present = true
+        filter_tooltip = WiceGridNlMessageProvider.get_message(:HIDE_FILTER_TOOLTIP)
+
         hide_icon = content_tag(:span,
-          link_to_function(
-            image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-              :title => filter_tooltip,
-              :alt   => filter_tooltip),
-            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').hide()" ),
-          :id => hide_icon_id,
-          :style => styles[0]
+          image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
+            :title => filter_tooltip,
+            :alt   => filter_tooltip),
+          :id => grid_name + '_hide_icon',
+          :style => styles[0],
+          :class => 'clickable'
         )
+
 
         filter_tooltip = WiceGridNlMessageProvider.get_message(:SHOW_FILTER_TOOLTIP)
 
         show_icon = content_tag(:span,
-          link_to_function(
-            image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-              :title => filter_tooltip,
-              :alt   => filter_tooltip),
-            "Element.toggle('#{show_icon_id}'); Element.toggle('#{hide_icon_id}'); $('#{filter_row_id}').show()" ),
-          :id => show_icon_id,
-          :style => styles[1]
+          image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
+            :title => filter_tooltip,
+            :alt   => filter_tooltip),
+          :id => grid_name + '_show_icon',
+          :style => styles[1],
+          :class => 'clickable'
         )
+        
         hide_icon + show_icon
       end
     end
 
-    def reset_submit_buttons(options, grid)  #:nodoc:
+    def reset_submit_buttons(options, grid, rendering)  #:nodoc:
       if options[:hide_submit_button]
         ''
       else
+        rendering.submit_button_present = true
         filter_tooltip = WiceGridNlMessageProvider.get_message(:FILTER_TOOLTIP)
-        link_to_function(image_tag(Defaults::FILTER_ICON, :title => filter_tooltip, :alt => filter_tooltip), submit_grid_javascript(grid))
+        image_tag(Defaults::FILTER_ICON, :title => filter_tooltip, :alt => filter_tooltip, :class => 'submit clickable')
       end + ' ' +
       if options[:hide_reset_button]
         ''
       else
+        rendering.reset_button_present = true
         filter_tooltip = WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP)
-        link_to_function(image_tag(Defaults::RESET_ICON, :title => filter_tooltip, :alt => filter_tooltip), reset_grid_javascript(grid))
+        image_tag(Defaults::RESET_ICON, :title => filter_tooltip, :alt => filter_tooltip, :class => 'reset clickable')
       end
     end
-
 
     # Renders a detached filter. The parameters are:
     # * +grid+ the WiceGrid object
@@ -611,34 +653,50 @@ module Wice
         extra_request_parameters["#{grid.name}[q]"] = grid.saved_query.id
       end
 
-      will_paginate(grid.resultset, 
+      html, js = pagination_info(grid, allow_showing_all_records)
+
+      [will_paginate(grid.resultset, 
         :previous_label => WiceGridNlMessageProvider.get_message(:PREVIOUS_LABEL),
         :next_label     => WiceGridNlMessageProvider.get_message(:NEXT_LABEL),
         :param_name     => "#{grid.name}[page]", 
         :params         => extra_request_parameters).to_s +
-      ' <div class="pagination_status">' + pagination_info(grid, allow_showing_all_records) + '</div>'
+        ' <div class="pagination_status">' + html + '</div>', js]
     end
 
 
     def show_all_link(collection_total_entries, parameters, grid_name) #:nodoc:
-      
+
       message = WiceGridNlMessageProvider.get_message(:ALL_QUERIES_WARNING)
-      
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{message}'))" : ''
-      '<span class="show_all_link">' +
-        link_to_function(WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_LABEL),
-        "#{confirmation} #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})",
-        :title => WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_TOOLTIP)) + '</span>'
+      js = %/ $$('div##{grid_name}.wice_grid_container .show_all_link').each(function(e){\n/ +
+           %/   e.observe('click', function(){\n/ +
+           %/     #{confirmation} #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})\n/ +
+           %/   })\n/ +
+           %/ })\n/
+
+      tooltip = WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_TOOLTIP)
+      html = '<span class="show_all_link"><a href="#" title="#{tooltip}">' +
+        WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_LABEL) +
+        '</a></span>'
+
+      [html, js]
     end
 
     def back_to_pagination_link(parameters, grid_name) #:nodoc:
       pagination_override_parameter_name = "#{grid_name}[pp]"
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
-      ' <span class="show_all_link">' +
-        link_to_function(WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_LABEL),
-          "#{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})",
-          :tooltip => WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP)) +
-        '</span>'
+
+      js = %/ $$('div##{grid_name}.wice_grid_container .show_all_link').each(function(e){\n/ +
+           %/   e.observe('click', function(){\n/ +
+           %/     #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})\n/ +
+           %/   })\n/ +
+           %/ })\n/
+
+      tooltip = WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP)
+      html = ' <span class="show_all_link"><a href="#" title="#{tooltip}">' +
+        WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_LABEL) +
+        '</a></span>'
+      [html, js]
     end
 
     def pagination_info(grid, allow_showing_all_records)  #:nodoc:
@@ -648,7 +706,8 @@ module Wice
       collection_total_entries_str = collection_total_entries.to_s
       parameters = grid.get_state_as_parameter_value_pairs
 
-      if (collection.total_pages < 2 && collection.length == 0)
+      js = nil
+      html = if (collection.total_pages < 2 && collection.length == 0)
         '0'
       else
         parameters << ["#{grid.name}[pp]", collection_total_entries_str]
@@ -657,14 +716,18 @@ module Wice
           if (! allow_showing_all_records) || collection_total_entries <= collection.length
             ''
           else
-            show_all_link(collection_total_entries, parameters, grid.name)
+            res, js = show_all_link(collection_total_entries, parameters, grid.name)
+            res
           end
       end +
       if grid.all_record_mode?
-        back_to_pagination_link(parameters, grid.name)
+        res, js = back_to_pagination_link(parameters, grid.name)
+        res
       else
         ''
       end
+      
+      [html, js]
     end
 
     if self.respond_to?(:safe_helper)

@@ -6,7 +6,11 @@
   border-spacing: 0px
 }
 
-.wice_grid th { 
+.wice_grid .clickable{
+  cursor: pointer;
+}
+
+.wice_grid th {
   background-color: #dfdfdf; 
   font-weight: bold; 
   text-shadow: rgb(204, 204, 204) 0px 1px 0px; 
