@@ -675,7 +675,7 @@ module Wice
            %/ })\n/
 
       tooltip = WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_TOOLTIP)
-      html = '<span class="show_all_link"><a href="#" title="#{tooltip}">' +
+      html = %/<span class="show_all_link"><a href="#" title="#{tooltip}">/ +
         WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_LABEL) +
         '</a></span>'
 
@@ -693,7 +693,7 @@ module Wice
            %/ })\n/
 
       tooltip = WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP)
-      html = ' <span class="show_all_link"><a href="#" title="#{tooltip}">' +
+      html = %/ <span class="show_all_link"><a href="#" title="#{tooltip}">/ +
         WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_LABEL) +
         '</a></span>'
       [html, js]
