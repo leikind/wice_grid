@@ -81,6 +81,9 @@
 .wice_grid a.date_label {text-decoration: none;}
 .wice_grid a.date_label:hover {text-decoration: line-through;}
 
+.wice_grid td.sel{
+  text-align: center;
+}
 
 .wice_grid_container .pagination {
   float: left;

@@ -21,7 +21,7 @@ class WiceGridAssetsGenerator < Rails::Generator::Base
       m.directory "public/images/icons/grid"
       
       %w(arrow_down.gif calendar_view_month.png expand.png page_white_find.png table_refresh.png  
-        arrow_up.gif delete.png page_white_excel.png    table.png).each do |f|
+        arrow_up.gif delete.png page_white_excel.png  table.png tick_all.png untick_all.png ).each do |f|
           m.file "icons/#{f}",  "public/images/icons/grid/#{f}"
       end
       

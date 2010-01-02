@@ -1,3 +1,7 @@
+action_column - Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, delete
+the selected records.
+
+
 using merge_conditions to merge conditions :)
 
 WiceGrid is now compatible with the new Rails XSS behavior which

@@ -26,6 +26,7 @@ module Wice
       @grid.renderer = self
       @columns = []
       @columns_table = {}
+      @action_column_present = false
     end
 
     def add_column(vc)  #:nodoc:
@@ -109,6 +110,39 @@ module Wice
           "<tr><td colspan=\"#{number_of_columns}\">#{panel}</td><td>#{csv_export_icon}</td></tr>"
         end
       end
+    end
+
+
+    # Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, deleting
+    # selected records. Please note that +action_column+ only creates the checkboxes and the 'Select All' and 
+    # 'Deselect All' buttons, and the form itelf as well as processing the parameters should be taken care of
+    # by the application code.
+    #
+    # * <tt>:param_name</tt> - The name of the HTTP parameter.
+    #   The complete HTTP parameter is <tt>"#{grid_name}[#{param_name}][]"</tt>.
+    #   The default param_name is 'selected'.
+    # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
+    # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header. 
+    #   The default is +true+.
+    # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
+    def action_column(opts = {})
+      
+      if @action_column_present
+        raise Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
+      end
+      
+      options = {
+        :param_name     => :selected,
+        :td_html_attrs  => {},
+        :select_all_buttons => true,
+        :object_property => :id
+      }
+
+      opts.assert_valid_keys(options.keys)
+      options.merge!(opts)
+      @action_column_present = true
+      @columns << ActionViewColumn.new(@grid, options[:td_html_attrs], options[:param_name],
+            options[:select_all_buttons], options[:object_property])
     end
 
     # Defines everything related to a column in a grid - column name, filtering, rendering cells, etc.
@@ -444,7 +478,6 @@ module Wice
     def filter_columns(method_name = nil) #:nodoc:
       method_name ? @columns.select(&method_name) : @columns
     end
-
 
   end
 end

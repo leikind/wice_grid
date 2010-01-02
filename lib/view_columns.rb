@@ -4,6 +4,7 @@ module Wice
     include ActionView::Helpers::FormTagHelper
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::JavaScriptHelper
+    include ActionView::Helpers::AssetTagHelper
 
     # fields defined from the options parameter
     FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
@@ -118,6 +119,62 @@ module Wice
 
     def id_out_of_name(s) #:nodoc:
       s.gsub(/[\[\]]+/,'_').sub(/_+$/, '')
+    end
+
+  end
+
+  class ActionViewColumn < ViewColumn #:nodoc:
+    def initialize(grid_obj, td_html_attrs, param_name, select_all_buttons, object_property)  #:nodoc:
+      @select_all_buttons   = select_all_buttons
+      self.grid             = grid_obj
+      self.td_html_attrs    = td_html_attrs
+      self.td_html_attrs.add_or_append_class_value!('sel')
+      grid_name             = self.grid.name
+      @param_name           = param_name
+      @cell_rendering_block = lambda do |object, params|
+        selected = if params[grid_name] && params[grid_name][param_name] && 
+                      params[grid_name][param_name].index(object.send(object_property).to_s)
+          true
+        else
+          false
+        end
+        check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
+      end
+    end
+    
+    def in_html  #:nodoc:
+      true
+    end
+    
+    def capable_of_hosting_filter_related_icons?  #:nodoc:
+      false
+    end
+
+    def column_name  #:nodoc:
+      return '' unless @select_all_buttons
+      select_all_tootip   = WiceGridNlMessageProvider.get_message(:SELECT_ALL)
+      deselect_all_tootip = WiceGridNlMessageProvider.get_message(:DESELECT_ALL)
+      
+      html = content_tag(:span, image_tag(Defaults::TICK_ALL_ICON, :alt => select_all_tootip), 
+                         :class => 'clickable select_all', :title => select_all_tootip) + ' ' +
+             content_tag(:span, image_tag(Defaults::UNTICK_ALL_ICON, :alt => deselect_all_tootip),
+                         :class => 'clickable deselect_all', :title => deselect_all_tootip)
+
+      js = %! $$('div##{grid.name}.wice_grid_container .select_all').each(function(e){\n! +
+           %!   e.observe('click', function(){\n! +
+           %!     $$('div##{grid.name}.wice_grid_container .sel input').each(function(checkbox){\n! +
+           %!       checkbox.checked = true;\n! +
+           %!     })\n! +
+           %!   })\n! +
+           %! })\n! +
+           %! $$('div##{grid.name}.wice_grid_container .deselect_all').each(function(e){\n! +
+           %!   e.observe('click', function(){\n! +
+           %!     $$('div##{grid.name}.wice_grid_container .sel input').each(function(checkbox){\n! +
+           %!       checkbox.checked = false;\n! +
+           %!     })\n! +
+           %!   })\n! +
+           %! })\n!
+      [html, js]
     end
 
   end

@@ -36,6 +36,9 @@ en:
     validates_presence_error: Please submit the name of the custom query
     query_deleted_message: Saved query deleted.
     query_saved_message: Query saved.
+    select_all: Select all
+    deselect_all: Remove selection
+
 
 is:
   wice_grid:
@@ -192,6 +195,10 @@ ru:
     validates_presence_error: Пожалуйста введите имя сохраняемого фильтра
     query_deleted_message: Сохранённый фильтр удалён.
     query_saved_message: Сохранённый фильтр сохранён.
+    select_all: Отметить все
+    deselect_all: Убрать выделение
+    
+    
 pt:
   wice_grid:
     show_filter_tooltip: Mostrar o filtro

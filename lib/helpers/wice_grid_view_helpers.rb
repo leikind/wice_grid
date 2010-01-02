@@ -263,9 +263,17 @@ module Wice
         true
       end
 
-      rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
-        if column.attribute_name && column.allow_ordering
+      cached_javascript = []
 
+      rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
+        
+        column_name = column.column_name
+        if column_name.is_a? Array
+          column_name, js = column_name
+          cached_javascript << js
+        end
+        
+        if column.attribute_name && column.allow_ordering
 
           css_class = grid.filtered_by?(column) ? 'active_filter' : nil
 
@@ -278,7 +286,7 @@ module Wice
           end
 
           col_link = link_to(
-            column.column_name,
+            column_name,
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
           content << content_tag(:th, col_link, Hash.make_hash(:class, css_class))
@@ -290,7 +298,7 @@ module Wice
               :class => 'hide_show_icon'
             )
           else
-            content << content_tag(:th, column.column_name)
+            content << content_tag(:th, column_name)
           end
         end
       end
@@ -303,8 +311,6 @@ module Wice
       content << '</tr>'
       # rendering first row end
 
-
-      cached_javascript = []
 
       unless no_filters_at_all # there are filters, we don't know where, in the table or detached
         if no_filter_row # they are all detached
@@ -399,7 +405,12 @@ module Wice
           cell_block = column.cell_rendering_block
 
           opts = column.td_html_attrs.clone
-          column_block_output = call_block_as_erb_or_ruby(rendering, cell_block, ar)
+          
+          column_block_output = if column.class == Wice::ActionViewColumn
+            cell_block.call(ar, params)
+          else
+            call_block_as_erb_or_ruby(rendering, cell_block, ar)
+          end
 
           if column_block_output.kind_of?(Array)
 

@@ -35,7 +35,11 @@ if defined?(Wice::Defaults)
   # CSV Export icon.
   Wice::Defaults::CSV_EXPORT_ICON = "/images/icons/grid/page_white_excel.png"
 
+  # Tick-All icon for the action column.
+  Wice::Defaults::TICK_ALL_ICON = "/images/icons/grid/tick_all.png"
 
+  # Untick-All icon for the action column.
+  Wice::Defaults::UNTICK_ALL_ICON = "/images/icons/grid/untick_all.png"
 
   # The label of the first option of a custom dropdown list meaning 'All items'
   Wice::Defaults::CUSTOM_FILTER_ALL_LABEL = '--'
@@ -189,7 +193,10 @@ if defined?(Wice::Defaults)
 
   Wice::Defaults::QUERY_DELETED_MESSAGE = "Saved query deleted."
   Wice::Defaults::QUERY_SAVED_MESSAGE   = "Query saved."
-
+  
+  Wice::Defaults::SELECT_ALL   = "Select all"
+  Wice::Defaults::DESELECT_ALL = "Remove selection"
+  
   ########    Messages END      ########
 
 
