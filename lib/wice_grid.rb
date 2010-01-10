@@ -69,6 +69,7 @@ module Wice
         :page                 => 1,
         :per_page             => Defaults::PER_PAGE,
         :saved_query          => nil,
+        :select               => nil,
         :total_entries        => nil
       }
 
@@ -212,6 +213,7 @@ module Wice
 
       @ar_options[:joins]   = @options[:joins]
       @ar_options[:include] = @options[:include]
+      @ar_options[:select]  = @options[:select]
     end
 
     def read  #:nodoc:

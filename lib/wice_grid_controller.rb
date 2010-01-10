@@ -49,8 +49,9 @@ module Wice
     #   with a single parameter which is a Proc object. Once called, the object returns a list of all records of the current selection
     #   throughout all pages. See section "Integration With The Application" in the README.
     # * <tt>:total_entries</tt> - If not specified, <tt>will_paginate</tt> will run a <tt>select count</tt>
-    #   query to calculate the total number of entries. If specified, the value is passed on to <tt>:total_entries</tt> of 
-    #   will_paginate's <tt>paginate</tt> method.    
+    # * <tt>:select</tt> - ActiveRecord <tt>:select</tt> option. Please do not forget that <tt>:select</tt> is ignored
+    #   when <tt>:include</tt> is present. It is unlikely you would need <tt>:select</tt> with WiceGrid, but if you do, 
+    #   use it with care :)
     #
     # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting
