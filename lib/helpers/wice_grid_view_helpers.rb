@@ -512,6 +512,15 @@ module Wice
                              %/ })\n/ 
       end
 
+      if rendering.contains_a_text_input?
+        cached_javascript <<
+          %! $$('div##{grid.name}.wice_grid_container .wice_grid_filter_row input[type=text]').each(function(e){\n! +
+          %!   e.observe('keydown', function(event){\n! +
+          %!     if (event.keyCode == 13) {#{grid.name}.process()}\n! +
+          %!   })\n! +
+          %! }) !
+      end
+
       content << javascript_tag(
         %/ document.observe("dom:loaded", function() {\n/ +
         %/ #{prototype_and_js_version_check}\n/ +

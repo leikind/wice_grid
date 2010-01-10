@@ -54,6 +54,10 @@ module Wice
       filter_columns(filter).each{|col| yield col}
     end
 
+    def contains_a_text_input?
+      filter_columns(:in_html).detect(&:contains_a_text_input)
+    end
+
     def each_column_aware_of_one_last_one(filter = nil)  #:nodoc:
       cols = filter_columns(filter)
       cols[0..-2].each{|col| yield col, false}
@@ -286,7 +290,6 @@ module Wice
         options.delete(:class)
       end
 
-
       if block.nil?
         if ! options[:attribute_name].blank?
           block = lambda{|obj| obj.send(options[:attribute_name])}
@@ -356,7 +359,6 @@ module Wice
       end
       add_column(vc)
     end
-    #WTF end
 
     # Optional method inside the +grid+ block, to which every ActiveRecord instance is injected, just like +column+. Unlike +column+, it returns
     # a hash which will be used as HTML attributes for the row with the given ActiveRecord instance.

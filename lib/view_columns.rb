@@ -14,6 +14,8 @@ module Wice
 
     attr_accessor :cell_rendering_block, :grid, :css_class, :table_name, :main_table, :model_class, :custom_filter
 
+    attr_reader :contains_a_text_input
+
     def initialize(block, options, grid_obj, tname, mtable, cfilter)  #:nodoc:
       self.cell_rendering_block = block
       self.grid           = grid_obj
@@ -31,10 +33,6 @@ module Wice
 
     def css_class #:nodoc:
       @css_class || ''
-    end
-
-    def enter_key_handler #:nodoc:
-      @enter_key_handler ||= "if (event.keyCode == 13) {#{grid.name}.process()}"
     end
 
     def yield_declaration_of_column_filter #:nodoc:
@@ -183,13 +181,13 @@ module Wice
     @@handled_type[:integer] = self
 
     def render_filter_internal(params) #:nodoc:
+      @contains_a_text_input = true
 
       @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:fr => '')
       @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:to => '')
 
-
-      text_field_tag(parameter_name,  params[:fr], :size => 3, :onkeydown=>enter_key_handler, :id => @dom_id) +
-      text_field_tag(parameter_name2, params[:to], :size => 3, :onkeydown=>enter_key_handler, :id => @dom_id2)
+      text_field_tag(parameter_name,  params[:fr], :size => 3, :id => @dom_id) +
+      text_field_tag(parameter_name2, params[:to], :size => 3, :id => @dom_id2)
     end
 
     def yield_declaration_of_column_filter #:nodoc:
@@ -374,13 +372,13 @@ module Wice
     attr_accessor :negation
 
     def render_filter_internal(params) #:nodoc:
-
+      @contains_a_text_input = true
       if negation
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:v => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:n => '')
 
         '<div class="text_filter_container">' +
-          text_field_tag(parameter_name, params[:v], :size => 8, :onkeydown=>enter_key_handler, :id => @dom_id) +
+          text_field_tag(parameter_name, params[:v], :size => 8, :id => @dom_id) +
           if defined?(::Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! ::Wice::Defaults::NEGATION_CHECKBOX_LABEL.blank?
             ::Wice::Defaults::NEGATION_CHECKBOX_LABEL
           else
@@ -393,7 +391,7 @@ module Wice
           '</div>'
       else
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query('')
-        text_field_tag(parameter_name, params, :size => 8, :onkeydown=>enter_key_handler, :id => @dom_id)
+        text_field_tag(parameter_name, params, :size => 8, :id => @dom_id)
       end
     end
 
