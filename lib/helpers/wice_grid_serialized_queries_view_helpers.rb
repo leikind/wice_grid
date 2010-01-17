@@ -33,17 +33,18 @@ module Wice
         else
           ''
         end +
-        javascript_tag do
-          %/
-          function #{grid_name}_save_query(){
-            if ( typeof(#{grid_name}) != "undefined")
-                #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})
-          } /
-        end +
         text_field_tag(id_and_name,  '',
-          :size => 20, :onkeydown=>'', :id => id_and_name,
-          :onkeydown=>"if (event.keyCode == 13) {#{grid_name}_save_query()}") +
-        button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +  '</div>'
+          :size => 20, :onkeydown=>'', :id => id_and_name) +
+        button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +  '</div>' +
+        javascript_tag do
+          %/ function #{grid_name}_save_query(){\n/ +
+          %/  if ( typeof(#{grid_name}) != "undefined")\n/ +
+          %/      #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})\n/ +
+          %/}\n/ +
+          %/ $('#{id_and_name}').observe('keydown', function(event){\n/ +
+          %/    if (event.keyCode == 13) #{grid_name}_save_query();\n/ +
+          %/ })\n/
+        end
     end
 
     def saved_queries_list(grid_name, saved_query = nil, extra_parameters = nil)  #:nodoc:

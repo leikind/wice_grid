@@ -9,7 +9,6 @@ namespace "wice_grid" do
           t.column :name,      :string
           t.column :grid_name, :string
           t.column :query,     :text
-          t.column :grid_hash, :string
 
           t.timestamps
         end

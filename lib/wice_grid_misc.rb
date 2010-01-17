@@ -4,7 +4,6 @@ module Wice
 
     @@model_validated = false
 
-
     # checks whether the class is a valid storage for saved queries
     def validate_query_model(query_store_model)  #:nodoc:
       unless query_store_model.respond_to?(:list)
