@@ -939,6 +939,8 @@ This feature also works with <tt>:erb_mode => true</tt>.
 If a column was declared with <tt>:detach_with_id</tt>, but never output with +grid_filter+, filtering the grid in development mode will result
 in an warning javascript message and the missing filter will be ignored. There is no such message in production.
 
+<tt>grid</tt> parameter <tt>:show_filter</tt> must not be set to <tt>:no</tt> for detached filters to work.
+
 ==== How Does It Work? (For the interested)
 
 When there is at least one column with <tt>:detach_with_id</tt>, the generated HTML code is stored in a buffer, code for detached filters is stored
