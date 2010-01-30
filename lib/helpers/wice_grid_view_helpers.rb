@@ -526,9 +526,13 @@ module Wice
         %/ #{prototype_and_js_version_check}\n/ +
         %/ #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
         %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n/ +
-        rendering.select_for(:in_html) do |vc|
-          vc.attribute_name and not vc.no_filter
-        end.collect{|column| column.yield_javascript}.join("\n") +
+        if no_filters_at_all
+          ''
+        else
+          rendering.select_for(:in_html) do |vc|
+            vc.attribute_name and not vc.no_filter
+          end.collect{|column| column.yield_javascript}.join("\n")
+        end +
         "\n" + cached_javascript.compact.join('') +
         '})'
       )
@@ -612,7 +616,8 @@ module Wice
         raise WiceGridArgumentError.new("grid_filter: You have attempted to run 'grid_filter' before 'grid'. Read about detached filters in the documentation.")
       end
       if grid.output_buffer == true
-        raise WiceGridArgumentError.new("grid_filter: You have defined no detached filters. Read about detached filters in the documentation.")
+        raise WiceGridArgumentError.new("grid_filter: You have defined no detached filters, or you try use detached filters with" +
+          ":show_filters => :no (set :show_filters to :always in this case). Read about detached filters in the documentation.")
       end
 
       grid.output_buffer.filter_for filter_key
