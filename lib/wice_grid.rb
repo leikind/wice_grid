@@ -159,13 +159,13 @@ module Wice
     def declare_column(column_name, model_class, custom_filter_active, table_alias)  #:nodoc:
       if model_class # this is an included table
         column = @table_column_matrix.get_column_by_model_class_and_column_name(model_class, column_name)
-        raise WiceGridArgumentError.new("Сolumn '#{column_name}' is not found in table '#{model_class.table_name}'!") if column.nil?
+        raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model_class.table_name}'!") if column.nil?
         main_table = false
         table_name = model_class.table_name
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
         if column.nil?
-          raise WiceGridArgumentError.new("Сolumn '#{column_name}' is not found in table '#{@klass.table_name}'! " +
+          raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " +
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " +
             "the grid, and specify :model_class in column declaration.")
         end
