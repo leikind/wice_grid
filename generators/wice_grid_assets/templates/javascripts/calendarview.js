@@ -695,23 +695,23 @@ Calendar.defaultDateTimeFormat = '%Y-%m-%d %H:%M';
 Calendar.init =  function(){
 
   Calendar.DAY_NAMES = new Array(
+    Calendar.getMessageFor('sunday'),
     Calendar.getMessageFor('monday'),
     Calendar.getMessageFor('tuesday'),
     Calendar.getMessageFor('wednesday'),
     Calendar.getMessageFor('thursday'),
     Calendar.getMessageFor('friday'),
-    Calendar.getMessageFor('saturday'),
-    Calendar.getMessageFor('sunday')
+    Calendar.getMessageFor('saturday')
   );
 
   Calendar.SHORT_DAY_NAMES = new Array(
+    Calendar.getMessageFor('sunday_short'),
     Calendar.getMessageFor('monday_short'),
     Calendar.getMessageFor('tuesday_short'),
     Calendar.getMessageFor('wednesday_short'),
     Calendar.getMessageFor('thursday_short'),
     Calendar.getMessageFor('friday_short'),
-    Calendar.getMessageFor('saturday_short'),
-    Calendar.getMessageFor('sunday_short')
+    Calendar.getMessageFor('saturday_short')
   );
 
   Calendar.MONTH_NAMES = new Array(
