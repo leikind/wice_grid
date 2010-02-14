@@ -20,7 +20,7 @@ module Wice
       options.merge!(opts)
 
       [:attribute_name, :value].each do |key|
-        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_foo: :#{key} is a mandatory argument") unless options[key]
+        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
       end
 
       attr_name = if options[:model_class]
