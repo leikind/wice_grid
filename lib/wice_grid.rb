@@ -319,7 +319,9 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model_klass.find(:all, :select => 'distinct ' + column.name).collect{|ar| ar[column.name] }.reject(&:blank?).map{|i|[i,i]}
+      res = column.model_klass.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar| 
+        ar[column.name] 
+      }.reject{|e| e.blank?}.map{|i|[i,i]}
     end
 
 
@@ -338,7 +340,7 @@ module Wice
         else
           [i,i]
         end
-      }
+      }.sort{|a,b| a[1]<=>b[1]}
     end
 
     def output_csv? #:nodoc:
