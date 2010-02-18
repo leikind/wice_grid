@@ -340,7 +340,7 @@ module Wice
         else
           [i,i]
         end
-      }.sort{|a,b| a[1]<=>b[1]}
+      }.sort{|a,b| a[0]<=>b[0]}
     end
 
     def output_csv? #:nodoc:
