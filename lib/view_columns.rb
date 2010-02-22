@@ -98,7 +98,7 @@ module Wice
     end
 
     def capable_of_hosting_filter_related_icons?  #:nodoc:
-      self.attribute_name.blank? && ! self.filter_shown?
+      self.attribute_name.blank? && self.column_name.blank? && ! self.filter_shown?
     end
 
     protected
