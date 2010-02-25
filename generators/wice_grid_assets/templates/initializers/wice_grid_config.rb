@@ -151,8 +151,8 @@ if defined?(Wice::Defaults)
   Wice::Defaults::BOOLEAN_FILTER_TRUE_LABEL  = 'yes'
   Wice::Defaults::BOOLEAN_FILTER_FALSE_LABEL = 'no'
 
-  Wice::Defaults::PREVIOUS_LABEL = '« Previous'
-  Wice::Defaults::NEXT_LABEL     = 'Next »'
+  Wice::Defaults::PREVIOUS_LABEL = '&#171; Previous'
+  Wice::Defaults::NEXT_LABEL     = 'Next &#187;'
 
   # Title of the icon clicking on which will show the calendar to set the FROM date.
   Wice::Defaults::DATE_SELECTOR_TOOLTIP_FROM = 'From'
