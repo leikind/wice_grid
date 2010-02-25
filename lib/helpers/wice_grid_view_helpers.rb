@@ -226,6 +226,8 @@ module Wice
       sorting_dependant_row_cycling = options[:sorting_dependant_row_cycling]
 
       content = GridOutputBuffer.new
+      # Ruby 1.9.1
+      content.force_encoding('UTF-8') if content.respond_to?(:force_encoding)
 
       content << %!<div class="wice_grid_container" id="#{grid.name}"><h3 id="#{grid.name}_title">!
       content << h(grid.saved_query.name) if grid.saved_query
