@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module Wice
   class TableColumnMatrix < Hash #:nodoc:
 

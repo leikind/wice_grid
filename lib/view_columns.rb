@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module Wice
 
   class ViewColumn
@@ -391,7 +392,7 @@ module Wice
           '</div>'
       else
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query('')
-        text_field_tag(parameter_name, params, :size => 8, :id => @dom_id)
+        text_field_tag(parameter_name, (params.blank? ? '' : params), :size => 8, :id => @dom_id)
       end
     end
 

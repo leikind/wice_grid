@@ -1,6 +1,12 @@
-action_column - Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, delete
-the selected records.
+Ruby 1.9.1 compliance
 
+Dropdowns generated with :custom_filter => :auto and :custom_filter => [method chain] are now ordered by option labels
+
+how_filters => false is the same as :show_filters => :no and :show_filters => true is the same as :show_filters => :always
+
+action_column - Adds a column with checkboxes for each record. 
+Useful for actions with multiple records, for example, delete
+the selected records.
 
 using merge_conditions to merge conditions :)
 

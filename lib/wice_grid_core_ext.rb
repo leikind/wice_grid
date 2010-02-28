@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module WGHashExtensions  #:nodoc:
 
   def self.included(base)  #:nodoc:

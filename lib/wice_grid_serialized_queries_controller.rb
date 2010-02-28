@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module Wice
   class <<self
     # Used in routes.rb to define routes to the query processing controller.
