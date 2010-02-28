@@ -461,20 +461,21 @@ module Wice
       def special_value(str)   #:nodoc:
         str =~ /^\s*(not\s+)?null\s*$/i
       end
-    end
+      
+      # create a Time instance out of parameters
+      def params_2_datetime(par)   #:nodoc:
+        return nil if par.blank?
+        params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect{|v| v.blank? ? nil : v.to_i}
+        Time.local(*params)
+      end
 
-    # create a Time instance out of parameters
-    def params_2_datetime(par)   #:nodoc:
-      return nil if par.blank?
-      params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect{|v| v.blank? ? nil : v.to_i}
-      Time.local(*params)
-    end
-
-    # create a Date instance out of parameters
-    def params_2_date(par)   #:nodoc:
-      return nil if par.blank?
-      params =  [par[:year], par[:month], par[:day]].collect{|v| v.blank? ? nil : v.to_i}
-      Date.civil(*params)
+      # create a Date instance out of parameters
+      def params_2_date(par)   #:nodoc:
+        return nil if par.blank?
+        params =  [par[:year], par[:month], par[:day]].collect{|v| v.blank? ? nil : v.to_i}
+        Date.civil(*params)
+      end
+      
     end
   end
 
