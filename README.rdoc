@@ -30,6 +30,8 @@ WiceGrid does not use AJAX calls to reload itself, instead simple GET requests a
 
 WiceGrid is known to work with MySQL and Postgres.
 
+WiceGrid is compliant with Ruby 1.9.1.
+
 === Examples
 
 This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online ( http://grid.leikind.org ), or just view the code ( http://github.com/leikind/wice_grid_examples ).
