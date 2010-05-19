@@ -230,9 +230,9 @@ module Wice
       # Ruby 1.9.1
       content.force_encoding('UTF-8') if content.respond_to?(:force_encoding)
 
-      content << %!<div class="wice_grid_container" id="#{grid.name}"><h3 id="#{grid.name}_title">!
-      content << h(grid.saved_query.name) if grid.saved_query
-      content << "</h3><table #{tag_options(table_html_attrs, true)}>"
+      content << %!<div class="wice_grid_container" id="#{grid.name}"><div id="#{grid.name}_title">!
+      content << content_tag(:h3, grid.saved_query.name) if grid.saved_query
+      content << "</div><table #{tag_options(table_html_attrs, true)}>"
       content << "<thead>"
 
       no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?) ? true: false
