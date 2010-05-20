@@ -192,6 +192,16 @@ module Wice
       return if @ar_options_formed
       @ar_options_formed = true unless opts[:forget_generated_options]
 
+      # validate @status[:order_direction]
+      @status[:order_direction] = case @status[:order_direction]
+      when /desc/i
+        'desc'
+      when /asc/i
+        'asc'
+      else
+        ''
+      end
+
       # conditions
       if @table_column_matrix.generated_conditions.size == 0
         @status.delete(:f)
@@ -397,7 +407,7 @@ module Wice
       end
 
       if custom_order.blank?
-        fully_qualified_column_name
+        ActiveRecord::Base.sanitize(fully_qualified_column_name)
       else
         if custom_order.is_a? String
           custom_order.gsub(/\?/, fully_qualified_column_name)
