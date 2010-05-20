@@ -530,7 +530,7 @@ module Wice
       content << javascript_tag(
         %/ document.observe("dom:loaded", function() {\n/ +
         %/ #{prototype_and_js_version_check}\n/ +
-        %/ var #{grid.name} = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
+        %/ window['#{grid.name}'] = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
         %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n/ +
         if no_filters_at_all
           ''
