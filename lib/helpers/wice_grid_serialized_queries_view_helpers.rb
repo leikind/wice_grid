@@ -25,7 +25,7 @@ module Wice
         parameters << [ CGI.unescape({:extra => {k => ''}}.to_query.sub(/=$/,'')) , v.to_s ]
       end
       parameters <<  ['authenticity_token', form_authenticity_token]
-      %! <div class="wice_grid_query_panel"><h3>#{WiceGridNlMessageProvider.get_message(:SAVED_QUERY_PANEL_TITLE)}</h3>! +
+      (%! <div class="wice_grid_query_panel"><h3>#{WiceGridNlMessageProvider.get_message(:SAVED_QUERY_PANEL_TITLE)}</h3>! +
         saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
         %!<div id="#{grid_name}_notification_messages"  onmouseover="new Effect.Fade(this)"></div>! +
         if block_given?
@@ -45,7 +45,7 @@ module Wice
           %/ $('#{id_and_name}').observe('keydown', function(event){\n/ +
           %/    if (event.keyCode == 13) #{grid_name}_save_query();\n/ +
           %/ })\n/
-        end
+        end).html_safe
     end
 
     def saved_queries_list(grid_name, saved_query = nil, extra_parameters = nil)  #:nodoc:

@@ -240,9 +240,9 @@ module Wice
         end
       end
 
-      '<div class="custom_dropdown_container">' +
+      '<div class="custom_dropdown_container">'.html_safe_if_needed +
       content_tag(:select, options_for_select(@custom_filter, params), select_options) +
-      select_toggle + '</div>'
+      select_toggle.html_safe_if_needed + '</div>'.html_safe_if_needed
     end
 
     def yield_declaration_of_column_filter #:nodoc:
@@ -331,7 +331,6 @@ module Wice
         prepare_for_calendar_filter
         render_calendar_filter_internal(params)
       end
-
     end
 
     def yield_declaration_of_column_filter #:nodoc:
