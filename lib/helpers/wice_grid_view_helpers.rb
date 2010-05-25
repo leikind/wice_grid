@@ -687,11 +687,12 @@ module Wice
       html, js = pagination_info(grid, allow_showing_all_records)
 
       [will_paginate(grid.resultset, 
+        :renderer       => 'Wice::LinkRenderer',
         :previous_label => WiceGridNlMessageProvider.get_message(:PREVIOUS_LABEL),
         :next_label     => WiceGridNlMessageProvider.get_message(:NEXT_LABEL),
         :param_name     => "#{grid.name}[page]", 
         :params         => extra_request_parameters).to_s +
-        ' <div class="pagination_status">' + html + '</div>', js]
+        (' <div class="pagination_status">' + html + '</div>').html_safe_if_needed, js]
     end
 
 
