@@ -762,9 +762,5 @@ module Wice
       [html, js]
     end
 
-    if self.respond_to?(:safe_helper)
-      safe_helper :grid_filter
-    end
-
   end
 end

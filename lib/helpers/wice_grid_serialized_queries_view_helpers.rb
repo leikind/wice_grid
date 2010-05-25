@@ -80,9 +80,5 @@ module Wice
       end.join('') + '</ul>'
     end
 
-    if self.respond_to?(:safe_helper)
-      safe_helper :saved_queries_panel
-    end
-
   end
 end
