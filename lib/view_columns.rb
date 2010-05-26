@@ -240,9 +240,9 @@ module Wice
         end
       end
 
-      '<div class="custom_dropdown_container">' +
+      '<span class="custom_dropdown_container">' +
       content_tag(:select, options_for_select(@custom_filter, params), select_options) +
-      select_toggle + '</div>'
+      select_toggle + '</span>'
     end
 
     def yield_declaration_of_column_filter #:nodoc:
