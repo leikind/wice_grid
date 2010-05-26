@@ -206,8 +206,8 @@ module Wice
       if @table_column_matrix.generated_conditions.size == 0
         @status.delete(:f)
       end
-      
-      @ar_options[:conditions] = klass.merge_conditions(@status[:conditions], * @table_column_matrix.conditions)
+
+      @ar_options[:conditions] = klass.send(:merge_conditions, @status[:conditions], * @table_column_matrix.conditions )
       # conditions processed
 
       if (! opts[:skip_ordering]) && @status[:order]
