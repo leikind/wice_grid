@@ -49,7 +49,7 @@ module Wice
 
       grid.get_state_as_parameter_value_pairs(true).collect{|param_name, value|
         hidden_field_tag(param_name, value)
-      }.join("\n")
+      }.join("\n").html_safe_if_needed
     end
 
     def dump_state(grid)  #:nodoc:
@@ -143,10 +143,5 @@ module Wice
       res
     end
 
-    if self.respond_to?(:safe_helper)
-      safe_helper :wice_grid_custom_filter_params, :dump_filter_parameters_as_hidden_fields, 
-        :dump_state, :scaffolded_grid, :include_wice_grid_assets, :names_of_wice_grid_javascripts,
-        :names_of_wice_grid_stylesheets
-    end
   end
 end
