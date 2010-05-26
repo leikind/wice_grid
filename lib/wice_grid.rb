@@ -19,7 +19,7 @@ module Wice
 
   class WiceGrid
 
-    attr_reader :klass, :name, :resultset, :custom_order, :after, :query_store_model
+    attr_reader :klass, :name, :resultset, :custom_order, :query_store_model
     attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :saved_query
     attr_writer :renderer
     attr_accessor :output_buffer, :view_helper_finished
@@ -41,9 +41,13 @@ module Wice
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
       end
 
-      # validate :after
-      unless [NilClass, Symbol, Proc].index(opts[:after].class)
-        raise WiceGridArgumentError.new(":after must be either a Proc or Symbol object")
+      Wice.deprecated_call(:after, :with_resultset, opts)
+
+      # validate :with_resultset & :with_paginated_resultset
+      [:with_resultset, :with_paginated_resultset].each do |callback_symbol|
+        unless [NilClass, Symbol, Proc].index(opts[callback_symbol].class)
+          raise WiceGridArgumentError.new(":#{callback_symbol} must be either a Proc or Symbol object")
+        end
       end
 
       opts[:order_direction].downcase! if opts[:order_direction].kind_of?(String)
@@ -58,7 +62,8 @@ module Wice
 
       # options that are understood
       @options = {
-        :after                => nil,
+        :with_paginated_resultset  => nil,
+        :with_resultset       => nil,
         :conditions           => nil,
         :csv_file_name        => nil,
         :custom_order         => {},
@@ -81,8 +86,6 @@ module Wice
       @options.merge!(opts)
       @export_to_csv_enabled = @options[:enable_export_to_csv]
       @csv_file_name = @options[:csv_file_name]
-
-      @after = @options[:after]
 
       case @name = @options[:name]
       when String
@@ -123,6 +126,13 @@ module Wice
       @method_scoping = @klass.send(:scoped_methods)[-1]
     end
 
+    def with_paginated_resultset(&callback)
+      @options[:with_paginated_resultset] = callback
+    end
+
+    def with_resultset(&callback)
+      @options[:with_resultset] = callback
+    end
 
     def process_loading_query #:nodoc:
       @saved_query = nil
@@ -233,16 +243,9 @@ module Wice
       with_exclusive_scope do
         @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
       end
-      
-      if self.after
-        lazy_grid_caller = lambda{self.send(:resultset_without_paging_with_user_filters)}
-        if self.after.is_a?(Proc)
-          self.after.call(lazy_grid_caller)
-        elsif self.after.is_a?(Symbol)
-          @controller.send(self.after, lazy_grid_caller)
-        end
-      end
+      invoke_resultset_callbacks
     end
+    
 
     # core workflow methods END
 
@@ -387,12 +390,39 @@ module Wice
     # Can be called only after the view helper.
     # See section "Integration With The Application" in the README.
     def selected_records
-      raise WiceGridException.new("all_records can only be called only after the grid view helper") unless self.view_helper_finished
+      STDERR.puts "WiceGrid: Parameter :#{selected_records} is deprecated, use :#{all_pages_records} or :#{current_page_records} instead!"
+      all_pages_records
+    end
+
+    # TO DO
+    def all_pages_records
+      raise WiceGridException.new("all_pages_records can only be called only after the grid view helper") unless self.view_helper_finished
       resultset_without_paging_with_user_filters
     end
 
+    # TO DO
+    def current_page_records
+      raise WiceGridException.new("current_page_records can only be called only after the grid view helper") unless self.view_helper_finished
+      @resultset
+    end
+
+
 
     protected
+
+    def invoke_resultset_callback(callback, argument) #:nodoc:
+      case callback
+      when Proc
+        callback.call(argument)
+      when Symbol
+        @controller.send(callback, argument)
+      end
+    end
+
+    def invoke_resultset_callbacks #:nodoc:
+      invoke_resultset_callback(@options[:with_paginated_resultset], @resultset)
+      invoke_resultset_callback(@options[:with_resultset], lambda{self.send(:resultset_without_paging_with_user_filters)})
+    end
 
     def with_exclusive_scope #:nodoc:
       if @method_scoping
