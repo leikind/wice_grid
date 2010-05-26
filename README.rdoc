@@ -72,6 +72,12 @@ To include WiceGrid javascript and stylesheet files to the page use helper +incl
 
   <%= include_wice_grid_assets %>
 
+The default behavior of +include_wice_grid_assets+ is a bit magical in the sense that it
+produces no output if the page contains no grids, so don't panic if you see no WiceGrid includes.
+If you prefer to always have WiceGrid stylesheet and javascript, use
+
+  <%= include_wice_grid_assets :load_on_demand => false %>
+
 The simplest example of a WiceGrid for one simple DB table called ApplicationAccount is the following:
 
 Controller:
