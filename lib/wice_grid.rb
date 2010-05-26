@@ -510,8 +510,11 @@ module Wice
         current_parameter_name = alias_or_table_name(table_alias) + '.' + self.name
       end
 
+      # Preprocess incoming parameters for datetime, if what's coming in is 
+      # a datetime (with custom_filter it can be anything else, and not 
+      # the datetime hash {:fr => ..., :to => ...})
       if @request_params
-        if self.type == :datetime || self.type == :timestamp
+        if (self.type == :datetime || self.type == :timestamp) && @request_params.is_a?(Hash)
           [:fr, :to].each do |sym|
             if @request_params[sym]
               if @request_params[sym].is_a?(String)
@@ -524,8 +527,10 @@ module Wice
 
         end
 
-        if self.type == :date
-
+        # Preprocess incoming parameters for date, if what's coming in is 
+        # a date (with custom_filter it can be anything else, and not 
+        # the date hash {:fr => ..., :to => ...})
+        if self.type == :date && @request_params.is_a?(Hash)
           [:fr, :to].each do |sym|
             if @request_params[sym]
               if @request_params[sym].is_a?(String)
