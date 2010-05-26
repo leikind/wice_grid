@@ -165,7 +165,7 @@ class Array  #:nodoc:
 end
 
 module StringExt
-  def html_safe_if_needed
+  def html_safe_if_necessary
     if respond_to?(:html_safe)
       html_safe
     else

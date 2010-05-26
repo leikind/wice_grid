@@ -20,7 +20,7 @@ module Wice
 
     def to_s
       if @first_output || ! @stubborn_output_mode
-        super.html_safe_if_needed
+        super.html_safe_if_necessary
       else
         @first_output = true
         ''

@@ -240,9 +240,9 @@ module Wice
         end
       end
 
-      '<span class="custom_dropdown_container">'.html_safe_if_needed +
+      '<span class="custom_dropdown_container">'.html_safe_if_necessary +
       content_tag(:select, options_for_select(@custom_filter, params), select_options) +
-      select_toggle.html_safe_if_needed + '</span>'.html_safe_if_needed
+      select_toggle.html_safe_if_necessary + '</span>'.html_safe_if_necessary
     end
 
     def yield_declaration_of_column_filter #:nodoc:

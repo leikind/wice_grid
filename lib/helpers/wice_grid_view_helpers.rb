@@ -324,7 +324,7 @@ module Wice
           rendering.each_column(:in_html) do |column|
             if column.filter_shown?
               filter_html_code, filter_js_code = column.render_filter
-              filter_html_code = filter_html_code.html_safe_if_needed
+              filter_html_code = filter_html_code.html_safe_if_necessary
               cached_javascript << filter_js_code
               content.add_filter(column.detach_with_id, filter_html_code)
             end
@@ -344,7 +344,7 @@ module Wice
             if column.filter_shown?
 
               filter_html_code, filter_js_code = column.render_filter
-              filter_html_code = filter_html_code.html_safe_if_needed
+              filter_html_code = filter_html_code.html_safe_if_necessary
               cached_javascript << filter_js_code
               if column.detach_with_id
                 content.stubborn_output_mode = true
@@ -694,7 +694,7 @@ module Wice
         :next_label     => WiceGridNlMessageProvider.get_message(:NEXT_LABEL),
         :param_name     => "#{grid.name}[page]", 
         :params         => extra_request_parameters).to_s +
-        (' <div class="pagination_status">' + html + '</div>').html_safe_if_needed, js]
+        (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary, js]
     end
 
 

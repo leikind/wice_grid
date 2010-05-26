@@ -9,7 +9,7 @@ module Wice
       links.push    page_link_or_span(@collection.next_page,     'disabled next_page', @options[:next_label])
 
       html = links.join(@options[:separator])
-      @options[:container] ? @template.content_tag(:div, html.html_safe_if_needed, html_attributes) : html
+      @options[:container] ? @template.content_tag(:div, html.html_safe_if_necessary, html_attributes) : html
     end
 
   end
