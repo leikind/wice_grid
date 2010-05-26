@@ -159,14 +159,6 @@ module Wice
         content = grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons)
       end
 
-      if grid.after
-        lazy_grid_caller = lambda{grid.send(:resultset_without_paging_with_user_filters)}
-        if grid.after.is_a?(Proc)
-          grid.after.call(lazy_grid_caller)
-        elsif grid.after.is_a?(Symbol)
-          controller.send(grid.after, lazy_grid_caller)
-        end
-      end
       grid.view_helper_finished = true
       prepare_result(rendering, grid, content, block)
     end

@@ -233,6 +233,15 @@ module Wice
       with_exclusive_scope do
         @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
       end
+      
+      if self.after
+        lazy_grid_caller = lambda{self.send(:resultset_without_paging_with_user_filters)}
+        if self.after.is_a?(Proc)
+          self.after.call(lazy_grid_caller)
+        elsif self.after.is_a?(Symbol)
+          @controller.send(self.after, lazy_grid_caller)
+        end
+      end
     end
 
     # core workflow methods END
