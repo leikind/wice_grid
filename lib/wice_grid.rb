@@ -62,8 +62,6 @@ module Wice
 
       # options that are understood
       @options = {
-        :with_paginated_resultset  => nil,
-        :with_resultset       => nil,
         :conditions           => nil,
         :csv_file_name        => nil,
         :custom_order         => {},
@@ -78,6 +76,8 @@ module Wice
         :saved_query          => nil,
         :select               => nil,
         :total_entries        => nil
+        :with_paginated_resultset  => nil,
+        :with_resultset       => nil
       }
 
       # validate parameters
@@ -126,10 +126,15 @@ module Wice
       @method_scoping = @klass.send(:scoped_methods)[-1]
     end
 
+    # A block executed from within the plugin to process records of the current page.
+    # The argument to the callback is the array of the records. See the README for more details.
     def with_paginated_resultset(&callback)
       @options[:with_paginated_resultset] = callback
     end
 
+    # A block executed from within the plugin to process all records browsable through 
+    # all pages with the current filters. The argument to 
+    # the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     def with_resultset(&callback)
       @options[:with_resultset] = callback
     end
@@ -386,21 +391,19 @@ module Wice
     end
 
 
-    # Returns a list of all records of the current selection throughout all pages.
-    # Can be called only after the view helper.
-    # See section "Integration With The Application" in the README.
-    def selected_records
+    def selected_records #:nodoc:
       STDERR.puts "WiceGrid: Parameter :#{selected_records} is deprecated, use :#{all_pages_records} or :#{current_page_records} instead!"
       all_pages_records
     end
 
-    # TO DO
+    # Returns the list of objects browsable through all pages with the current filters. 
+    # Should only be called after the +grid+ helper.
     def all_pages_records
       raise WiceGridException.new("all_pages_records can only be called only after the grid view helper") unless self.view_helper_finished
       resultset_without_paging_with_user_filters
     end
 
-    # TO DO
+    # Returns the list of objects displayed on current page. Should only be called after the +grid+ helper.
     def current_page_records
       raise WiceGridException.new("current_page_records can only be called only after the grid view helper") unless self.view_helper_finished
       @resultset

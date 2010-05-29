@@ -969,50 +969,114 @@ Using this trick you have to deal with the parameters correctly, mind that Proto
   <%= javascript_include_tag *([:defaults] + names_of_wice_grid_javascripts + [ 'ui', 'swfobject', {:cache => true}]) %>
 
 
-=== Integration With The Application
+=== Access to Records From Outside The Grid
 
-If it is needed to retrieve the objects of the current selection that the user has selected with filters, for use outside of the grid,
-WiceGrid offers two options.
+There are two ways you can access the records outside the grid - using methods of the WiceGrid object and using callbacks.
 
+==== Accessing Records Via The WiceGrid Object
 
-==== Accessing selected records from the view
-
-Use method +selected_records+ of a WiceGrid instance:
+Method +current_page_records+ returns exactly the same list of objects displayed on page:
 
   <%= grid(@tasks_grid) do |g|
     ...
   end -%>
 
-  <% if params[:process_selected_tasks] 
-    selected = @tasks_grid.selected_records %>
-    <p><%= selected.size %> selected: <%= selected.map(&:id).to_sentence %></p>
-  <% end -%>
+  <p>
+    IDs of records on the current page:
+    <%= @tasks_grid.current_page_records.map(&:id).to_sentence %>
+  </p>
 
-This call can only be used after the view helper.
+Method +all_pages_records+ returns a list of objects browsable through all pages with the current filters:
 
-==== Accessing selected records from the controller
+  <%= grid(@tasks_grid) do |g|
+    ...
+  end -%>
 
-Because the real database work is done from the view helper, to access the selected records it is required to set up a callback to a controller
-method. +initialize_grid+ accepts parameter <tt>:after</tt> to setup a callback to a method or a Proc object which will be called
-with a parameter giving access to the selection of objects.
+  <p>
+    IDs of all records:
+    <%= @tasks_grid.all_pages_records.map(&:id).to_sentence %>
+  </p>
+
+Mind that this helper results in an additional SQL query.
 
 
-The code to implement this use case might look in the following way:
+Because of the current implementation of WiceGrid these helpers work only after the declaration of the grid in the view.
+This is due to the lazy nature of WiceGrid - the actual call to the database is made during the execution of 
+the +grid+ helper, because to build the correct query columns declarations are required.
 
-  def index
-    @tasks_grid = initialize_grid(Task, :after => :process_selection)
+==== Accessing Records Via Callbacks
+
+It is possible to set up callbacks which are executed from within the plugin just after the call to the database.
+The callbacks are called before rendering the grid cells, so the results of this processing can be used in the grid.
+There are 3 ways you can set up such callbacks:
+
+Via a lambda object:
+
+  def index 
+    @tasks_grid = initialize_grid(Task,
+      :with_paginated_resultset => lambda do |records|
+        ...
+      end
+    )
+  end
+  
+Via a symbol which is the name of a controller method:
+
+  def index 
+    @tasks_grid = initialize_grid(Task,
+      :with_paginated_resultset => :process_selection
+    )
+  end
+  
+  def process_selection(records)
+    ...
   end
 
-  def process_selection(wrapper_lambda)
-    if params[:process_selected_tasks]
-      @selected_tasks = wrapper_lambda.call
-      # Do something with @selected_tasks
+Via a separate block:
+
+  def index 
+    @tasks_grid = initialize_grid(Task)
+
+    @tasks_grid.with_paginated_resultset do |records|
+      ...
     end
   end
 
-The object supplied to the callback is not the list of the selected objects but a Proc object that needs to be called to obtain this list.
-This is done so to avoid redundant SQL calls each time when the page with the grid is rendered;
-the list of objects is  <i>all pages</i> of the current filtered selection, and can be quite large.
+There are two callbacks: 
+
+* <tt>:with_paginated_resultset</tt> - used to process records of the current page
+* <tt>:with_resultset</tt> - used to process all records browsable through all pages with the current filters
+
+While the <tt>:with_paginated_resultset</tt> callback just receives the list of records, <tt>:with_resultset</tt>
+receives a lambda object which, when called, returns the list of all records:
+
+
+  def index 
+    @tasks_grid = initialize_grid(Task)
+
+    @tasks_grid.with_resultset do |wrapper|
+      all_records = wrapper.call
+      ...
+    end
+  end
+
+
+This lazy nature exists for performance reasons.
+Reading all records leads to an additional call, and there can be cases when processing all records should be triggered
+only under certain circumstances:
+
+  def index 
+    @tasks_grid = initialize_grid(Task)
+
+    @tasks_grid.with_resultset do |wrapper|
+      if params[:process_all_records]
+        all_records = wrapper.call
+        ...
+      end
+    end
+  end
+
+
 
 == Icons
 

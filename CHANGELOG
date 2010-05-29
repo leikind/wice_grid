@@ -1,3 +1,12 @@
+Method WiceGrid#selected_records and parameter :after were a bit of a mess and have been substituted by
+
+* WiceGrid#current_page_records returning records on the current page
+* WiceGrid#all_pages_records returning records browsable throughout all pages
+* :with_paginated_resultset - callback to process records on the current page
+* :with_resultset - callback to process records browsable throughout all pages
+
+Compliant with Rails 1.2.8 with or without rails_xss and erubis
+
 Ruby 1.9.1 compliance
 
 Dropdowns generated with :custom_filter => :auto and :custom_filter => [method chain] are now ordered by option labels
