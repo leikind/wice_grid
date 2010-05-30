@@ -75,7 +75,7 @@ module Wice
         :per_page             => Defaults::PER_PAGE,
         :saved_query          => nil,
         :select               => nil,
-        :total_entries        => nil
+        :total_entries        => nil,
         :with_paginated_resultset  => nil,
         :with_resultset       => nil
       }
