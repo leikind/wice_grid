@@ -55,7 +55,7 @@ module Wice
       filter_columns(filter).each{|col| yield col}
     end
 
-    def contains_a_text_input?
+    def contains_a_text_input?  #:nodoc:
       filter_columns(:in_html).detect(&:contains_a_text_input)
     end
 
@@ -120,7 +120,7 @@ module Wice
 
 
     # Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, deleting
-    # selected records. Please note that +action_column+ only creates the checkboxes and the 'Select All' and 
+    # selected records. Please note that +action_column+ only creates the checkboxes and the 'Select All' and
     # 'Deselect All' buttons, and the form itelf as well as processing the parameters should be taken care of
     # by the application code.
     #
@@ -128,15 +128,15 @@ module Wice
     #   The complete HTTP parameter is <tt>"#{grid_name}[#{param_name}][]"</tt>.
     #   The default param_name is 'selected'.
     # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
-    # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header. 
+    # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header.
     #   The default is +true+.
     # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
     def action_column(opts = {})
-      
+
       if @action_column_present
         raise Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
       end
-      
+
       options = {
         :param_name     => :selected,
         :td_html_attrs  => {},
@@ -155,34 +155,38 @@ module Wice
     #
     # +column+ is only used inside the block of the +grid+ method. See documentation for the +grid+ method for more details.
     #
-    # The only parameter is a hash of options. None of them is optional. If no options are supplied, the result will be a column with no
-    # name, no filtering and no sorting.
+    # The only parameter is a hash of options. None of them is optional. If no options are supplied, the result will be a
+    # column with no name, no filtering and no sorting.
     #
     # * <tt>:column_name</tt> - Name of the column.
     # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
     # * <tt>:class</tt> - a shortcut for <tt>:td_html_attrs => {:class => 'css_class'}</tt>
-    # * <tt>:attribute_name</tt> - name of a database column (which normally correspond to a model attribute with the same name). By default the
-    #   field is assumed to belong to the default table (see documentation for the +initialize_grid+ method). Parameter <tt>:model_class</tt>
-    #   allows to specify another table. Presence of this parameter
+    # * <tt>:attribute_name</tt> - name of a database column (which normally correspond to a model attribute with the
+    #   same name). By default the field is assumed to belong to the default table (see documentation for the
+    #   +initialize_grid+ method). Parameter <tt>:model_class</tt> allows to specify another table. Presence of
+    #   this parameter
     #   * adds sorting capabilities by this field
     #   * automatically creates a filter based on the type of the field unless parameter <tt>:no_filter</tt> is set to true.
     #     The following filters exist for the following types:
     #     * <tt>string</tt> - a text field
-    #     * <tt>integer</tt> and <tt>float</tt>  - two text fields to specify the range. Both limits or only one can be specified
-    #     * <tt>boolean</tt> - a dropdown list with 'yes', 'no', or '-'. These labels can be changed in <tt>lib/wice_grid_config.rb</tt>
+    #     * <tt>integer</tt> and <tt>float</tt>  - two text fields to specify the range. Both limits or only one
+    #       can be specified
+    #     * <tt>boolean</tt> - a dropdown list with 'yes', 'no', or '-'. These labels can be changed in
+    #       <tt>lib/wice_grid_config.rb</tt>.
     #     * <tt>date</tt> - two sets of standard date dropdown lists so specify the time range.
-    #     * <tt>datetime</tt> - two sets of standard datetime dropdown lists so specify the time range. At this moment this filter
+    #     * <tt>datetime</tt> - two sets of standard datetime dropdown lists so specify the time range. This filter
     #       is far from being user-friendly due to the number of dropdown lists.
-    # * <tt>:no_filter</tt> - Turns off filters even if <tt>:attribute_name</tt> is specified. This is needed if sorting is required while
-    #   filters are not.
-    # * <tt>:allow_ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+ (i.e. if <tt>:attribute_name</tt>
-    #   is defined, ordering is enabled)
+    # * <tt>:no_filter</tt> - Turns off filters even if <tt>:attribute_name</tt> is specified.
+    #   This is needed if sorting is required while  filters are not.
+    # * <tt>:allow_ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
+    #   (i.e. if <tt>:attribute_name</tt> is defined, ordering is enabled)
     # * <tt>:model_class</tt> - Name of the model class to which <tt>:attribute_name</tt> belongs to if this is not the main table.
-    # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord constructs a query where
-    #   the second join provides an alias for the joined table. Setting <tt>:table_alias</tt> to this alias will enable WiceGrid to order
-    #   and filter by columns belonging to different associatiations  but originating from the same table without confusion. See README for an example.
-    # * <tt>:custom_filter</tt> - Allows to construct a custom dropdown filter. Depending on the value of <tt>:custom_filter</tt> different
-    #   modes are available:
+    # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord
+    #   constructs a query where the second join provides an alias for the joined table. Setting <tt>:table_alias</tt>
+    #   to this alias will enable WiceGrid to order and filter by columns belonging to different associatiations  but
+    #   originating from the same table without confusion. See README for an example.
+    # * <tt>:custom_filter</tt> - Allows to construct a custom dropdown filter. Depending on the value of
+    #   <tt>:custom_filter</tt> different modes are available:
     #   * array of strings and/or numbers - this is a direct  definition of possible values of the dropdown.
     #     Every item will be used both as the value of the select option and as its label.
     #   * Array of two-element arrays - Every first item of the two-element array is used for the label of the select option
@@ -191,58 +195,68 @@ module Wice
     #     while the values will be values of options of the dropdown list:
     #   * <tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the field specified by
     #     <tt>:attribute_name</tt> and <tt>:model_class</tt>.
-    #     <tt>:attribute_name</tt> throughout all pages. In other words, this runs an SQL query without +offset+ and +limit+ clauses and
-    #     with <tt>distinct(table.field)</tt> instead of <tt>distinct(*)</tt>
-    #   * any other symbol name (method name) - The dropdown list is populated by all unique value returned by the method with this name
-    #     sent to <em>all</em> ActiveRecord objects throughout all pages. The main difference from <tt>:auto</tt> is that this method does
-    #     not have to be a field in the result set, it is just some  value computed in the method after the database call and ActiveRecord
-    #     instantiation.
+    #     <tt>:attribute_name</tt> throughout all pages. In other words, this runs an SQL query without +offset+ and +limit+
+    #     clauses and  with <tt>distinct(table.field)</tt> instead of <tt>distinct(*)</tt>
+    #   * any other symbol name (method name) - The dropdown list is populated by all unique value returned by the
+    #     method with this name sent to <em>all</em> ActiveRecord objects throughout all pages. The main difference
+    #     from <tt>:auto</tt> is that this method does not have to be a field in the result set, it is just some
+    #     value computed in the method after the database call and ActiveRecord instantiation.
     #
-    #     But here lies the major drawback - this mode requires additional query without +offset+ and +limit+ clauses to instantiate _all_
-    #     ActiveRecord objects, and performance-wise it brings all the advantages of pagination to nothing.
-    #     Thus, memory- and performance-wise this can be really bad for some queries and tables and should be used with care.
+    #     But here lies the major drawback - this mode requires additional query without +offset+ and +limit+
+    #     clauses to instantiate _all_ ActiveRecord objects, and performance-wise it brings all the advantages
+    #     of pagination to nothing. Thus, memory- and performance-wise this can be really bad for some queries
+    #     and tables and should be used with care.
     #
-    #     If the method returns a atomic value like a string or an integer, it is used for both the value and the label of the select option element.
-    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
+    #     If the method returns a atomic value like a string or an integer, it is used for both the value and the
+    #     label of the select option element. However, if the retuned value is a two element array, the first element
+    #     is used for the option label and the second - for the value.
     #     Read more in README, section 'Custom dropdown filters'
-    #   * An array of symbols (method names) - similar to the mode with a single symbol name. The first method name is sent to the ActiveRecord
-    #     object if it responds to this method, the second method name is sent to the
+    #   * An array of symbols (method names) - similar to the mode with a single symbol name. The first method name
+    #     is sent to the ActiveRecord object if it responds to this method, the second method name is sent to the
     #     returned value unless it is +nil+, and so on. In other words, a single symbol mode is a
     #     case of an array of symbols where the array contains just one element. Thus the warning about the single method name
     #     mode applies here as well.
     #
-    #     If the last method returns a atomic value like a string or an integer, it is used for both the value and the label of the
-    #     select option element.
-    #     However, if the retuned value is a two element array, the first element is used for the option label and the second - for the value.
+    #     If the last method returns a atomic value like a string or an integer, it is used for both the value and the
+    #     label of the select option element.
+    #     However, if the retuned value is a two element array, the first element is used for the option label and the
+    #     second - for the value.
     #     Read more in README, section 'Custom dropdown filters'
-    # * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt> ('+yes+') in the config.
+    # * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt>
+    #   ('+yes+') in the config.
     #   Only has effect in a column with a boolean filter.
-    # * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('+no+') in the config.
+    # * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt>
+    #   ('+no+') in the config.
     #   Only has effect in a column with a boolean filter.
     # * <tt>:allow_multiple_selection</tt> - enables or disables switching between single and multiple selection modes for
     #   custom dropdown boxes. +true+ by default (see +ALLOW_MULTIPLE_SELECTION+ in the configuration file).
-    # * <tt>:filter_all_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('<tt>--</tt>') in the config.
-    #   Has effect in a column with a boolean filter _or_ a custom filter.
-    # * <tt>:detach_with_id</tt> - allows to detach the filter and render it after or before the grid with the +grid_filter+ helper.
-    #   The value is an arbitrary unique identifier
+    # * <tt>:filter_all_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('<tt>--</tt>')
+    #   in the config. Has effect in a column with a boolean filter _or_ a custom filter.
+    # * <tt>:detach_with_id</tt> - allows to detach the filter and render it after or before the grid with the
+    #   +grid_filter+ helper. The value is an arbitrary unique identifier
     #   of the filter. Read section 'Detached Filters' in README for details.
     #   Has effect in a column with a boolean filter _or_ a custom filter.
-    # * <tt>:in_csv</tt> - When CSV export is enabled, all columns are included into the export. Setting <tt>:in_csv</tt> to false will
-    #   prohibit the column from inclusion into the export.
-    # * <tt>:in_html</tt> - When CSV export is enabled and it is needed to use a column for CSV export only and ignore it in HTML, set
-    #   this parameter to false.
+    # * <tt>:in_csv</tt> - When CSV export is enabled, all columns are included into the export. Setting <tt>:in_csv</tt>
+    #   to false will prohibit the column from inclusion into the export.
+    # * <tt>:in_html</tt> - When CSV export is enabled and it is needed to use a column for CSV export only and ignore it
+    #   in HTML, set this parameter to false.
     # * <tt>:helper_style</tt> - Changes the flavor of Date and DateTime filters. The values are:
     #   * <tt>:standard</tt> - the default Rails Date/DateTime helper
     #   * <tt>:calendar</tt> - a Javascript popup calendar control
     # * <tt>:negation_in_filter</tt> - turn on/off the negation checkbox in string filters
+    # * <tt>:auto_reload</tt> - a boolean value specifying if a change in a filter triggers reloading of the grid. Works with all
+    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters. 
+    #   The default is false. (see +AUTO_RELOAD+ in the configuration file).
     #
-    # The block parameter is an ActiveRecord instance. This block is called for every ActiveRecord shown, and the return value of
-    # the block is a string which becomes the contents of one table cell, or an array of two elements where the first element is the cell contents
-    # and the second is a hash of HTML attributes to be added for the <tt><td></tt> tag of the current cell.
+    # The block parameter is an ActiveRecord instance. This block is called for every ActiveRecord shown, and the return
+    # value of the block is a string which becomes the contents of one table cell, or an array of two elements where
+    # the first element is the cell contents and the second is a hash of HTML attributes to be added for the <tt><td></tt>
+    # tag of the current cell.
     #
-    # In case of an array output, please note that if you need to define HTML attributes for all <tt><td></tt>'s in a column, use +td_html_attrs+.
-    # Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt> element, it will not overwrite the class defined in
-    # +td_html_attrs+, or classes added by the grid itself (+active_filter+ and +sorted+), instead they will be all concatenated:
+    # In case of an array output, please note that if you need to define HTML attributes for all <tt><td></tt>'s in a
+    # column, use +td_html_attrs+. Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt>
+    # element, it will not overwrite the class defined in +td_html_attrs+, or classes added by the grid itself
+    # (+active_filter+ and +sorted+), instead they will be all concatenated:
     # <tt><td class="sorted user_class_for_columns user_class_for_this_specific_cell"></tt>
     #
     # It is up to the developer to make sure that what in rendered in column cells
@@ -253,6 +267,7 @@ module Wice
         :allow_multiple_selection   => Defaults::ALLOW_MULTIPLE_SELECTION,
         :allow_ordering             => true,
         :attribute_name             => nil,
+        :auto_reload                => Defaults::AUTO_RELOAD,
         :boolean_filter_false_label => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_FALSE_LABEL),
         :boolean_filter_true_label  => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_TRUE_LABEL),
         :class                      => nil,
@@ -362,21 +377,23 @@ module Wice
       add_column(vc)
     end
 
-    # Optional method inside the +grid+ block, to which every ActiveRecord instance is injected, just like +column+. Unlike +column+, it returns
-    # a hash which will be used as HTML attributes for the row with the given ActiveRecord instance.
+    # Optional method inside the +grid+ block, to which every ActiveRecord instance is injected, just like +column+.
+    # Unlike +column+, it returns a hash which will be used as HTML attributes for the row with the given ActiveRecord instance.
     #
-    # Note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt> element, it will not overwrite classes +even+ and +odd+,
-    # instead they will be concatenated: <tt><tr class="even highlighted_row_class_name"></tt>
+    # Note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt> element, it will not overwrite
+    # classes +even+ and +odd+, instead they will be concatenated: <tt><tr class="even highlighted_row_class_name"></tt>
     def row_attributes(&block)
       @row_attributes_handler = block
     end
 
-    # Can be used to add HTML code (another row, for example) right after each grid row. Nothing is added if the block return +false+ or +nil+.
+    # Can be used to add HTML code (another row, for example) right after each grid row.
+    # Nothing is added if the block return +false+ or +nil+.
     def after_row(&block)
       @after_row_handler = block
     end
 
-    # Can be used to add HTML code (another row, for example) right before each grid row. Nothing is added if the block return +false+ or +nil+.
+    # Can be used to add HTML code (another row, for example) right before each grid row.
+    # Nothing is added if the block return +false+ or +nil+.
     def before_row(&block)
       @before_row_handler = block
     end
@@ -477,7 +494,24 @@ module Wice
       '?' + query_params.to_query
     end
 
+    def contains_auto_reloading_inputs #:nodoc:
+      contains_auto_reloading_elements(:has_auto_reloading_input?)
+    end
+
+    def contains_auto_reloading_selects #:nodoc:
+      contains_auto_reloading_elements(:has_auto_reloading_select?)
+    end
+
+    def contains_auto_reloading_calendars #:nodoc:
+      contains_auto_reloading_elements(:has_auto_reloading_calendar?)
+    end
+
     protected
+
+    def contains_auto_reloading_elements(what) #:nodoc:
+      filter_columns(:in_html).detect{|column| column.filter_shown? && column.send(what)}
+    end
+
 
     def filter_columns(method_name = nil) #:nodoc:
       method_name ? @columns.select(&method_name) : @columns

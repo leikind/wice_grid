@@ -31,15 +31,15 @@ module Wice
     # * <tt>:erb_mode</tt> - can be <tt>true</tt> or <tt>false</tt>. Defines the style of the helper method
     #   in the view. The default is <tt>false</tt>.
     # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
-    # * <tt>:hide_reset_button</tt> - Do not show the default Filter Reset button. 
+    # * <tt>:hide_reset_button</tt> - Do not show the default Filter Reset button.
     #   Useful when using a custom reset button (helper +reset_grid_javascript+).
     #   By default it is false.
     # * <tt>:hide_submit_button</tt> - Do not show the default Filter Submit button.
     #   Useful when using a custom submit button (helper +submit_grid_javascript+).
     #   By default it is false.
-    # * <tt>:hide_csv_button</tt> - a boolean value which defines whether the default Export To CSV button 
+    # * <tt>:hide_csv_button</tt> - a boolean value which defines whether the default Export To CSV button
     #   should be rendered. Useful when using a custom Export To CSV button (helper +export_to_csv_javascript+).
-    #   By default it is false.    
+    #   By default it is false.
     #   Please read README for more insights.
     #
     # The block contains definitions of grid columns using the +column+ method sent to the object yielded into
@@ -540,6 +540,31 @@ module Wice
           %!   e.observe('click', function(event){\n! +
           %!     #{grid.name}.export_to_csv()\n! +
           %!   })\n! +
+          %! });\n!
+      end
+
+      if rendering.contains_auto_reloading_selects
+        cached_javascript <<
+          %! $$('div##{grid.name}.wice_grid_container select.auto_reload').each(function(e){\n! +
+          %!   e.observe('change', function(event){\n! +
+          %!     #{grid.name}.process()\n! +
+          %!   })\n! +
+          %! });\n!
+      end
+
+      if rendering.contains_auto_reloading_inputs
+        cached_javascript <<
+          %! $$('div##{grid.name}.wice_grid_container input.auto_reload').each(function(e){\n! +
+          %!   e.observe('keyup', function(event){\n! +
+          %!     #{grid.name}.process()\n! +
+          %!   })\n! +
+          %! });\n!
+      end
+
+      if rendering.contains_auto_reloading_calendars
+        cached_javascript <<
+          %! document.observe('wg:calendarChanged', function(event){\n! +
+          %!   #{grid.name}.process()\n! +
           %! });\n!
       end
 

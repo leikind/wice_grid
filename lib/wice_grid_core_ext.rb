@@ -164,8 +164,8 @@ class Array  #:nodoc:
   include WGArrayExtensions
 end
 
-module StringExt
-  def html_safe_if_necessary
+module StringExt #:nodoc:
+  def html_safe_if_necessary #:nodoc:
     if respond_to?(:html_safe)
       html_safe
     else

@@ -1,3 +1,5 @@
+auto reloading filters
+
 helper export_to_csv_javascript to create custom CSV buttons
 option :hide_csv_button to hide the default CSV export button
 

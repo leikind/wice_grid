@@ -4,7 +4,7 @@ module Wice
 
     include ActionView::Helpers::AssetTagHelper
 
-    def calendar_constructor(popup_trigger_icon_id, dom_id, date_format, date_span_id, with_time)
+    def calendar_constructor(popup_trigger_icon_id, dom_id, date_format, date_span_id, with_time, fireEvent)
 
       javascript = ''
 
@@ -17,6 +17,9 @@ module Wice
       javascript <<  %|    new Calendar({\n |
       javascript << %|      popupTriggerElement : "#{popup_trigger_icon_id}",\n |
       javascript << %|      initialDate : $('#{dom_id}').value,\n |
+      if fireEvent
+        javascript << %|      onHideCallback : function(){Event.fire($(#{dom_id}), 'wg:calendarChanged')},\n |
+      end
       javascript << %|      dateFormat : "#{date_format}",\n|
       unless Wice::Defaults::POPUP_PLACEMENT_STRATEGY == :trigger
         javascript << %|      popupPositioningStrategy : "#{Wice::Defaults::POPUP_PLACEMENT_STRATEGY}",\n|
@@ -26,7 +29,7 @@ module Wice
       end
       javascript << %|      outputFields : $A(['#{date_span_id}', '#{dom_id}'])\n |
       javascript << %|    });\n|
-      
+
       javascript
     end
 
@@ -44,11 +47,19 @@ module Wice
       datepicker_placeholder_id = dom_id + '_date_placeholder'
       date_span_id = dom_id + '_date_view'
 
-      date_picker = image_tag(Defaults::CALENDAR_ICON, :id => popup_trigger_icon_id, :style => 'cursor: pointer', :title => html_opts[:title]) +
+      function = %! $('#{date_span_id}').innerHTML = ''; $('#{dom_id}').value = ''; !
+      if opts[:fire_event]
+        function += "Event.fire($(#{dom_id}), 'wg:calendarChanged')"
+      end
+
+      date_picker = image_tag(Defaults::CALENDAR_ICON,
+        :id => popup_trigger_icon_id,
+        :style => 'cursor: pointer',
+        :title => html_opts[:title]) +
 
       link_to_function(
         content_tag(:span, date_string, :id => date_span_id),
-        %! $('#{date_span_id}').innerHTML = ''; $('#{dom_id}').value = ''; !,
+        function,
         :class => 'date_label',
         :title => WiceGridNlMessageProvider.get_message(:DATE_STRING_TOOLTIP)) + ' ' +
 
@@ -56,7 +67,7 @@ module Wice
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
 
-      javascript = calendar_constructor(popup_trigger_icon_id, dom_id, date_format, date_span_id, with_time)
+      javascript = calendar_constructor(popup_trigger_icon_id, dom_id, date_format, date_span_id, with_time, opts[:fire_event])
 
       [html, javascript]
     end

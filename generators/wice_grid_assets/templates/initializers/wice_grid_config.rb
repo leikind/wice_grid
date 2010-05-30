@@ -60,12 +60,16 @@ if defined?(Wice::Defaults)
   # * <tt>:always</tt>        - show the filter always
   # * <tt>:no</tt>            - never show the filter
   Wice::Defaults::SHOW_FILTER = :always
-  
+
+  # A boolean value specifying if a change in a filter triggers reloading of the grid.
+  Wice::Defaults::AUTO_RELOAD = false
+
+
   # SQL operator used for matching strings in string filters.
   Wice::Defaults::STRING_MATCHING_OPERATOR = 'LIKE'
   # STRING_MATCHING_OPERATOR = 'ILIKE' # Use this for Postgresql case-insensitive matching.
-  
-  
+
+
   # Defining one string matching operator globally for the whole application turns is not enough
   # when you connect to two databases one of which is MySQL and the other is Postgresql.
   # If the key for an adapter is missing it will fall back to Wice::Defaults::STRING_MATCHING_OPERATOR
@@ -86,24 +90,24 @@ if defined?(Wice::Defaults)
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                              Showing All Queries                          #
-  
+
   # Enable or disable showing all queries (non-paginated table)
   Wice::Defaults::ALLOW_SHOWING_ALL_QUERIES = true
-  
+
   # If number of all queries is more than this value, the user will be given a warning message
   Wice::Defaults::START_SHOWING_WARNING_FROM = 100
-  
+
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                               Saving Queries                              #
-  
+
   # Icon to delete a saved query
-  Wice::Defaults::DELETE_QUERY_ICON = 'icons/grid/delete.png'    
-  
+  Wice::Defaults::DELETE_QUERY_ICON = 'icons/grid/delete.png'
+
   # ActiveRecord model to store queries. Read the documentation for details
   # QUERY_STORE_MODEL = 'WiceGridSerializedQuery'
   Wice::Defaults::QUERY_STORE_MODEL = 'WiceGridSerializedQuery'
-  
+
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #            Here go settings related to the calendar helpers               #
@@ -147,7 +151,7 @@ if defined?(Wice::Defaults)
 
   Wice::Defaults::FILTER_TOOLTIP = "Filter"
   Wice::Defaults::RESET_FILTER_TOOLTIP = "Reset"
-    
+
   Wice::Defaults::BOOLEAN_FILTER_TRUE_LABEL  = 'yes'
   Wice::Defaults::BOOLEAN_FILTER_FALSE_LABEL = 'no'
 
@@ -167,13 +171,13 @@ if defined?(Wice::Defaults)
 
   # tooltip for the link to switch to "show all records"
   Wice::Defaults::SHOW_ALL_RECORDS_TOOLTIP = 'Show all records'
-  
+
   # Warning message shown when the user wants to switch to all-records mode
   Wice::Defaults::ALL_QUERIES_WARNING = 'Are you sure you want to display all records?'
 
   # link to paginated view
   Wice::Defaults::SWITCH_BACK_TO_PAGINATED_MODE_LABEL = "back to paginated view"
-  
+
   # tooltip for the link to paginated view
   Wice::Defaults::SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP = "Switch back to the view with pages"
 
@@ -183,20 +187,20 @@ if defined?(Wice::Defaults)
 
   Wice::Defaults::SAVED_QUERY_PANEL_TITLE = 'Saved Queries'
   Wice::Defaults::SAVE_QUERY_BUTTON_LABEL = 'Save the state of filters'
-  
+
   Wice::Defaults::SAVED_QUERY_DELETION_CONFIRMATION = 'Are you sure?'
   Wice::Defaults::SAVED_QUERY_DELETION_LINK_TITLE   = 'Delete query'
   Wice::Defaults::SAVED_QUERY_LINK_TITLE            = 'Load query'
-  
+
   Wice::Defaults::VALIDATES_UNIQUENESS_ERROR = "A query with this name already exists"
   Wice::Defaults::VALIDATES_PRESENCE_ERROR   = "Please sumbit the name of the custom query"
 
   Wice::Defaults::QUERY_DELETED_MESSAGE = "Saved query deleted."
   Wice::Defaults::QUERY_SAVED_MESSAGE   = "Query saved."
-  
+
   Wice::Defaults::SELECT_ALL   = "Select all"
   Wice::Defaults::DESELECT_ALL = "Remove selection"
-  
+
   ########    Messages END      ########
 
 
