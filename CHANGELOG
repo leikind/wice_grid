@@ -1,3 +1,6 @@
+helper export_to_csv_javascript to create custom CSV buttons
+option :hide_csv_button to hide the default CSV export button
+
 Method WiceGrid#selected_records and parameter :after were a bit of a mess and have been substituted by
 
 * WiceGrid#current_page_records returning records on the current page
