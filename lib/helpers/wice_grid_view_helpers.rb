@@ -611,7 +611,7 @@ module Wice
     end
 
     def reset_submit_buttons(options, grid, rendering)  #:nodoc:
-      if options[:hide_submit_button]
+      (if options[:hide_submit_button]
         ''
       else
         rendering.submit_button_present = true
@@ -624,7 +624,7 @@ module Wice
         rendering.reset_button_present = true
         filter_tooltip = WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP)
         image_tag(Defaults::RESET_ICON, :title => filter_tooltip, :alt => filter_tooltip, :class => 'reset clickable')
-      end
+      end).html_safe_if_necessary
     end
 
     # Renders a detached filter. The parameters are:
