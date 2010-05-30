@@ -239,11 +239,11 @@ module Wice
 
       pagination_panel_content_html, pagination_panel_content_js = nil, nil
       if options[:upper_pagination_panel]
-        content << rendering.pagination_panel(no_rightmost_column){
-          pagination_panel_content_html, pagination_panel_content_js = pagination_panel_content(grid, 
-            options[:extra_request_parameters], options[:allow_showing_all_records])
+        content << rendering.pagination_panel(no_rightmost_column) do
+          pagination_panel_content_html, pagination_panel_content_js =
+            pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
           pagination_panel_content_html
-        }
+        end
       end
 
       title_row_attrs = header_tr_html_attrs.clone
@@ -370,7 +370,7 @@ module Wice
       end
 
       content << '</thead><tfoot>'
-      content << rendering.pagination_panel(no_rightmost_column){
+      content << rendering.pagination_panel(no_rightmost_column) do
         if pagination_panel_content_html
           pagination_panel_content_html
         else
@@ -378,9 +378,10 @@ module Wice
             pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
           pagination_panel_content_html
         end
-      }
+      end
+
       content << '</tfoot><tbody>'
-      cached_javascript << pagination_panel_content_js if pagination_panel_content_js
+      cached_javascript << pagination_panel_content_js
 
       # rendering  rows
       cell_value_of_the_ordered_column = nil
@@ -493,7 +494,7 @@ module Wice
                              %/   Element.toggle('#{grid.name}_show_icon');\n/+
                              %/   Element.toggle('#{grid.name}_hide_icon');\n/+
                              %/   $('#{filter_row_id}').hide();\n/+
-                             %/ })\n/
+                             %/ });\n/
       end
 
       if rendering.reset_button_present
@@ -501,7 +502,7 @@ module Wice
                              %/   e.observe('click', function(){\n/+
                              %/     #{reset_grid_javascript(grid)};\n/+
                              %/   })\n/+
-                             %/ })\n/
+                             %/ });\n/
       end
       
       if rendering.submit_button_present
@@ -509,7 +510,7 @@ module Wice
                              %/   e.observe('click', function(){\n/+
                              %/     #{submit_grid_javascript(grid)};\n/+
                              %/   })\n/+
-                             %/ })\n/ 
+                             %/ });\n/
       end
 
       if rendering.contains_a_text_input?
@@ -518,7 +519,16 @@ module Wice
           %!   e.observe('keydown', function(event){\n! +
           %!     if (event.keyCode == 13) {#{grid.name}.process()}\n! +
           %!   })\n! +
-          %! }) !
+          %! });\n!
+      end
+
+      if rendering.csv_export_icon_present
+        cached_javascript <<
+          %! $$('div##{grid.name}.wice_grid_container .export_to_csv_button').each(function(e){\n! +
+          %!   e.observe('click', function(event){\n! +
+          %!     #{grid.name}.export_to_csv()\n! +
+          %!   })\n! +
+          %! });\n!
       end
 
       content << javascript_tag(
@@ -732,7 +742,7 @@ module Wice
       collection_total_entries_str = collection_total_entries.to_s
       parameters = grid.get_state_as_parameter_value_pairs
 
-      js = nil
+      js = ''
       html = if (collection.total_pages < 2 && collection.length == 0)
         '0'
       else

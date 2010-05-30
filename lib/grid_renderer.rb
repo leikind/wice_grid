@@ -16,7 +16,7 @@ module Wice
     attr_reader :grid
     attr_accessor :erb_mode
 
-    attr_accessor :reset_button_present, :submit_button_present, :show_hide_button_present
+    attr_accessor :reset_button_present, :submit_button_present, :show_hide_button_present, :csv_export_icon_present
 
     @@order_parameter_name = "order"
     @@order_direction_parameter_name = "order_direction"
@@ -86,30 +86,29 @@ module Wice
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      if @grid.export_to_csv_enabled
-        tooltip = WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP)
-        link_to_function(
-          image_tag(Defaults::CSV_EXPORT_ICON,
-            :title => tooltip,
-            :alt   => tooltip), "#{grid.name}.export_to_csv()")
-      else
-        nil
-      end
+      tooltip = WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP)
+      @csv_export_icon_present = true
+      image_tag(Defaults::CSV_EXPORT_ICON,
+        :title => tooltip,
+        :class => 'clickable export_to_csv_button',
+        :alt   => tooltip
+      )
     end
 
     def pagination_panel(no_rightmost_column)  #:nodoc:
       panel = yield
+
       number_of_columns = self.number_of_columns(:in_html)
       number_of_columns -= 1 if no_rightmost_column
-      csv_icon = csv_export_icon
+
       if panel.nil?
-        if csv_export_icon.nil?
+        unless @grid.export_to_csv_enabled
           ''
         else
           "<tr><td colspan=\"#{number_of_columns}\"></td><td>#{csv_export_icon}</td></tr>"
         end
       else
-        if csv_export_icon.nil?
+        unless @grid.export_to_csv_enabled
           "<tr><td colspan=\"#{number_of_columns + 1}\">#{panel}</td></tr>"
         else
           "<tr><td colspan=\"#{number_of_columns}\">#{panel}</td><td>#{csv_export_icon}</td></tr>"
