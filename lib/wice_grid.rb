@@ -520,16 +520,24 @@ module Wice
       def params_2_datetime(par)   #:nodoc:
         return nil if par.blank?
         params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect{|v| v.blank? ? nil : v.to_i}
-        Time.local(*params)
+        begin
+          Time.local(*params)
+        rescue ArgumentError, TypeError
+          nil
+        end
       end
 
       # create a Date instance out of parameters
       def params_2_date(par)   #:nodoc:
         return nil if par.blank?
         params =  [par[:year], par[:month], par[:day]].collect{|v| v.blank? ? nil : v.to_i}
-        Date.civil(*params)
+        begin
+          Date.civil(*params)
+        rescue ArgumentError, TypeError
+          nil
+        end
       end
-      
+
     end
   end
 
