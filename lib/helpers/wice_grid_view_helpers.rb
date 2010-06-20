@@ -545,7 +545,7 @@ module Wice
 
       if rendering.contains_auto_reloading_selects
         cached_javascript <<
-          %! $$('div##{grid.name}.wice_grid_container select.auto_reload').each(function(e){\n! +
+          %! $$('div##{grid.name}.wice_grid_container select.auto_reload', '.#{grid.name}_detached_filter select.auto_reload').each(function(e){\n! +
           %!   e.observe('change', function(event){\n! +
           %!     #{grid.name}.process()\n! +
           %!   })\n! +
@@ -554,7 +554,7 @@ module Wice
 
       if rendering.contains_auto_reloading_inputs
         cached_javascript <<
-          %! $$('div##{grid.name}.wice_grid_container input.auto_reload').each(function(e){\n! +
+          %! $$('div##{grid.name}.wice_grid_container input.auto_reload', '.#{grid.name}_detached_filter input.auto_reload').each(function(e){\n! +
           %!   e.observe('keyup', function(event){\n! +
           %!     #{grid.name}.process()\n! +
           %!   })\n! +
@@ -667,7 +667,7 @@ module Wice
           ":show_filters => :no (set :show_filters to :always in this case). Read about detached filters in the documentation.")
       end
 
-      grid.output_buffer.filter_for filter_key
+      content_tag :span, grid.output_buffer.filter_for(filter_key), :class => "#{grid.name}_detached_filter"
     end
 
     # Returns javascript which applies current filters. The parameter is a WiceGrid instance. Use it with +button_to_function+ to create
