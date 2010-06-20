@@ -53,6 +53,11 @@ module Wice
     # * <tt>:select</tt> - ActiveRecord <tt>:select</tt> option. Please do not forget that <tt>:select</tt> is ignored
     #   when <tt>:include</tt> is present. It is unlikely you would need <tt>:select</tt> with WiceGrid, but if you do, 
     #   use it with care :)
+    # * <tt>:with_paginated_resultset</tt> - a callback executed from within the plugin to process records of the current page.
+    #   Can be a lambda object or a controller method name (symbol). The argument to the callback is the array of the records.
+    # * <tt>:with_resultset</tt> - a callback executed from within the plugin to process all records browsable through 
+    #   all pages with the current filters. Can be a lambda object or a controller method name (symbol). The argument to 
+    #   the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     #
     # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting

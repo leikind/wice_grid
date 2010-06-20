@@ -5,6 +5,7 @@ require 'helpers/js_calendar_helpers.rb'
 require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
 require 'table_column_matrix.rb'
+require 'helpers/will_paginate_link_renderer.rb'
 require 'helpers/wice_grid_view_helpers.rb'
 require 'helpers/wice_grid_misc_view_helpers.rb'
 require 'helpers/wice_grid_serialized_queries_view_helpers.rb'
@@ -18,7 +19,7 @@ module Wice
 
   class WiceGrid
 
-    attr_reader :klass, :name, :resultset, :custom_order, :after, :query_store_model
+    attr_reader :klass, :name, :resultset, :custom_order, :query_store_model
     attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :saved_query
     attr_writer :renderer
     attr_accessor :output_buffer, :view_helper_finished
@@ -40,9 +41,13 @@ module Wice
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
       end
 
-      # validate :after
-      unless [NilClass, Symbol, Proc].index(opts[:after].class)
-        raise WiceGridArgumentError.new(":after must be either a Proc or Symbol object")
+      Wice.deprecated_call(:after, :with_resultset, opts)
+
+      # validate :with_resultset & :with_paginated_resultset
+      [:with_resultset, :with_paginated_resultset].each do |callback_symbol|
+        unless [NilClass, Symbol, Proc].index(opts[callback_symbol].class)
+          raise WiceGridArgumentError.new(":#{callback_symbol} must be either a Proc or Symbol object")
+        end
       end
 
       opts[:order_direction].downcase! if opts[:order_direction].kind_of?(String)
@@ -57,7 +62,6 @@ module Wice
 
       # options that are understood
       @options = {
-        :after                => nil,
         :conditions           => nil,
         :csv_file_name        => nil,
         :custom_order         => {},
@@ -71,7 +75,9 @@ module Wice
         :per_page             => Defaults::PER_PAGE,
         :saved_query          => nil,
         :select               => nil,
-        :total_entries        => nil
+        :total_entries        => nil,
+        :with_paginated_resultset  => nil,
+        :with_resultset       => nil
       }
 
       # validate parameters
@@ -80,8 +86,6 @@ module Wice
       @options.merge!(opts)
       @export_to_csv_enabled = @options[:enable_export_to_csv]
       @csv_file_name = @options[:csv_file_name]
-
-      @after = @options[:after]
 
       case @name = @options[:name]
       when String
@@ -122,6 +126,18 @@ module Wice
       @method_scoping = @klass.send(:scoped_methods)[-1]
     end
 
+    # A block executed from within the plugin to process records of the current page.
+    # The argument to the callback is the array of the records. See the README for more details.
+    def with_paginated_resultset(&callback)
+      @options[:with_paginated_resultset] = callback
+    end
+
+    # A block executed from within the plugin to process all records browsable through 
+    # all pages with the current filters. The argument to 
+    # the callback is a lambda object which returns the list of records when called. See the README for the explanation.
+    def with_resultset(&callback)
+      @options[:with_resultset] = callback
+    end
 
     def process_loading_query #:nodoc:
       @saved_query = nil
@@ -232,7 +248,9 @@ module Wice
       with_exclusive_scope do
         @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
       end
+      invoke_resultset_callbacks
     end
+    
 
     # core workflow methods END
 
@@ -373,16 +391,41 @@ module Wice
     end
 
 
-    # Returns a list of all records of the current selection throughout all pages.
-    # Can be called only after the view helper.
-    # See section "Integration With The Application" in the README.
-    def selected_records
-      raise WiceGridException.new("all_records can only be called only after the grid view helper") unless self.view_helper_finished
+    def selected_records #:nodoc:
+      STDERR.puts "WiceGrid: Parameter :#{selected_records} is deprecated, use :#{all_pages_records} or :#{current_page_records} instead!"
+      all_pages_records
+    end
+
+    # Returns the list of objects browsable through all pages with the current filters. 
+    # Should only be called after the +grid+ helper.
+    def all_pages_records
+      raise WiceGridException.new("all_pages_records can only be called only after the grid view helper") unless self.view_helper_finished
       resultset_without_paging_with_user_filters
     end
 
+    # Returns the list of objects displayed on current page. Should only be called after the +grid+ helper.
+    def current_page_records
+      raise WiceGridException.new("current_page_records can only be called only after the grid view helper") unless self.view_helper_finished
+      @resultset
+    end
+
+
 
     protected
+
+    def invoke_resultset_callback(callback, argument) #:nodoc:
+      case callback
+      when Proc
+        callback.call(argument)
+      when Symbol
+        @controller.send(callback, argument)
+      end
+    end
+
+    def invoke_resultset_callbacks #:nodoc:
+      invoke_resultset_callback(@options[:with_paginated_resultset], @resultset)
+      invoke_resultset_callback(@options[:with_resultset], lambda{self.send(:resultset_without_paging_with_user_filters)})
+    end
 
     def with_exclusive_scope #:nodoc:
       if @method_scoping
@@ -477,16 +520,24 @@ module Wice
       def params_2_datetime(par)   #:nodoc:
         return nil if par.blank?
         params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect{|v| v.blank? ? nil : v.to_i}
-        Time.local(*params)
+        begin
+          Time.local(*params)
+        rescue ArgumentError, TypeError
+          nil
+        end
       end
 
       # create a Date instance out of parameters
       def params_2_date(par)   #:nodoc:
         return nil if par.blank?
         params =  [par[:year], par[:month], par[:day]].collect{|v| v.blank? ? nil : v.to_i}
-        Date.civil(*params)
+        begin
+          Date.civil(*params)
+        rescue ArgumentError, TypeError
+          nil
+        end
       end
-      
+
     end
   end
 

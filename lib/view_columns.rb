@@ -9,7 +9,7 @@ module Wice
 
     # fields defined from the options parameter
     FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
-              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering]
+              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering, :auto_reload]
 
     attr_accessor *FIELDS
 
@@ -102,6 +102,18 @@ module Wice
       self.attribute_name.blank? && self.column_name.blank? && ! self.filter_shown?
     end
 
+    def has_auto_reloading_input?  #:nodoc:
+      false
+    end
+
+    def has_auto_reloading_select?  #:nodoc:
+      false
+    end
+
+    def has_auto_reloading_calendar?  #:nodoc:
+      false
+    end
+
     protected
 
     def form_parameter_template(v) #:nodoc:
@@ -131,7 +143,7 @@ module Wice
       grid_name             = self.grid.name
       @param_name           = param_name
       @cell_rendering_block = lambda do |object, params|
-        selected = if params[grid_name] && params[grid_name][param_name] && 
+        selected = if params[grid_name] && params[grid_name][param_name] &&
                       params[grid_name][param_name].index(object.send(object_property).to_s)
           true
         else
@@ -140,11 +152,11 @@ module Wice
         check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
       end
     end
-    
+
     def in_html  #:nodoc:
       true
     end
-    
+
     def capable_of_hosting_filter_related_icons?  #:nodoc:
       false
     end
@@ -153,8 +165,8 @@ module Wice
       return '' unless @select_all_buttons
       select_all_tootip   = WiceGridNlMessageProvider.get_message(:SELECT_ALL)
       deselect_all_tootip = WiceGridNlMessageProvider.get_message(:DESELECT_ALL)
-      
-      html = content_tag(:span, image_tag(Defaults::TICK_ALL_ICON, :alt => select_all_tootip), 
+
+      html = content_tag(:span, image_tag(Defaults::TICK_ALL_ICON, :alt => select_all_tootip),
                          :class => 'clickable select_all', :title => select_all_tootip) + ' ' +
              content_tag(:span, image_tag(Defaults::UNTICK_ALL_ICON, :alt => deselect_all_tootip),
                          :class => 'clickable deselect_all', :title => deselect_all_tootip)
@@ -187,14 +199,26 @@ module Wice
       @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:fr => '')
       @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:to => '')
 
-      text_field_tag(parameter_name,  params[:fr], :size => 3, :id => @dom_id) +
-      text_field_tag(parameter_name2, params[:to], :size => 3, :id => @dom_id2)
+      opts1 = {:size => 3, :id => @dom_id}
+      opts2 = {:size => 3, :id => @dom_id2}
+
+      if auto_reload
+        opts1[:class] = ' auto_reload'
+        opts2[:class] = ' auto_reload'
+      end
+
+      text_field_tag(parameter_name,  params[:fr], opts1) + text_field_tag(parameter_name2, params[:to], opts2)
     end
 
     def yield_declaration_of_column_filter #:nodoc:
       %$templates : ['#{@query}', '#{@query2}'],
           ids : ['#{@dom_id}', '#{@dom_id2}']  $
     end
+
+    def has_auto_reloading_input? #:nodoc:
+      auto_reload
+    end
+
   end
 
   class ViewColumnFloat < ViewColumnInteger #:nodoc:
@@ -222,12 +246,11 @@ module Wice
 
       end
 
-      select_options = {:name => @parameter_name, :id => @dom_id}
+      select_options = {:name => @parameter_name, :id => @dom_id, :class => 'custom_dropdown'}
 
       if @turn_off_select_toggling
         select_toggle = ''
       else
-        select_options[:class] = 'custom_dropdown'
         if self.allow_multiple_selection
           select_options[:multiple] = params.is_a?(Array) && params.size > 1
           select_toggle = content_tag(:a,
@@ -240,14 +263,22 @@ module Wice
         end
       end
 
-      '<span class="custom_dropdown_container">' +
+      if auto_reload
+        select_options[:class] += ' auto_reload'
+      end
+
+      '<span class="custom_dropdown_container">'.html_safe_if_necessary +
       content_tag(:select, options_for_select(@custom_filter, params), select_options) +
-      select_toggle + '</span>'
+      select_toggle.html_safe_if_necessary + '</span>'.html_safe_if_necessary
     end
 
     def yield_declaration_of_column_filter #:nodoc:
       %$templates : ['#{@query_without_equals_sign}'],
           ids : ['#{@dom_id}']  $
+    end
+
+    def has_auto_reloading_select? #:nodoc:
+      auto_reload
     end
   end
 
@@ -314,9 +345,11 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
-      html1, js1 = datetime_calendar(params[:fr], {:include_blank => true, :prefix => @name1, :id => @dom_id}, 
+      html1, js1 = datetime_calendar(params[:fr],
+        {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = datetime_calendar(params[:to], {:include_blank => true, :prefix => @name2, :id => @dom_id2}, 
+      html2, js2 = datetime_calendar(params[:to],
+        {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
@@ -331,12 +364,15 @@ module Wice
         prepare_for_calendar_filter
         render_calendar_filter_internal(params)
       end
-
     end
 
     def yield_declaration_of_column_filter #:nodoc:
       %$templates : [ #{@queris_ids.collect{|tuple| "'" + tuple[0] + "'"}.join(', ')} ],
           ids : [ #{@queris_ids.collect{|tuple| "'" + tuple[1] + "'"}.join(', ')} ] $
+    end
+
+    def has_auto_reloading_calendar? #:nodoc:
+      auto_reload && helper_style == :calendar
     end
 
   end
@@ -355,9 +391,9 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
 
-      html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1}, 
+      html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2}, 
+      html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
@@ -374,12 +410,14 @@ module Wice
 
     def render_filter_internal(params) #:nodoc:
       @contains_a_text_input = true
+      css_class = auto_reload ? 'auto_reload' : nil
+
       if negation
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:v => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:n => '')
 
         '<div class="text_filter_container">' +
-          text_field_tag(parameter_name, params[:v], :size => 8, :id => @dom_id) +
+          text_field_tag(parameter_name, params[:v], :size => 8, :id => @dom_id, :class => css_class) +
           if defined?(::Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! ::Wice::Defaults::NEGATION_CHECKBOX_LABEL.blank?
             ::Wice::Defaults::NEGATION_CHECKBOX_LABEL
           else
@@ -392,7 +430,7 @@ module Wice
           '</div>'
       else
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query('')
-        text_field_tag(parameter_name, (params.blank? ? '' : params), :size => 8, :id => @dom_id)
+        text_field_tag(parameter_name, (params.blank? ? '' : params), :size => 8, :id => @dom_id, :class => css_class)
       end
     end
 
@@ -405,6 +443,11 @@ module Wice
             ids : ['#{@dom_id}'] $
       end
     end
+
+    def has_auto_reloading_input? #:nodoc:
+      auto_reload
+    end
+
   end
 
 end
