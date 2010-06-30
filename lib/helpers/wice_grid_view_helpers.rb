@@ -471,8 +471,8 @@ module Wice
         content << before_row_output if before_row_output
         content << "<tr #{tag_options(row_attributes)}>#{row_content}"
         content << content_tag(:td, '') unless no_rightmost_column
-        content << after_row_output if after_row_output
         content << '</tr>'
+        content << after_row_output if after_row_output
       end
 
       content << '</tbody></table></div>'
