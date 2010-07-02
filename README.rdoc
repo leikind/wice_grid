@@ -28,7 +28,7 @@ WiceGrid does not take a collection as an input, it works directly with ActiveRe
 
 WiceGrid does not use AJAX calls to reload itself, instead simple GET requests are used for this, nevertheless, all other page parameters are respected and preserved. WiceGrid views do not contain forms so you can include it in your own forms.
 
-WiceGrid is known to work with Rails versions from 2.1.x to 2.3.5 (2.3.8 is in the works). WiceGrid with Rails versions older
+WiceGrid is known to work with Rails versions from 2.1.x to 2.3.8. WiceGrid with Rails versions older
 than 2.1 can still be functional depending on the functionalities used.
 
 WiceGrid is known to work with MySQL and Postgres.
