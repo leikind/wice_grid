@@ -1,4 +1,9 @@
 en:
+  date:
+    order:
+      - :year
+      - :month
+      - :day  
   wice_grid:
     show_filter_tooltip: Show filter
     hide_filter_tooltip: Hide filter
@@ -41,6 +46,11 @@ en:
 
 
 is:
+  date:
+    order:
+      - :year
+      - :month
+      - :day  
   wice_grid:
     show_filter_tooltip: Sýna síumöguleika
     hide_filter_tooltip: Fela síumoguleika
@@ -80,6 +90,11 @@ is:
     query_saved_message: leitaskipun hefur verið vistuð
 
 nl:
+  date:
+    order:
+      - :year
+      - :month
+      - :day  
   wice_grid:
     show_filter_tooltip: Filter tonen
     hide_filter_tooltip: Filter verbergen
@@ -119,6 +134,11 @@ nl:
     query_saved_message: Query opgeslagen
 
 fr:
+  date:
+    order:
+      - :year
+      - :month
+      - :day  
   wice_grid:
     show_filter_tooltip: Afficher le filtre
     hide_filter_tooltip: Cacher le filtrer
@@ -158,6 +178,11 @@ fr:
     query_saved_message: La requête a été sauvée.
 
 ru:
+  date:
+    order:
+      - :year
+      - :month
+      - :day  
   wice_grid:
     show_filter_tooltip: Показать фильтр
     hide_filter_tooltip: Спрятать фильтр
@@ -200,6 +225,11 @@ ru:
     
     
 pt:
+  date:
+    order:
+      - :year
+      - :month
+      - :day  
   wice_grid:
     show_filter_tooltip: Mostrar o filtro
     hide_filter_tooltip: Esconder o filtro

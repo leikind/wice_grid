@@ -2,6 +2,7 @@
 
 Version:: 0.5
 Author::  Yuri Leikind
+Contributor::  Xavier Defrang
 Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
 News:: http://leikind.org/wicegrid
@@ -33,6 +34,8 @@ than 2.1 can still be functional depending on the functionalities used.
 
 WiceGrid is known to work with MySQL and Postgres.
 
+WiceGrid works with Prototype and jQuery (experimental).
+
 WiceGrid is compliant with Ruby 1.9.1.
 
 === Examples
@@ -46,7 +49,7 @@ Rails version 2.1.0 or newer.
 
 <tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 2.3.2 or newer.
 
-<tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer.
+<tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer, or <tt>jQuery[http://jquery.com/]</tt>.
 
 == How-To
 
@@ -56,13 +59,30 @@ Run the following command to install the plugin:
 
   script/plugin install git://github.com/leikind/wice_grid.git
 
-To copy the plugin initializer, icons,  javascripts, and stylesheets to correct location,  run the following command:
+If your application is Prototype-based (default in Rails 2.x), run the following generator to copy all plugin assets:
 
-   ./script/generate wice_grid_assets
+   ./script/generate wice_grid_assets_prototype
 
-Using ./script/generate to copy assets gives the advantage of collision control - if a file with the same name already
-exists at the given location, the script will pause and ask the user about what action to take.
+For jQuery:
 
+   ./script/generate wice_grid_assets_jquery
+
+This will copy images, stylesheets, configuration file <tt>config/initializers/wice_grid_config.rb</tt>, and the correct version
+of javascript files.
+
+=== Support for Prototype and jQuery
+
+WiceGrid started as a plugin using the Prototype javascript framework. Support for jQuery was added for version 0.6.
+The plugin contains two versions of the main javascript file <tt>wice_grid.js</tt>, and depending on the generator run to
+install the assets (+wice_grid_assets_prototype+ or +wice_grid_assets_jquery+) the correct file is  copied into <tt>public/javascripts</tt>.
+
+Some javascript code is also generated and injected into the HTML page. The value of constant <tt>Wice::Defaults::JS_FRAMEWORK</tt> in 
+configuration file <tt>wice_grid_config.rb</tt> defines for which JS framework code should be generated.
+Generators +wice_grid_assets_prototype+ and +wice_grid_assets_jquery+ create a version of  <tt>wice_grid_config.rb</tt>
+with the corresponding value of <tt>Wice::Defaults::JS_FRAMEWORK</tt>.
+
+THERE IS TEMPORARILY NO JAVASCRIPT CALENDAR IN THE JQUERY VERSION AND ALL DATE/DATETIME FILTERS FALL BACK TO THE DEFAULT 
+RAILS DATE/DATETIME HELPERS.
 
 === Basics
 

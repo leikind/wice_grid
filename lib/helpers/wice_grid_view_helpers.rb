@@ -486,7 +486,7 @@ module Wice
       prototype_and_js_version_check = if ENV['RAILS_ENV'] == 'development'
         %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
         %$   alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' +\n$ +
-        %$     'Please make sure that you include Prototype and WiceGrid javascripts in your page. ' +\n$ +
+        %$     'Please make sure that you include WiceGrid javascript in your page. ' +\n$ +
         %$     'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +\n$ +
         %$     'for WiceGrid javascripts and assets.')\n$ +
         %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {\n$ +
@@ -497,79 +497,39 @@ module Wice
       end
 
       if rendering.show_hide_button_present
-        cached_javascript << %/ $('#{grid.name}_show_icon').observe('click', function(){\n/+
-                             %/   Element.toggle('#{grid.name}_show_icon');\n/+
-                             %/   Element.toggle('#{grid.name}_hide_icon');\n/+
-                             %/   $('#{filter_row_id}').show();\n/+
-                             %/ })\n/+
-                             %/ $('#{grid.name}_hide_icon').observe('click', function(){\n/+
-                             %/   Element.toggle('#{grid.name}_show_icon');\n/+
-                             %/   Element.toggle('#{grid.name}_hide_icon');\n/+
-                             %/   $('#{filter_row_id}').hide();\n/+
-                             %/ });\n/
+        cached_javascript << JsAdaptor.show_hide_button_initialization(grid.name, filter_row_id)
       end
 
       if rendering.reset_button_present
-        cached_javascript << %/ $$('div##{grid.name}.wice_grid_container .reset').each(function(e){\n/+
-                             %/   e.observe('click', function(){\n/+
-                             %/     #{reset_grid_javascript(grid)};\n/+
-                             %/   })\n/+
-                             %/ });\n/
+        cached_javascript << JsAdaptor.reset_button_initialization(grid.name, reset_grid_javascript(grid))
       end
 
       if rendering.submit_button_present
-        cached_javascript << %/ $$('div##{grid.name}.wice_grid_container .submit').each(function(e){\n/+
-                             %/   e.observe('click', function(){\n/+
-                             %/     #{submit_grid_javascript(grid)};\n/+
-                             %/   })\n/+
-                             %/ });\n/
+        cached_javascript << JsAdaptor.submit_button_initialization(grid.name, submit_grid_javascript(grid))
       end
 
       if rendering.contains_a_text_input?
-        cached_javascript <<
-          %! $$('div##{grid.name}.wice_grid_container .wice_grid_filter_row input[type=text]').each(function(e){\n! +
-          %!   e.observe('keydown', function(event){\n! +
-          %!     if (event.keyCode == 13) {#{grid.name}.process()}\n! +
-          %!   })\n! +
-          %! });\n!
+        cached_javascript << JsAdaptor.enter_key_event_registration(grid.name)
       end
 
       if rendering.csv_export_icon_present
-        cached_javascript <<
-          %! $$('div##{grid.name}.wice_grid_container .export_to_csv_button').each(function(e){\n! +
-          %!   e.observe('click', function(event){\n! +
-          %!     #{grid.name}.export_to_csv()\n! +
-          %!   })\n! +
-          %! });\n!
+        cached_javascript << JsAdaptor.csv_export_icon_initialization(grid.name)
       end
 
       if rendering.contains_auto_reloading_selects
-        cached_javascript <<
-          %! $$('div##{grid.name}.wice_grid_container select.auto_reload', '.#{grid.name}_detached_filter select.auto_reload').each(function(e){\n! +
-          %!   e.observe('change', function(event){\n! +
-          %!     #{grid.name}.process()\n! +
-          %!   })\n! +
-          %! });\n!
+        cached_javascript << JsAdaptor.auto_reloading_selects_event_initialization(grid.name)
       end
 
       if rendering.contains_auto_reloading_inputs
-        cached_javascript <<
-          %! $$('div##{grid.name}.wice_grid_container input.auto_reload', '.#{grid.name}_detached_filter input.auto_reload').each(function(e){\n! +
-          %!   e.observe('keyup', function(event){\n! +
-          %!     #{grid.name}.process()\n! +
-          %!   })\n! +
-          %! });\n!
+        cached_javascript << JsAdaptor.auto_reloading_inputs_event_initialization(grid.name)
       end
 
       if rendering.contains_auto_reloading_calendars
-        cached_javascript <<
-          %! document.observe('wg:calendarChanged', function(event){\n! +
-          %!   #{grid.name}.process()\n! +
-          %! });\n!
+        cached_javascript << JsAdaptor.auto_reloading_calendar_event_initialization(grid.name)
       end
 
       content << javascript_tag(
-        %/ document.observe("dom:loaded", function() {\n/ +
+        JsAdaptor.dom_loaded +
         %/ #{prototype_and_js_version_check}\n/ +
         %/ window['#{grid.name}'] = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
         %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n/ +
@@ -752,11 +712,8 @@ module Wice
 
       message = WiceGridNlMessageProvider.get_message(:ALL_QUERIES_WARNING)
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{message}'))" : ''
-      js = %/ $$('div##{grid_name}.wice_grid_container .show_all_link').each(function(e){\n/ +
-           %/   e.observe('click', function(){\n/ +
-           %/     #{confirmation} #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})\n/ +
-           %/   })\n/ +
-           %/ })\n/
+
+      js =  JsAdaptor.show_all_link_initialization(grid_name, confirmation, parameters.to_json)
 
       tooltip = WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_TOOLTIP)
       html = %/<span class="show_all_link"><a href="#" title="#{tooltip}">/ +
@@ -770,11 +727,7 @@ module Wice
       pagination_override_parameter_name = "#{grid_name}[pp]"
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
 
-      js = %/ $$('div##{grid_name}.wice_grid_container .show_all_link').each(function(e){\n/ +
-           %/   e.observe('click', function(){\n/ +
-           %/     #{grid_name}.reload_page_for_given_grid_state(#{parameters.to_json})\n/ +
-           %/   })\n/ +
-           %/ })\n/
+      js =  JsAdaptor.back_to_pagination_link_initialization(grid_name, parameters.to_json)
 
       tooltip = WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP)
       html = %/ <span class="show_all_link"><a href="#" title="#{tooltip}">/ +

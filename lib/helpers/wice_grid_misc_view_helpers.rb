@@ -104,7 +104,7 @@ module Wice
         javascript_include_tag('wice_grid') +
         stylesheet_link_tag('wice_grid') +
         if opts[:include_calendar]
-          stylesheet_link_tag("calendarview.css") + javascript_include_tag("calendarview.js")
+          Wice::JsAdaptor.js_framework_specific_calendar_assets(self)
         else
           ''
         end

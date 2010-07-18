@@ -1,7 +1,6 @@
 # encoding: UTF-8
 require 'will_paginate.rb'
 require 'wice_grid_misc.rb'
-require 'helpers/js_calendar_helpers.rb'
 require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
 require 'table_column_matrix.rb'
@@ -9,11 +8,15 @@ require 'helpers/will_paginate_link_renderer.rb'
 require 'helpers/wice_grid_view_helpers.rb'
 require 'helpers/wice_grid_misc_view_helpers.rb'
 require 'helpers/wice_grid_serialized_queries_view_helpers.rb'
+require 'helpers/js_calendar_helpers_prototype.rb'
 require 'view_columns.rb'
 require 'grid_output_buffer.rb'
 require 'wice_grid_controller.rb'
 require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
+require 'js_adaptors/js_adaptor.rb'
+
+
 
 module Wice
 
