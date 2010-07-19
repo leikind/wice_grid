@@ -3,18 +3,18 @@ module Wice
   module GridViewHelper
 
     # +wice_grid_custom_filter_params+ generates HTTP parameters understood by WiceGrid custom filters.
-    # Combined with Rails route helpers it allows to generate links leading to 
+    # Combined with Rails route helpers it allows to generate links leading to
     # grids with pre-selected custom filters.
     #
     # Parameters:
-    # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of 
+    # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of
     #   <tt>initialize_grid</tt>, the parameter is optional, and when absent, the name
     #   <tt>'grid'</tt> is assumed
-    # * <tt>:attribute_name</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute_name</tt> and 
+    # * <tt>:attribute_name</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute_name</tt> and
     #   <tt>:model_class</tt> of the column declaration with the target custom filter.
     # * <tt>:value</tt> - the value of the column filter.
     def wice_grid_custom_filter_params(opts = {})
-      options = {:grid_name => 'grid', 
+      options = {:grid_name => 'grid',
                  :attribute_name => nil,
                  :model_class => nil,
                  :value => nil}
@@ -95,7 +95,7 @@ module Wice
     # but it's possible not to include them setting parameter +include_calendar+ to false:
     #     <%= include_wice_grid_assets(:include_calendar => false) %>
     def include_wice_grid_assets(options = {})
-
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true, :load_on_demand => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
@@ -119,6 +119,7 @@ module Wice
     #  By default +names_of_wice_grid_javascripts+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_javascripts(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
@@ -135,6 +136,7 @@ module Wice
     #  By default +names_of_wice_grid_stylesheets+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_stylesheets(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
