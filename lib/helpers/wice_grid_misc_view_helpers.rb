@@ -2,42 +2,6 @@
 module Wice
   module GridViewHelper
 
-    # +wice_grid_custom_filter_params+ generates HTTP parameters understood by WiceGrid custom filters.
-    # Combined with Rails route helpers it allows to generate links leading to 
-    # grids with pre-selected custom filters.
-    #
-    # Parameters:
-    # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of 
-    #   <tt>initialize_grid</tt>, the parameter is optional, and when absent, the name
-    #   <tt>'grid'</tt> is assumed
-    # * <tt>:attribute_name</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute_name</tt> and 
-    #   <tt>:model_class</tt> of the column declaration with the target custom filter.
-    # * <tt>:value</tt> - the value of the column filter.
-    def wice_grid_custom_filter_params(opts = {})
-      options = {:grid_name => 'grid', 
-                 :attribute_name => nil,
-                 :model_class => nil,
-                 :value => nil}
-      options.merge!(opts)
-
-      [:attribute_name, :value].each do |key|
-        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
-      end
-
-      attr_name = if options[:model_class]
-        unless options[:model_class].nil?
-          options[:model_class] = options[:model_class].constantize if options[:model_class].is_a? String
-          raise Wice::WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
-        end
-        options[:model_class].table_name + '.' + options[:attribute_name]
-      else
-        options[:attribute_name]
-      end
-
-      {"#{options[:grid_name]}[f][#{attr_name}][]" => options[:value]}
-    end
-
-
     # This method dumps all HTTP parameters related to filtering and ordering of a certain grid as hidden form fields.
     # This might be required if you want to keep the state of a grid while reloading the page using other forms.
     #
@@ -95,7 +59,7 @@ module Wice
     # but it's possible not to include them setting parameter +include_calendar+ to false:
     #     <%= include_wice_grid_assets(:include_calendar => false) %>
     def include_wice_grid_assets(options = {})
-
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true, :load_on_demand => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
@@ -104,7 +68,7 @@ module Wice
         javascript_include_tag('wice_grid') +
         stylesheet_link_tag('wice_grid') +
         if opts[:include_calendar]
-          stylesheet_link_tag("calendarview.css") + javascript_include_tag("calendarview.js")
+          Wice::JsAdaptor.js_framework_specific_calendar_assets(self)
         else
           ''
         end
@@ -119,6 +83,7 @@ module Wice
     #  By default +names_of_wice_grid_javascripts+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_javascripts(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
@@ -135,6 +100,7 @@ module Wice
     #  By default +names_of_wice_grid_stylesheets+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_stylesheets(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)

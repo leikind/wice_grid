@@ -51,12 +51,12 @@ module Wice
     #   throughout all pages. See section "Integration With The Application" in the README.
     # * <tt>:total_entries</tt> - If not specified, <tt>will_paginate</tt> will run a <tt>select count</tt>
     # * <tt>:select</tt> - ActiveRecord <tt>:select</tt> option. Please do not forget that <tt>:select</tt> is ignored
-    #   when <tt>:include</tt> is present. It is unlikely you would need <tt>:select</tt> with WiceGrid, but if you do, 
+    #   when <tt>:include</tt> is present. It is unlikely you would need <tt>:select</tt> with WiceGrid, but if you do,
     #   use it with care :)
     # * <tt>:with_paginated_resultset</tt> - a callback executed from within the plugin to process records of the current page.
     #   Can be a lambda object or a controller method name (symbol). The argument to the callback is the array of the records.
-    # * <tt>:with_resultset</tt> - a callback executed from within the plugin to process all records browsable through 
-    #   all pages with the current filters. Can be a lambda object or a controller method name (symbol). The argument to 
+    # * <tt>:with_resultset</tt> - a callback executed from within the plugin to process all records browsable through
+    #   all pages with the current filters. Can be a lambda object or a controller method name (symbol). The argument to
     #   the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     #
     # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
@@ -121,5 +121,41 @@ module Wice
         false
       end
     end
+
+    # +wice_grid_custom_filter_params+ generates HTTP parameters understood by WiceGrid custom filters.
+    # Combined with Rails route helpers it allows to generate links leading to
+    # grids with pre-selected custom filters.
+    #
+    # Parameters:
+    # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of
+    #   <tt>initialize_grid</tt>, the parameter is optional, and when absent, the name
+    #   <tt>'grid'</tt> is assumed
+    # * <tt>:attribute_name</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute_name</tt> and
+    #   <tt>:model_class</tt> of the column declaration with the target custom filter.
+    # * <tt>:value</tt> - the value of the column filter.
+    def wice_grid_custom_filter_params(opts = {})
+      options = {:grid_name => 'grid',
+                 :attribute_name => nil,
+                 :model_class => nil,
+                 :value => nil}
+      options.merge!(opts)
+
+      [:attribute_name, :value].each do |key|
+        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
+      end
+
+      attr_name = if options[:model_class]
+        unless options[:model_class].nil?
+          options[:model_class] = options[:model_class].constantize if options[:model_class].is_a? String
+          raise Wice::WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
+        end
+        options[:model_class].table_name + '.' + options[:attribute_name]
+      else
+        options[:attribute_name]
+      end
+
+      {"#{options[:grid_name]}[f][#{attr_name}][]" => options[:value]}
+    end
+
   end
 end
