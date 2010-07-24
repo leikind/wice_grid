@@ -2,41 +2,6 @@
 module Wice
   module GridViewHelper
 
-    # +wice_grid_custom_filter_params+ generates HTTP parameters understood by WiceGrid custom filters.
-    # Combined with Rails route helpers it allows to generate links leading to
-    # grids with pre-selected custom filters.
-    #
-    # Parameters:
-    # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of
-    #   <tt>initialize_grid</tt>, the parameter is optional, and when absent, the name
-    #   <tt>'grid'</tt> is assumed
-    # * <tt>:attribute_name</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute_name</tt> and
-    #   <tt>:model_class</tt> of the column declaration with the target custom filter.
-    # * <tt>:value</tt> - the value of the column filter.
-    def wice_grid_custom_filter_params(opts = {})
-      options = {:grid_name => 'grid',
-                 :attribute_name => nil,
-                 :model_class => nil,
-                 :value => nil}
-      options.merge!(opts)
-
-      [:attribute_name, :value].each do |key|
-        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
-      end
-
-      attr_name = if options[:model_class]
-        unless options[:model_class].nil?
-          options[:model_class] = options[:model_class].constantize if options[:model_class].is_a? String
-          raise Wice::WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
-        end
-        options[:model_class].table_name + '.' + options[:attribute_name]
-      else
-        options[:attribute_name]
-      end
-
-      {"#{options[:grid_name]}[f][#{attr_name}][]" => options[:value]}
-    end
-
 
     # This method dumps all HTTP parameters related to filtering and ordering of a certain grid as hidden form fields.
     # This might be required if you want to keep the state of a grid while reloading the page using other forms.

@@ -1,3 +1,5 @@
+wice_grid_custom_filter_params used to be a view helper, not it is also accessible from the controller, to be used in cases like redirect_to(my_resource_path(wice_grid_custom_filter_params(...)))
+
 auto reloading filters
 
 helper export_to_csv_javascript to create custom CSV buttons
@@ -18,7 +20,7 @@ Dropdowns generated with :custom_filter => :auto and :custom_filter => [method c
 
 how_filters => false is the same as :show_filters => :no and :show_filters => true is the same as :show_filters => :always
 
-action_column - Adds a column with checkboxes for each record. 
+action_column - Adds a column with checkboxes for each record.
 Useful for actions with multiple records, for example, delete
 the selected records.
 
@@ -116,7 +118,7 @@ and
 --- Ruby
 :custom_filter => [:symbol1, :symbol2, :symbol3]
 ---
-  
+
 Now, if the last method returns an array of 2 elements, the first element becomes  the select option label and the second - the select option value (usually @id@).
 
 Before this change the value returned by the method had been used for both the value and the label of the select option.
@@ -129,12 +131,12 @@ Values @null@ and @not null@ in a generated custom filter dropdown are treated s
 
 Thus, if in a filter defined by
 
---- Ruby  
+--- Ruby
 :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
 ---
 values @1@, @2@ and @'No'@ are selected (in a multi-select mode),  this will result in the following SQL:
 
---- SQL  
+--- SQL
 ( table.field IN ( '1', '2' ) OR table.field IS NULL )
 ---
 
@@ -157,7 +159,7 @@ h4. td_html_attrs and table_html_attrs shortcuts
 
 @:td_html_attrs@ in column definitions and @table_html_attrs@ in the table definitions are mostly used to add css classes, so a shorter way has been added to add css classes.
 
-Instead of 
+Instead of
 
 --- RHTML
 <%= grid(@grid, :table_html_attrs => {:class => 'css_class1'}) do |g|
@@ -169,7 +171,7 @@ end -%>
 
 It's possible to just use the new @:class@ option:
 
---- RHTML  
+--- RHTML
 <%= grid(@grid, :class => 'css_class1') do |g|
   g.column(:class => 'css_class2') do
   end
@@ -178,7 +180,7 @@ end -%>
 
 h4. allow_multiple_selection
 
-New options for @column@: @:allow_multiple_selection@, use @:allow_multiple_selection => false@ to disable switching between single and multiple selection modes for custom dropdown boxes. 
+New options for @column@: @:allow_multiple_selection@, use @:allow_multiple_selection => false@ to disable switching between single and multiple selection modes for custom dropdown boxes.
 
 "See an online example":http://grid.leikind.org/custom_filters4
 
@@ -205,39 +207,39 @@ h4. other
 
 *  More control over Submit and Reset buttons.
    Two new view helpers: submit_grid_javascript returns javascript which applies current filters; reset_grid_javascript returns javascript
-   which resets the grid, clearing the state of filters. This allows to create your own Submit and Reset buttons anywhere on the page  
+   which resets the grid, clearing the state of filters. This allows to create your own Submit and Reset buttons anywhere on the page
    with the help of button_to_function:
 
      <%= button_to_function "Submit", submit_grid_javascript(@grid) %>
      <%= button_to_function "Reset",  reset_grid_javascript(@grid) %>
 
-   To complement this feature there are two new parameters in the +grid+ helper :hide_submit_button and :hide_reset_button which 
-   hide default buttons in the grid if set to true. Together with detached filter this allows to completely 
+   To complement this feature there are two new parameters in the +grid+ helper :hide_submit_button and :hide_reset_button which
+   hide default buttons in the grid if set to true. Together with detached filter this allows to completely
    get rid of the filter row with filters and icons.
 
 * erb_mode option has been moved to the grid view helper - watch for warnings and remove the parameter from initialize_grid if you have it there.
 
-* helper include_wice_grid_assets will require WiceGrid javascripts and stylesheets on demand, that is, only if at least one initialize_grid 
+* helper include_wice_grid_assets will require WiceGrid javascripts and stylesheets on demand, that is, only if at least one initialize_grid
   has been called in the controller. Otherwise the helper returns an empty string. However, you can force the old unconditioned behavior if you
   need by submitting  parameter :load_on_demand set to false:
     <%= include_wice_grid_assets(:load_on_demand => false) %>
 
-* Compatibility with Rails asset caching. Helpers names_of_wice_grid_stylesheets and names_of_wice_grid_javascripts return names of stylesheet and 
+* Compatibility with Rails asset caching. Helpers names_of_wice_grid_stylesheets and names_of_wice_grid_javascripts return names of stylesheet and
   javascript files and can be used with stylesheet_link_tag and javascript_include_tag with :cache => true. Using this trick you have to deal with
   the parameters correctly, mind that Prototype has to be loaded before WiceGrid javascripts:
 
     <%= stylesheet_link_tag *(['core',  'modalbox'] + names_of_wice_grid_stylesheets + [ {:cache => true}]) %>
-    <%= javascript_include_tag *([:defaults] + names_of_wice_grid_javascripts + [ 'ui', 'swfobject', {:cache => true}]) %> 
+    <%= javascript_include_tag *([:defaults] + names_of_wice_grid_javascripts + [ 'ui', 'swfobject', {:cache => true}]) %>
 
 *  When a page with a WiceGrid instance is loaded there is check a small chunk of javascript that checks whether Prototype is loaded and whether
    the main WiceGrid javascript files is loaded and is of the correct version. Problems are reported to the user via alert() dialog boxes.
    This check has now been disabled in the production mode.
-   
+
 *  The default field separator in generated CSV (comma) can now be overridden by setting :enable_export_to_csv  to a string instead of +true+.
-  
-*  It is possible to add your own handcrafted HTML after and/or before each grid row. This works similar to +row_attributes+, 
+
+*  It is possible to add your own handcrafted HTML after and/or before each grid row. This works similar to +row_attributes+,
    by adding blocks after_row and before_row:
-   
+
    <%= grid(@tasks_grid) do |g|
       g.before_row do |task|
         if task.active?
@@ -249,9 +251,9 @@ h4. other
       end
       .......
     end %>
-  
 
-  
+
+
 *  Bug fixes
 
 *  Refactoring
@@ -281,7 +283,7 @@ All records mode
 
 === 10/12/2008
 
-custom_filter made Rails-compliant, a new flavor -  Array of two-element arrays 
+custom_filter made Rails-compliant, a new flavor -  Array of two-element arrays
 
 === 4/12/2008
 A single helper to include all assets in a page
@@ -318,7 +320,7 @@ Refactoring
 
 === 6/11/2008
 
-Ability to provide a callback to a Proc object or a method, the callback will be called with the objects of the current selection of 
+Ability to provide a callback to a Proc object or a method, the callback will be called with the objects of the current selection of
 objects (throughout all pages). Can be used to use the WiceGrid filters set up by the user for further processing of the user's selection  of
 objects.
 
