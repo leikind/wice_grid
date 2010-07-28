@@ -59,7 +59,6 @@ module Wice
     # but it's possible not to include them setting parameter +include_calendar+ to false:
     #     <%= include_wice_grid_assets(:include_calendar => false) %>
     def include_wice_grid_assets(options = {})
-      Wice::JsAdaptor.init
       opts = {:include_calendar => true, :load_on_demand => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
@@ -68,7 +67,7 @@ module Wice
         javascript_include_tag('wice_grid') +
         stylesheet_link_tag('wice_grid') +
         if opts[:include_calendar]
-          Wice::JsAdaptor.js_framework_specific_calendar_assets(self)
+          stylesheet_link_tag("calendarview.css") + javascript_include_tag("calendarview.js")
         else
           ''
         end
@@ -83,7 +82,6 @@ module Wice
     #  By default +names_of_wice_grid_javascripts+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_javascripts(options = {})
-      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
@@ -100,7 +98,6 @@ module Wice
     #  By default +names_of_wice_grid_stylesheets+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_stylesheets(options = {})
-      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
