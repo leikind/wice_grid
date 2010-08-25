@@ -482,6 +482,7 @@ module Wice
       link_for_export      = rendering.link_for_export(controller, 'csv', options[:extra_request_parameters])
 
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
+      parameter_name_for_focus = {grid.name => {:foc => ''}}.to_query
 
       prototype_and_js_version_check = if ENV['RAILS_ENV'] == 'development'
         %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
@@ -489,7 +490,7 @@ module Wice
         %$     'Please make sure that you include WiceGrid javascript in your page. ' +\n$ +
         %$     'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +\n$ +
         %$     'for WiceGrid javascripts and assets.')\n$ +
-        %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.1")) {\n$ +
+        %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.2")) {\n$ +
         %$    alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets\\nto update it.");\n$ +
         %$ }\n$
       else
@@ -528,11 +529,16 @@ module Wice
         cached_javascript << JsAdaptor.auto_reloading_calendar_event_initialization(grid.name)
       end
 
+      if rendering.element_to_focus
+        cached_javascript << JsAdaptor.focus_element(rendering.element_to_focus)
+      end
+
       content << javascript_tag(
         JsAdaptor.dom_loaded +
         %/ #{prototype_and_js_version_check}\n/ +
         %/ window['#{grid.name}'] = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
-        %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}', '#{ENV['RAILS_ENV']}');\n/ +
+        %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}',\n/ +
+        %/ '#{parameter_name_for_focus}', '#{ENV['RAILS_ENV']}');\n/ +
         if no_filters_at_all
           ''
         else

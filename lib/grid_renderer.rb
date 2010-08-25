@@ -118,6 +118,10 @@ module Wice
       end
     end
 
+    def element_to_focus  #:nodoc:
+      grid.status['foc']
+    end
+
 
     # Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, deleting
     # selected records. Please note that +action_column+ only creates the checkboxes and the 'Select All' and
@@ -443,6 +447,7 @@ module Wice
       if new_params[@grid.name]
         new_params[@grid.name].delete(:page) # we reset paging here
         new_params[@grid.name].delete(:f)    # no filter for the base url
+        new_params[@grid.name].delete(:foc)  # nullify the focus
         new_params[@grid.name].delete(:q)    # and no request for the saved query
       end
 

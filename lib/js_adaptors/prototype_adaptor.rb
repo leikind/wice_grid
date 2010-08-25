@@ -65,7 +65,7 @@ module Wice::JsAdaptor  #:nodoc:
     def auto_reloading_inputs_event_initialization(grid_name)  #:nodoc:
       %! $$('div##{grid_name}.wice_grid_container input.auto_reload', '.#{grid_name}_detached_filter input.auto_reload').each(function(e){\n! +
       %!   e.observe('keyup', function(event){\n! +
-      %!    #{grid_name}.process()\n! +
+      %!     #{grid_name}.process(event.element().id)\n! +
       %!   })\n! +
       %! });\n!
     end
@@ -129,6 +129,12 @@ module Wice::JsAdaptor  #:nodoc:
    
     def fade_this  #:nodoc:
       'new Effect.Fade(this)'
+    end
+
+    def focus_element(element_to_focus)
+      %! var elToFocus = $('#{element_to_focus}');\n! +
+      %! elToFocus.focus();\n! +
+      %! elToFocus.value = elToFocus.value;\n! # this will just place the cursor at the end of the text input
     end
 
   end
