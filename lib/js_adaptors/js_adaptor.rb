@@ -3,9 +3,9 @@
 module Wice::JsAdaptor  #:nodoc:
   def self.init  #:nodoc:
     if Wice::Defaults::JS_FRAMEWORK == :prototype
-      require 'js_adaptors/prototype_adaptor.rb'
+      include Wice::JsAdaptor::Prototype
     else
-      require 'js_adaptors/jquery_adaptor.rb'
+      include Wice::JsAdaptor::Jquery
     end
   end
 end
