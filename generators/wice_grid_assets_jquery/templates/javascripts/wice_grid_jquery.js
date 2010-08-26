@@ -1,5 +1,5 @@
 function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all_records,
-                      link_for_export, parameter_name_for_query_loading, environment){
+                      link_for_export, parameter_name_for_query_loading, parameter_name_for_focus, environment){
 
    this.checkIfJsFrameworkIsLoaded = function(){
      if (! jQuery){
@@ -10,6 +10,7 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
   this.checkIfJsFrameworkIsLoaded();
   this.name = name;
   this.parameter_name_for_query_loading = parameter_name_for_query_loading;
+  this.parameter_name_for_focus = parameter_name_for_focus;
   this.base_request_for_filter = base_request_for_filter;
   this.base_link_for_show_all_records = base_link_for_show_all_records;
   this.link_for_export = link_for_export;
@@ -21,8 +22,8 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
   }
 
 
-  this.process = function(){
-    window.location = this.build_url_with_params();
+  this.process = function(dom_id_to_focus){
+    window.location = this.build_url_with_params(dom_id_to_focus);
   }
 
   this.reload_page_for_given_grid_state = function(grid_state){
@@ -76,7 +77,7 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
   }
 
 
-  this.build_url_with_params = function(){
+  this.build_url_with_params = function(dom_id_to_focus){
     var results = new Array();
     var _this =  this;
     jQuery.each(this.filter_declarations, function(i, filter_declaration){
@@ -92,6 +93,9 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
     if ( results.length != 0){
       all_filter_params = results.join('&');
       res = this.append_to_url(res, all_filter_params);
+    }
+    if (dom_id_to_focus){
+      res = this.append_to_url(res, this.parameter_name_for_focus + dom_id_to_focus);
     }
     return res;
   }
@@ -148,4 +152,4 @@ function toggle_multi_select(select_id, link_obj, expand_label, collapse_label) 
   }
 }
 
-WiceGridProcessor._version = '0.4.1';
+WiceGridProcessor._version = '0.4.2';

@@ -131,7 +131,7 @@ module Wice::JsAdaptor  #:nodoc:
       'new Effect.Fade(this)'
     end
 
-    def focus_element(element_to_focus)
+    def focus_element(element_to_focus)  #:nodoc:
       %! var elToFocus = $('#{element_to_focus}');\n! +
       %! elToFocus.focus();\n! +
       %! elToFocus.value = elToFocus.value;\n! # this will just place the cursor at the end of the text input
