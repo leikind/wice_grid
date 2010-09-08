@@ -25,27 +25,25 @@ module Wice
         parameters << [ CGI.unescape({:extra => {k => ''}}.to_query.sub(/=$/,'')) , v.to_s ]
       end
       parameters <<  ['authenticity_token', form_authenticity_token]
+
       (%! <div class="wice_grid_query_panel"><h3>#{WiceGridNlMessageProvider.get_message(:SAVED_QUERY_PANEL_TITLE)}</h3>! +
         saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
-        %!<div id="#{grid_name}_notification_messages"  onmouseover="new Effect.Fade(this)"></div>! +
+        %!<div id="#{grid_name}_notification_messages"  onmouseover="#{Wice::JsAdaptor.fade_this}"></div>! +
         if block_given?
           view, ids = yield
           view
         else
           ''
         end +
-        text_field_tag(id_and_name,  '',
-          :size => 20, :onkeydown=>'', :id => id_and_name) +
-        button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +  '</div>' +
+        text_field_tag(id_and_name,  '', :size => 20, :onkeydown=>'', :id => id_and_name) +
+        button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +  
+        '</div>' +
         javascript_tag do
-          %/ function #{grid_name}_save_query(){\n/ +
-          %/  if ( typeof(#{grid_name}) != "undefined")\n/ +
-          %/      #{grid_name}.save_query($F('#{id_and_name}'), '#{base_path_to_query_controller}', #{parameters.to_json}, #{ids.to_json})\n/ +
-          %/}\n/ +
-          %/ $('#{id_and_name}').observe('keydown', function(event){\n/ +
-          %/    if (event.keyCode == 13) #{grid_name}_save_query();\n/ +
-          %/ })\n/
-        end).html_safe
+          JsAdaptor.call_to_save_query_and_key_event_initialization_for_saving_queries(
+            id_and_name, grid_name, base_path_to_query_controller, parameters.to_json, ids.to_json
+          )
+        end
+        ).html_safe
     end
 
     def saved_queries_list(grid_name, saved_query = nil, extra_parameters = nil)  #:nodoc:

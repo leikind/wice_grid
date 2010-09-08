@@ -171,20 +171,8 @@ module Wice
              content_tag(:span, image_tag(Defaults::UNTICK_ALL_ICON, :alt => deselect_all_tootip),
                          :class => 'clickable deselect_all', :title => deselect_all_tootip)
 
-      js = %! $$('div##{grid.name}.wice_grid_container .select_all').each(function(e){\n! +
-           %!   e.observe('click', function(){\n! +
-           %!     $$('div##{grid.name}.wice_grid_container .sel input').each(function(checkbox){\n! +
-           %!       checkbox.checked = true;\n! +
-           %!     })\n! +
-           %!   })\n! +
-           %! })\n! +
-           %! $$('div##{grid.name}.wice_grid_container .deselect_all').each(function(e){\n! +
-           %!   e.observe('click', function(){\n! +
-           %!     $$('div##{grid.name}.wice_grid_container .sel input').each(function(checkbox){\n! +
-           %!       checkbox.checked = false;\n! +
-           %!     })\n! +
-           %!   })\n! +
-           %! })\n!
+      js = JsAdaptor.action_column_initialization(grid.name)
+
       [html, js]
     end
 
@@ -255,7 +243,7 @@ module Wice
           select_options[:multiple] = params.is_a?(Array) && params.size > 1
           select_toggle = content_tag(:a,
             tag(:img, :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
-            :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');",
+            :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');", # TO DO: to locales
             :class => 'toggle_multi_select_icon', :title => 'Expand')
         else
           select_options[:multiple] = false
@@ -282,7 +270,6 @@ module Wice
     end
   end
 
-
   class ViewColumnBoolean < ViewColumnCustomDropdown #:nodoc:
     @@handled_type[:boolean] = self
     include ActionView::Helpers::FormOptionsHelper
@@ -297,7 +284,6 @@ module Wice
       super(params)
     end
   end
-
 
   class ViewColumnDatetime < ViewColumn #:nodoc:
     @@handled_type[:datetime] = self
@@ -357,7 +343,7 @@ module Wice
 
     def render_filter_internal(params) #:nodoc:
 
-      if helper_style == :standard
+      if helper_style == :standard || Defaults::JS_FRAMEWORK == :jquery
         prepare_for_standard_filter
         render_standard_filter_internal(params)
       else
@@ -399,8 +385,6 @@ module Wice
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
   end
-
-
 
   class ViewColumnString < ViewColumn #:nodoc:
     @@handled_type[:string] = self

@@ -2,6 +2,7 @@
 module Wice
   module GridViewHelper
 
+
     # This method dumps all HTTP parameters related to filtering and ordering of a certain grid as hidden form fields.
     # This might be required if you want to keep the state of a grid while reloading the page using other forms.
     #
