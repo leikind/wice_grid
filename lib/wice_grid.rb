@@ -455,7 +455,7 @@ module Wice
       end
 
       if custom_order.blank?
-        ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name)
+        ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name.strip)
       else
         if custom_order.is_a? String
           custom_order.gsub(/\?/, fully_qualified_column_name)
