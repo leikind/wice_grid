@@ -71,6 +71,7 @@ module Wice
         :csv_file_name        => nil,
         :custom_order         => {},
         :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
+        :group                => nil,
         :include              => nil,
         :joins                => nil,
         :name                 => Defaults::GRID_NAME,
@@ -245,6 +246,7 @@ module Wice
 
       @ar_options[:joins]   = @options[:joins]
       @ar_options[:include] = @options[:include]
+      @ar_options[:group] = @options[:group]
       @ar_options[:select]  = @options[:select]
     end
 
@@ -342,7 +344,7 @@ module Wice
 
     def count  #:nodoc:
       form_ar_options(:skip_ordering => true, :forget_generated_options => true)
-      @klass.count(:conditions => @ar_options[:conditions], :joins => @ar_options[:joins], :include => @ar_options[:include])
+      @klass.count(:conditions => @ar_options[:conditions], :joins => @ar_options[:joins], :include => @ar_options[:include], :group => @ar_options[:group])
     end
 
     alias_method :size, :count
@@ -489,6 +491,7 @@ module Wice
       with_exclusive_scope do
         @klass.find(:all, :joins => @ar_options[:joins], 
                           :include => @ar_options[:include], 
+                          :group => @ar_options[:group],
                           :conditions => @options[:conditions])
       end
     end
@@ -498,6 +501,7 @@ module Wice
       with_exclusive_scope do
         @klass.find(:all, :joins      => @ar_options[:joins],
                           :include    => @ar_options[:include],
+                          :group      => @ar_options[:group],
                           :conditions => @ar_options[:conditions],
                           :order      => @ar_options[:order])
       end
