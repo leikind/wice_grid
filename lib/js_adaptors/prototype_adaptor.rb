@@ -1,13 +1,13 @@
 # encoding: UTF-8
 module Wice::JsAdaptor  #:nodoc:
 
-  module Prototype
+  module Prototype    #:nodoc:
 
-    def self.included(base)
+    def self.included(base)   #:nodoc:
       base.extend(ClassMethods)
     end
 
-    module ClassMethods
+    module ClassMethods   #:nodoc:
       def init  #:nodoc:
       end
 

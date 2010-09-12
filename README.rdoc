@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 0.5
+Version:: 0.5.6
 Author::  Yuri Leikind
 Contributor::  Xavier Defrang
 Homepage:: http://leikind.org/pages/wicegrid

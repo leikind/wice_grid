@@ -174,6 +174,6 @@ module StringExt #:nodoc:
   end
 end
 
-class String
+class String #:nodoc:
   include StringExt
 end
