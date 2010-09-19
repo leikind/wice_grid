@@ -96,6 +96,14 @@ module Wice::JsAdaptor   #:nodoc:
         ''
       end
 
+      def js_framework_specific_calendar_js_name  #:nodoc:
+        nil
+      end
+
+      def js_framework_specific_calendar_css_name  #:nodoc:
+        nil
+      end
+
       def action_column_initialization(grid_name)  #:nodoc:
         %! $('div##{grid_name}.wice_grid_container .select_all').click(function(e){\n! +
         %!   $('div##{grid_name}.wice_grid_container .sel input').each(function(i, checkbox){\n! +

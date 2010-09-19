@@ -68,7 +68,7 @@ module Wice
         javascript_include_tag('wice_grid') +
         stylesheet_link_tag('wice_grid') +
         if opts[:include_calendar]
-          stylesheet_link_tag("calendarview.css") + javascript_include_tag("calendarview.js")
+          JsAdaptor.js_framework_specific_calendar_assets(self)
         else
           ''
         end
@@ -87,7 +87,8 @@ module Wice
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       res = ['wice_grid']
-      res <<  'calendarview.js' if opts[:include_calendar]
+      n = js_framework_specific_calendar_js_name
+      res <<  n if n && opts[:include_calendar]
       res
     end
 
@@ -103,7 +104,8 @@ module Wice
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       res = ['wice_grid']
-      res << "calendarview.css" if opts[:include_calendar]
+      n = js_framework_specific_calendar_css_name
+      res << n if n && opts[:include_calendar]
       res
     end
 

@@ -116,6 +116,15 @@ module Wice::JsAdaptor  #:nodoc:
         view.stylesheet_link_tag("calendarview.css") + view.javascript_include_tag("calendarview.js")
       end
 
+      def js_framework_specific_calendar_js_name  #:nodoc:
+        'calendarview.js'
+      end
+
+      def js_framework_specific_calendar_css_name  #:nodoc:
+        'calendarview.css'
+      end
+
+
       def action_column_initialization(grid_name)  #:nodoc:
         %! $$('div##{grid_name}.wice_grid_container .select_all').each(function(e){\n! +
         %!   e.observe('click', function(){\n! +
