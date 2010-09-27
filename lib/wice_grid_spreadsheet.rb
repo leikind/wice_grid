@@ -3,6 +3,8 @@ require 'csv'
 
 module Wice
   class Spreadsheet  #:nodoc:
+
+    attr_reader :tempfile
     # CSV in 1.9.1 is a version of FasterCSV
     if RUBY_VERSION == '1.9.1' || RUBY_VERSION == '1.9.2'
 
@@ -26,15 +28,6 @@ module Wice
            csv << row.map(&:to_s)
         end
       end
-    end
-    
-    
-    def path  #:nodoc:
-      @tempfile.path
-    end
-
-    def close  #:nodoc:
-      @tempfile.close
     end
   end
 end

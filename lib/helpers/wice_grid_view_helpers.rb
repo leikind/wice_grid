@@ -692,8 +692,8 @@ module Wice
         end
         spreadsheet << row
       end
-      spreadsheet.close
-      return spreadsheet.path
+      grid.csv_tempfile = spreadsheet.tempfile
+      return grid.csv_tempfile.path
     end
 
     def pagination_panel_content(grid, extra_request_parameters, allow_showing_all_records) #:nodoc:

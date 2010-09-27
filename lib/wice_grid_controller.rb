@@ -117,6 +117,7 @@ module Wice
         temp_filename.strip!
         filename = (grid.csv_file_name || grid.name ) + '.csv'
         send_file temp_filename, :filename => filename, :type => 'text/csv'
+        grid.csv_tempfile.close
         true
       else
         yield if block_given?
