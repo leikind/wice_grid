@@ -289,7 +289,8 @@ module Wice
     @@handled_type[:datetime] = self
     @@handled_type[:timestamp] = self
     include ActionView::Helpers::DateHelper
-    include ::Wice::JSCalendarHelpers
+    include Wice::JsCalendarHelpers
+
 
     # name_and_id_from_options in Rails Date helper does not substitute '.' with '_'
     # like all other simpler form helpers do. Thus, overriding it here.
@@ -331,10 +332,10 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
-      html1, js1 = datetime_calendar(params[:fr],
+      html1, js1 = datetime_calendar_prototype(params[:fr],
         {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = datetime_calendar(params[:to],
+      html2, js2 = datetime_calendar_prototype(params[:to],
         {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
@@ -342,7 +343,7 @@ module Wice
 
 
     def render_filter_internal(params) #:nodoc:
-
+      # falling back to the Rails helpers for Datetime
       if helper_style == :standard || Defaults::JS_FRAMEWORK == :jquery
         prepare_for_standard_filter
         render_standard_filter_internal(params)
@@ -368,6 +369,14 @@ module Wice
 
     @@datetime_chunk_names = %w(year month day)
 
+    def define_calendar_helper_method
+      @@calendar_helper_method = if Wice::Defaults::JS_FRAMEWORK == :prototype
+        :date_calendar_prototype
+      else
+        :date_calendar_jquery
+      end
+    end
+
     def render_standard_filter_internal(params) #:nodoc:
       '<div class="date-filter">' +
       select_date(params[:fr], {:include_blank => true, :prefix => @name1, :id => @dom_id}) + '<br/>' +
@@ -376,13 +385,27 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
+      define_calendar_helper_method unless ViewColumnDate.class_variable_defined?(:@@calendar_helper_method)
 
-      html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
+      html1, js1 = send(@@calendar_helper_method, params[:fr], 
+        {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
+      html2, js2 = send(@@calendar_helper_method, params[:to], 
+        {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
+    end
+    
+    def render_filter_internal(params) #:nodoc:
+
+      if helper_style == :standard
+        prepare_for_standard_filter
+        render_standard_filter_internal(params)
+      else
+        prepare_for_calendar_filter
+        render_calendar_filter_internal(params)
+      end
     end
   end
 

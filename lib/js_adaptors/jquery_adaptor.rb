@@ -66,7 +66,9 @@ module Wice::JsAdaptor   #:nodoc:
       end
 
       def auto_reloading_calendar_event_initialization(grid_name)  #:nodoc:
-        '' # TO DO jquery calendar is not yet here
+        %! $(document).bind('wg:calendarChanged', function(event){\n! +
+        %!   #{grid_name}.process()\n! +
+        %! });\n!
       end
 
       def show_all_link_initialization(grid_name, confirmation, parameters_json)  #:nodoc:

@@ -8,8 +8,8 @@ require 'helpers/will_paginate_link_renderer.rb'
 require 'helpers/wice_grid_view_helpers.rb'
 require 'helpers/wice_grid_misc_view_helpers.rb'
 require 'helpers/wice_grid_serialized_queries_view_helpers.rb'
-require 'helpers/js_calendar_helpers_prototype.rb'
-require 'view_columns.rb'
+require 'helpers/wice_grid_view_helpers.rb'
+require 'helpers/js_calendar_helpers.rb'
 require 'grid_output_buffer.rb'
 require 'wice_grid_controller.rb'
 require 'wice_grid_spreadsheet.rb'
@@ -17,7 +17,7 @@ require 'wice_grid_serialized_queries_controller.rb'
 require 'js_adaptors/js_adaptor.rb'
 require 'js_adaptors/jquery_adaptor.rb'
 require 'js_adaptors/prototype_adaptor.rb'
-
+require 'view_columns.rb'
 
 
 module Wice
@@ -128,7 +128,7 @@ module Wice
       process_params
 
       @ar_options_formed = false
-      
+
       @method_scoping = @klass.send(:scoped_methods)[-1]
     end
 
@@ -138,8 +138,8 @@ module Wice
       @options[:with_paginated_resultset] = callback
     end
 
-    # A block executed from within the plugin to process all records browsable through 
-    # all pages with the current filters. The argument to 
+    # A block executed from within the plugin to process all records browsable through
+    # all pages with the current filters. The argument to
     # the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     def with_resultset(&callback)
       @options[:with_resultset] = callback
@@ -257,7 +257,7 @@ module Wice
       end
       invoke_resultset_callbacks
     end
-    
+
 
     # core workflow methods END
 
@@ -355,8 +355,8 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model_klass.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar| 
-        ar[column.name] 
+      res = column.model_klass.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar|
+        ar[column.name]
       }.reject{|e| e.blank?}.map{|i|[i,i]}
     end
 
@@ -403,7 +403,7 @@ module Wice
       all_pages_records
     end
 
-    # Returns the list of objects browsable through all pages with the current filters. 
+    # Returns the list of objects browsable through all pages with the current filters.
     # Should only be called after the +grid+ helper.
     def all_pages_records
       raise WiceGridException.new("all_pages_records can only be called only after the grid view helper") unless self.view_helper_finished
@@ -489,8 +489,8 @@ module Wice
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
       with_exclusive_scope do
-        @klass.find(:all, :joins => @ar_options[:joins], 
-                          :include => @ar_options[:include], 
+        @klass.find(:all, :joins => @ar_options[:joins],
+                          :include => @ar_options[:include],
                           :group => @ar_options[:group],
                           :conditions => @options[:conditions])
       end
@@ -524,7 +524,7 @@ module Wice
       def special_value(str)   #:nodoc:
         str =~ /^\s*(not\s+)?null\s*$/i
       end
-      
+
       # create a Time instance out of parameters
       def params_2_datetime(par)   #:nodoc:
         return nil if par.blank?
@@ -570,8 +570,8 @@ module Wice
         current_parameter_name = alias_or_table_name(table_alias) + '.' + self.name
       end
 
-      # Preprocess incoming parameters for datetime, if what's coming in is 
-      # a datetime (with custom_filter it can be anything else, and not 
+      # Preprocess incoming parameters for datetime, if what's coming in is
+      # a datetime (with custom_filter it can be anything else, and not
       # the datetime hash {:fr => ..., :to => ...})
       if @request_params
         if (self.type == :datetime || self.type == :timestamp) && @request_params.is_a?(Hash)
@@ -587,8 +587,8 @@ module Wice
 
         end
 
-        # Preprocess incoming parameters for date, if what's coming in is 
-        # a date (with custom_filter it can be anything else, and not 
+        # Preprocess incoming parameters for date, if what's coming in is
+        # a date (with custom_filter it can be anything else, and not
         # the date hash {:fr => ..., :to => ...})
         if self.type == :date && @request_params.is_a?(Hash)
           [:fr, :to].each do |sym|
