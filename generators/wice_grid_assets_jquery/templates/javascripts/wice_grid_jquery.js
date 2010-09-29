@@ -126,7 +126,13 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
         }
         return '';
       }
-      var val = $('#' + ids[i]).val();
+      var el = $('#' + ids[i]);
+      var val;
+      if (el[0] && el[0].type == 'checkbox'){
+        if (el[0].checked) val = 1;
+      } else {
+        val = el.val();
+      }
       if (val instanceof Array) {
         for(j = 0; j < val.length; j++){
           if (val[j] && val[j] != "")
@@ -152,4 +158,4 @@ function toggle_multi_select(select_id, link_obj, expand_label, collapse_label) 
   }
 }
 
-WiceGridProcessor._version = '0.4.2';
+WiceGridProcessor._version = '0.4.3';
