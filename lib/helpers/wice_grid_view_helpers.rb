@@ -327,7 +327,7 @@ module Wice
           content.stubborn_output_mode = true
           rendering.each_column(:in_html) do |column|
             if column.filter_shown?
-              filter_html_code, filter_js_code = column.render_filter
+              filter_html_code, filter_js_code = column.render_filter(true)
               filter_html_code = filter_html_code.html_safe_if_necessary
               cached_javascript << filter_js_code
               content.add_filter(column.detach_with_id, filter_html_code)
@@ -347,7 +347,7 @@ module Wice
           rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
             if column.filter_shown?
 
-              filter_html_code, filter_js_code = column.render_filter
+              filter_html_code, filter_js_code = column.render_filter(self)
               filter_html_code = filter_html_code.html_safe_if_necessary
               cached_javascript << filter_js_code
               if column.detach_with_id
