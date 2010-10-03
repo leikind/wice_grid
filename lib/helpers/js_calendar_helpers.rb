@@ -70,6 +70,8 @@ module Wice
       javascript <<  %|   buttonImage: "#{::Wice::Defaults::CALENDAR_ICON}",\n|
       javascript <<  %|   buttonImageOnly: true,\n|
       javascript <<  %|   buttonText: "#{title}",\n|
+      javascript <<  %|   changeMonth: true,\n|
+      javascript <<  %|   changeYear: true,\n|
       javascript <<  %|   onSelect: function(dateText, inst) {\n|
       javascript <<  %|     $("##{date_span_id}").html(dateText);\n|
       if fireEvent
