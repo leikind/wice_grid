@@ -26,10 +26,12 @@ module Wice
       lang = Object.const_defined?(:I18n) ? I18n.locale : nil
 
       if lang
-        javascript <<  %| var regionalOptions = $.datepicker.regional['#{lang}']  ;\n|
-        javascript <<  %| delete regionalOptions.dateFormat ;\n|
-        javascript <<  %| delete regionalOptions.firstDate ;\n|
-        javascript <<  %| $( "##{dom_id}" ).datepicker( "option", $.datepicker.regional['#{lang}'] );\n|
+        javascript <<  %| if ($.datepicker.regional['#{lang}']){\n|
+        javascript <<  %|   var regionalOptions = $.datepicker.regional['#{lang}']  ;\n|
+        javascript <<  %|   delete regionalOptions.dateFormat ;\n|
+        javascript <<  %|   delete regionalOptions.firstDate ;\n|
+        javascript <<  %|   $( "##{dom_id}" ).datepicker( "option", $.datepicker.regional['#{lang}'] );\n|
+        javascript <<  %| }\n|
       end
 
       javascript += %| $('##{datepicker_placeholder_id} .ui-datepicker-trigger').addClass('clickable');\n|
@@ -55,7 +57,7 @@ module Wice
 
       date_picker =
 
-        text_field_tag(name, date_string, :id => dom_id) + ' ' +
+        hidden_field_tag(name, date_string, :id => dom_id) + ' ' +
 
         link_to_function(
           content_tag(:span, date_string, :id => date_span_id),
