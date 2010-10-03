@@ -369,14 +369,6 @@ module Wice
 
     @@datetime_chunk_names = %w(year month day)
 
-    def define_calendar_helper_method
-      @@calendar_helper_method = if Wice::Defaults::JS_FRAMEWORK == :prototype
-        :date_calendar_prototype
-      else
-        :date_calendar_jquery
-      end
-    end
-
     def render_standard_filter_internal(params) #:nodoc:
       '<div class="date-filter">' +
       select_date(params[:fr], {:include_blank => true, :prefix => @name1, :id => @dom_id}) + '<br/>' +
@@ -385,12 +377,16 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
-      define_calendar_helper_method unless ViewColumnDate.class_variable_defined?(:@@calendar_helper_method)
+      calendar_helper_method = if Wice::Defaults::JS_FRAMEWORK == :prototype
+        :date_calendar_prototype
+      else
+        :date_calendar_jquery
+      end
 
-      html1, js1 = send(@@calendar_helper_method, params[:fr], 
+      html1, js1 = send(calendar_helper_method, params[:fr],
         {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = send(@@calendar_helper_method, params[:to], 
+      html2, js2 = send(calendar_helper_method, params[:to],
         {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
