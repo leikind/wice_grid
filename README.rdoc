@@ -81,12 +81,27 @@ configuration file <tt>wice_grid_config.rb</tt> defines for which JS framework c
 Generators +wice_grid_assets_prototype+ and +wice_grid_assets_jquery+ create a version of  <tt>wice_grid_config.rb</tt>
 with the corresponding value of <tt>Wice::Defaults::JS_FRAMEWORK</tt>.
 
-THERE IS TEMPORARILY NO JAVASCRIPT CALENDAR IN THE JQUERY VERSION AND ALL DATE/DATETIME FILTERS FALL BACK TO THE DEFAULT 
+
+In the Prototype mode the plugin uses a forked[http://github.com/leikind/calendarview] version of Calendarview[http://github.com/jsmecham/calendarview]. It is bundled with the plugin and the generator task
++wice_grid_assets_prototype+ will install al necessary assets.
+
+The jQuery version uses jQuery datepicker[http://jqueryui.com/demos/datepicker/]. Because this is part
+of the standard jQuery codebase, it is not bundled together with the plugin, and it is the responsibility
+of the programmer to include all necessary assets including localization files if the application is 
+multilingual.
+
+It is always possible to fall back to simple dropdown lists that the standard date/datetime Rails helpers use.
+
+JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT 
 RAILS DATE/DATETIME HELPERS.
+
 
 === Basics
 
-WiceGrid requires prototype.js and effects.js in order to function, so make sure you have <tt><%=javascript_include_tag :defaults %></tt> in your layout template.
+The Prototype version of WiceGrid requires <tt>prototype.js</tt> and <tt>effects.js</tt> in order to function.
+The jQuery version of WiceGrid requires <tt>jquery.js</tt> and <tt>jquery-ui.js</tt> in order to function.
+
+Thus, make sure you have <tt><%=javascript_include_tag :defaults %></tt> in your layout template.
 
 To include WiceGrid javascript and stylesheet files to the page use helper +include_wice_grid_assets+ :
 
@@ -804,12 +819,28 @@ keep ordering and filtering.
 
 === Javascript Calendar for Date and DateTime Filters.
 
-Standard Rails Date and DateTime helpers are a set of dropdown lists, and while this is practical, displaying two Date or especially DateTime
+Standard Rails Date and DateTime helpers are a set of dropdown lists, and while this is practical, 
+displaying two Date or especially DateTime
 helpers takes too much space on a page and is in general confusing.
 
 To solve this, WiceGrid includes a second variant of Date/DateTime filters based on a Javascript calendar.
 
-Calendar based helpers are enabled by default, but it's possible to change it in <tt>config/initializers/wice_grid_config.rb</tt>, variable HELPER_STYLE.
+In the Prototype mode the plugin uses a forked[http://github.com/leikind/calendarview] version of Calendarview[http://github.com/jsmecham/calendarview]. It is bundled with the plugin and the generator task
++wice_grid_assets_prototype+ will install al necessary assets.
+
+The jQuery version uses jQuery datepicker[http://jqueryui.com/demos/datepicker/]. Because this is part
+of the standard jQuery codebase, it is not bundled together with the plugin, and it is the responsibility
+of the programmer to include all necessary assets including localization files if the application is 
+multilingual.
+
+It is always possible to fall back to simple dropdown lists that the standard date/datetime Rails helpers use.
+
+JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT 
+RAILS DATE/DATETIME HELPERS.
+
+
+Calendar based helpers are enabled by default, but it's possible to change it in 
+<tt>config/initializers/wice_grid_config.rb</tt>, variable HELPER_STYLE.
 
 The flavor of the date filter can also be changed on per-column basis:
 
@@ -821,11 +852,20 @@ The flavor of the date filter can also be changed on per-column basis:
     task.created_at.to_s(:short)
   end
 
-You can change the presentation format of the date changing +DATETIME_FORMAT+ and +DATE_FORMAT+ in
-<tt>config/initializers/wice_grid_config.rb</tt>. Doing
-this,  make sure that lamdbas defined in +DATETIME_PARSER+ and +DATE_PARSER+ return  valid DateTime and Date objects. The format
-by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and DateTime.parse and Date.parse handle it.
+Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ define the format of dates the user will see, as well as the
+format of the string sent in a HTTP parameter.
+
+You can change the constants in
+<tt>config/initializers/wice_grid_config.rb</tt>. Doing so,  make sure that lamdbas defined 
+in +DATETIME_PARSER+ and +DATE_PARSER+ return valid DateTime and Date objects. The format
+by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and <tt>Time.zone.parse</tt> 
+and <tt>Date.parse</tt> handle it.
 Make sure it stays so.
+
+jQuery +datepicker+ uses a different format flavor, therefore there is an additional constant 
++DATE_FORMAT_JQUERY+. While +DATE_FORMAT_JQUERY+ is fed to +datepicker+, +DATE_FORMAT+ is still used
+for presenting initial date values in filters, so make sure that +DATE_FORMAT_JQUERY+ and +DATE_FORMAT+
+result in an identical date representation.
 
 
 === Show All Records
