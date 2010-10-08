@@ -82,6 +82,20 @@ module Wice
 
       lang = Object.const_defined?(:I18n) ? I18n.locale : nil
 
+      if Rails.env == 'development'
+        unless view.respond_to? :datepicker_check_done
+
+          javascript <<  %| if (! $.datepicker2 ){\n|
+          javascript <<  %|    alert("Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)|
+          javascript <<  %| installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in |
+          javascript <<  %| wice_grid_config.rb in order to use standard Rails date helpers")\n|
+          javascript <<  %| }\n|
+
+          def view.datepicker_check_done
+          end
+        end
+      end
+
       if lang
         unless view.respond_to? :wg_calendar_lang_set
 
