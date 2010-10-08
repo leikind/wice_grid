@@ -57,13 +57,13 @@ module Wice
       end
     end
 
-    def render_filter #:nodoc:
+    def render_filter(view) #:nodoc:
       params = @grid.filter_params(self)
-      res = render_filter_internal(params)
+      res = render_filter_internal(params, view)
       return (res.is_a?(Array)) ? res : [res, nil]
     end
 
-    def render_filter_internal(params) #:nodoc:
+    def render_filter_internal(params, view) #:nodoc:
       '<!-- implement me! -->'
     end
 
@@ -181,7 +181,7 @@ module Wice
   class ViewColumnInteger < ViewColumn #:nodoc:
     @@handled_type[:integer] = self
 
-    def render_filter_internal(params) #:nodoc:
+    def render_filter_internal(params, view) #:nodoc:
       @contains_a_text_input = true
 
       @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:fr => '')
@@ -220,7 +220,7 @@ module Wice
     attr_accessor :filter_all_label
     attr_accessor :custom_filter
 
-    def render_filter_internal(params) #:nodoc:
+    def render_filter_internal(params, view) #:nodoc:
       @query, @query_without_equals_sign, @parameter_name, @dom_id = form_parameter_name_id_and_query('')
       @query_without_equals_sign += '%5B%5D='
 
@@ -276,12 +276,12 @@ module Wice
 
     attr_accessor :boolean_filter_true_label, :boolean_filter_false_label
 
-    def render_filter_internal(params) #:nodoc:
+    def render_filter_internal(params, view) #:nodoc:
       @custom_filter = {@filter_all_label => nil,
                         @boolean_filter_true_label  => 't',
                         @boolean_filter_false_label => 'f' }
       @turn_off_select_toggling = true
-      super(params)
+      super(params, view)
     end
   end
 
@@ -289,7 +289,8 @@ module Wice
     @@handled_type[:datetime] = self
     @@handled_type[:timestamp] = self
     include ActionView::Helpers::DateHelper
-    include ::Wice::JSCalendarHelpers
+    include Wice::JsCalendarHelpers
+
 
     # name_and_id_from_options in Rails Date helper does not substitute '.' with '_'
     # like all other simpler form helpers do. Thus, overriding it here.
@@ -330,25 +331,25 @@ module Wice
       '</div>'
     end
 
-    def render_calendar_filter_internal(params) #:nodoc:
-      html1, js1 = datetime_calendar(params[:fr],
+    def render_calendar_filter_internal(params, view) #:nodoc:
+      html1, js1 = datetime_calendar_prototype(params[:fr], view,
         {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = datetime_calendar(params[:to],
+      html2, js2 = datetime_calendar_prototype(params[:to], view,
         {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
 
 
-    def render_filter_internal(params) #:nodoc:
-
+    def render_filter_internal(params, view) #:nodoc:
+      # falling back to the Rails helpers for Datetime
       if helper_style == :standard || Defaults::JS_FRAMEWORK == :jquery
         prepare_for_standard_filter
         render_standard_filter_internal(params)
       else
         prepare_for_calendar_filter
-        render_calendar_filter_internal(params)
+        render_calendar_filter_internal(params, view)
       end
     end
 
@@ -375,14 +376,33 @@ module Wice
       '</div>'
     end
 
-    def render_calendar_filter_internal(params) #:nodoc:
+    def render_calendar_filter_internal(params, view) #:nodoc:
 
-      html1, js1 = date_calendar(params[:fr], {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
+      calendar_helper_method = if Wice::Defaults::JS_FRAMEWORK == :prototype
+        :date_calendar_prototype
+      else
+        :date_calendar_jquery
+      end
+
+      html1, js1 = send(calendar_helper_method, params[:fr], view,
+        {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = date_calendar(params[:to], {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
+      html2, js2 = send(calendar_helper_method, params[:to], view,
+        {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
+    end
+    
+    def render_filter_internal(params, view) #:nodoc:
+
+      if helper_style == :standard
+        prepare_for_standard_filter
+        render_standard_filter_internal(params)
+      else
+        prepare_for_calendar_filter
+        render_calendar_filter_internal(params, view)
+      end
     end
   end
 
@@ -392,7 +412,7 @@ module Wice
 
     attr_accessor :negation
 
-    def render_filter_internal(params) #:nodoc:
+    def render_filter_internal(params, view) #:nodoc:
       @contains_a_text_input = true
       css_class = auto_reload ? 'auto_reload' : nil
 
