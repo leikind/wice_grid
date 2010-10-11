@@ -239,7 +239,13 @@ module Wice
       end
 
       if self.output_html?
-        @ar_options[:per_page] = @status[:pp] || @status[:per_page]
+        @ar_options[:per_page] = if all_record_mode?
+          # reset the :pp value in all records mode
+          @status[:pp] = count_resultset_without_paging_without_user_filters
+        else
+          @status[:per_page]
+        end
+
         @ar_options[:page] = @status[:page]
         @ar_options[:total_entries] = @status[:total_entries] if @status[:total_entries]
       end
@@ -495,6 +501,19 @@ module Wice
                           :conditions => @options[:conditions])
       end
     end
+
+    def count_resultset_without_paging_without_user_filters  #:nodoc:
+      form_ar_options
+      with_exclusive_scope do
+        @klass.count(
+          :joins => @ar_options[:joins],
+          :include => @ar_options[:include],
+          :group => @ar_options[:group],
+          :conditions => @options[:conditions]
+        )
+      end
+    end
+
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       form_ar_options
