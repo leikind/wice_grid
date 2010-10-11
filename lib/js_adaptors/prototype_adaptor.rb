@@ -76,6 +76,15 @@ module Wice::JsAdaptor  #:nodoc:
         %! });\n!
       end
 
+      def auto_reloading_inputs_with_negation_checkboxes_event_initialization(grid_name)  #:nodoc:
+        %! $$('div##{grid_name}.wice_grid_container input.negation_checkbox', '.#{grid_name}_detached_filter input.negation_checkbox').each(function(e){\n! +
+        %!   e.observe('click', function(event){\n! +
+        %!     #{grid_name}.process(event.element().id)\n! +
+        %!   })\n! +
+        %! });\n!
+      end
+
+
       def auto_reloading_calendar_event_initialization(grid_name)  #:nodoc:
         %! document.observe('wg:calendarChanged', function(event){\n! +
         %!   #{grid_name}.process()\n! +

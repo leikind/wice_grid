@@ -503,6 +503,10 @@ module Wice
       contains_auto_reloading_elements(:has_auto_reloading_input?)
     end
 
+    def contains_auto_reloading_inputs_with_negation_checkboxes #:nodoc:
+      contains_auto_reloading_elements(:auto_reloading_input_with_negation_checkbox?)
+    end
+
     def contains_auto_reloading_selects #:nodoc:
       contains_auto_reloading_elements(:has_auto_reloading_select?)
     end

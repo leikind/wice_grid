@@ -526,6 +526,10 @@ module Wice
         cached_javascript << JsAdaptor.auto_reloading_inputs_event_initialization(grid.name)
       end
 
+      if rendering.contains_auto_reloading_inputs_with_negation_checkboxes
+        cached_javascript << JsAdaptor.auto_reloading_inputs_with_negation_checkboxes_event_initialization(grid.name)
+      end
+
       if rendering.contains_auto_reloading_calendars
         cached_javascript << JsAdaptor.auto_reloading_calendar_event_initialization(grid.name)
       end

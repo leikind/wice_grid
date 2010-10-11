@@ -106,6 +106,10 @@ module Wice
       false
     end
 
+    def auto_reloading_input_with_negation_checkbox?  #:nodoc:
+      false
+    end
+
     def has_auto_reloading_select?  #:nodoc:
       false
     end
@@ -410,13 +414,15 @@ module Wice
     @@handled_type[:string] = self
     @@handled_type[:text] = self
 
-    attr_accessor :negation
+    attr_accessor :negation, :auto_reloading_input_with_negation_checkbox
 
     def render_filter_internal(params, view) #:nodoc:
       @contains_a_text_input = true
       css_class = auto_reload ? 'auto_reload' : nil
 
       if negation
+        self.auto_reloading_input_with_negation_checkbox = true if auto_reload
+
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:v => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:n => '')
 
@@ -450,6 +456,10 @@ module Wice
 
     def has_auto_reloading_input? #:nodoc:
       auto_reload
+    end
+
+    def auto_reloading_input_with_negation_checkbox? #:nodoc:
+      self.auto_reloading_input_with_negation_checkbox
     end
 
   end
