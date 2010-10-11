@@ -85,7 +85,7 @@ module Wice
       if Rails.env == 'development'
         unless view.respond_to? :datepicker_check_done
 
-          javascript <<  %| if (! $.datepicker2 ){\n|
+          javascript <<  %| if (! $.datepicker ){\n|
           javascript <<  %|    alert("Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)|
           javascript <<  %| installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in |
           javascript <<  %| wice_grid_config.rb in order to use standard Rails date helpers")\n|
