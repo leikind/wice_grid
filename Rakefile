@@ -22,3 +22,21 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('CHANGELOG')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name = "wice_grid"
+    gem.summary = %Q{Rails Grid Plugin}
+    gem.description = %Q{A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters }
+    gem.email = "yuri.leikind@gmail.com"
+    gem.homepage = "http://github.com/lekind/wice_grid"
+    gem.authors = ["Yuri Leikind"]
+    gem.add_development_dependency "will_paginate", ">= 2.3.2"
+    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+end
+

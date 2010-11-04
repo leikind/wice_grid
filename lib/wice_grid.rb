@@ -19,6 +19,9 @@ require 'js_adaptors/jquery_adaptor.rb'
 require 'js_adaptors/prototype_adaptor.rb'
 require 'view_columns.rb'
 
+ActionView::Base.class_eval { include Wice::GridViewHelper }
+ActionController::Base.send(:include, Wice::Controller)
+ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
 
