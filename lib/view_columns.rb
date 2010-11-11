@@ -57,7 +57,19 @@ module Wice
       end
     end
 
+
+    def config
+      @view.config
+    end
+
+    def controller
+      @view.controller
+    end
+
+
     def render_filter(view) #:nodoc:
+      # TO DO: this has to be initialized in the initializer
+      @view = view
       params = @grid.filter_params(self)
       res = render_filter_internal(params, view)
       return (res.is_a?(Array)) ? res : [res, nil]

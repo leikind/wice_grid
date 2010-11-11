@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wice_grid}
-  s.version = "0.5.6"
+  s.version = "3.0.0.pre1"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
-  s.date = %q{2010-11-04}
+  s.date = %q{2010-11-11}
   s.description = %q{A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters }
   s.email = %q{yuri.leikind@gmail.com}
   s.extra_rdoc_files = [
@@ -23,41 +23,37 @@ Gem::Specification.new do |s|
      "Rakefile",
      "SAVED_QUERIES_HOWTO.rdoc",
      "VERSION",
-     "generators/common_templates/icons/arrow_down.gif",
-     "generators/common_templates/icons/arrow_up.gif",
-     "generators/common_templates/icons/calendar_view_month.png",
-     "generators/common_templates/icons/delete.png",
-     "generators/common_templates/icons/expand.png",
-     "generators/common_templates/icons/page_white_excel.png",
-     "generators/common_templates/icons/page_white_find.png",
-     "generators/common_templates/icons/table.png",
-     "generators/common_templates/icons/table_refresh.png",
-     "generators/common_templates/icons/tick_all.png",
-     "generators/common_templates/icons/untick_all.png",
-     "generators/common_templates/initializers/wice_grid_config.rb",
-     "generators/common_templates/locales/wice_grid.yml",
-     "generators/common_templates/stylesheets/wice_grid.css",
-     "generators/wice_grid_assets_jquery/templates/USAGE",
-     "generators/wice_grid_assets_jquery/templates/javascripts/wice_grid_jquery.js",
-     "generators/wice_grid_assets_jquery/wice_grid_assets_jquery_generator.rb",
-     "generators/wice_grid_assets_prototype/USAGE",
-     "generators/wice_grid_assets_prototype/templates/javascripts/calendarview.js",
-     "generators/wice_grid_assets_prototype/templates/javascripts/wice_grid_prototype.js",
-     "generators/wice_grid_assets_prototype/templates/stylesheets/calendarview.css",
-     "generators/wice_grid_assets_prototype/wice_grid_assets_prototype_generator.rb",
-     "init.rb",
-     "install.rb",
+     "lib/generators/wice_grid/templates/calendarview.css",
+     "lib/generators/wice_grid/templates/calendarview.js",
+     "lib/generators/wice_grid/templates/icons/arrow_down.gif",
+     "lib/generators/wice_grid/templates/icons/arrow_up.gif",
+     "lib/generators/wice_grid/templates/icons/calendar_view_month.png",
+     "lib/generators/wice_grid/templates/icons/delete.png",
+     "lib/generators/wice_grid/templates/icons/expand.png",
+     "lib/generators/wice_grid/templates/icons/page_white_excel.png",
+     "lib/generators/wice_grid/templates/icons/page_white_find.png",
+     "lib/generators/wice_grid/templates/icons/table.png",
+     "lib/generators/wice_grid/templates/icons/table_refresh.png",
+     "lib/generators/wice_grid/templates/icons/tick_all.png",
+     "lib/generators/wice_grid/templates/icons/untick_all.png",
+     "lib/generators/wice_grid/templates/wice_grid.css",
+     "lib/generators/wice_grid/templates/wice_grid.yml",
+     "lib/generators/wice_grid/templates/wice_grid_config.rb",
+     "lib/generators/wice_grid/templates/wice_grid_jquery.js",
+     "lib/generators/wice_grid/templates/wice_grid_prototype.js",
+     "lib/generators/wice_grid/wice_grid_assets_jquery_generator.rb",
+     "lib/generators/wice_grid/wice_grid_assets_prototype_generator.rb",
      "lib/grid_output_buffer.rb",
      "lib/grid_renderer.rb",
      "lib/helpers/js_calendar_helpers.rb",
      "lib/helpers/wice_grid_misc_view_helpers.rb",
      "lib/helpers/wice_grid_serialized_queries_view_helpers.rb",
      "lib/helpers/wice_grid_view_helpers.rb",
-     "lib/helpers/will_paginate_link_renderer.rb",
      "lib/js_adaptors/jquery_adaptor.rb",
      "lib/js_adaptors/js_adaptor.rb",
      "lib/js_adaptors/prototype_adaptor.rb",
      "lib/table_column_matrix.rb",
+     "lib/tasks/wice_grid_tasks.rake",
      "lib/view_columns.rb",
      "lib/views/create.rjs",
      "lib/views/delete.rjs",
@@ -68,7 +64,6 @@ Gem::Specification.new do |s|
      "lib/wice_grid_serialized_queries_controller.rb",
      "lib/wice_grid_serialized_query.rb",
      "lib/wice_grid_spreadsheet.rb",
-     "tasks/wice_grid_tasks.rake",
      "test/.gitignore",
      "test/database.yml",
      "test/schema.rb",
@@ -81,7 +76,7 @@ Gem::Specification.new do |s|
      "test/wice_grid_misc_test.rb",
      "test/wice_grid_test.rb",
      "test/wice_grid_view_helper_test.rb",
-     "uninstall.rb"
+     "wice_grid.gemspec"
   ]
   s.homepage = %q{http://github.com/lekind/wice_grid}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -103,12 +98,12 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<will_paginate>, [">= 2.3.2"])
+      s.add_development_dependency(%q<will_paginate>, [">= 3.0.pre2"])
     else
-      s.add_dependency(%q<will_paginate>, [">= 2.3.2"])
+      s.add_dependency(%q<will_paginate>, [">= 3.0.pre2"])
     end
   else
-    s.add_dependency(%q<will_paginate>, [">= 2.3.2"])
+    s.add_dependency(%q<will_paginate>, [">= 3.0.pre2"])
   end
 end
 

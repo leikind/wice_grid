@@ -1,11 +1,6 @@
 module Wice
   module JsCalendarHelpers
 
-    include ActionView::Helpers::AssetTagHelper
-    include ActionView::Helpers::TagHelper
-    include ActionView::Helpers::JavaScriptHelper
-    include ActionView::Helpers::FormTagHelper
-
     # Jquery
 
     def date_calendar_jquery(initial_date, view, opts = {}, html_opts = {})  #:nodoc:

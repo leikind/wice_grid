@@ -4,7 +4,6 @@ require 'wice_grid_misc.rb'
 require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
 require 'table_column_matrix.rb'
-require 'helpers/will_paginate_link_renderer.rb'
 require 'helpers/wice_grid_view_helpers.rb'
 require 'helpers/wice_grid_misc_view_helpers.rb'
 require 'helpers/wice_grid_serialized_queries_view_helpers.rb'
@@ -19,11 +18,65 @@ require 'js_adaptors/jquery_adaptor.rb'
 require 'js_adaptors/prototype_adaptor.rb'
 require 'view_columns.rb'
 
-ActionView::Base.class_eval { include Wice::GridViewHelper }
-ActionController::Base.send(:include, Wice::Controller)
+
+
 ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
+
+  module Foo
+    def self.included(base)
+      base.extend(ClassMethods)
+    end
+
+    module ClassMethods
+      def merge_conditions(*conditions)
+        segments = []
+
+        conditions.each do |condition|
+          unless condition.blank?
+            sql = sanitize_sql(condition)
+            segments << sql unless sql.blank?
+          end
+        end
+
+        "(#{segments.join(') AND (')})" unless segments.empty?
+      end
+    end
+  end
+
+  class WiceGridRailtie < Rails::Railtie
+
+    initializer "wice_grid_railtie.configure_rails_initialization" do |app|
+
+      ActionController::Base.send(:include, Wice::Controller)
+
+      ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
+
+      Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
+
+      ::ActionView::Base.class_eval { include Wice::GridViewHelper }
+
+      ActiveRecord::Base.send(:include, ::Wice::Foo)
+
+      [ActionView::Helpers::AssetTagHelper,
+       ActionView::Helpers::TagHelper,
+       ActionView::Helpers::JavaScriptHelper,
+       ActionView::Helpers::FormTagHelper].each do |m|
+        JsCalendarHelpers.send(:include, m)
+      end
+
+
+      # ActiveSupport::Notifications.subscribe do |*args|
+      #   event = ActiveSupport::Notifications::Event.new(*args)
+      #   puts "Got notification: #{event.inspect}"
+      # end
+    end
+
+    rake_tasks do
+      load 'tasks/wice_grid_tasks.rake'
+    end
+  end
 
   class WiceGrid
 
@@ -37,19 +90,10 @@ module Wice
     def initialize(klass, controller, opts = {})  #:nodoc:
       @controller = controller
 
-      # check for will_paginate
-      # raise WiceGridException.new("Plugin will_paginate not found! wice_grid requires will_paginate.")
-      unless klass.respond_to?(:paginate)
-        raise Wice::WiceGridException.new('will_paginate not found, WiceGrid cannot proceed. Please install gem mislav-will_paginate. ' +
-                                          'You might need to add github.com as the gem source before you install the gem: ' +
-                                          'gem sources -a http://gems.github.com')
-      end
 
       unless klass.kind_of?(Class) && klass.ancestors.index(ActiveRecord::Base)
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
       end
-
-      Wice.deprecated_call(:after, :with_resultset, opts)
 
       # validate :with_resultset & :with_paginated_resultset
       [:with_resultset, :with_paginated_resultset].each do |callback_symbol|
@@ -806,5 +850,3 @@ module Wice
   end
 
 end
-
-ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)

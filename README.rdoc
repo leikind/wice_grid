@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 0.5.6
+Version:: 3.0.0.pre1
 Author::  Yuri Leikind
 Contributor::  Xavier Defrang
 Homepage:: http://leikind.org/pages/wicegrid
@@ -9,6 +9,21 @@ News:: http://leikind.org/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 == Intro
+
+
+THIS IS AN EARLY ALPHA VERSION OF THE PLUGIN FOR RAILS 3.0.
+BASIC STUFF WORKS, BUT A LOT OF FUNCTIONALITIES ARE BROKEN.
+THE DOCUMENTATION BELOW CAN BE OUTDATED.
+
+FOR RAILS 3.0 IT ONLY WORKS AS A GEM.
+AT THE SAME TIME NO OFFICIAL IS GEM YET RELEASED, SO IF YOU WANT TO TRY IT, CLONE THE REPOSITORY, PUT IT INTO vendor/wice_grid AND ADD THIS TO YOUR GEMFILE:
+
+   gem "wice_grid", '3.0.0.pre1', :path => 'vendor/wice_grid'
+
+
+OR BUILD THE GEM.
+
+=========================
 
 WiceGrid is a Rails grid plugin.
 

@@ -7,7 +7,6 @@ module Wice
     include ActionView::Helpers::TextHelper
     include ActionView::Helpers::AssetTagHelper
     include ActionView::Helpers::JavaScriptHelper
-    include ::WillPaginate::ViewHelpers
 
     attr_reader :page_parameter_name
     attr_reader :after_row_handler
