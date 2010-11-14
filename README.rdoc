@@ -47,7 +47,7 @@ This tutorial is accompanied by a sample application with WiceGrid examples whic
 
 Rails version 2.1.0 or newer.
 
-<tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 2.3.2 or newer.
+<tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 2.3.15 or newer.
 
 <tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer, or <tt>jQuery[http://jquery.com/]</tt>.
 
