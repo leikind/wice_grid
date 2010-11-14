@@ -22,12 +22,13 @@ module Wice
     @@order_direction_parameter_name = "order_direction"
     @@page_parameter_name = "page"
 
-    def initialize(grid)  #:nodoc:
+    def initialize(grid, view)  #:nodoc:
       @grid = grid
       @grid.renderer = self
       @columns = []
       @columns_table = {}
       @action_column_present = false
+      @view = view
     end
 
     def add_column(vc)  #:nodoc:
@@ -152,7 +153,7 @@ module Wice
       options.merge!(opts)
       @action_column_present = true
       @columns << ActionViewColumn.new(@grid, options[:td_html_attrs], options[:param_name],
-            options[:select_all_buttons], options[:object_property])
+            options[:select_all_buttons], options[:object_property], @view)
     end
 
     # Defines everything related to a column in a grid - column name, filtering, rendering cells, etc.
@@ -369,7 +370,7 @@ module Wice
         end # custom_filter
       end # attribute_name
 
-      vc = klass.new(block, options, @grid, table_name, main_table, custom_filter)
+      vc = klass.new(block, options, @grid, table_name, main_table, custom_filter, @view)
 
       vc.negation    = options[:negation_in_filter] if vc.respond_to? :negation=
 
