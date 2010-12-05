@@ -3,7 +3,7 @@ en:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Show filter
     hide_filter_tooltip: Hide filter
@@ -50,7 +50,7 @@ is:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Sýna síumöguleika
     hide_filter_tooltip: Fela síumoguleika
@@ -88,13 +88,16 @@ is:
     validates_presence_error: Vinsamlegast gefið heiti fyrir leitarskipun
     query_deleted_message: Vistaðri leitarskipun hefur verið eytt
     query_saved_message: leitaskipun hefur verið vistuð
+    # To do: translate
+    select_all: Select all
+    deselect_all: Remove selection
 
 nl:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Filter tonen
     hide_filter_tooltip: Filter verbergen
@@ -132,13 +135,15 @@ nl:
     validates_presence_error: Gelieve de naam van de query in te vullen
     query_deleted_message: Opgeslagen query verwijderd.
     query_saved_message: Query opgeslagen
+    select_all: Selecteer alle rijen
+    deselect_all: Deselecteer alle rijen
 
 fr:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Afficher le filtre
     hide_filter_tooltip: Cacher le filtrer
@@ -176,13 +181,15 @@ fr:
     validates_presence_error: Veuillez indiquer le nom de la requête que vous souhaitez sauver
     query_deleted_message: La requête a été effacée.
     query_saved_message: La requête a été sauvée.
+    select_all: Sélectionner tout
+    deselect_all: Désélectionner tout
 
 ru:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Показать фильтр
     hide_filter_tooltip: Спрятать фильтр
@@ -222,14 +229,14 @@ ru:
     query_saved_message: Сохранённый фильтр сохранён.
     select_all: Отметить все
     deselect_all: Убрать выделение
-    
-    
+
+
 pt:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Mostrar o filtro
     hide_filter_tooltip: Esconder o filtro
@@ -267,3 +274,6 @@ pt:
     validates_presence_error: Queira indicar o nome da query que deseja gravar
     query_deleted_message: A query foi apagada.
     query_saved_message: A query foi gravada.
+    # To do: translate
+    select_all: Select all
+    deselect_all: Remove selection

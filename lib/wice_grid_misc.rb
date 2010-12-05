@@ -75,12 +75,7 @@ module Wice
     class << self
 
       def get_message(key) #:nodoc:
-        translated = I18n.t(key.to_s.downcase, :scope => 'wice_grid', :default => '_')
-        if translated == '_'
-          raise(key.to_s.downcase)
-        else
-          translated
-        end
+        translated = I18n.t(key.to_s.downcase, :scope => 'wice_grid')
       end
 
     end

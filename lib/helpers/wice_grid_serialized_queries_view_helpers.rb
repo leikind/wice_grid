@@ -41,7 +41,7 @@ module Wice
         javascript_tag do
           JsAdaptor.call_to_save_query_and_key_event_initialization_for_saving_queries(
             id_and_name, grid_name, base_path_to_query_controller, parameters.to_json, ids.to_json
-          )
+          ).html_safe
         end
         ).html_safe
     end
