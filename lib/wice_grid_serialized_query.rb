@@ -2,9 +2,10 @@
 class WiceGridSerializedQuery < ActiveRecord::Base  #:nodoc:
   serialize :query
 
-  validates_uniqueness_of :name, :scope => :grid_name, :on => :create, 
-    :message => ::Wice::WiceGridNlMessageProvider.get_message(:VALIDATES_UNIQUENESS_ERROR)
-  validates_presence_of :name, :message => ::Wice::WiceGridNlMessageProvider.get_message(:VALIDATES_PRESENCE_ERROR)
+  validates_uniqueness_of :name, :scope => :grid_name, :on => :create,
+    :message => 'A query with this name already exists'
+
+  validates_presence_of :name, :message => 'Please submit the name of the custom query'
 
   def self.list(name, controller)
     conditions = {:grid_name => name}
