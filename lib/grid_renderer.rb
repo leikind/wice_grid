@@ -30,6 +30,15 @@ module Wice
       @view = view
     end
 
+    def config  #:nodoc:
+      @view.config
+    end
+
+    def controller  #:nodoc:
+      @view.controller
+    end
+
+
     def add_column(vc)  #:nodoc:
       @columns_table[vc.fully_qualified_attribute_name] = vc if vc.attribute_name
       @columns << vc
