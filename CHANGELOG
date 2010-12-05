@@ -1,8 +1,11 @@
+0.6
+
 wice_grid_custom_filter_params used to be a view helper, not it is also accessible from the controller, to be used in cases like redirect_to(my_resource_path(wice_grid_custom_filter_params(...)))
 
 auto reloading filters
 
 helper export_to_csv_javascript to create custom CSV buttons
+
 option :hide_csv_button to hide the default CSV export button
 
 Method WiceGrid#selected_records and parameter :after were a bit of a mess and have been substituted by

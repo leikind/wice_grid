@@ -20,8 +20,6 @@ NO OFFICIAL GEM IS YET RELEASED, SO IF YOU WANT TO TRY IT, CLONE THE REPOSITORY,
 
 For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/). 
 
-For the Rails 2 version see version 0.6 (https://github.com/leikind/wice_grid/) .
-
 == Intro
 
 WiceGrid is a Rails grid plugin.
