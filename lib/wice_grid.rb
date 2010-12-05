@@ -24,28 +24,7 @@ ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
 
-  module Foo
-    def self.included(base)
-      base.extend(ClassMethods)
-    end
-
-    module ClassMethods
-      def merge_conditions(*conditions)
-        segments = []
-
-        conditions.each do |condition|
-          unless condition.blank?
-            sql = sanitize_sql(condition)
-            segments << sql unless sql.blank?
-          end
-        end
-
-        "(#{segments.join(') AND (')})" unless segments.empty?
-      end
-    end
-  end
-
-  class WiceGridRailtie < Rails::Railtie
+  class WiceGridRailtie < Rails::Railtie  #:nodoc:
 
     initializer "wice_grid_railtie.configure_rails_initialization" do |app|
 
@@ -57,7 +36,7 @@ module Wice
 
       ::ActionView::Base.class_eval { include Wice::GridViewHelper }
 
-      ActiveRecord::Base.send(:include, ::Wice::Foo)
+      ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
 
       [ActionView::Helpers::AssetTagHelper,
        ActionView::Helpers::TagHelper,

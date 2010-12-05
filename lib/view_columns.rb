@@ -1,7 +1,7 @@
 # encoding: UTF-8
 module Wice
 
-  class ViewColumn
+  class ViewColumn  #:nodoc:
     include ActionView::Helpers::FormTagHelper
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::JavaScriptHelper
@@ -59,11 +59,11 @@ module Wice
     end
 
 
-    def config
+    def config  #:nodoc:
       @view.config
     end
 
-    def controller
+    def controller  #:nodoc:
       @view.controller
     end
 

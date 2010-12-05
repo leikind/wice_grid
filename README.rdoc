@@ -2,28 +2,27 @@
 
 Version:: 3.0.0.pre1
 Author::  Yuri Leikind
-Contributor::  Xavier Defrang
 Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
 News:: http://leikind.org/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
-== Intro
+== Attention!
+There are two major branches of WiceGrid.
 
+THIS IS AN ALPHA VERSION OF THE PLUGIN FOR RAILS 3.0.
+The current branch (https://github.com/leikind/wice_grid/tree/rails3) starts with version 3.0, works with Rails 3, and can only be used as a gem.
 
-THIS IS AN EARLY ALPHA VERSION OF THE PLUGIN FOR RAILS 3.0.
-BASIC STUFF WORKS, BUT A LOT OF FUNCTIONALITIES ARE BROKEN.
-THE DOCUMENTATION BELOW CAN BE OUTDATED.
-
-FOR RAILS 3.0 IT ONLY WORKS AS A GEM.
-AT THE SAME TIME NO OFFICIAL GEM IS YET RELEASED, SO IF YOU WANT TO TRY IT, CLONE THE REPOSITORY, PUT IT INTO vendor/wice_grid AND ADD THIS TO YOUR GEMFILE:
+NO OFFICIAL GEM IS YET RELEASED, SO IF YOU WANT TO TRY IT, CLONE THE REPOSITORY, PUT IT INTO vendor/wice_grid AND ADD THIS TO YOUR GEMFILE:
 
    gem "wice_grid", '3.0.0.pre1', :path => 'vendor/wice_grid'
 
 
-OR BUILD THE GEM.
+For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/). 
 
-=========================
+For the Rails 2 version see version 0.6 (https://github.com/leikind/wice_grid/) .
+
+== Intro
 
 WiceGrid is a Rails grid plugin.
 
@@ -44,14 +43,15 @@ WiceGrid does not take a collection as an input, it works directly with ActiveRe
 
 WiceGrid does not use AJAX calls to reload itself, instead simple GET requests are used for this, nevertheless, all other page parameters are respected and preserved. WiceGrid views do not contain forms so you can include it in your own forms.
 
-WiceGrid is known to work with Rails versions from 2.1.x to 2.3.9. WiceGrid with Rails versions older
-than 2.1 can still be functional depending on the functionalities used.
+There are two major branches of WiceGrid.
+
+The current branch (https://github.com/leikind/wice_grid/tree/rails3) starts with version 3.0, works with Rails 3, and can only be used as a gem.
+
+For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/). 
 
 WiceGrid is known to work with MySQL and Postgres.
 
 WiceGrid works with Prototype and jQuery (experimental).
-
-WiceGrid is compliant with Ruby 1.9.1.
 
 === Examples
 
@@ -60,9 +60,9 @@ This tutorial is accompanied by a sample application with WiceGrid examples whic
 
 == Requirements
 
-Rails version 2.1.0 or newer.
+Rails version 3.0 or newer.
 
-<tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 2.3.2 or newer.
+<tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 3.0.pre2 or newer.
 
 <tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer, or <tt>jQuery[http://jquery.com/]</tt>.
 
@@ -70,20 +70,19 @@ Rails version 2.1.0 or newer.
 
 === Installation
 
-Run the following command to install the plugin:
+Install the gem:
 
-  script/plugin install git://github.com/leikind/wice_grid.git
+  gem install wice_grid
 
-If your application is Prototype-based (default in Rails 2.x), run the following generator to copy all plugin assets:
+If your application is Prototype-based , run the following generator to copy all plugin assets:
 
-   ./script/generate wice_grid_assets_prototype
+   rails g wice_grid_assets_prototype
 
 For jQuery:
 
-   ./script/generate wice_grid_assets_jquery
+   rails g wice_grid_assets_jquery
 
-This will copy images, stylesheets, configuration file <tt>config/initializers/wice_grid_config.rb</tt>, and the correct version
-of javascript files.
+This will copy images, stylesheets, configuration file <tt>config/initializers/wice_grid_config.rb</tt>, and the correct version of javascript files.
 
 === Support for Prototype and jQuery
 

@@ -1,19 +1,19 @@
-module WiceGrid
-  module Generators
-    class WiceGridAssetsJqueryGenerator < Rails::Generators::Base
+module WiceGrid #:nodoc:
+  module Generators #:nodoc:
+    class WiceGridAssetsJqueryGenerator < Rails::Generators::Base #:nodoc:
 
       desc "Copy WiceGrid assets for JQuery based apps"
       source_root File.expand_path('../templates', __FILE__)
 
-      def active_js_framework
+      def active_js_framework #:nodoc:
         'jquery'
       end
-      def inactive_js_framework
+      def inactive_js_framework #:nodoc:
         'prototype'
       end
 
 
-      def copy_stuff
+      def copy_stuff #:nodoc:
         template 'wice_grid_config.rb', 'config/initializers/wice_grid_config.rb'
 
         copy_file 'wice_grid.yml',  'config/locales/wice_grid.yml'

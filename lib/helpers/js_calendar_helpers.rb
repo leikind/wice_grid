@@ -1,5 +1,5 @@
-module Wice
-  module JsCalendarHelpers
+module Wice #:nodoc:
+  module JsCalendarHelpers #:nodoc:
 
     # Jquery
 
@@ -56,7 +56,7 @@ module Wice
 
     # jquery
 
-    def calendar_constructor_jquery(dom_id, view, date_format, date_span_id, fireEvent, title, datepicker_placeholder_id)
+    def calendar_constructor_jquery(dom_id, view, date_format, date_span_id, fireEvent, title, datepicker_placeholder_id) #:nodoc:
 
       javascript  =  %| $( "##{dom_id}" ).datepicker({\n|
       javascript <<  %|   firstDay: 1,\n|
@@ -116,7 +116,7 @@ module Wice
     # prortotype
 
     def calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, 
-                                      date_span_id, with_time, fireEvent)
+                                      date_span_id, with_time, fireEvent) #:nodoc:
       javascript = ''
 
       unless view.respond_to? :wg_calendar_lang_set

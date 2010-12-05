@@ -49,6 +49,27 @@ module Wice
     end
   end
 
+  module MergeConditions #:nodoc:
+    def self.included(base) #:nodoc:
+      base.extend(ClassMethods)
+    end
+
+    module ClassMethods #:nodoc:
+      def merge_conditions(*conditions) #:nodoc:
+        segments = []
+
+        conditions.each do |condition|
+          unless condition.blank?
+            sql = sanitize_sql(condition)
+            segments << sql unless sql.blank?
+          end
+        end
+
+        "(#{segments.join(') AND (')})" unless segments.empty?
+      end
+    end
+  end
+
 
   module WiceGridNlMessageProvider #:nodoc:
     class << self
