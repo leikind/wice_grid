@@ -1,12 +1,21 @@
 = WiceGrid
 
-Version:: 0.5.6
+Version:: 0.6.0
 Author::  Yuri Leikind
 Contributor::  Xavier Defrang
 Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
 News:: http://leikind.org/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
+
+
+== Attention!
+
+There are two major branches of WiceGrid.
+
+You are looking at  WiceGrid for Rails 2, version 0.6.0.
+
+For Rails 3.0 see https://github.com/leikind/wice_grid/tree/rails3
 
 == Intro
 
