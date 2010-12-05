@@ -8,14 +8,14 @@ module Wice
     # Read section "Saving Queries How-To" in README for more details.
     def define_routes(map, controller)
       controller = controller.to_s
-      map.create_serialized_query '/wice_grid_serialized_queries/:grid_name',
-        :controller => controller,
-        :action => 'create',
-        :conditions => {:method => :post}
-      map.delete_serialized_query '/wice_grid_serialized_query/:grid_name/:id',
-        :controller => controller,
-        :action => 'delete',
-        :conditions => {:method => :post}
+
+      map.match '/wice_grid_serialized_queries/:grid_name',
+        :to => "#{controller}#create",
+        :as => 'create_serialized_query'
+
+      map.match '/wice_grid_serialized_queries/:grid_name/:id',
+        :to => "#{controller}#delete",
+        :as => 'delete_serialized_query'
     end
   end
 
@@ -33,7 +33,7 @@ module Wice
           @error_messages = sq.errors.full_raw_messages.join(' ')
         end
       end
-      render :file => "#{RAILS_ROOT}/vendor/plugins/wice_grid/lib/views/delete.rjs"
+      render :file => "#{Pathname.new(__FILE__).dirname}/views/delete.rjs"
     end
 
     def create  #:nodoc:
@@ -56,7 +56,7 @@ module Wice
         @error_messages = @saved_query.errors.map{ |_, msg| msg }.join(' ')
       end
 
-      render :file => "#{RAILS_ROOT}/vendor/plugins/wice_grid/lib/views/create.rjs"
+      render :file => "#{Pathname.new(__FILE__).dirname}/views/create.rjs"
     end
 
     def extra

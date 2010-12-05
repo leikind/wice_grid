@@ -66,11 +66,7 @@ module Wice
         JsCalendarHelpers.send(:include, m)
       end
 
-
-      # ActiveSupport::Notifications.subscribe do |*args|
-      #   event = ActiveSupport::Notifications::Event.new(*args)
-      #   puts "Got notification: #{event.inspect}"
-      # end
+      require 'wice_grid_serialized_query.rb'
     end
 
     rake_tasks do
