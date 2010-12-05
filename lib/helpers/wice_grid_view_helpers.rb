@@ -484,7 +484,7 @@ module Wice
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
       parameter_name_for_focus = {grid.name => {:foc => ''}}.to_query
 
-      prototype_and_js_version_check = if ENV['RAILS_ENV'] == 'development'
+      prototype_and_js_version_check = if Rails.env == 'development'
         %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
         %$   alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' +\n$ +
         %$     'Please make sure that you include WiceGrid javascript in your page. ' +\n$ +
@@ -543,7 +543,7 @@ module Wice
         %/ #{prototype_and_js_version_check}\n/ +
         %/ window['#{grid.name}'] = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
         %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}',\n/ +
-        %/ '#{parameter_name_for_focus}', '#{ENV['RAILS_ENV']}');\n/ +
+        %/ '#{parameter_name_for_focus}', '#{Rails.env}');\n/ +
         if no_filters_at_all
           ''
         else
