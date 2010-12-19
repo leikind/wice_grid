@@ -10,8 +10,8 @@ en:
     csv_export_tooltip: Export to CSV
     filter_tooltip: Filter
     reset_filter_tooltip: Reset
-    boolean_filter_true_label: yes
-    boolean_filter_false_label: no
+    boolean_filter_true_label: "yes"
+    boolean_filter_false_label: "no"
     previous_label: « Previous
     next_label: Next »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
