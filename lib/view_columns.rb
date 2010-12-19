@@ -271,8 +271,12 @@ module Wice
         select_options[:class] += ' auto_reload'
       end
 
+      params_for_select = (params.is_a?(Hash) && params.empty?) ? [nil] : params
+
       '<span class="custom_dropdown_container">'.html_safe_if_necessary +
-      content_tag(:select, options_for_select(@custom_filter, params), select_options) +
+        content_tag(:select,
+          options_for_select(@custom_filter, params_for_select),
+          select_options) +
       select_toggle.html_safe_if_necessary + '</span>'.html_safe_if_necessary
     end
 
@@ -293,9 +297,12 @@ module Wice
     attr_accessor :boolean_filter_true_label, :boolean_filter_false_label
 
     def render_filter_internal(params) #:nodoc:
-      @custom_filter = {@filter_all_label => nil,
-                        @boolean_filter_true_label  => 't',
-                        @boolean_filter_false_label => 'f' }
+      @custom_filter = {
+        @filter_all_label => nil,
+        @boolean_filter_true_label  => 't',
+        @boolean_filter_false_label => 'f'
+      }
+
       @turn_off_select_toggling = true
       super(params)
     end
