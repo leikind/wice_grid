@@ -25,10 +25,10 @@ module Wice
         parameters << [ CGI.unescape({:extra => {k => ''}}.to_query.sub(/=$/,'')) , v.to_s ]
       end
       parameters <<  ['authenticity_token', form_authenticity_token]
-
+      notification_messages_id = "#{grid_name}_notification_messages"
       (%! <div class="wice_grid_query_panel"><h3>#{WiceGridNlMessageProvider.get_message(:SAVED_QUERY_PANEL_TITLE)}</h3>! +
         saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
-        %!<div id="#{grid_name}_notification_messages"  onmouseover="#{Wice::JsAdaptor.fade_this}"></div>! +
+        %!<div id="#{notification_messages_id}"  onmouseover="#{Wice::JsAdaptor.fade_this(notification_messages_id)}"></div>! +
         if block_given?
           view, ids = yield
           view

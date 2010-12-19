@@ -151,8 +151,8 @@ module Wice::JsAdaptor  #:nodoc:
         %! })\n!
       end
 
-      def fade_this  #:nodoc:
-        'new Effect.Fade(this)'
+      def fade_this(notification_messages_id)  #:nodoc:
+        "new Effect.Fade(this)"
       end
 
       def focus_element(element_to_focus)  #:nodoc:

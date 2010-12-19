@@ -126,8 +126,8 @@ module Wice::JsAdaptor   #:nodoc:
         %! })\n!
       end
 
-      def fade_this  #:nodoc:
-        'jQuery([]).pushStack(this).fadeOut()'
+      def fade_this(notification_messages_id)  #:nodoc:
+        "$('##{notification_messages_id}').effect('fade')"
       end
 
       def focus_element(element_to_focus)  #:nodoc:
