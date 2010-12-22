@@ -235,12 +235,8 @@ module Wice
     #     However, if the retuned value is a two element array, the first element is used for the option label and the
     #     second - for the value.
     #     Read more in README, section 'Custom dropdown filters'
-    # * <tt>:boolean_filter_true_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_TRUE_LABEL</tt>
-    #   ('+yes+') in the config.
-    #   Only has effect in a column with a boolean filter.
-    # * <tt>:boolean_filter_false_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt>
-    #   ('+no+') in the config.
-    #   Only has effect in a column with a boolean filter.
+    # * <tt>:boolean_filter_true_label</tt> - overrides the label for <tt>true</tt> in the boolean filter (<tt>wice_grid.boolean_filter_true_label</tt> in <tt>wice_grid.yml</tt>).
+    # * <tt>:boolean_filter_false_label</tt> - overrides the label for <tt>false</tt> in the boolean filter (<tt>wice_grid.boolean_filter_false_label</tt> in <tt>wice_grid.yml</tt>).
     # * <tt>:allow_multiple_selection</tt> - enables or disables switching between single and multiple selection modes for
     #   custom dropdown boxes. +true+ by default (see +ALLOW_MULTIPLE_SELECTION+ in the configuration file).
     # * <tt>:filter_all_label</tt> - overrides the default value for <tt>BOOLEAN_FILTER_FALSE_LABEL</tt> ('<tt>--</tt>')

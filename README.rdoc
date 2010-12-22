@@ -13,11 +13,6 @@ There are two major branches of WiceGrid.
 THIS IS AN ALPHA VERSION OF THE PLUGIN FOR RAILS 3.0.
 The current branch (https://github.com/leikind/wice_grid/tree/rails3) starts with version 3.0, works with Rails 3, and can only be used as a gem.
 
-NO OFFICIAL GEM IS YET RELEASED, SO IF YOU WANT TO TRY IT, CLONE THE REPOSITORY, PUT IT INTO vendor/wice_grid AND ADD THIS TO YOUR GEMFILE:
-
-   gem "wice_grid", '3.0.0.pre1', :path => 'vendor/wice_grid'
-
-
 For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/). 
 
 == Intro
@@ -49,7 +44,7 @@ For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (htt
 
 WiceGrid is known to work with MySQL and Postgres.
 
-WiceGrid works with Prototype and jQuery (experimental).
+WiceGrid works with Prototype and jQuery
 
 === Examples
 
@@ -70,7 +65,7 @@ Rails version 3.0 or newer.
 
 Install the gem:
 
-  gem install wice_grid
+  gem install --pre wice_grid
 
 If your application is Prototype-based , run the following generator to copy all plugin assets:
 
@@ -111,9 +106,9 @@ RAILS DATE/DATETIME HELPERS.
 === Basics
 
 The Prototype version of WiceGrid requires <tt>prototype.js</tt> and <tt>effects.js</tt> in order to function.
-The jQuery version of WiceGrid requires <tt>jquery.js</tt> and <tt>jquery-ui.js</tt> in order to function.
+The jQuery version of WiceGrid requires <tt>jquery.js</tt>, the Datepicker widget from jQuery UI, and the Highlight and Fade effects for the saved queries functionality.
 
-Thus, make sure you have <tt><%=javascript_include_tag :defaults %></tt> in your layout template.
+Thus, make sure you require all necessary JS assets in your layout template.
 
 To include WiceGrid javascript and stylesheet files to the page use helper +include_wice_grid_assets+ :
 
