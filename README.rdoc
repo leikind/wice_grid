@@ -13,7 +13,7 @@ There are two major branches of WiceGrid.
 THIS IS AN ALPHA VERSION OF THE PLUGIN FOR RAILS 3.0.
 The current branch (https://github.com/leikind/wice_grid/tree/rails3) starts with version 3.0, works with Rails 3, and can only be used as a gem.
 
-For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/). 
+For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/).
 
 == Intro
 
@@ -40,7 +40,7 @@ There are two major branches of WiceGrid.
 
 The current branch (https://github.com/leikind/wice_grid/tree/rails3) starts with version 3.0, works with Rails 3, and can only be used as a gem.
 
-For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/). 
+For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/).
 
 WiceGrid is known to work with MySQL and Postgres.
 
@@ -63,9 +63,11 @@ Rails version 3.0 or newer.
 
 === Installation
 
-Install the gem:
+Add the following to your Gemfile:
 
-  gem install --pre wice_grid
+  gem "wice_grid", '3.0.0.pre1'
+
+and run the <tt>bundle</tt> command.
 
 If your application is Prototype-based , run the following generator to copy all plugin assets:
 
@@ -83,7 +85,7 @@ WiceGrid started as a plugin using the Prototype javascript framework. Support f
 The plugin contains two versions of the main javascript file <tt>wice_grid.js</tt>, and depending on the generator run to
 install the assets (+wice_grid_assets_prototype+ or +wice_grid_assets_jquery+) the correct file is  copied into <tt>public/javascripts</tt>.
 
-Some javascript code is also generated and injected into the HTML page. The value of constant <tt>Wice::Defaults::JS_FRAMEWORK</tt> in 
+Some javascript code is also generated and injected into the HTML page. The value of constant <tt>Wice::Defaults::JS_FRAMEWORK</tt> in
 configuration file <tt>wice_grid_config.rb</tt> defines for which JS framework code should be generated.
 Generators +wice_grid_assets_prototype+ and +wice_grid_assets_jquery+ create a version of  <tt>wice_grid_config.rb</tt>
 with the corresponding value of <tt>Wice::Defaults::JS_FRAMEWORK</tt>.
