@@ -80,7 +80,7 @@ Gem::Specification.new do |s|
      "test/wice_grid_view_helper_test.rb",
      "wice_grid.gemspec"
   ]
-  s.homepage = %q{http://github.com/lekind/wice_grid}
+  s.homepage = %q{http://github.com/leikind/wice_grid}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
