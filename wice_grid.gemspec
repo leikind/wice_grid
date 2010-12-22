@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
-  s.date = %q{2010-11-11}
+  s.date = %q{2010-12-22}
   s.description = %q{A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters }
   s.email = %q{yuri.leikind@gmail.com}
   s.extra_rdoc_files = [
@@ -56,7 +56,9 @@ Gem::Specification.new do |s|
      "lib/tasks/wice_grid_tasks.rake",
      "lib/view_columns.rb",
      "lib/views/create.rjs",
+     "lib/views/create_jq.rjs",
      "lib/views/delete.rjs",
+     "lib/views/delete_jq.rjs",
      "lib/wice_grid.rb",
      "lib/wice_grid_controller.rb",
      "lib/wice_grid_core_ext.rb",
