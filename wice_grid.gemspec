@@ -79,7 +79,7 @@ Gem::Specification.new do |s|
     "test/wice_grid_view_helper_test.rb",
     "wice_grid.gemspec"
   ]
-  s.homepage = %q{http://github.com/lekind/wice_grid}
+  s.homepage = %q{http://github.com/leikind/wice_grid}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Rails Grid Plugin}
