@@ -26,6 +26,7 @@ module Wice
     # WiceGrid is not a scaffolding solution, I hate scaffolding and how certain idiots associate scaffolding with Rails,
     # so I do not document this method to avoid contributing to this misunderstanding.
     def scaffolded_grid(grid_obj, opts = {}) #:nodoc:
+      Wice::JsAdaptor.init
       unless grid_obj.kind_of? WiceGrid
         raise WiceGridArgumentError.new("scaffolded_grid: the parameter must be a WiceGrid instance.")
       end
@@ -84,11 +85,12 @@ module Wice
     #  By default +names_of_wice_grid_javascripts+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_javascripts(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       res = ['wice_grid']
-      n = js_framework_specific_calendar_js_name
+      n = JsAdaptor.js_framework_specific_calendar_js_name
       res <<  n if n && opts[:include_calendar]
       res
     end
@@ -101,11 +103,12 @@ module Wice
     #  By default +names_of_wice_grid_stylesheets+ returns all javascripts, but it's possible not to include calendar widget javascripts by
     #  setting parameter <tt>:include_calendar</tt>  to +false+.
     def names_of_wice_grid_stylesheets(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
       res = ['wice_grid']
-      n = js_framework_specific_calendar_css_name
+      n = JsAdaptor.js_framework_specific_calendar_css_name
       res << n if n && opts[:include_calendar]
       res
     end
