@@ -60,6 +60,7 @@ module Wice
     # but it's possible not to include them setting parameter +include_calendar+ to false:
     #     <%= include_wice_grid_assets(:include_calendar => false) %>
     def include_wice_grid_assets(options = {})
+      Wice::JsAdaptor.init
       opts = {:include_calendar => true, :load_on_demand => true}
       options.assert_valid_keys(opts.keys)
       opts.merge!(options)
