@@ -356,10 +356,10 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
       html1, js1 = datetime_calendar_prototype(params[:fr], @view,
-        {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload},
+        {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload, :grid_name => self.grid.name},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
       html2, js2 = datetime_calendar_prototype(params[:to], @view,
-        {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload},
+        {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload, :grid_name => self.grid.name},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
@@ -408,10 +408,10 @@ module Wice
       end
 
       html1, js1 = send(calendar_helper_method, params[:fr], @view,
-        {:include_blank => true, :prefix => @name1, :fire_event => auto_reload},
+        {:include_blank => true, :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
       html2, js2 = send(calendar_helper_method, params[:to], @view,
-        {:include_blank => true, :prefix => @name2, :fire_event => auto_reload},
+        {:include_blank => true, :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]

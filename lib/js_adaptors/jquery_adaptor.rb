@@ -73,7 +73,7 @@ module Wice::JsAdaptor   #:nodoc:
 
 
       def auto_reloading_calendar_event_initialization(grid_name)  #:nodoc:
-        %! $(document).bind('wg:calendarChanged', function(event){\n! +
+        %! $(document).bind('wg:calendarChanged_#{grid_name}', function(event){\n! +
         %!   #{grid_name}.process()\n! +
         %! });\n!
       end
