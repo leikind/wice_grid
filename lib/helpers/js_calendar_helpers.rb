@@ -11,7 +11,7 @@ module Wice
     def date_calendar_jquery(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
       date_format = Wice::Defaults::DATE_FORMAT
 
-      options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id =
+      options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name  =
         prepare_data_for_calendar(opts, date_format, initial_date)
 
       remove_date_function = %! $('##{date_span_id}').html(''); $('##{dom_id}')[0].value = ''; !
@@ -29,7 +29,7 @@ module Wice
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
 
       javascript = calendar_constructor_jquery(dom_id, view, Wice::Defaults::DATE_FORMAT_JQUERY,
-        date_span_id, opts[:fire_event], html_opts[:title], datepicker_placeholder_id)
+        date_span_id, opts[:fire_event], html_opts[:title], datepicker_placeholder_id, close_calendar_event_name)
 
       [html, javascript]
     end
@@ -55,13 +55,14 @@ module Wice
       dom_id = options[:id] || name.gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
       datepicker_placeholder_id = dom_id + '_date_placeholder'
       date_span_id = dom_id + '_date_view'
-
-      return options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id
+      close_calendar_event_name =  "wg:calendarChanged_#{opts[:grid_name]}"
+      return options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name
     end
 
     # jquery
 
-    def calendar_constructor_jquery(dom_id, view, date_format, date_span_id, fireEvent, title, datepicker_placeholder_id)
+    def calendar_constructor_jquery(dom_id, view, date_format, date_span_id, fireEvent, title,
+        datepicker_placeholder_id, close_calendar_event_name)
 
       javascript  =  %| $( "##{dom_id}" ).datepicker({\n|
       javascript <<  %|   firstDay: 1,\n|
@@ -75,7 +76,7 @@ module Wice
       javascript <<  %|   onSelect: function(dateText, inst) {\n|
       javascript <<  %|     $("##{date_span_id}").html(dateText);\n|
       if fireEvent
-        javascript <<  %|     $("##{dom_id}").trigger('wg:calendarChanged');\n|
+        javascript <<  %|     $("##{dom_id}").trigger('#{close_calendar_event_name}');\n|
       end
       javascript <<  %|   }\n|
       javascript <<  %| });\n|
@@ -121,7 +122,7 @@ module Wice
     # prortotype
 
     def calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, 
-                                      date_span_id, with_time, fireEvent)
+                                      date_span_id, with_time, fireEvent, close_calendar_event_name)
       javascript = ''
 
       unless view.respond_to? :wg_calendar_lang_set
@@ -137,7 +138,7 @@ module Wice
       javascript << %|      popupTriggerElement : "#{popup_trigger_icon_id}",\n |
       javascript << %|      initialDate : $('#{dom_id}').value,\n |
       if fireEvent
-        javascript << %|      onHideCallback : function(){Event.fire($(#{dom_id}), 'wg:calendarChanged')},\n |
+        javascript << %|      onHideCallback : function(){Event.fire($(#{dom_id}), '#{close_calendar_event_name}')},\n |
       end
       javascript << %|      dateFormat : "#{date_format}",\n|
       unless Wice::Defaults::POPUP_PLACEMENT_STRATEGY == :trigger
@@ -154,14 +155,14 @@ module Wice
 
     def select_date_datetime_common_prototype(initial_date, view, opts, html_opts, with_time, date_format)  #:nodoc:
 
-      options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id =
+      options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name =
         prepare_data_for_calendar(opts, date_format, initial_date)
 
       popup_trigger_icon_id = dom_id + '_trigger'
 
       function = %! $('#{date_span_id}').innerHTML = ''; $('#{dom_id}').value = ''; !
       if opts[:fire_event]
-        function += "Event.fire($(#{dom_id}), 'wg:calendarChanged')"
+        function += "Event.fire($(#{dom_id}), '#{close_calendar_event_name}')"
       end
 
       date_picker = image_tag(Defaults::CALENDAR_ICON,
@@ -179,7 +180,7 @@ module Wice
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
 
-      javascript = calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, date_span_id, with_time, opts[:fire_event])
+      javascript = calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, date_span_id, with_time, opts[:fire_event], close_calendar_event_name)
 
       [html, javascript]
     end
