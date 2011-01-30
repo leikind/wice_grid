@@ -465,7 +465,11 @@ module Wice
       end
 
       if custom_order.blank?
-        ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name.strip)
+        if ActiveRecord::ConnectionAdapters.const_defined?(:SQLite3Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+          fully_qualified_column_name.strip.split('.').map{|chunk| ActiveRecord::Base.connection.quote_table_name(chunk)}.join('.')
+        else
+          ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name.strip)
+        end
       else
         if custom_order.is_a? String
           custom_order.gsub(/\?/, fully_qualified_column_name)
