@@ -267,3 +267,40 @@ pt:
     validates_presence_error: Queira indicar o nome da query que deseja gravar
     query_deleted_message: A query foi apagada.
     query_saved_message: A query foi gravada.
+
+pt-BR:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Mostrar o filtro
+    hide_filter_tooltip: Esconder o filtro
+    csv_export_tooltip: Exportar em CSV
+    filter_tooltip: Filtrar
+    reset_filter_tooltip: Reinicializar
+    boolean_filter_true_label: sim
+    boolean_filter_false_label: não
+    previous_label: « Anterior
+    next_label: Próximo »
+    date_selector_tooltip_from: De
+    date_selector_tooltip_to: a
+    negation_checkbox_title: Excluir
+    show_all_records_label: Ver todos
+    show_all_records_tooltip: Ver todos os registos
+    all_queries_warning: Tem certeza que gostaria de visualizar todos os registos?
+    switch_back_to_paginated_mode_label: Voltar à lista paginada
+    switch_back_to_paginated_mode_tooltip: Voltar à lista por página
+    date_string_tooltip: Clique para apagar
+    saved_query_panel_title: Filtros gravados
+    save_query_button_label: Gravar o estado dos filtros
+    saved_query_deletion_confirmation: Tem certeza?
+    saved_query_deletion_link_title: Apagar o filtro
+    saved_query_link_title: Carregar o filtro
+    validates_uniqueness_error: Já existe um filtro com o mesmo nome
+    validates_presence_error: Indique o nome do filtro que deseja gravar
+    query_deleted_message: O filtro foi apagado.
+    query_saved_message: O filtro foi gravado.
+    select_all: Selecionar todos
+    deselect_all: Remover seleção
