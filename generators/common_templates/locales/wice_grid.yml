@@ -267,6 +267,8 @@ pt:
     validates_presence_error: Queira indicar o nome da query que deseja gravar
     query_deleted_message: A query foi apagada.
     query_saved_message: A query foi gravada.
+    select_all: Selecionar todos
+    deselect_all: Remover seleção
 
 pt-BR:
   date:
