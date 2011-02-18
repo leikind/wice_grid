@@ -166,7 +166,7 @@ module Wice::JsAdaptor  #:nodoc:
         %/   e.observe('keyup', function(){\n/+
         %!     var endRange = e.next();\n! +
         %!     if (e.value){\n! +
-        %/       endRange.value = #{Wice::Defaults::SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST} + parseInt(e.value);\n/ +
+        %/       endRange.value = #{Wice::ConfigurationProvider.value_for(:SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST)} + parseInt(e.value);\n/ +
         %/     }else{\n/ +
           %/       endRange.value = '';\n/ +
         %/     }\n/ +

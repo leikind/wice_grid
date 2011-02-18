@@ -401,7 +401,7 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
 
-      calendar_helper_method = if Wice::Defaults::JS_FRAMEWORK == :prototype
+      calendar_helper_method = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
         :date_calendar_prototype
       else
         :date_calendar_jquery
@@ -447,8 +447,8 @@ module Wice
 
         '<div class="text_filter_container">' +
           text_field_tag(parameter_name, params[:v], :size => 8, :id => @dom_id, :class => css_class) +
-          if defined?(::Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! ::Wice::Defaults::NEGATION_CHECKBOX_LABEL.blank?
-            ::Wice::Defaults::NEGATION_CHECKBOX_LABEL
+          if defined?(Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! Wice::ConfigurationProvider.value_for(:NEGATION_CHECKBOX_LABEL).blank?
+            Wice::ConfigurationProvider.value_for(:NEGATION_CHECKBOX_LABEL)
           else
             ''
           end +

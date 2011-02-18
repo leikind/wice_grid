@@ -623,9 +623,9 @@ module Wice
           [:fr, :to].each do |sym|
             if @request_params[sym]
               if @request_params[sym].is_a?(String)
-                @request_params[sym] = Wice::Defaults::DATETIME_PARSER.call(@request_params[sym])
+                @request_params[sym] = Wice::ConfigurationProvider.value_for(:DATETIME_PARSER).call(@request_params[sym])
               elsif @request_params[sym].is_a?(Hash)
-                @request_params[sym] = ::Wice::GridTools.params_2_datetime(@request_params[sym])
+                @request_params[sym] = Wice::GridTools.params_2_datetime(@request_params[sym])
               end
             end
           end
@@ -639,7 +639,7 @@ module Wice
           [:fr, :to].each do |sym|
             if @request_params[sym]
               if @request_params[sym].is_a?(String)
-                @request_params[sym] = Wice::Defaults::DATE_PARSER.call(@request_params[sym])
+                @request_params[sym] = Wice::ConfigurationProvider.value_for(:DATE_PARSER).call(@request_params[sym])
               elsif @request_params[sym].is_a?(Hash)
                 @request_params[sym] = ::Wice::GridTools.params_2_date(@request_params[sym])
               end

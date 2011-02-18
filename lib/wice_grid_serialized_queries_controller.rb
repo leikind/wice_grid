@@ -33,7 +33,7 @@ module Wice
           @error_messages = sq.errors.full_raw_messages.join(' ')
         end
       end
-      template_name = if Wice::Defaults::JS_FRAMEWORK == :prototype
+      template_name = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
         'delete'
       else
         'delete_jq'
@@ -60,7 +60,7 @@ module Wice
       else
         @error_messages = @saved_query.errors.map{ |_, msg| msg }.join(' ')
       end
-      template_name = if Wice::Defaults::JS_FRAMEWORK == :prototype
+      template_name = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
         'create'
       else
         'create_jq'
