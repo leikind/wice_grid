@@ -42,7 +42,7 @@ module Wice::JsAdaptor   #:nodoc:
       end
 
       def enter_key_event_registration(grid_name)  #:nodoc:
-        %! $('div##{grid_name}.wice_grid_container .wice_grid_filter_row input[type=text]').keydown(function(event){\n! +
+        %! $('div##{grid_name}.wice_grid_container .wice_grid_filter_row input[type=text], .#{grid_name}_detached_filter input[type=text]').keydown(function(event){\n! +
         %!  if (event.keyCode == 13) {#{grid_name}.process()}\n! +
         %! });\n!
       end
