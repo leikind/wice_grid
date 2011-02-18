@@ -13,7 +13,7 @@ module Wice
       end
 
       grid.get_state_as_parameter_value_pairs(true).collect{|param_name, value|
-        hidden_field_tag(param_name, value)
+        hidden_field_tag(param_name, value, :id => "hidden-#{param_name.gsub(/[\[\]]/, '-')}")
       }.join("\n").html_safe_if_necessary
     end
 
