@@ -520,6 +520,10 @@ module Wice
       contains_auto_reloading_elements(:has_auto_reloading_calendar?)
     end
 
+    def contains_range_filters
+      filter_columns(:in_html).detect{|column| column.filter_shown? && column.is_a?(ViewColumnInteger)}
+    end
+
     protected
 
     def contains_auto_reloading_elements(what) #:nodoc:

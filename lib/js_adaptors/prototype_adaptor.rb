@@ -161,8 +161,19 @@ module Wice::JsAdaptor  #:nodoc:
         %! elToFocus.value = elToFocus.value;\n! # this will just place the cursor at the end of the text input
       end
 
+      def update_ranges(grid_name)
+        %/ $$('div##{grid_name}.wice_grid_container .range-start, .#{grid_name}_detached_filter .range-start').each(function(e){\n/+
+        %/   e.observe('keyup', function(){\n/+
+        %!     var endRange = e.next();\n! +
+        %!     if (e.value){\n! +
+        %/       endRange.value = #{Wice::Defaults::SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST} + parseInt(e.value);\n/ +
+        %/     }else{\n/ +
+          %/       endRange.value = '';\n/ +
+        %/     }\n/ +
+        %/   })\n/+
+        %/ });\n/
+      end
+
     end
-
   end
-
 end

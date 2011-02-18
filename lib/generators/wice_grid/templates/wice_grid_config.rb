@@ -67,6 +67,11 @@ if defined?(Wice::Defaults)
   # A boolean value specifying if a change in a filter triggers reloading of the grid.
   Wice::Defaults::AUTO_RELOAD = false
 
+  # If set to an integer (including 0), in integer and float filters the second field will be
+  # dynamically updated when the first field is updated
+  Wice::Defaults::SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST = false
+  # Wice::Defaults::SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST = 1
+
 
   # SQL operator used for matching strings in string filters.
   Wice::Defaults::STRING_MATCHING_OPERATOR = 'LIKE'
