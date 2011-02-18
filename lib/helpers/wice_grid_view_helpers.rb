@@ -475,6 +475,14 @@ module Wice
         content << after_row_output if after_row_output
       end
 
+      last_row_output = if rendering.last_row_handler
+        call_block_as_erb_or_ruby(rendering, rendering.last_row_handler, nil)
+      else
+        nil
+      end
+
+      content << last_row_output if last_row_output
+
       content << '</tbody></table></div>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
