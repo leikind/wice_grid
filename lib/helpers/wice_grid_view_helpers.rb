@@ -538,6 +538,11 @@ module Wice
         cached_javascript << JsAdaptor.focus_element(rendering.element_to_focus)
       end
 
+      if Wice::Defaults::SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST && rendering.contains_range_filters
+        cached_javascript << JsAdaptor.update_ranges(grid.name)
+      end
+
+
       content << javascript_tag(
         JsAdaptor.dom_loaded +
         %/ #{prototype_and_js_version_check}\n/ +
