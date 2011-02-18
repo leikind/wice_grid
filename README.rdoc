@@ -691,7 +691,7 @@ WiceGrid icons are in directory <tt>public/images/icons/grid/</tt>.
 
 === Adding rows to the grid
 
-It is possible to add your own handcrafted HTML after and/or before each grid row. This works similar to +row_attributes+, by adding blocks +after_row+ and +before_row+:
+It is possible to add your own handcrafted HTML after and/or before each grid row. This works similar to +row_attributes+, by adding blocks +after_row+, +before_row+,  and +last_row+:
 
   <%= grid(@tasks_grid) do |g|
     g.before_row do |task|
@@ -702,14 +702,21 @@ It is possible to add your own handcrafted HTML after and/or before each grid ro
         nil
       end
     end
+
+    g.last_row do          # This row will always be added to the bottom of the grid
+      content_tag(:tr,
+        content_tag(:td,
+          'Last row',
+        :colspan => 10),
+       :class => 'last_row')
+    end
+
     .......
   end %>
 
 It is up for the developer to return the correct HTML code, or return +nil+ if no row is needed for this record. Naturally, there is only one +before_row+  definition and one +after_row+  definition for a WiceGrid instance.
 
 A real life example might be some enterprisy tables inside a table.
-
-Likewise, you can add your own HTML after all rows using last_row.
 
 === Rendering a grid without records
 
