@@ -707,7 +707,9 @@ It is possible to add your own handcrafted HTML after and/or before each grid ro
 
 It is up for the developer to return the correct HTML code, or return +nil+ if no row is needed for this record. Naturally, there is only one +before_row+  definition and one +after_row+  definition for a WiceGrid instance.
 
-A real life example might be some enterprisy  tables inside a table.
+A real life example might be some enterprisy tables inside a table.
+
+Likewise, you can add your own HTML after all rows using last_row.
 
 === Rendering a grid without records
 
