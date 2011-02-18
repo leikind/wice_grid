@@ -3,7 +3,7 @@ en:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Show filter
     hide_filter_tooltip: Hide filter
@@ -50,7 +50,7 @@ is:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Sýna síumöguleika
     hide_filter_tooltip: Fela síumoguleika
@@ -88,13 +88,16 @@ is:
     validates_presence_error: Vinsamlegast gefið heiti fyrir leitarskipun
     query_deleted_message: Vistaðri leitarskipun hefur verið eytt
     query_saved_message: leitaskipun hefur verið vistuð
+    # To do: translate
+    select_all: Select all
+    deselect_all: Remove selection
 
 nl:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Filter tonen
     hide_filter_tooltip: Filter verbergen
@@ -132,13 +135,15 @@ nl:
     validates_presence_error: Gelieve de naam van de query in te vullen
     query_deleted_message: Opgeslagen query verwijderd.
     query_saved_message: Query opgeslagen
+    select_all: Selecteer alle rijen
+    deselect_all: Deselecteer alle rijen
 
 fr:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Afficher le filtre
     hide_filter_tooltip: Cacher le filtrer
@@ -176,13 +181,15 @@ fr:
     validates_presence_error: Veuillez indiquer le nom de la requête que vous souhaitez sauver
     query_deleted_message: La requête a été effacée.
     query_saved_message: La requête a été sauvée.
+    select_all: Sélectionner tout
+    deselect_all: Désélectionner tout
 
 ru:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Показать фильтр
     hide_filter_tooltip: Спрятать фильтр
@@ -222,14 +229,14 @@ ru:
     query_saved_message: Сохранённый фильтр сохранён.
     select_all: Отметить все
     deselect_all: Убрать выделение
-    
-    
+
+
 pt:
   date:
     order:
       - :year
       - :month
-      - :day  
+      - :day
   wice_grid:
     show_filter_tooltip: Mostrar o filtro
     hide_filter_tooltip: Esconder o filtro
@@ -306,3 +313,96 @@ pt-BR:
     query_saved_message: O filtro foi gravado.
     select_all: Selecionar todos
     deselect_all: Remover seleção
+
+
+sk:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Zobraziť filter
+    hide_filter_tooltip: Skryť filter
+    csv_export_tooltip: Exportovať do CSV
+    filter_tooltip: Filter
+    reset_filter_tooltip: Zrušiť filtre
+    boolean_filter_true_label: "áno"
+    boolean_filter_false_label: "nie"
+    previous_label: « Predchádzajúci
+    next_label: Následujúci »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Dátum od
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Dátum do
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Inverzný výber
+    # link to switch to show all records
+    show_all_records_label: Zobraziť všetko
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Zobrazí všetky záznamy v databáze
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Určite chceš zobraziť všetky záznamy v databáze?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: späť na stránkové zobrazenie
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Prepnúť do stránkového zobrazenia
+    # Title of the date string.
+    date_string_tooltip: Kliknutím zmažeš
+    saved_query_panel_title: Uložené filtre/výsledky
+    save_query_button_label: Uložiť stav filtrov
+    saved_query_deletion_confirmation: Si si istý?
+    saved_query_deletion_link_title: Vymazať uložený filter
+    saved_query_link_title: Nahrať uložený filter
+    validates_uniqueness_error: Filter s uvedeným názvom už existuje.
+    validates_presence_error: Prosím zadaj názov uloženého filtra.
+    query_deleted_message: Uložený filter bol vymazaný.
+    query_saved_message: Filter bol uložený.
+    select_all: Vyber všetko
+    deselect_all: Zrušiť výber
+
+cz:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Zobrazit filtr
+    hide_filter_tooltip: Skrýt filtr
+    csv_export_tooltip: Exportovat do CSV
+    filter_tooltip: Filtr
+    reset_filter_tooltip: Zrušit filtr
+    boolean_filter_true_label: "áno"
+    boolean_filter_false_label: "ne"
+    previous_label: « Předešlý
+    next_label: Následující »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Dátum od
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Dátum do
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Inverzní výběr
+    # link to switch to show all records
+    show_all_records_label: Zobrazit všechno
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Zobrazí všechny záznamy v databáze
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Určitě chceš zobrazit všechny záznamy v databáze?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: zpět na stránkové zobrazení
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Přepnout do stránkového zobrazení
+    # Title of the date string.
+    date_string_tooltip: Kliknutím zmažeš
+    saved_query_panel_title: Uložené filtry
+    save_query_button_label: Uložit aktuálni stav filtrů
+    saved_query_deletion_confirmation: Seš si jistej?
+    saved_query_deletion_link_title: Smazat uloženej filtr
+    saved_query_link_title: Použít uloženej filtr
+    validates_uniqueness_error: Filtr už existuje.
+    validates_presence_error: Prosím zadej název filtru.
+    query_deleted_message: Uložený filtr byl smazán.
+    query_saved_message: Filtr byl uložen.
+    select_all: Vyber všechno
+    deselect_all: Zrušit výběr
