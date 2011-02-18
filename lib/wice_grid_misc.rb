@@ -20,7 +20,7 @@ module Wice
     # Retrieves and constantizes (if needed ) the Query Store model
     def get_query_store_model #:nodoc:
 
-      query_store_model = ::Wice::Defaults::QUERY_STORE_MODEL
+      query_store_model = Wice::ConfigurationProvider.value_for(:QUERY_STORE_MODEL)
       query_store_model = query_store_model.constantize if query_store_model.is_a? String
       raise ::Wice::WiceGridArgumentError.new("Defaults::QUERY_STORE_MODEL must be an ActiveRecord class or a string which can be constantized to an ActiveRecord class") unless query_store_model.kind_of? Class
       validate_query_model(query_store_model) unless @@model_validated
@@ -28,11 +28,11 @@ module Wice
     end
 
     def get_string_matching_operators(model)   #:nodoc:
-      if defined?(Wice::Defaults::STRING_MATCHING_OPERATORS) && Wice::Defaults::STRING_MATCHING_OPERATORS.is_a?(Hash) &&
-          str_matching_operator = Wice::Defaults::STRING_MATCHING_OPERATORS[model.connection.class.to_s]
+      if defined?(Wice::Defaults::STRING_MATCHING_OPERATORS) && Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATORS).is_a?(Hash) &&
+          str_matching_operator = Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATORS)[model.connection.class.to_s]
         str_matching_operator
       else
-        Wice::Defaults::STRING_MATCHING_OPERATOR
+        Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATOR)
       end
     end
 
@@ -79,6 +79,20 @@ module Wice
       else # Rails without :I18n
         alias_method :get_message, :get_from_hardcoded_constants
       end
+    end
+  end
+
+  module ConfigurationProvider #:nodoc:
+    class << self
+
+      def value_for(key) #:nodoc:
+        if Wice::Defaults.const_defined?(key)
+          Wice::Defaults.const_get(key)
+        else
+          raise WiceGridException.new("Could not find constant #{key} in the configuration file! Please run the generator command to update the configuration file:\n   rails g  wice_grid:wice_grid_assets_jquery\nor   rails g wice_grid:wice_grid_assets_prototype\ndepending on your JS framework")
+        end
+      end
+
     end
   end
 

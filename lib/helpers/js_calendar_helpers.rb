@@ -9,7 +9,7 @@ module Wice
     # Jquery
 
     def date_calendar_jquery(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
-      date_format = Wice::Defaults::DATE_FORMAT
+      date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
 
       options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name  =
         prepare_data_for_calendar(opts, date_format, initial_date)
@@ -28,7 +28,7 @@ module Wice
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
 
-      javascript = calendar_constructor_jquery(dom_id, view, Wice::Defaults::DATE_FORMAT_JQUERY,
+      javascript = calendar_constructor_jquery(dom_id, view, Wice::ConfigurationProvider.value_for(:DATE_FORMAT_JQUERY),
         date_span_id, opts[:fire_event], html_opts[:title], datepicker_placeholder_id, close_calendar_event_name)
 
       [html, javascript]
@@ -36,11 +36,11 @@ module Wice
 
     # Prototype
     def date_calendar_prototype(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
-      select_date_datetime_common_prototype(initial_date, view, opts, html_opts, false, Wice::Defaults::DATE_FORMAT)
+      select_date_datetime_common_prototype(initial_date, view, opts, html_opts, false, Wice::ConfigurationProvider.value_for(:DATE_FORMAT))
     end
 
     def datetime_calendar_prototype(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
-      select_date_datetime_common_prototype(initial_date, view, opts, html_opts, true, Wice::Defaults::DATETIME_FORMAT)
+      select_date_datetime_common_prototype(initial_date, view, opts, html_opts, true, Wice::ConfigurationProvider.value_for(:DATETIME_FORMAT))
     end
 
     protected
@@ -68,7 +68,7 @@ module Wice
       javascript <<  %|   firstDay: 1,\n|
       javascript <<  %|   showOn: "button",\n|
       javascript <<  %|   dateFormat: "#{date_format}",\n|
-      javascript <<  %|   buttonImage: "#{::Wice::Defaults::CALENDAR_ICON}",\n|
+      javascript <<  %|   buttonImage: "#{Wice::ConfigurationProvider.value_for(:CALENDAR_ICON)}",\n|
       javascript <<  %|   buttonImageOnly: true,\n|
       javascript <<  %|   buttonText: "#{title}",\n|
       javascript <<  %|   changeMonth: true,\n|
@@ -141,8 +141,8 @@ module Wice
         javascript << %|      onHideCallback : function(){Event.fire($(#{dom_id}), '#{close_calendar_event_name}')},\n |
       end
       javascript << %|      dateFormat : "#{date_format}",\n|
-      unless Wice::Defaults::POPUP_PLACEMENT_STRATEGY == :trigger
-        javascript << %|      popupPositioningStrategy : "#{Wice::Defaults::POPUP_PLACEMENT_STRATEGY}",\n|
+      unless Wice::ConfigurationProvider.value_for(:POPUP_PLACEMENT_STRATEGY) == :trigger
+        javascript << %|      popupPositioningStrategy : "#{Wice::ConfigurationProvider.value_for(:POPUP_PLACEMENT_STRATEGY)}",\n|
       end
       if with_time
         javascript << %|        withTime : true,\n|
