@@ -12,6 +12,7 @@ module Wice
     attr_reader :after_row_handler
     attr_reader :before_row_handler
     attr_reader :blank_slate_handler
+    attr_reader :last_row_handler
     attr_reader :grid
     attr_accessor :erb_mode
 
@@ -407,6 +408,11 @@ module Wice
       @before_row_handler = block
     end
 
+    # Can be used to add HTML code (calculation results, for example) after all rows.
+    # Nothing is added if the block return +false+ or +nil+.
+    def last_row(&block)
+      @last_row_handler = block
+    end
     # The output of the block submitted to +blank_slate+ is rendered instead of the whole grid if no filters are active
     # and there are no records to render.
     # In addition to the block style two other variants are accepted:
