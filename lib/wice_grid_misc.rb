@@ -89,7 +89,7 @@ module Wice
         if Wice::Defaults.const_defined?(key)
           Wice::Defaults.const_get(key)
         else
-          raise WiceGridException.new("Could not find constant #{key} in the configuration file! Please run the generator command to update the configuration file:\n   rails g  wice_grid:wice_grid_assets_jquery\nor   rails g wice_grid:wice_grid_assets_prototype\ndepending on your JS framework")
+          raise WiceGridException.new("Could not find constant #{key} in the configuration file! Please run the generator command to update the configuration file:\n   ./script/generate   wice_grid_assets_jquery\nor   \n./script/generate  wice_grid_assets_prototype\ndepending on your JS framework")
         end
       end
 
