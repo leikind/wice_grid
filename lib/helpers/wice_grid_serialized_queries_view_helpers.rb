@@ -35,9 +35,10 @@ module Wice
         else
           ''
         end +
+        '<div class="wg-saved-query-input-controls">'+
         text_field_tag(id_and_name,  '', :size => 20, :onkeydown=>'', :id => id_and_name) +
         button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +
-        '</div>' +
+        '</div></div>' +
         javascript_tag do
           JsAdaptor.call_to_save_query_and_key_event_initialization_for_saving_queries(
             id_and_name, grid_name, base_path_to_query_controller, parameters.to_json, ids.to_json
