@@ -94,7 +94,7 @@ module Wice::JsAdaptor   #:nodoc:
                                     id_and_name, grid_name, base_path_to_query_controller, parameters_json, ids_json)  #:nodoc:
         %/ function #{grid_name}_save_query(){\n/ +
         %`   if ( typeof(#{grid_name}) != "undefined")\n` +
-        %!      #{grid_name}.save_query($('##{id_and_name}')[0].value, '#{base_path_to_query_controller}', #{parameters_json}, #{ids_json})\n! +
+        %!      #{grid_name}.save_query('#{id_and_name}', $('##{id_and_name}')[0].value, '#{base_path_to_query_controller}', #{parameters_json}, #{ids_json})\n! +
         %/}\n/ +
         %/ $('##{id_and_name}').keydown(function(event){\n/ +
         %/    if (event.keyCode == 13) #{grid_name}_save_query();\n/ +
