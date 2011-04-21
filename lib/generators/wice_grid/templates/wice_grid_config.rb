@@ -142,7 +142,14 @@ if defined?(Wice::Defaults)
   # format defined by +DATETIME_FORMAT+ and must generate a DateTime object.
   # In many cases <tt>Time.zone.parse</tt> is enough, for instance,  <tt>%Y-%m-%d</tt>. If you change the format, make sure to check this code
   # and modify it if needed.
-  Wice::Defaults::DATETIME_PARSER = lambda{|datetime_string| Time.zone.parse(datetime_string) }
+  Wice::Defaults::DATETIME_PARSER = lambda{|datetime_string|
+    if Time.zone
+      Time.zone.parse(datetime_string)
+    else
+      Time.parse(datetime_string)
+    end
+  }
+
 
   # With Calendar helpers enabled the parameter sent is the string displayed. This lambda will be given a date string in the
   # format defined by +DATETIME+ and must generate a Date object.
