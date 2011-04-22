@@ -71,11 +71,11 @@ and run the <tt>bundle</tt> command.
 
 If your application is Prototype-based , run the following generator to copy all plugin assets:
 
-   rails g wice_grid_assets_prototype
+   rails g wice_grid:wice_grid_assets_prototype
 
 For jQuery:
 
-   rails g wice_grid_assets_jquery
+   rails g wice_grid:wice_grid_assets_jquery
 
 This will copy images, stylesheets, configuration file <tt>config/initializers/wice_grid_config.rb</tt>, and the correct version of javascript files.
 
@@ -96,12 +96,12 @@ In the Prototype mode the plugin uses a forked[http://github.com/leikind/calenda
 
 The jQuery version uses jQuery datepicker[http://jqueryui.com/demos/datepicker/]. Because this is part
 of the standard jQuery codebase, it is not bundled together with the plugin, and it is the responsibility
-of the programmer to include all necessary assets including localization files if the application is 
+of the programmer to include all necessary assets including localization files if the application is
 multilingual.
 
 It is always possible to fall back to simple dropdown lists that the standard date/datetime Rails helpers use.
 
-JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT 
+JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT
 RAILS DATE/DATETIME HELPERS.
 
 
@@ -837,7 +837,7 @@ keep ordering and filtering.
 
 === Javascript Calendar for Date and DateTime Filters.
 
-Standard Rails Date and DateTime helpers are a set of dropdown lists, and while this is practical, 
+Standard Rails Date and DateTime helpers are a set of dropdown lists, and while this is practical,
 displaying two Date or especially DateTime
 helpers takes too much space on a page and is in general confusing.
 
@@ -848,16 +848,16 @@ In the Prototype mode the plugin uses a forked[http://github.com/leikind/calenda
 
 The jQuery version uses jQuery datepicker[http://jqueryui.com/demos/datepicker/]. Because this is part
 of the standard jQuery codebase, it is not bundled together with the plugin, and it is the responsibility
-of the programmer to include all necessary assets including localization files if the application is 
+of the programmer to include all necessary assets including localization files if the application is
 multilingual.
 
 It is always possible to fall back to simple dropdown lists that the standard date/datetime Rails helpers use.
 
-JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT 
+JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT
 RAILS DATE/DATETIME HELPERS.
 
 
-Calendar based helpers are enabled by default, but it's possible to change it in 
+Calendar based helpers are enabled by default, but it's possible to change it in
 <tt>config/initializers/wice_grid_config.rb</tt>, variable HELPER_STYLE.
 
 The flavor of the date filter can also be changed on per-column basis:
@@ -874,13 +874,13 @@ Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ define the format of dates the use
 format of the string sent in a HTTP parameter.
 
 You can change the constants in
-<tt>config/initializers/wice_grid_config.rb</tt>. Doing so,  make sure that lamdbas defined 
+<tt>config/initializers/wice_grid_config.rb</tt>. Doing so,  make sure that lamdbas defined
 in +DATETIME_PARSER+ and +DATE_PARSER+ return valid DateTime and Date objects. The format
-by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and <tt>Time.zone.parse</tt> 
+by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and <tt>Time.zone.parse</tt>
 and <tt>Date.parse</tt> handle it.
 Make sure it stays so.
 
-jQuery +datepicker+ uses a different format flavor, therefore there is an additional constant 
+jQuery +datepicker+ uses a different format flavor, therefore there is an additional constant
 +DATE_FORMAT_JQUERY+. While +DATE_FORMAT_JQUERY+ is fed to +datepicker+, +DATE_FORMAT+ is still used
 for presenting initial date values in filters, so make sure that +DATE_FORMAT_JQUERY+ and +DATE_FORMAT+
 result in an identical date representation.
@@ -1188,3 +1188,4 @@ only under certain circumstances:
 
 Icons used by the plugin are courtesy of Mark James, the creator of the SILK icon set -
 http://www.famfamfam.com/lab/icons/silk/.
+
