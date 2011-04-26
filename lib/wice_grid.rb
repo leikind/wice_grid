@@ -363,7 +363,10 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model_klass.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar|
+      quoted_column = quote_table_name(column.name)
+      res = column.model_klass.find(:all,
+          :select => "distinct #{quoted_column}",
+          :order => "#{quoted_column} asc").collect{|ar|
         ar[column.name]
       }.reject{|e| e.blank?}.map{|i|[i,i]}
     end
@@ -465,11 +468,7 @@ module Wice
       end
 
       if custom_order.blank?
-        if ActiveRecord::ConnectionAdapters.const_defined?(:SQLite3Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
-          fully_qualified_column_name.strip.split('.').map{|chunk| ActiveRecord::Base.connection.quote_table_name(chunk)}.join('.')
-        else
-          ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name.strip)
-        end
+        quote_table_name(fully_qualified_column_name)
       else
         if custom_order.is_a? String
           custom_order.gsub(/\?/, fully_qualified_column_name)
@@ -478,6 +477,15 @@ module Wice
         else
           raise WiceGridArgumentError.new("invalid custom order #{custom_order.inspect}")
         end
+      end
+    end
+
+
+    def quote_table_name(tname) #:nodoc:
+      if ActiveRecord::ConnectionAdapters.const_defined?(:SQLite3Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+        tname.strip.split('.').map{|chunk| ActiveRecord::Base.connection.quote_table_name(chunk)}.join('.')
+      else
+        ActiveRecord::Base.connection.quote_table_name(tname.strip)
       end
     end
 
