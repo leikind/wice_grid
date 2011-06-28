@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 3.0.0.pre3
+Version:: 3.0.0
 Author::  Yuri Leikind
 Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
@@ -10,7 +10,7 @@ Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 == Attention!
 There are two major branches of WiceGrid.
 
-THIS IS AN ALPHA VERSION OF THE PLUGIN FOR RAILS 3.0.
+THIS IS A VERSION OF THE PLUGIN FOR RAILS 3.0.
 The current branch (https://github.com/leikind/wice_grid/tree/rails3) starts with version 3.0, works with Rails 3, and can only be used as a gem.
 
 For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/).
