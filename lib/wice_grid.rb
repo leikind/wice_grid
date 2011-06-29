@@ -62,11 +62,15 @@ module Wice
 
     # core workflow methods START
 
-    def initialize(klass, controller, opts = {})  #:nodoc:
+    def initialize(klass_or_relation, controller, opts = {})  #:nodoc:
       @controller = controller
 
+      @relation = klass_or_relation
+      @klass = klass_or_relation.is_a?(ActiveRecord::Relation) ?
+        klass_or_relation.klass :
+        klass_or_relation
 
-      unless klass.kind_of?(Class) && klass.ancestors.index(ActiveRecord::Base)
+      unless @klass.kind_of?(Class) && @klass.ancestors.index(ActiveRecord::Base)
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
       end
 
@@ -124,8 +128,6 @@ module Wice
       end
       raise WiceGridArgumentError.new("name of the grid can only contain alphanumeruc characters") unless @name =~ /^[a-zA-Z\d_]*$/
 
-      @klass = klass
-
       @table_column_matrix = TableColumnMatrix.new
       @table_column_matrix.default_model_class = @klass
 
@@ -151,7 +153,7 @@ module Wice
 
       @ar_options_formed = false
 
-      @method_scoping = @klass.send(:scoped_methods)[-1]
+      @method_scoping = @relation.send(:scoped_methods)[-1]
     end
 
     # A block executed from within the plugin to process records of the current page.
@@ -281,7 +283,7 @@ module Wice
     def read  #:nodoc:
       form_ar_options
       with_exclusive_scope do
-        @resultset = self.output_csv? ?  @klass.find(:all, @ar_options) : @klass.paginate(@ar_options)
+        @resultset = self.output_csv? ?  @relation.find(:all, @ar_options) : @relation.paginate(@ar_options)
       end
       invoke_resultset_callbacks
     end
@@ -372,7 +374,7 @@ module Wice
 
     def count  #:nodoc:
       form_ar_options(:skip_ordering => true, :forget_generated_options => true)
-      @klass.count(:conditions => @ar_options[:conditions], :joins => @ar_options[:joins], :include => @ar_options[:include], :group => @ar_options[:group])
+      @relation.count(:conditions => @ar_options[:conditions], :joins => @ar_options[:joins], :include => @ar_options[:include], :group => @ar_options[:group])
     end
 
     alias_method :size, :count
@@ -464,7 +466,7 @@ module Wice
 
     def with_exclusive_scope #:nodoc:
       if @method_scoping
-        @klass.send(:with_exclusive_scope, @method_scoping) do
+        @relation.send(:with_exclusive_scope, @method_scoping) do
           yield
         end
       else
@@ -521,7 +523,7 @@ module Wice
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
       with_exclusive_scope do
-        @klass.find(:all, :joins => @ar_options[:joins],
+        @relation.find(:all, :joins => @ar_options[:joins],
                           :include => @ar_options[:include],
                           :group => @ar_options[:group],
                           :conditions => @options[:conditions])
@@ -531,7 +533,7 @@ module Wice
     def count_resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
       with_exclusive_scope do
-        @klass.count(
+        @relation.count(
           :joins => @ar_options[:joins],
           :include => @ar_options[:include],
           :group => @ar_options[:group],
@@ -544,7 +546,7 @@ module Wice
     def resultset_without_paging_with_user_filters  #:nodoc:
       form_ar_options
       with_exclusive_scope do
-        @klass.find(:all, :joins      => @ar_options[:joins],
+        @relation.find(:all, :joins      => @ar_options[:joins],
                           :include    => @ar_options[:include],
                           :group      => @ar_options[:group],
                           :conditions => @ar_options[:conditions],
