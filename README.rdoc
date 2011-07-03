@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 3.0.0
+Version:: 3.0.1
 Author::  Yuri Leikind
 Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
@@ -65,7 +65,7 @@ Rails version 3.0 or newer.
 
 Add the following to your Gemfile:
 
-  gem "wice_grid", '3.0.0'
+  gem "wice_grid", '3.0.1'
 
 and run the <tt>bundle</tt> command.
 
