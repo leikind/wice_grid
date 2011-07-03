@@ -114,7 +114,7 @@ module Wice
         template_name = opts[grid.name] || opts[grid.name.intern]
         template_name ||= grid.name + '_grid'
         temp_filename = render_to_string(:partial => template_name)
-        temp_filename.strip!
+        temp_filename = temp_filename.strip
         filename = (grid.csv_file_name || grid.name ) + '.csv'
         grid.csv_tempfile.close
         send_file_rails2 temp_filename, :filename => filename, :type => 'text/csv'
