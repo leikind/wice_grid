@@ -23,7 +23,7 @@ module Wice
     # if in other parameters a column name is mentioned without the name of the table, this table is implied.
     # Just like in an ordinary ActiveRecord <tt>find</tt> you can use <tt>:joins</tt>, <tt>:include</tt>, and <tt>:conditions</tt>.
     #
-    # The first parameter is an ActiveRecord class name. The generated ActiveRecord call will use it as the
+    # The first parameter is an ActiveRecord class name or an  ActiveRecord::Relation instance. The generated ActiveRecord call will use it as the
     # receiver of the <tt>paginate</tt> method: <tt>klass.paginate(...)</tt>
     #
     # The second parameters is a hash of parameters:

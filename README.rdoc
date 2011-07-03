@@ -65,7 +65,7 @@ Rails version 3.0 or newer.
 
 Add the following to your Gemfile:
 
-  gem "wice_grid", '3.0.0.pre1'
+  gem "wice_grid", '3.0.0'
 
 and run the <tt>bundle</tt> command.
 
@@ -128,6 +128,10 @@ Controller:
 
   @tasks_grid = initialize_grid(Task)
 
+It is also possible to use an  ActiveRecord::Relation instance as the first argument:
+
+  @tasks_grid = initialize_grid(Task.where(:active => true))
+
 View:
 
   <%= grid(@tasks_grid) do |g|
@@ -159,6 +163,8 @@ The return value of the block is the table cell content.
 
 In the above view code five columns were defined, all without names, no sorting or filtering is available. Still, pagination becomes active if
 the number of all extracted records exceeds the default number of rows per page.
+
+
 
 Column names are defined with parameter <tt>:column_name</tt>:
 
@@ -324,6 +330,16 @@ with WiceGrid code:
 
   @user_groups_grid = initialize_grid(UserGroup, :conditions => ['portal_application_id = ?', @portal_application])
 
+Alternatively, instead of a Class object as the first parameter, you can use  ActiveRecord::Relation:
+
+
+  @tasks_grid = initialize_grid(Task.
+    where(:archived => false, :projects => {:active => true}).
+    joins(:project)
+  )
+
+
+  Task
 
 === Queries with join tables
 
