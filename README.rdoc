@@ -15,7 +15,7 @@ There are two major branches of WiceGrid.
 
 You are looking at  WiceGrid for Rails 2, version 0.6.0.
 
-For Rails 3.0 see https://github.com/leikind/wice_grid/tree/rails3
+For Rails 3.0 see https://github.com/leikind/wice_grid
 
 == Intro
 
