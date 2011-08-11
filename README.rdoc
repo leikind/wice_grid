@@ -339,7 +339,14 @@ Alternatively, instead of a Class object as the first parameter, you can use  Ac
   )
 
 
-  Task
+Please note that though all queries inside of WiceGrid are run without the default
+scope, if you use an ActiveRecord::Relation instance to initialize grid, it will
+already include the default scope. Thus you might consider using <tt>unscoped</tt>:
+
+  @tasks_grid = initialize_grid(Task.
+    where(:archived => false, :projects => {:active => true}).
+    joins(:project)
+  )
 
 === Queries with join tables
 

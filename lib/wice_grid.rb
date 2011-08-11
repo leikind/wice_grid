@@ -153,7 +153,6 @@ module Wice
 
       @ar_options_formed = false
 
-      @method_scoping = @relation.send(:scoped_methods)[-1]
     end
 
     # A block executed from within the plugin to process records of the current page.
@@ -282,8 +281,12 @@ module Wice
 
     def read  #:nodoc:
       form_ar_options
-      with_exclusive_scope do
-        @resultset = self.output_csv? ?  @relation.find(:all, @ar_options) : @relation.paginate(@ar_options)
+      @klass.unscoped do
+        @resultset = if self.output_csv?
+          @relation.find(:all, @ar_options)
+        else
+          @relation.paginate(@ar_options)
+        end
       end
       invoke_resultset_callbacks
     end
@@ -464,15 +467,6 @@ module Wice
       invoke_resultset_callback(@options[:with_resultset], lambda{self.send(:resultset_without_paging_with_user_filters)})
     end
 
-    def with_exclusive_scope #:nodoc:
-      if @method_scoping
-        @relation.send(:with_exclusive_scope, @method_scoping) do
-          yield
-        end
-      else
-        yield
-      end
-    end
 
 
     def add_custom_order_sql(fully_qualified_column_name) #:nodoc:
@@ -522,7 +516,7 @@ module Wice
 
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
-      with_exclusive_scope do
+      @klass.unscoped do
         @relation.find(:all, :joins => @ar_options[:joins],
                           :include => @ar_options[:include],
                           :group => @ar_options[:group],
@@ -532,7 +526,7 @@ module Wice
 
     def count_resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
-      with_exclusive_scope do
+      @klass.unscoped do
         @relation.count(
           :joins => @ar_options[:joins],
           :include => @ar_options[:include],
@@ -545,7 +539,7 @@ module Wice
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       form_ar_options
-      with_exclusive_scope do
+      @klass.unscoped do
         @relation.find(:all, :joins      => @ar_options[:joins],
                           :include    => @ar_options[:include],
                           :group      => @ar_options[:group],
