@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wice_grid}
-  s.version = "3.0.2"
+  s.version = "3.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Yuri Leikind}]
-  s.date = %q{2011-08-11}
+  s.authors = ["Yuri Leikind"]
+  s.date = %q{2011-09-01}
   s.description = %q{A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters }
   s.email = %q{yuri.leikind@gmail.com}
   s.extra_rdoc_files = [
@@ -80,8 +80,8 @@ Gem::Specification.new do |s|
     "wice_grid.gemspec"
   ]
   s.homepage = %q{http://github.com/lekind/wice_grid}
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.6}
+  s.require_paths = ["lib"]
+  s.rubygems_version = %q{1.6.2}
   s.summary = %q{Rails Grid Plugin}
 
   if s.respond_to? :specification_version then

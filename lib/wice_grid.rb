@@ -28,24 +28,29 @@ module Wice
 
     initializer "wice_grid_railtie.configure_rails_initialization" do |app|
 
-      ActionController::Base.send(:include, Wice::Controller)
-
-      ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
-
-      Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
-
-      ::ActionView::Base.class_eval { include Wice::GridViewHelper }
-
-      ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
-
-      [ActionView::Helpers::AssetTagHelper,
-       ActionView::Helpers::TagHelper,
-       ActionView::Helpers::JavaScriptHelper,
-       ActionView::Helpers::FormTagHelper].each do |m|
-        JsCalendarHelpers.send(:include, m)
+      ActiveSupport.on_load :action_controller do
+        ActionController::Base.send(:include, Wice::Controller)
       end
 
-      require 'wice_grid_serialized_query.rb'
+      ActiveSupport.on_load :active_record do
+        ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
+        ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
+      end
+
+      ActiveSupport.on_load :action_view do
+        ::ActionView::Base.class_eval { include Wice::GridViewHelper }
+        [ActionView::Helpers::AssetTagHelper,
+         ActionView::Helpers::TagHelper,
+         ActionView::Helpers::JavaScriptHelper,
+         ActionView::Helpers::FormTagHelper].each do |m|
+          JsCalendarHelpers.send(:include, m)
+        end
+      end
+
+      ActiveSupport.on_load :action_view do
+        Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
+        require 'wice_grid_serialized_query.rb'
+      end
     end
 
     rake_tasks do
