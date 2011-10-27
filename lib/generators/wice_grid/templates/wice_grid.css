@@ -1,4 +1,4 @@
-/*  This is just an example, so feel free to re-style it completely */ 
+/*  This is just an example, so feel free to re-style it completely */
 
 .wice_grid {
   border: 1px solid #ccc;
@@ -11,21 +11,21 @@
 }
 
 .wice_grid th {
-  background-color: #dfdfdf; 
-  font-weight: bold; 
-  text-shadow: rgb(204, 204, 204) 0px 1px 0px; 
+  background-color: #dfdfdf;
+  font-weight: bold;
+  text-shadow: rgb(204, 204, 204) 0px 1px 0px;
   height: 2em;
   padding: 0 1em;
-  
+
 }
-.wice_grid th a { 
-  color: #000; 
+.wice_grid th a {
+  color: #000;
 }
-.wice_grid th a:hover { 
-  color: #333; 
+.wice_grid th a:hover {
+  color: #333;
 }
 
-.wice_grid tr.wice_grid_title_row th,  
+.wice_grid tr.wice_grid_title_row th,
 .wice_grid tr.wice_grid_filter_row th{
   background-color: #dddddd;
   vertical-align: top;
@@ -55,15 +55,15 @@
   padding: 0 1em;
 }
 
-.wice_grid .desc,  .wice_grid .asc{ 
-  padding-right: 18px; 
+.wice_grid .desc,  .wice_grid .asc{
+  padding-right: 18px;
   text-decoration:none;
 }
 
-.wice_grid .desc { 
+.wice_grid .desc {
   background: transparent url(/images/icons/grid/arrow_down.gif) right no-repeat
 }
-.wice_grid .asc  { 
+.wice_grid .asc  {
   background: transparent url(/images/icons/grid/arrow_up.gif)   right no-repeat
 }
 
@@ -129,7 +129,7 @@
   list-style-image: none;
   list-style-position: outside;
   list-style-type: none;
-  margin-left : 0px;  
+  margin-left : 0px;
 }
 
 .wice_grid_query_panel .query_list li a.query_load_link {
@@ -139,7 +139,7 @@
 
 .wice_grid_query_panel .query_list li a.current {
   font-weight: bold;
-  text-decoration: underline;  
+  text-decoration: underline;
 }
 
 

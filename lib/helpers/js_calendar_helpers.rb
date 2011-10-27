@@ -116,7 +116,7 @@ module Wice #:nodoc:
 
     # prortotype
 
-    def calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, 
+    def calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format,
                                       date_span_id, with_time, fireEvent, close_calendar_event_name)
       javascript = ''
 

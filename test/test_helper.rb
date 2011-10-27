@@ -34,7 +34,7 @@ def load_schema
   ActiveRecord::Base.establish_connection(config[db_adapter])
   load(File.dirname(__FILE__) + "/schema.rb")
   require File.dirname(__FILE__) + '/../init.rb'
-  
+
 end
 
 #
@@ -82,8 +82,8 @@ end
 NUM_TASKS.times do |i|
   project = Project.find(:first, :order => 'RAND()')
   owner = Person.find(:first, :order => 'RAND()')
-  Task.create!(:name => "Task%03d" % i, 
-               :description => "Description%03d" % i, 
-               :person => Person.all[i % NUM_PEOPLE], 
+  Task.create!(:name => "Task%03d" % i,
+               :description => "Description%03d" % i,
+               :person => Person.all[i % NUM_PEOPLE],
                :project => Project.all[i % NUM_PROJECTS])
 end

@@ -3,10 +3,10 @@
 	g.column(:attribute_name => 'name')
 
 	g.column(:attribute_name => 'firstname', :model_class => 'Person')
-	g.column(:attribute_name => 'lastname',  :model_class => 'Person') 
+	g.column(:attribute_name => 'lastname',  :model_class => 'Person')
 
 	g.column(:attribute_name => 'updated_at') do |project|
 		project.updated_at.strftime("%d/%m/%Y %H:%M")
 	end
-	
+
 end -%>

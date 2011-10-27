@@ -58,11 +58,11 @@ Just like WiceGrid itself, the query panel contains no forms and is thus form-fr
 *Important*: Saved queries of all grids in the application are stored in one table and differentiated by the name of the grid, thus, for all forms
 with saved queries it is important to define different names! (use parameter <tt>:name</tt> in +initialize_grid+)
 
-It is also possible to initialize a grid with an initial saved query providing the id of the query record or the ActiveRecord 
+It is also possible to initialize a grid with an initial saved query providing the id of the query record or the ActiveRecord
 itself to parameter <tt>saved_query</tt>:
 
-  @products_grid = initialize_grid(Product, 
-    :name => 'prod_grid', 
+  @products_grid = initialize_grid(Product,
+    :name => 'prod_grid',
     :saved_query =>  SavedQuery.find_by_id_and_grid_name(12, 'prod_grid') )
 
 
@@ -114,7 +114,7 @@ The following step is to make sure that a new query is saved with the correct +u
 
    <%= saved_queries_panel(@identities_grid, :extra_parameters => {:user_id => @current_user.id}) %>
 
-For every key in has :extra_parameters there must exist a field in the model - this hash will be used as a parameter to 
+For every key in has :extra_parameters there must exist a field in the model - this hash will be used as a parameter to
 <tt>attributes=</tt> method of the query object.
 
 Finally, let WiceGrid know which model to use for saving queries by changing constant  +QUERY_STORE_MODEL+

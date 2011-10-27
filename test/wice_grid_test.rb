@@ -7,13 +7,13 @@ class ObjectWithoutStringRepresentation
 end
 
 class WiceGridTest < Test::Unit::TestCase
-  
-  # 
+
+  #
   def setup
      @controller = ActionController::Base.new
      @controller.params = {}
   end
-  
+
   def test_grid_parameter_must_be_a_grid
     assert_raise(Wice::WiceGridArgumentError) { Wice::WiceGrid.new(nil, @controller) }
     assert_raise(Wice::WiceGridArgumentError) { Wice::WiceGrid.new("MyModel", @controller) }
@@ -26,7 +26,7 @@ class WiceGridTest < Test::Unit::TestCase
     assert_nothing_raised { Wice::WiceGrid.new(Person, @controller, :after => lambda { } ) }
     assert_nothing_raised { Wice::WiceGrid.new(Person, @controller, :after => :symbol) }
   end
-  
+
   def test_grid_name_parameter_validation
     object_without_to_s = ObjectWithoutStringRepresentation.new
     assert !object_without_to_s.respond_to?(:to_s)

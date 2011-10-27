@@ -1,8 +1,8 @@
 namespace "wice_grid" do
-  
+
   desc "Create a table to store saved queries"
   task :create_queries_table => :environment do
-    
+
     class CreateWiceGridSerializedQueriesTable < ::ActiveRecord::Migration
       def self.up
         create_table :wice_grid_serialized_queries do |t|
@@ -20,9 +20,9 @@ namespace "wice_grid" do
         drop_table :wice_grid_serialized_queries
       end
     end
-    
+
     CreateWiceGridSerializedQueriesTable.up
   end
-  
-  
+
+
 end

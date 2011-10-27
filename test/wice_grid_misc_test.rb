@@ -4,8 +4,8 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 require 'action_controller/test_process'
 
 class WiceGridMiscTest < Test::Unit::TestCase
-  
-  
+
+
   def test_get_query_store_model
     assert_equal(SavedQuery, Wice.get_query_store_model)
   end

@@ -416,7 +416,7 @@ module Wice
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
-    
+
     def render_filter_internal(params) #:nodoc:
 
       if helper_style == :standard

@@ -3,7 +3,7 @@
 Fixed the "Cannot modify SafeBuffer in place" problem and thus Rails 3.0.8 and 3.0.9
 Support for ActiveRecord::Relation
 
-3.0.0 
+3.0.0
 
 Rails 3 support
 
