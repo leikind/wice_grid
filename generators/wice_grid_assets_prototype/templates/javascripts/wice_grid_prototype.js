@@ -17,7 +17,8 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
   this.link_for_export = link_for_export;
   this.filter_declarations = new Array();
   this.environment = environment;
-  
+  this.timer = null;
+
   this.toString = function(){
     return "<WiceGridProcessor instance for grid '" + this.name + "'>";
   }
@@ -26,6 +27,18 @@ function WiceGridProcessor(name, base_request_for_filter, base_link_for_show_all
   this.process = function(dom_id_to_focus){
     window.location = this.build_url_with_params(dom_id_to_focus);
   }
+
+  this.set_process_timer = function(dom_id_to_focus){
+
+    if (this.timer){
+      clearTimeout(this.timer);
+      this.timer = null;
+    }
+
+    processor = this;
+    this.timer = setTimeout(function(){processor.process(dom_id_to_focus)}, 1000);
+  }
+
 
   this.reload_page_for_given_grid_state = function(grid_state){
     var request_path = this.grid_state_to_request(grid_state);

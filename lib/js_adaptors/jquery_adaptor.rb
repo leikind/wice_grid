@@ -61,7 +61,7 @@ module Wice::JsAdaptor   #:nodoc:
 
       def auto_reloading_inputs_event_initialization(grid_name)  #:nodoc:
         %! $('div##{grid_name}.wice_grid_container input.auto_reload, .#{grid_name}_detached_filter input.auto_reload').keyup(function(event, element){\n! +
-        %!   #{grid_name}.process(this.id);\n! +
+        %!   #{grid_name}.set_process_timer(this.id);\n! +
         %! });\n!
       end
 
