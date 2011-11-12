@@ -493,9 +493,9 @@ module Wice
         %$     'Please make sure that you include WiceGrid javascript in your page. ' +\n$ +
         %$     'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +\n$ +
         %$     'for WiceGrid javascripts and assets.')\n$ +
-        %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.3")) {\n$ +
-        %$    alert("wice_grid.js in your /public is outdated, please run\\n ./script/generate wice_grid_assets_jquery\\n$ +
-        %$ or\\n ./script/generate wice_grid_assets_prototype\\nto update it.");\n$ +
+        %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.4")) {\n$ +
+        %$    alert("wice_grid.js in your /public is outdated, please run\\n rails g wice_grid:wice_grid_assets_jquery\\n$ +
+        %$ or\\n rails g wice_grid:wice_grid_assets_prototype\\nto update it.");\n$ +
         %$ }\n$
       else
         ''
