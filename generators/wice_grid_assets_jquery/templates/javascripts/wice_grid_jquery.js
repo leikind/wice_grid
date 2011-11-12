@@ -170,4 +170,4 @@ function toggle_multi_select(select_id, link_obj, expand_label, collapse_label) 
   }
 }
 
-WiceGridProcessor._version = '0.4.3';
+WiceGridProcessor._version = '0.4.4';
