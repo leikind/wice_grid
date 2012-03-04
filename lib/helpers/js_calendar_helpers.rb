@@ -19,7 +19,7 @@ module Wice #:nodoc:
           content_tag(:span, date_string, :id => date_span_id),
           remove_date_function,
           :class => 'date_label',
-          :title => ::Wice::WiceGridNlMessageProvider.get_message(:DATE_STRING_TOOLTIP))
+          :title => ::Wice::NlMessage['date_string_tooltip'])
 
       html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
 

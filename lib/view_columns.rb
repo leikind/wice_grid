@@ -182,10 +182,10 @@ module Wice
 
       html = content_tag(:div, '',
         :class => 'clickable select-all',
-        :title => WiceGridNlMessageProvider.get_message(:SELECT_ALL)) + ' ' +
+        :title => NlMessage['select_all']) + ' ' +
       content_tag(:div, '',
         :class => 'clickable deselect-all',
-        :title => WiceGridNlMessageProvider.get_message(:DESELECT_ALL))
+        :title => NlMessage['deselect_all'])
 
       js = JsAdaptor.action_column_initialization(grid.name)
 
@@ -358,10 +358,10 @@ module Wice
     def render_calendar_filter_internal(params) #:nodoc:
       html1, js1 = datetime_calendar_prototype(params[:fr], @view,
         {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
+        :title => NlMessage['date_selector_tooltip_from'])
       html2, js2 = datetime_calendar_prototype(params[:to], @view,
         {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
+        :title => NlMessage['date_selector_tooltip_to'])
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
 
@@ -399,10 +399,10 @@ module Wice
 
       html1, js1 = date_calendar_jquery(params[:fr], @view,
         {:include_blank => true, :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
+        :title => NlMessage['date_selector_tooltip_from'])
       html2, js2 = date_calendar_jquery(params[:to], @view,
         {:include_blank => true, :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
+        :title => NlMessage['date_selector_tooltip_to'])
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
@@ -444,7 +444,7 @@ module Wice
           end +
           check_box_tag(parameter_name2, '1', (params[:n] == '1'),
             :id => @dom_id2,
-            :title => WiceGridNlMessageProvider.get_message(:NEGATION_CHECKBOX_TITLE),
+            :title => NlMessage['negation_checkbox_title'],
             :class => 'negation_checkbox') +
           '</div>'
       else

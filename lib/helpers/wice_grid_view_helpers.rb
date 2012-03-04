@@ -526,14 +526,14 @@ module Wice
         rendering.show_hide_button_present = true
 
         content_tag(:div, '',
-          :title => WiceGridNlMessageProvider.get_message(:HIDE_FILTER_TOOLTIP),
+          :title => NlMessage['hide_filter_tooltip'],
           :id => grid_name + '_hide_icon',
           :style => styles[0],
           :class => 'clickable hide_show_icon'
         ) +
 
         content_tag(:div, '',
-          :title => WiceGridNlMessageProvider.get_message(:SHOW_FILTER_TOOLTIP),
+          :title => NlMessage['show_filter_tooltip'],
           :id => grid_name + '_show_icon',
           :style => styles[1],
           :class => 'clickable hide_show_icon'
@@ -548,7 +548,7 @@ module Wice
       else
         rendering.submit_button_present = true
         content_tag(:div, '',
-          :title => WiceGridNlMessageProvider.get_message(:FILTER_TOOLTIP),
+          :title => NlMessage['filter_tooltip'],
           :id => grid.name + '_submit_grid_icon',
           :class => 'submit clickable'
         )
@@ -558,7 +558,7 @@ module Wice
       else
         rendering.reset_button_present = true
         content_tag(:div, '',
-          :title => WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP),
+          :title => NlMessage['reset_filter_tooltip'],
           :id => grid.name + '_reset_grid_icon',
           :class => 'reset clickable'
         )
@@ -652,8 +652,8 @@ module Wice
       html, js = pagination_info(grid, allow_showing_all_records)
 
       [will_paginate(grid.resultset,
-        :previous_label => WiceGridNlMessageProvider.get_message(:PREVIOUS_LABEL),
-        :next_label     => WiceGridNlMessageProvider.get_message(:NEXT_LABEL),
+        :previous_label => NlMessage['previous_label'],
+        :next_label     => NlMessage['next_label'],
         :param_name     => "#{grid.name}[page]",
         :params         => extra_request_parameters).to_s +
         (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary, js]
@@ -662,14 +662,14 @@ module Wice
 
     def show_all_link(collection_total_entries, parameters, grid_name) #:nodoc:
 
-      message = WiceGridNlMessageProvider.get_message(:ALL_QUERIES_WARNING)
+      message = NlMessage['all_queries_warning']
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{message}'))" : ''
 
       js =  JsAdaptor.show_all_link_initialization(grid_name, confirmation, parameters.to_json)
 
-      tooltip = WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_TOOLTIP)
+      tooltip = NlMessage['show_all_records_tooltip']
       html = %/<span class="show_all_link"><a href="#" title="#{tooltip}">/ +
-        WiceGridNlMessageProvider.get_message(:SHOW_ALL_RECORDS_LABEL) +
+        NlMessage['show_all_records_label'] +
         '</a></span>'
 
       [html, js]
@@ -681,9 +681,9 @@ module Wice
 
       js =  JsAdaptor.back_to_pagination_link_initialization(grid_name, parameters.to_json)
 
-      tooltip = WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_TOOLTIP)
+      tooltip = NlMessage['switch_back_to_paginated_mode_tooltip']
       html = %/ <span class="show_all_link"><a href="#" title="#{tooltip}">/ +
-        WiceGridNlMessageProvider.get_message(:SWITCH_BACK_TO_PAGINATED_MODE_LABEL) +
+        NlMessage['switch_back_to_paginated_mode_label'] +
         '</a></span>'
       [html, js]
     end

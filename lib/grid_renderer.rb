@@ -97,7 +97,7 @@ module Wice
     def csv_export_icon #:nodoc:
       @csv_export_icon_present = true
       content_tag(:div, '',
-        :title => WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP),
+        :title => NlMessage['csv_export_tooltip'],
         :class => 'clickable export_to_csv_button'
       )
     end
@@ -275,8 +275,8 @@ module Wice
         :allow_ordering             => true,
         :attribute_name             => nil,
         :auto_reload                => Defaults::AUTO_RELOAD,
-        :boolean_filter_false_label => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_FALSE_LABEL),
-        :boolean_filter_true_label  => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_TRUE_LABEL),
+        :boolean_filter_false_label => NlMessage['boolean_filter_false_label'],
+        :boolean_filter_true_label  => NlMessage['boolean_filter_true_label'],
         :class                      => nil,
         :column_name                => '',
         :custom_filter              => nil,
