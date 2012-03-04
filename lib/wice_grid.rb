@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 require 'will_paginate.rb'
 require 'wice_grid_misc.rb'
 require 'wice_grid_core_ext.rb'
@@ -18,12 +19,11 @@ require 'js_adaptors/jquery_adaptor.rb'
 require 'view_columns.rb'
 
 
-
 ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
 
-  class WiceGridRailtie < Rails::Railtie  #:nodoc:
+  class WiceGridEngine < ::Rails::Engine
 
     initializer "wice_grid_railtie.configure_rails_initialization" do |app|
 
