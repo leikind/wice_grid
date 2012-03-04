@@ -655,6 +655,7 @@ module Wice
         :previous_label => NlMessage['previous_label'],
         :next_label     => NlMessage['next_label'],
         :param_name     => "#{grid.name}[page]",
+        :renderer       => ::Wice::WillPaginatePaginator,
         :params         => extra_request_parameters).to_s +
         (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary, js]
     end

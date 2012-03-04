@@ -19,6 +19,7 @@ require 'js_adaptors/jquery_adaptor.rb'
 require 'view_columns.rb'
 
 
+
 ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
@@ -50,6 +51,9 @@ module Wice
         Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
         require 'wice_grid_serialized_query.rb'
       end
+
+      require 'will_paginate_paginator.rb'
+
     end
 
     rake_tasks do

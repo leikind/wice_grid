@@ -80,6 +80,21 @@
   width: auto;
 }
 
+.wice_grid .pagination{
+  margin: 0px;
+}
+
+
+.wice_grid_container .pagination {
+  float: left;
+}
+.wice_grid_container .pagination_status {
+  font-weight: bold;
+  float: right;
+}
+
+
+
 /*.wice_grid th.filter_icons, .wice_grid th.hide_show_icon {
   text-align: right ;
 }
@@ -122,26 +137,10 @@
   text-align: center;
 }
 */
-/*.wice_grid_container .pagination {
-  float: left;
-}
-*/
-/*.wice_grid_container .pagination_status {
-  font-weight: bold;
-  float: right;
-}
-*/
 /*.wice_grid_container .pagination_status .show_all_link a {
   text-decoration: none;
   font-size: 80%;
 }
-*/
-/*.wice_grid .custom_dropdown_container { position: relative; padding-right: 9px;}
-.wice_grid .custom_dropdown_container .toggle_multi_select_icon { position:absolute; top:0; right:0;  }
-
-.wice_grid .text_filter_container { position: relative; padding-right: 13px;}
-.wice_grid .text_filter_container .negation_checkbox { position:absolute; top:0; right:0;  }
-
 */
 /*  Saved Queries  */
 /*
