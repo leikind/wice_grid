@@ -138,7 +138,7 @@ module Wice
       buff = GridOutputBuffer.new
 
       buff <<  if rendering.blank_slate_handler.is_a?(Proc)
-        call_block_as_erb_or_ruby(rendering, rendering.blank_slate_handler, nil)
+        call_block(rendering.blank_slate_handler, nil)
       elsif rendering.blank_slate_handler.is_a?(Hash)
         render(rendering.blank_slate_handler)
       else
@@ -153,7 +153,7 @@ module Wice
       buff
     end
 
-    def call_block_as_erb_or_ruby(rendering, block, ar)  #:nodoc:
+    def call_block(block, ar)  #:nodoc:
       block.call(ar)
     end
 
@@ -337,13 +337,13 @@ module Wice
       grid.each do |ar| # rows
 
         before_row_output = if rendering.before_row_handler
-          call_block_as_erb_or_ruby(rendering, rendering.before_row_handler, ar)
+          call_block(rendering.before_row_handler, ar)
         else
           nil
         end
 
         after_row_output = if rendering.after_row_handler
-          call_block_as_erb_or_ruby(rendering, rendering.after_row_handler, ar)
+          call_block(rendering.after_row_handler, ar)
         else
           nil
         end
@@ -357,7 +357,7 @@ module Wice
           column_block_output = if column.class == Wice::ActionViewColumn
             cell_block.call(ar, params)
           else
-            call_block_as_erb_or_ruby(rendering, cell_block, ar)
+            call_block(cell_block, ar)
           end
 
           if column_block_output.kind_of?(Array)
@@ -411,7 +411,7 @@ module Wice
       end
 
       last_row_output = if rendering.last_row_handler
-        call_block_as_erb_or_ruby(rendering, rendering.last_row_handler, nil)
+        call_block(rendering.last_row_handler, nil)
       else
         nil
       end
@@ -645,7 +645,7 @@ module Wice
         rendering.each_column(:in_csv) do |column|
           cell_block = column.cell_rendering_block
 
-          column_block_output = call_block_as_erb_or_ruby(rendering, cell_block, ar)
+          column_block_output = call_block(cell_block, ar)
 
           if column_block_output.kind_of?(Array)
             column_block_output, additional_opts = column_block_output
