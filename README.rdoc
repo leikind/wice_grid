@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 3.0.2
+Version:: 3.2.0.pre1
 Author::  Yuri Leikind
 Homepage:: http://leikind.org/pages/wicegrid
 Examples online:: http://grid.leikind.org
@@ -8,12 +8,14 @@ News:: http://leikind.org/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 == Attention!
-There are two major branches of WiceGrid.
+There are three  branches of WiceGrid.
 
-THIS IS A VERSION OF THE PLUGIN FOR RAILS 3.0.
-The current branch (https://github.com/leikind/wice_grid) starts with version 3.0, works with Rails 3, and can only be used as a gem.
+THIS IS A VERSION OF THE PLUGIN FOR RAILS 3.2.
 
-For Rails 2 WiceGrid only works as a Rails plugin. See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/tree/master).
+For Rails 3.0 see branch rails3 https://github.com/leikind/wice_grid/ .
+
+For Rails 2 WiceGrid only works as a Rails plugin.
+See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
 == Intro
 
@@ -53,11 +55,10 @@ This tutorial is accompanied by a sample application with WiceGrid examples whic
 
 == Requirements
 
-Rails version 3.0 or newer.
+Rails version 3.2 or newer.
 
 <tt>will_paginate[http://github.com/mislav/will_paginate/wikis]</tt> version 3.0.pre2 or newer.
 
-<tt>Prototype[http://www.prototypejs.org]</tt> version 1.5.1 or newer, or <tt>jQuery[http://jquery.com/]</tt>.
 
 == How-To
 
@@ -65,41 +66,20 @@ Rails version 3.0 or newer.
 
 Add the following to your Gemfile:
 
-  gem "wice_grid", '3.0.1'
+  gem "wice_grid", '3.2.0.pre1'
 
 and run the <tt>bundle</tt> command.
 
-If your application is Prototype-based , run the following generator to copy all plugin assets:
+Run the following generator to copy all plugin assets:
 
-   rails g wice_grid:wice_grid_assets_prototype
-
-For jQuery:
-
-   rails g wice_grid:wice_grid_assets_jquery
+   rails g wice_grid:install
 
 This will copy images, stylesheets, configuration file <tt>config/initializers/wice_grid_config.rb</tt>, and the correct version of javascript files.
 
 === Support for Prototype and jQuery
 
 WiceGrid started as a plugin using the Prototype javascript framework. Support for jQuery was added for version 0.6.
-The plugin contains two versions of the main javascript file <tt>wice_grid.js</tt>, and depending on the generator run to
-install the assets (+wice_grid_assets_prototype+ or +wice_grid_assets_jquery+) the correct file is  copied into <tt>public/javascripts</tt>.
-
-Some javascript code is also generated and injected into the HTML page. The value of constant <tt>Wice::Defaults::JS_FRAMEWORK</tt> in
-configuration file <tt>wice_grid_config.rb</tt> defines for which JS framework code should be generated.
-Generators +wice_grid_assets_prototype+ and +wice_grid_assets_jquery+ create a version of  <tt>wice_grid_config.rb</tt>
-with the corresponding value of <tt>Wice::Defaults::JS_FRAMEWORK</tt>.
-
-
-In the Prototype mode the plugin uses a forked[http://github.com/leikind/calendarview] version of Calendarview[http://github.com/jsmecham/calendarview]. It is bundled with the plugin and the generator task
-+wice_grid_assets_prototype+ will install al necessary assets.
-
-The jQuery version uses jQuery datepicker[http://jqueryui.com/demos/datepicker/]. Because this is part
-of the standard jQuery codebase, it is not bundled together with the plugin, and it is the responsibility
-of the programmer to include all necessary assets including localization files if the application is
-multilingual.
-
-It is always possible to fall back to simple dropdown lists that the standard date/datetime Rails helpers use.
+Beginning from version 3.2 only jQuery is supported.
 
 JQUERY DATEPICKER IS ONLY USED FOR DATE FILTERS AT THE MOMENT. DATETIME FILTERS  FALL BACK TO THE DEFAULT
 RAILS DATE/DATETIME HELPERS.
@@ -107,10 +87,7 @@ RAILS DATE/DATETIME HELPERS.
 
 === Basics
 
-The Prototype version of WiceGrid requires <tt>prototype.js</tt> and <tt>effects.js</tt> in order to function.
-The jQuery version of WiceGrid requires <tt>jquery.js</tt>, the Datepicker widget from jQuery UI, and the Highlight and Fade effects for the saved queries functionality.
-
-Thus, make sure you require all necessary JS assets in your layout template.
+Make sure you require all necessary JS assets in your layout template.
 
 To include WiceGrid javascript and stylesheet files to the page use helper +include_wice_grid_assets+ :
 

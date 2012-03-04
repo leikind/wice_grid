@@ -15,7 +15,6 @@ require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
 require 'js_adaptors/js_adaptor.rb'
 require 'js_adaptors/jquery_adaptor.rb'
-require 'js_adaptors/prototype_adaptor.rb'
 require 'view_columns.rb'
 
 

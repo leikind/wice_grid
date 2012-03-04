@@ -33,12 +33,8 @@ module Wice
           @error_messages = sq.errors.full_raw_messages.join(' ')
         end
       end
-      template_name = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
-        'delete'
-      else
-        'delete_jq'
-      end
-      render :file => "#{Pathname.new(__FILE__).dirname}/views/#{template_name}.rjs"
+
+      render :file => "#{Pathname.new(__FILE__).dirname}/views/delete.rjs"
     end
 
     def create  #:nodoc:
@@ -60,12 +56,8 @@ module Wice
       else
         @error_messages = @saved_query.errors.map{ |_, msg| msg }.join(' ')
       end
-      template_name = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
-        'create'
-      else
-        'create_jq'
-      end
-      render :file => "#{Pathname.new(__FILE__).dirname}/views/#{template_name}.rjs"
+
+      render :file => "#{Pathname.new(__FILE__).dirname}/views/create.rjs"
     end
 
     def extra

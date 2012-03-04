@@ -620,14 +620,24 @@ module Wice
       else
         rendering.submit_button_present = true
         filter_tooltip = WiceGridNlMessageProvider.get_message(:FILTER_TOOLTIP)
-        image_tag(Defaults::FILTER_ICON, :title => filter_tooltip, :alt => filter_tooltip, :class => 'submit clickable')
+        image_tag(Defaults::FILTER_ICON,
+          :title => filter_tooltip,
+          :alt => filter_tooltip,
+          :id => grid.name + '_submit_grid_icon',
+          :class => 'submit clickable'
+        )
       end + ' ' +
       if options[:hide_reset_button]
         ''
       else
         rendering.reset_button_present = true
         filter_tooltip = WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP)
-        image_tag(Defaults::RESET_ICON, :title => filter_tooltip, :alt => filter_tooltip, :class => 'reset clickable')
+        image_tag(Defaults::RESET_ICON,
+          :title => filter_tooltip,
+          :alt => filter_tooltip,
+          :id => grid.name + '_reset_grid_icon',
+          :class => 'reset clickable'
+        )
       end).html_safe_if_necessary
     end
 

@@ -29,15 +29,6 @@ module Wice #:nodoc:
       [html, javascript]
     end
 
-    # Prototype
-    def date_calendar_prototype(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
-      select_date_datetime_common_prototype(initial_date, view, opts, html_opts, false, Wice::ConfigurationProvider.value_for(:DATE_FORMAT))
-    end
-
-    def datetime_calendar_prototype(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
-      select_date_datetime_common_prototype(initial_date, view, opts, html_opts, true, Wice::ConfigurationProvider.value_for(:DATETIME_FORMAT))
-    end
-
     protected
 
     # common
@@ -114,71 +105,6 @@ module Wice #:nodoc:
       javascript
     end
 
-    # prortotype
-
-    def calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, 
-                                      date_span_id, with_time, fireEvent, close_calendar_event_name)
-      javascript = ''
-
-      unless view.respond_to? :wg_calendar_lang_set
-        lang = Object.const_defined?(:I18n) ? I18n.locale : nil
-        javascript << %|    Calendar.language = '#{lang}';\n| unless lang.blank?
-
-        def view.wg_calendar_lang_set
-        end
-      end
-
-
-      javascript <<  %|    new Calendar({\n |
-      javascript << %|      popupTriggerElement : "#{popup_trigger_icon_id}",\n |
-      javascript << %|      initialDate : $('#{dom_id}').value,\n |
-      if fireEvent
-        javascript << %|      onHideCallback : function(){Event.fire($(#{dom_id}), '#{close_calendar_event_name}')},\n |
-      end
-      javascript << %|      dateFormat : "#{date_format}",\n|
-      unless Wice::ConfigurationProvider.value_for(:POPUP_PLACEMENT_STRATEGY) == :trigger
-        javascript << %|      popupPositioningStrategy : "#{Wice::ConfigurationProvider.value_for(:POPUP_PLACEMENT_STRATEGY)}",\n|
-      end
-      if with_time
-        javascript << %|        withTime : true,\n|
-      end
-      javascript << %|      outputFields : $A(['#{date_span_id}', '#{dom_id}'])\n |
-      javascript << %|    });\n|
-
-      javascript
-    end
-
-    def select_date_datetime_common_prototype(initial_date, view, opts, html_opts, with_time, date_format)  #:nodoc:
-
-      options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name =
-        prepare_data_for_calendar(opts, date_format, initial_date)
-
-      popup_trigger_icon_id = dom_id + '_trigger'
-
-      function = %! $('#{date_span_id}').innerHTML = ''; $('#{dom_id}').value = ''; !
-      if opts[:fire_event]
-        function += "Event.fire($(#{dom_id}), '#{close_calendar_event_name}')"
-      end
-
-      date_picker = image_tag(Defaults::CALENDAR_ICON,
-        :id => popup_trigger_icon_id,
-        :class => 'clickable',
-        :title => html_opts[:title]) +
-
-      link_to_function(
-        content_tag(:span, date_string, :id => date_span_id),
-        function,
-        :class => 'date_label',
-        :title => WiceGridNlMessageProvider.get_message(:DATE_STRING_TOOLTIP)) + ' ' +
-
-        hidden_field_tag(name, date_string, :class => 'text-input', :id => dom_id)
-
-      html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
-
-      javascript = calendar_constructor_prototype(popup_trigger_icon_id, view, dom_id, date_format, date_span_id, with_time, opts[:fire_event], close_calendar_event_name)
-
-      [html, javascript]
-    end
 
   end
 end

@@ -367,13 +367,8 @@ module Wice
 
     def render_filter_internal(params) #:nodoc:
       # falling back to the Rails helpers for Datetime
-      if helper_style == :standard || Defaults::JS_FRAMEWORK == :jquery
-        prepare_for_standard_filter
-        render_standard_filter_internal(params)
-      else
-        prepare_for_calendar_filter
-        render_calendar_filter_internal(params)
-      end
+      prepare_for_standard_filter
+      render_standard_filter_internal(params)
     end
 
     def yield_declaration_of_column_filter #:nodoc:
@@ -401,22 +396,16 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
 
-      calendar_helper_method = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
-        :date_calendar_prototype
-      else
-        :date_calendar_jquery
-      end
-
-      html1, js1 = send(calendar_helper_method, params[:fr], @view,
+      html1, js1 = date_calendar_jquery(params[:fr], @view,
         {:include_blank => true, :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = send(calendar_helper_method, params[:to], @view,
+      html2, js2 = date_calendar_jquery(params[:to], @view,
         {:include_blank => true, :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name},
         :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
-    
+
     def render_filter_internal(params) #:nodoc:
 
       if helper_style == :standard

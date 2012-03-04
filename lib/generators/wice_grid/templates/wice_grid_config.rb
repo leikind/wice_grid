@@ -1,8 +1,5 @@
 if defined?(Wice::Defaults)
 
-  Wice::Defaults::JS_FRAMEWORK = :<%= active_js_framework %>
-  # Wice::Defaults::JS_FRAMEWORK = :<%= inactive_js_framework %>
-
   # Style of the view helper.
   # +false+ is a usual view helper.
   # +true+ will allow to embed erb content in column (cell) definitions.
