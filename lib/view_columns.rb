@@ -179,13 +179,13 @@ module Wice
 
     def column_name  #:nodoc:
       return '' unless @select_all_buttons
-      select_all_tootip   = WiceGridNlMessageProvider.get_message(:SELECT_ALL)
-      deselect_all_tootip = WiceGridNlMessageProvider.get_message(:DESELECT_ALL)
 
-      html = content_tag(:span, image_tag(Defaults::TICK_ALL_ICON, :alt => select_all_tootip),
-                         :class => 'clickable select_all', :title => select_all_tootip) + ' ' +
-             content_tag(:span, image_tag(Defaults::UNTICK_ALL_ICON, :alt => deselect_all_tootip),
-                         :class => 'clickable deselect_all', :title => deselect_all_tootip)
+      html = content_tag(:div, '',
+        :class => 'clickable select-all',
+        :title => WiceGridNlMessageProvider.get_message(:SELECT_ALL)) + ' ' +
+      content_tag(:div, '',
+        :class => 'clickable deselect-all',
+        :title => WiceGridNlMessageProvider.get_message(:DESELECT_ALL))
 
       js = JsAdaptor.action_column_initialization(grid.name)
 
@@ -257,10 +257,11 @@ module Wice
       else
         if self.allow_multiple_selection
           select_options[:multiple] = params.is_a?(Array) && params.size > 1
-          select_toggle = content_tag(:a,
-            tag(:img, :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
+          select_toggle = content_tag(:a, '',
+            :title => 'Expand/Collapse',
             :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');", # TO DO: to locales
-            :class => 'toggle_multi_select_icon', :title => 'Expand')
+            :class => 'toggle_multi_select_icon clickable'
+          )
         else
           select_options[:multiple] = false
           select_toggle = ''

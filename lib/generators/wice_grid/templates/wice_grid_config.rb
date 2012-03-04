@@ -15,27 +15,6 @@ if defined?(Wice::Defaults)
   # for filter related icons (filter icon, reset icon, show/hide icon), otherwise an additional table column is added.
   Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS = true
 
-  Wice::Defaults::SHOW_HIDE_FILTER_ICON = 'icons/grid/page_white_find.png'
-
-
-  # Icon to trigger filtering.
-  Wice::Defaults::FILTER_ICON = 'icons/grid/table_refresh.png'
-
-  # Icon to reset the filter.
-  Wice::Defaults::RESET_ICON = "icons/grid/table.png"
-
-  # Icon to reset the filter.
-  Wice::Defaults::TOGGLE_MULTI_SELECT_ICON = "/images/icons/grid/expand.png"
-
-  # CSV Export icon.
-  Wice::Defaults::CSV_EXPORT_ICON = "/images/icons/grid/page_white_excel.png"
-
-  # Tick-All icon for the action column.
-  Wice::Defaults::TICK_ALL_ICON = "/images/icons/grid/tick_all.png"
-
-  # Untick-All icon for the action column.
-  Wice::Defaults::UNTICK_ALL_ICON = "/images/icons/grid/untick_all.png"
-
   # The label of the first option of a custom dropdown list meaning 'All items'
   Wice::Defaults::CUSTOM_FILTER_ALL_LABEL = '--'
 

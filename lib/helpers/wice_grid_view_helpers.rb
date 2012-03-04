@@ -105,6 +105,9 @@ module Wice
       options[:show_filters] = :always if options[:show_filters] == true
 
       options[:table_html_attrs].add_or_append_class_value!('wice_grid', true)
+      options[:table_html_attrs].add_or_append_class_value!('table', true)
+      options[:table_html_attrs].add_or_append_class_value!('table-bordered', true)
+      options[:table_html_attrs].add_or_append_class_value!('table-striped', true)
 
       if options[:class]
         options[:table_html_attrs].add_or_append_class_value!(options[:class])
@@ -239,8 +242,7 @@ module Wice
         else
           if reuse_last_column_for_filter_buttons && last
             content << content_tag(:th,
-              hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering),
-              :class => 'hide_show_icon'
+              hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
             )
           else
             content << content_tag(:th, column_name)
@@ -521,32 +523,22 @@ module Wice
         hide_icon = show_icon = ''
       else
 
-
         rendering.show_hide_button_present = true
-        filter_tooltip = WiceGridNlMessageProvider.get_message(:HIDE_FILTER_TOOLTIP)
 
-        hide_icon = content_tag(:span,
-          image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-            :title => filter_tooltip,
-            :alt   => filter_tooltip),
+        content_tag(:div, '',
+          :title => WiceGridNlMessageProvider.get_message(:HIDE_FILTER_TOOLTIP),
           :id => grid_name + '_hide_icon',
           :style => styles[0],
-          :class => 'clickable'
-        )
+          :class => 'clickable hide_show_icon'
+        ) +
 
-
-        filter_tooltip = WiceGridNlMessageProvider.get_message(:SHOW_FILTER_TOOLTIP)
-
-        show_icon = content_tag(:span,
-          image_tag(Defaults::SHOW_HIDE_FILTER_ICON,
-            :title => filter_tooltip,
-            :alt   => filter_tooltip),
+        content_tag(:div, '',
+          :title => WiceGridNlMessageProvider.get_message(:SHOW_FILTER_TOOLTIP),
           :id => grid_name + '_show_icon',
           :style => styles[1],
-          :class => 'clickable'
+          :class => 'clickable hide_show_icon'
         )
 
-        hide_icon + show_icon
       end
     end
 
@@ -555,10 +547,8 @@ module Wice
         ''
       else
         rendering.submit_button_present = true
-        filter_tooltip = WiceGridNlMessageProvider.get_message(:FILTER_TOOLTIP)
-        image_tag(Defaults::FILTER_ICON,
-          :title => filter_tooltip,
-          :alt => filter_tooltip,
+        content_tag(:div, '',
+          :title => WiceGridNlMessageProvider.get_message(:FILTER_TOOLTIP),
           :id => grid.name + '_submit_grid_icon',
           :class => 'submit clickable'
         )
@@ -567,10 +557,8 @@ module Wice
         ''
       else
         rendering.reset_button_present = true
-        filter_tooltip = WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP)
-        image_tag(Defaults::RESET_ICON,
-          :title => filter_tooltip,
-          :alt => filter_tooltip,
+        content_tag(:div, '',
+          :title => WiceGridNlMessageProvider.get_message(:RESET_FILTER_TOOLTIP),
           :id => grid.name + '_reset_grid_icon',
           :class => 'reset clickable'
         )

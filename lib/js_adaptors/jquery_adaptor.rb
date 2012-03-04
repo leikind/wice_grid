@@ -114,12 +114,12 @@ module Wice::JsAdaptor   #:nodoc:
       end
 
       def action_column_initialization(grid_name)  #:nodoc:
-        %! $('div##{grid_name}.wice_grid_container .select_all').click(function(e){\n! +
+        %! $('div##{grid_name}.wice_grid_container .select-all').click(function(e){\n! +
         %!   $('div##{grid_name}.wice_grid_container .sel input').each(function(i, checkbox){\n! +
         %!     checkbox.checked = true;\n! +
         %!   })\n! +
         %! })\n! +
-        %! $('div##{grid_name}.wice_grid_container .deselect_all').click(function(e){\n! +
+        %! $('div##{grid_name}.wice_grid_container .deselect-all').click(function(e){\n! +
         %!   $('div##{grid_name}.wice_grid_container .sel input').each(function(i, checkbox){\n! +
         %!     checkbox.checked = false;\n! +
         %!   })\n! +

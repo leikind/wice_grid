@@ -95,12 +95,10 @@ module Wice
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      tooltip = WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP)
       @csv_export_icon_present = true
-      image_tag(Defaults::CSV_EXPORT_ICON,
-        :title => tooltip,
-        :class => 'clickable export_to_csv_button',
-        :alt   => tooltip
+      content_tag(:div, '',
+        :title => WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP),
+        :class => 'clickable export_to_csv_button'
       )
     end
 
