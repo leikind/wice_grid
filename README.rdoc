@@ -763,35 +763,6 @@ If the messages are not found, or I18n is missing, WiceGrid will fall back to th
 
 Currently supported languages are English, Dutch, French, and Russian.
 
-=== ERB mode
-
-The view helper can function in two different modes. These are defined by its +erb_mode+ parameter.
-By default (<tt>:erb_mode => false</tt>) the view helper is a simple helper surrounded by <tt><%=</tt> and <tt>%></tt>, like in all examples
-above.
-
-
-The second mode (<tt>:erb_mode => true</tt>) is called <em>ERB mode</em> and it allows to embed any ERB content inside blocks,
-which is basically the style of the
-<tt>form_for</tt> helper, only <tt>form_for</tt> takes one block, while inside the <tt>grid</tt> block there are other method calls taking
-blocks as parameters:
-
-    <% grid(@countries_grid, :erb_mode => true) do |g| %>
-
-      <% g.column :column_name => 'Name', :attribute_name => 'name' do |country| %>
-        <b>Name: <%= link_to(country.name, country_path(country)) %></b>
-      <% end %>
-
-      <% g.column :column_name => 'Numeric Code', :attribute_name => 'numeric_code' do |country| %>
-        <i>Numeric Code: <%= country.numeric_code %></i>
-      <% end %>
-
-    <% end -%>
-
-This mode can be usable if you like to have much HTML code inside cells.
-
-Please remember that in this mode the helper opens with <tt><%</tt> instead of <tt><%=</tt>, similar to <tt>form_for</tt>.
-
-The default value for <tt>:show_filters</tt> can be changed in <tt>config/initializers/wice_grid_config.rb</tt>.
 
 === Action Column
 
@@ -1050,8 +1021,6 @@ of the default filter row and the default icons (see section 'Submit/Reset Butto
 
 For CSV export will continue functioning, just make sure the first call to +grid+ is still in the template of its own and
 is inside of <tt><%= %></tt>, because when CSV is requested, the first  +grid+ works in the old fashioned way producing CSV formatted output.
-
-This feature also works with <tt>:erb_mode => true</tt>.
 
 If a column was declared with <tt>:detach_with_id</tt>, but never output with +grid_filter+, filtering the grid in development mode will result
 in an warning javascript message and the missing filter will be ignored. There is no such message in production.

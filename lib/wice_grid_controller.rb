@@ -60,7 +60,7 @@ module Wice
     #   all pages with the current filters. Can be a lambda object or a controller method name (symbol). The argument to
     #   the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     #
-    # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
+    # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, and <tt>:name</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting
     # without having to repeat it for every grid instance.
 

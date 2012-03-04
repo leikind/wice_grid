@@ -1,10 +1,5 @@
 if defined?(Wice::Defaults)
 
-  # Style of the view helper.
-  # +false+ is a usual view helper.
-  # +true+ will allow to embed erb content in column (cell) definitions.
-  Wice::Defaults::ERB_MODE = false
-
   # Default number of rows to show per page.
   Wice::Defaults::PER_PAGE = 20
 

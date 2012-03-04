@@ -28,8 +28,6 @@ module Wice
     # * <tt>:sorting_dependant_row_cycling</tt> - When set to true (by default it is false) the row styles +odd+
     #   and +even+ will be changed only when the content of the cell belonging to the sorted column changes.
     #   In other words, rows with identical values in the ordered column will have the same style (color).
-    # * <tt>:erb_mode</tt> - can be <tt>true</tt> or <tt>false</tt>. Defines the style of the helper method
-    #   in the view. The default is <tt>false</tt>.
     # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
     # * <tt>:hide_reset_button</tt> - Do not show the default Filter Reset button.
     #   Useful when using a custom reset button (helper +reset_grid_javascript+).
@@ -63,43 +61,6 @@ module Wice
     #
     #   end -%>
     #
-    # The helper may have two styles defined by the +erb_mode+ parameter to the +initialize_grid+ in the contoller.
-    # By default (<tt>erb_mode = false</tt>) this is a simple helper surrounded by <tt><%=</tt> and <tt>%></tt>:
-    #
-    #     <%= grid(@countries_grid) do |g|
-    #
-    #       g.column :column_name => 'Name', :attribute_name => 'name' do |country|
-    #         link_to(country.name, country_path(country))
-    #       end
-    #
-    #       g.column :column_name => 'Numeric Code', :attribute_name => 'numeric_code' do |country|
-    #         country.numeric_code
-    #       end
-    #
-    #     end -%>
-    #
-    #
-    #
-    # The second style (<tt>erb_mode = true</tt>) is called <em>ERB mode</em> and it allows to embed any ERB content inside blocks,
-    # which is basically the style of the
-    # <tt>form_for</tt> helper, only <tt>form_for</tt> takes one block, while inside the <tt>grid</tt> block there are other method calls taking
-    # blocks as parameters:
-    #
-    #     <% grid(@countries_grid) do |g|
-    #
-    #       <% g.column :column_name => 'Name', :attribute_name => 'name' do |country| %>
-    #         <b>Name: <%= link_to(country.name, country_path(country)) %></b>
-    #       <% end %>
-    #
-    #       <% g.column :column_name => 'Numeric Code', :attribute_name => 'numeric_code' do |country| %>
-    #         <i>Numeric Code: <%= country.numeric_code %></i>
-    #       <% end %>
-    #
-    #     <% end -%>
-    #
-    # This mode can be usable if you like to have much HTML code inside cells.
-    #
-    # Please remember that in this mode the helper opens with <tt><%</tt> instead of <tt><%=</tt>, similar to <tt>form_for</tt>.
     #
     # Defaults for parameters <tt>:show_filters</tt> and <tt>:upper_pagination_panel</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt> using constants <tt>Wice::Defaults::SHOW_FILTER</tt> and
@@ -125,7 +86,6 @@ module Wice
       options = {
         :allow_showing_all_records     => Defaults::ALLOW_SHOWING_ALL_QUERIES,
         :class                         => nil,
-        :erb_mode                      => Defaults::ERB_MODE,
         :extra_request_parameters      => {},
         :header_tr_html_attrs          => {},
         :hide_reset_button             => false,
@@ -152,7 +112,6 @@ module Wice
       end
 
       rendering = GridRenderer.new(grid, self)
-      rendering.erb_mode = options[:erb_mode]
 
       block.call(rendering) # calling block containing column() calls
 
@@ -165,30 +124,15 @@ module Wice
         # If blank_slate is defined we don't show any grid at all
         if rendering.blank_slate_handler &&  grid.resultset.size == 0 && ! grid.filtering_on?
           content = generate_blank_slate(grid, rendering)
-          return prepare_result(rendering, grid, content, block)
+          return content
         end
 
         content = grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons)
       end
 
       grid.view_helper_finished = true
-      prepare_result(rendering, grid, content, block)
+      content
     end
-
-    def prepare_result(rendering, grid, content, block) #:nodoc:
-      if rendering.erb_mode
-        # true in this case is a sign that grid_html has run in a normal mode, i.e. without detached filters
-        if grid.output_buffer.nil? || grid.output_buffer == true
-          return content.to_s
-        else
-          # this way we're sending an empty string and setting flag stubborn_output_mode of GridOutputBuffer to false
-          return grid.output_buffer.to_s
-        end
-      else
-        return content
-      end
-    end
-
 
     def generate_blank_slate(grid, rendering) #:nodoc:
       buff = GridOutputBuffer.new
@@ -210,11 +154,7 @@ module Wice
     end
 
     def call_block_as_erb_or_ruby(rendering, block, ar)  #:nodoc:
-      if rendering.erb_mode
-        capture(ar, &block)
-      else
-        block.call(ar)
-      end
+      block.call(ar)
     end
 
     # the longest method? :(

@@ -14,7 +14,6 @@ module Wice
     attr_reader :blank_slate_handler
     attr_reader :last_row_handler
     attr_reader :grid
-    attr_accessor :erb_mode
 
     attr_accessor :reset_button_present, :submit_button_present, :show_hide_button_present, :csv_export_icon_present
 
@@ -255,7 +254,7 @@ module Wice
     #   * <tt>:calendar</tt> - a Javascript popup calendar control
     # * <tt>:negation_in_filter</tt> - turn on/off the negation checkbox in string filters
     # * <tt>:auto_reload</tt> - a boolean value specifying if a change in a filter triggers reloading of the grid. Works with all
-    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters. 
+    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters.
     #   The default is false. (see +AUTO_RELOAD+ in the configuration file).
     #
     # The block parameter is an ActiveRecord instance. This block is called for every ActiveRecord shown, and the return
