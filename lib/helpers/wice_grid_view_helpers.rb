@@ -427,15 +427,12 @@ module Wice
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
       parameter_name_for_focus = {grid.name => {:foc => ''}}.to_query
 
-      prototype_and_js_version_check = if Rails.env == 'development'
+      js_loaded_check  = if Rails.env == 'development'
         %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
-        %$   alert('wice_grid.js not loaded, WiceGrid cannot proceed! ' +\n$ +
-        %$     'Please make sure that you include WiceGrid javascript in your page. ' +\n$ +
-        %$     'Use <%= include_wice_grid_assets %> or <%= include_wice_grid_assets(:include_calendar => true) %> ' +\n$ +
-        %$     'for WiceGrid javascripts and assets.')\n$ +
-        %$ } else if ((typeof(WiceGridProcessor._version) == "undefined") || ( WiceGridProcessor._version != "0.4.4")) {\n$ +
-        %$    alert("wice_grid.js in your /public is outdated, please run\\n rails g wice_grid:wice_grid_assets_jquery\\n$ +
-        %$ or\\n rails g wice_grid:wice_grid_assets_prototype\\nto update it.");\n$ +
+        %$   alert("wice_grid.js not loaded, WiceGrid cannot proceed!\\n" +\n$ +
+        %$     "Make sure that you have loaded wice_grid.js.\\n" +\n$ +
+        %$     "Add line\\n//= require wice_grid.js\\n" +\n$ +
+        %$     "to app/assets/javascripts/application.js")\n$ +
         %$ }\n$
       else
         ''
@@ -485,10 +482,9 @@ module Wice
         cached_javascript << JsAdaptor.update_ranges(grid.name)
       end
 
-
       content << javascript_tag(
         JsAdaptor.dom_loaded +
-        %/ #{prototype_and_js_version_check}\n/ +
+        %/ #{js_loaded_check}\n/ +
         %/ window['#{grid.name}'] = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
         %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}',\n/ +
         %/ '#{parameter_name_for_focus}', '#{Rails.env}');\n/ +
