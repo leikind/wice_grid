@@ -165,7 +165,7 @@ module Wice
 
 
     def send_file_rails2(path, options = {}) #:doc:
-      raise MissingFile, "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
+      raise "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
 
       options[:length]   ||= File.size(path)
       options[:filename] ||= File.basename(path) unless options[:url_based_filename]
