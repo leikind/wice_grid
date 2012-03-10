@@ -328,9 +328,9 @@ module Wice
     def ordered_by?(column)  #:nodoc:
       return nil if @status[:order].blank?
       if column.main_table && ! offs = @status[:order].index('.')
-        @status[:order] == column.attribute_name
+        @status[:order] == column.attribute
       else
-        @status[:order] == column.table_alias_or_table_name + '.' + column.attribute_name
+        @status[:order] == column.table_alias_or_table_name + '.' + column.attribute
       end
     end
 

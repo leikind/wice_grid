@@ -47,11 +47,11 @@ module Wice
     #
     #   <%= grid(@accounts_grid, :table_html_attrs => {:class => 'grid_style', :id => 'accounts_grid'}, :header_tr_html_attrs => {:class => 'grid_headers'}) do |g|
     #
-    #     g.column :column_name => 'Username', :attribute_name => 'username' do |account|
+    #     g.column :name => 'Username', :attribute => 'username' do |account|
     #       account.username
     #     end
     #
-    #     g.column :column_name => 'application_account.field.identity_id'._, :attribute_name => 'firstname', :model_class =>  Person do |account|
+    #     g.column :name => 'application_account.field.identity_id'._, :attribute => 'firstname', :model_class =>  Person do |account|
     #       link_to(account.identity.name, identity_path(account.identity))
     #     end
     #
@@ -215,13 +215,13 @@ module Wice
 
       rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
 
-        column_name = column.column_name
+        column_name = column.name
         if column_name.is_a? Array
           column_name, js = column_name
           cached_javascript << js
         end
 
-        if column.attribute_name && column.allow_ordering
+        if column.attribute && column.allow_ordering
 
           css_class = grid.filtered_by?(column) ? 'active_filter' : nil
 
@@ -388,7 +388,7 @@ module Wice
             opts.add_or_append_class_value!(additional_css_class) unless additional_css_class.blank?
           end
 
-          if sorting_dependant_row_cycling && column.attribute_name && grid.ordered_by?(column)
+          if sorting_dependant_row_cycling && column.attribute && grid.ordered_by?(column)
             cell_value_of_the_ordered_column = column_block_output
           end
           row_content += content_tag(:td, column_block_output, opts)
@@ -494,7 +494,7 @@ module Wice
           ''
         else
           rendering.select_for(:in_html) do |vc|
-            vc.attribute_name and not vc.no_filter
+            vc.attribute and not vc.no_filter
           end.collect{|column| column.yield_javascript}.join("\n")
         end +
         "\n" + cached_javascript.compact.join('') +

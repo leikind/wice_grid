@@ -8,7 +8,7 @@ module Wice
     include ActionView::Helpers::AssetTagHelper
 
     # fields defined from the options parameter
-    FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
+    FIELDS = [:attribute, :name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
               :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering, :auto_reload]
 
     attr_accessor *FIELDS
@@ -49,7 +49,7 @@ module Wice
       declaration = yield_declaration_of_column_filter
       if declaration
         %!#{@grid.name}.register( {
-          filter_name : "#{self.column_name}",
+          filter_name : "#{self.name}",
           detached : #{detachness},
           #{declaration}
         } ); !
@@ -88,16 +88,16 @@ module Wice
 
     # bad name, because for the main table the name is not really 'fully_qualified'
     def attribute_name_fully_qualified_for_all_but_main_table_columns #:nodoc:
-      self.main_table ? attribute_name : table_alias_or_table_name + '.' + attribute_name
+      self.main_table ? attribute : table_alias_or_table_name + '.' + attribute
     end
 
     def fully_qualified_attribute_name #:nodoc:
-      table_alias_or_table_name + '.' + attribute_name
+      table_alias_or_table_name + '.' + attribute
     end
 
 
     def filter_shown? #:nodoc:
-      self.attribute_name && ! self.no_filter
+      self.attribute && ! self.no_filter
     end
 
     def filter_shown_in_main_table? #:nodoc:
@@ -110,7 +110,7 @@ module Wice
     end
 
     def capable_of_hosting_filter_related_icons?  #:nodoc:
-      self.attribute_name.blank? && self.column_name.blank? && ! self.filter_shown?
+      self.attribute.blank? && self.name.blank? && ! self.filter_shown?
     end
 
     def has_auto_reloading_input?  #:nodoc:
@@ -177,7 +177,7 @@ module Wice
       false
     end
 
-    def column_name  #:nodoc:
+    def name  #:nodoc:
       return '' unless @select_all_buttons
 
       html = content_tag(:div, '',

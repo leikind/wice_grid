@@ -42,7 +42,7 @@ module Wice
       end
       grid(grid_obj, opts) do |g|
         columns.each do |column_name|
-          g.column :column_name => column_name.humanize, :attribute_name => column_name  do |ar|
+          g.column :name => column_name.humanize, :attribute => column_name  do |ar|
             ar.send(column_name)
           end
         end
