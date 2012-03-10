@@ -228,9 +228,9 @@ If only sorting is needed, we can turn off filters using <tt>:filter</tt> :
 
   g.column :name => 'ID', :attribute => 'id', :filter => false
 
-If no ordering links are needed, use <tt>:allow_ordering</tt>:
+If no ordering links are needed, use <tt>:ordering => false</tt>:
 
-  g.column :name => 'Added', :attribute => 'created_at', :allow_ordering => false
+  g.column :name => 'Added', :attribute => 'created_at', :ordering => false
 
 It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute</tt> (and <tt>:model_class</tt> discussed below).
 

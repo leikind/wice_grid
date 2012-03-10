@@ -9,7 +9,7 @@ module Wice
 
     # fields defined from the options parameter
     FIELDS = [:attribute, :name, :td_html_attrs, :filter, :model_class, :allow_multiple_selection,
-              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering, :auto_reload]
+              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload]
 
     attr_accessor *FIELDS
 

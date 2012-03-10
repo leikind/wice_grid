@@ -189,7 +189,7 @@ module Wice
     #       is far from being user-friendly due to the number of dropdown lists.
     # * <tt>:filter</tt> - Disables filters when set to false.
     #   This is needed if sorting is required while  filters are not.
-    # * <tt>:allow_ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
+    # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
     # * <tt>:model_class</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
     # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord
@@ -272,7 +272,7 @@ module Wice
     def column(opts = {}, &block)
       options = {
         :allow_multiple_selection   => Defaults::ALLOW_MULTIPLE_SELECTION,
-        :allow_ordering             => true,
+        :ordering                   => true,
         :attribute                  => nil,
         :auto_reload                => Defaults::AUTO_RELOAD,
         :boolean_filter_false_label => NlMessage['boolean_filter_false_label'],

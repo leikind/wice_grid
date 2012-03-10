@@ -221,7 +221,7 @@ module Wice
           cached_javascript << js
         end
 
-        if column.attribute && column.allow_ordering
+        if column.attribute && column.ordering
 
           css_class = grid.filtered_by?(column) ? 'active_filter' : nil
 
