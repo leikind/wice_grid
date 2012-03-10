@@ -8,7 +8,7 @@ module Wice
     include ActionView::Helpers::AssetTagHelper
 
     # fields defined from the options parameter
-    FIELDS = [:attribute, :name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
+    FIELDS = [:attribute, :name, :td_html_attrs, :filter, :model_class, :allow_multiple_selection,
               :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering, :auto_reload]
 
     attr_accessor *FIELDS
@@ -97,7 +97,7 @@ module Wice
 
 
     def filter_shown? #:nodoc:
-      self.attribute && ! self.no_filter
+      self.attribute && self.filter
     end
 
     def filter_shown_in_main_table? #:nodoc:

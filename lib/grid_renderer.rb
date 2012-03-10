@@ -177,7 +177,7 @@ module Wice
     #   +initialize_grid+ method). Parameter <tt>:model_class</tt> allows to specify another table. Presence of
     #   this parameter
     #   * adds sorting capabilities by this field
-    #   * automatically creates a filter based on the type of the field unless parameter <tt>:no_filter</tt> is set to true.
+    #   * automatically creates a filter based on the type of the field unless parameter <tt>:filter</tt> is set to false.
     #     The following filters exist for the following types:
     #     * <tt>string</tt> - a text field
     #     * <tt>integer</tt> and <tt>float</tt>  - two text fields to specify the range. Both limits or only one
@@ -187,7 +187,7 @@ module Wice
     #     * <tt>date</tt> - two sets of standard date dropdown lists so specify the time range.
     #     * <tt>datetime</tt> - two sets of standard datetime dropdown lists so specify the time range. This filter
     #       is far from being user-friendly due to the number of dropdown lists.
-    # * <tt>:no_filter</tt> - Turns off filters even if <tt>:attribute</tt> is specified.
+    # * <tt>:filter</tt> - Disables filters when set to false.
     #   This is needed if sorting is required while  filters are not.
     # * <tt>:allow_ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
@@ -288,7 +288,7 @@ module Wice
         :in_html                    => true,
         :model_class                => nil,
         :negation_in_filter         => Defaults::NEGATION_IN_STRING_FILTERS,
-        :no_filter                  => false,
+        :filter                  => true,
         :table_alias                => nil,
         :td_html_attrs              => {}
       }

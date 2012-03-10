@@ -494,7 +494,7 @@ module Wice
           ''
         else
           rendering.select_for(:in_html) do |vc|
-            vc.attribute and not vc.no_filter
+            vc.attribute && vc.filter
           end.collect{|column| column.yield_javascript}.join("\n")
         end +
         "\n" + cached_javascript.compact.join('') +

@@ -224,9 +224,9 @@ where the block contains just a call to the same attribute declared by :attribut
 
 In this case +name+ will be used as the method name to send to the ActiveRecord instance.
 
-If only sorting is needed, we can turn off filters using <tt>:no_filter</tt> :
+If only sorting is needed, we can turn off filters using <tt>:filter</tt> :
 
-  g.column :name => 'ID', :attribute => 'id', :no_filter => true
+  g.column :name => 'ID', :attribute => 'id', :filter => false
 
 If no ordering links are needed, use <tt>:allow_ordering</tt>:
 
