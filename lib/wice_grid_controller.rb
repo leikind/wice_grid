@@ -67,7 +67,6 @@ module Wice
 
     def initialize_grid(klass, opts = {})
       Wice::JsAdaptor.init
-      @__wice_grid_on_page = true
       wg = WiceGrid.new(klass, self, opts)
       self.wice_grid_instances = [] if self.wice_grid_instances.nil?
       self.wice_grid_instances << wg

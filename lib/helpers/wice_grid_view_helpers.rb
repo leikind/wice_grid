@@ -104,7 +104,7 @@ module Wice
       options[:show_filters] = :no     if options[:show_filters] == false
       options[:show_filters] = :always if options[:show_filters] == true
 
-      options[:table_html_attrs].add_or_append_class_value!('wice_grid', true)
+      options[:table_html_attrs].add_or_append_class_value!('wice-grid', true)
       options[:table_html_attrs].add_or_append_class_value!('table', true)
       options[:table_html_attrs].add_or_append_class_value!('table-bordered', true)
       options[:table_html_attrs].add_or_append_class_value!('table-striped', true)
@@ -172,7 +172,7 @@ module Wice
       # Ruby 1.9.1
       content.force_encoding('UTF-8') if content.respond_to?(:force_encoding)
 
-      content << %!<div class="wice_grid_container" id="#{grid.name}"><div id="#{grid.name}_title">!
+      content << %!<div class="wice-grid-container" id="#{grid.name}"><div id="#{grid.name}_title">!
       content << content_tag(:h3, grid.saved_query.name) if grid.saved_query
       content << "</div><table #{tag_options(table_html_attrs, true)}>"
       content << "<thead>"
@@ -251,8 +251,7 @@ module Wice
       end
 
       content << content_tag(:th,
-        hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering),
-        :class => 'hide_show_icon'
+        hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
       ) unless no_rightmost_column
 
       content << '</tr>'
@@ -440,10 +439,6 @@ module Wice
         ''
       end
 
-      if rendering.show_hide_button_present
-        cached_javascript << JsAdaptor.show_hide_button_initialization(grid.name, filter_row_id)
-      end
-
       if rendering.reset_button_present
         cached_javascript << JsAdaptor.reset_button_initialization(grid.name, reset_grid_javascript(grid))
       end
@@ -529,14 +524,14 @@ module Wice
           :title => NlMessage['hide_filter_tooltip'],
           :id => grid_name + '_hide_icon',
           :style => styles[0],
-          :class => 'clickable hide_show_icon'
+          :class => 'clickable  hide-filter'
         ) +
 
         content_tag(:div, '',
           :title => NlMessage['show_filter_tooltip'],
           :id => grid_name + '_show_icon',
           :style => styles[1],
-          :class => 'clickable hide_show_icon'
+          :class => 'clickable  show-filter'
         )
 
       end

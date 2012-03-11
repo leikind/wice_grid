@@ -7,7 +7,6 @@ module Wice
     attr_accessor :return_empty_strings_for_nonexistent_filters
 
     def stubborn_output_mode=(m)
-      RAILS_DEFAULT_LOGGER.debug("=== WiceGrid: detached filters are requested, postponing output till the second call of the view helper") if m
       @stubborn_output_mode = m
     end
 
