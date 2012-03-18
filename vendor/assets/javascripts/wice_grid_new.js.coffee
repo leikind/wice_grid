@@ -68,22 +68,12 @@ setupSubmitReset = (wiceGridContainer) ->
 
 
 
-
-
-
-
-
-setupBehaviorForGrid = (wiceGridContainer) ->
-
-  setupHidingShowingOfFilterRow(wiceGridContainer)
-  setupSubmitReset(wiceGridContainer)
-  setupShowingAllRecords(wiceGridContainer)
-
-
-
 jQuery ->
 
   $(".wice-grid-container").each (index, wiceGridContainer) ->
-    setupBehaviorForGrid(wiceGridContainer)
+    setupHidingShowingOfFilterRow(wiceGridContainer)
+    setupSubmitReset(wiceGridContainer)
+    setupShowingAllRecords(wiceGridContainer)
+
 
 

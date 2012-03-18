@@ -70,6 +70,7 @@ module Wice
     # Pease read documentation about the +column+ method to achieve the enlightenment.
 
     def grid(grid, opts = {}, &block)
+      # strip the method from HTML stuff
       unless grid.class == WiceGrid
         raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class")
       end
@@ -104,18 +105,6 @@ module Wice
       options[:show_filters] = :no     if options[:show_filters] == false
       options[:show_filters] = :always if options[:show_filters] == true
 
-      options[:html].add_or_append_class_value!('wice-grid', true)
-
-      if Array === Defaults::DEFAULT_TABLE_CLASSES
-        Defaults::DEFAULT_TABLE_CLASSES.each do |default_class|
-          options[:html].add_or_append_class_value!(default_class, true)
-        end
-      end
-
-      if options[:class]
-        options[:html].add_or_append_class_value!(options[:class])
-        options.delete(:class)
-      end
 
       rendering = GridRenderer.new(grid, self)
 
@@ -167,6 +156,21 @@ module Wice
     def grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons) #:nodoc:
 
       table_html_attrs, header_tr_html_attrs = options[:html], options[:header_tr_html_attrs]
+
+      table_html_attrs.add_or_append_class_value!('wice-grid', true)
+
+      if Array === Defaults::DEFAULT_TABLE_CLASSES
+        Defaults::DEFAULT_TABLE_CLASSES.each do |default_class|
+          table_html_attrs.add_or_append_class_value!(default_class, true)
+        end
+      end
+
+      if options[:class]
+        table_html_attrs.add_or_append_class_value!(options[:class])
+        options.delete(:class)
+      end
+
+
 
       cycle_class = nil
       sorting_dependant_row_cycling = options[:sorting_dependant_row_cycling]
