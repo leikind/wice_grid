@@ -45,16 +45,14 @@ module Wice
       (! detach_with_id.blank?).to_s
     end
 
-    def yield_javascript #:nodoc:
+    def yield_declaration #:nodoc:
       declaration = yield_declaration_of_column_filter
       if declaration
-        %!#{@grid.name}.register( {
-          filter_name : "#{self.name}",
-          detached : #{detachness},
-          #{declaration}
-        } ); !
-      else
-        ''
+        {
+          :filter_name => self.name,
+          :detached    => detachness,
+          :declaration => declaration
+        }
       end
     end
 
@@ -215,9 +213,12 @@ module Wice
     end
 
     def yield_declaration_of_column_filter #:nodoc:
-      %$templates : ['#{@query}', '#{@query2}'],
-          ids : ['#{@dom_id}', '#{@dom_id2}']  $
+      {
+        :templates => [@query, @query2],
+        :ids       => [@dom_id, @dom_id2]
+      }
     end
+
 
     def has_auto_reloading_input? #:nodoc:
       auto_reload
@@ -281,10 +282,14 @@ module Wice
       select_toggle.html_safe_if_necessary + '</span>'.html_safe_if_necessary
     end
 
+
     def yield_declaration_of_column_filter #:nodoc:
-      %$templates : ['#{@query_without_equals_sign}'],
-          ids : ['#{@dom_id}']  $
+      {
+        :templates => [@query_without_equals_sign],
+        :ids       => [@dom_id]
+      }
     end
+
 
     def has_auto_reloading_select? #:nodoc:
       auto_reload
@@ -372,10 +377,14 @@ module Wice
       render_standard_filter_internal(params)
     end
 
+
     def yield_declaration_of_column_filter #:nodoc:
-      %$templates : [ #{@queris_ids.collect{|tuple| "'" + tuple[0] + "'"}.join(', ')} ],
-          ids : [ #{@queris_ids.collect{|tuple| "'" + tuple[1] + "'"}.join(', ')} ] $
+      {
+        :templates => @queris_ids.collect{|tuple|  tuple[0] },
+        :ids       => @queris_ids.collect{|tuple|  tuple[1] }
+      }
     end
+
 
     def has_auto_reloading_calendar? #:nodoc:
       auto_reload && helper_style == :calendar
@@ -453,15 +462,21 @@ module Wice
       end
     end
 
+
     def yield_declaration_of_column_filter #:nodoc:
       if negation
-        %$templates : ['#{@query}', '#{@query2}'],
-            ids : ['#{@dom_id}', '#{@dom_id2}'] $
+        {
+          :templates => [@query, @query2],
+          :ids       => [@dom_id, @dom_id2]
+        }
       else
-        %$templates : ['#{@query}'],
-            ids : ['#{@dom_id}'] $
+        {
+          :templates => [@query],
+          :ids       => [@dom_id]
+        }
       end
     end
+
 
     def has_auto_reloading_input? #:nodoc:
       auto_reload

@@ -426,7 +426,7 @@ module Wice
 
       content << last_row_output if last_row_output
 
-      content << '</tbody></table></div>'
+      content << '</tbody></table>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
 
@@ -434,6 +434,25 @@ module Wice
 
       parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
       parameter_name_for_focus = {grid.name => {:foc => ''}}.to_query
+
+      processor_initializer_arguments = [base_link_for_filter, base_link_for_show_all_records,
+        link_for_export, parameter_name_for_query_loading, parameter_name_for_focus, Rails.env]
+
+      filter_declarations = if no_filters_at_all
+        []
+      else
+        rendering.select_for(:in_html) do |vc|
+          vc.attribute && vc.filter
+        end.collect{|column| column.yield_declaration}
+      end
+
+      content << content_tag(:div, '',
+        'data-processor-initializer-arguments' => processor_initializer_arguments.to_json,
+        'data-filter-declarations'             => filter_declarations.to_json,
+        :class                                 => 'wg-data'
+      )
+
+      content << '</div>'
 
       js_loaded_check  = if Rails.env == 'development'
         %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
@@ -474,21 +493,10 @@ module Wice
         cached_javascript << JsAdaptor.update_ranges(grid.name)
       end
 
+
+
       content << javascript_tag(
-        JsAdaptor.dom_loaded +
-        %/ #{js_loaded_check}\n/ +
-        %/ window['#{grid.name}'] = new WiceGridProcessor('#{grid.name}', '#{base_link_for_filter}',\n/ +
-        %/  '#{base_link_for_show_all_records}', '#{link_for_export}', '#{parameter_name_for_query_loading}',\n/ +
-        %/ '#{parameter_name_for_focus}', '#{Rails.env}');\n/ +
-        if no_filters_at_all
-          ''
-        else
-          rendering.select_for(:in_html) do |vc|
-            vc.attribute && vc.filter
-          end.collect{|column| column.yield_javascript}.join("\n")
-        end +
-        "\n" + cached_javascript.compact.join('') +
-        '})'
+        JsAdaptor.dom_loaded + cached_javascript.compact.join('') + '})'
       )
 
       if content.stubborn_output_mode
