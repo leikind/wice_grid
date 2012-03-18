@@ -1,10 +1,8 @@
 to do:
 
-1) allow to configure global additional classes for a table
-2) an example for :when_filtered
-3) get rid of this :href => "javascript: toggle_multi_select
+1) get rid of this :href => "javascript: toggle_multi_select
    at view_columns
-4)
+
 +++++++
 +++++++
 3.2.0pre1

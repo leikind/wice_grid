@@ -7,8 +7,8 @@ module Wice
     # The first parameter is a grid object returned by +initialize_grid+ in the controller.
     #
     # The second parameter is a hash of options:
-    # * <tt>:table_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>table</tt> tag.
-    # * <tt>:class</tt> - a shortcut for <tt>:table_html_attrs => {:class => 'css_class'}</tt>
+    # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>table</tt> tag.
+    # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
     # * <tt>:header_tr_html_attrs</tt> - a hash of HTML attributes to be included into the first <tt>tr</tt> tag
     #   (or two first <tt>tr</tt>'s if the filter row is present).
     # * <tt>:show_filters</tt> - defines when the filter is shown. Possible values are:
@@ -45,7 +45,7 @@ module Wice
     # first block is called for cells of the first column for each row (each ActiveRecord instance), the
     # second block is called for cells of the second column, and so on. See the example:
     #
-    #   <%= grid(@accounts_grid, :table_html_attrs => {:class => 'grid_style', :id => 'accounts_grid'}, :header_tr_html_attrs => {:class => 'grid_headers'}) do |g|
+    #   <%= grid(@accounts_grid, :html => {:class => 'grid_style', :id => 'accounts_grid'}, :header_tr_html_attrs => {:class => 'grid_headers'}) do |g|
     #
     #     g.column :name => 'Username', :attribute => 'username' do |account|
     #       account.username
@@ -93,7 +93,7 @@ module Wice
         :hide_csv_button               => false,
         :show_filters                  => Defaults::SHOW_FILTER,
         :sorting_dependant_row_cycling => false,
-        :table_html_attrs              => {},
+        :html                          => {},
         :upper_pagination_panel        => Defaults::SHOW_UPPER_PAGINATION_PANEL
       }
 
@@ -104,13 +104,16 @@ module Wice
       options[:show_filters] = :no     if options[:show_filters] == false
       options[:show_filters] = :always if options[:show_filters] == true
 
-      options[:table_html_attrs].add_or_append_class_value!('wice-grid', true)
-      options[:table_html_attrs].add_or_append_class_value!('table', true)
-      options[:table_html_attrs].add_or_append_class_value!('table-bordered', true)
-      options[:table_html_attrs].add_or_append_class_value!('table-striped', true)
+      options[:html].add_or_append_class_value!('wice-grid', true)
+
+      if Array === Defaults::DEFAULT_TABLE_CLASSES
+        Defaults::DEFAULT_TABLE_CLASSES.each do |default_class|
+          options[:html].add_or_append_class_value!(default_class, true)
+        end
+      end
 
       if options[:class]
-        options[:table_html_attrs].add_or_append_class_value!(options[:class])
+        options[:html].add_or_append_class_value!(options[:class])
         options.delete(:class)
       end
 
@@ -163,13 +166,13 @@ module Wice
     # the longest method? :(
     def grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons) #:nodoc:
 
-      table_html_attrs, header_tr_html_attrs = options[:table_html_attrs], options[:header_tr_html_attrs]
+      table_html_attrs, header_tr_html_attrs = options[:html], options[:header_tr_html_attrs]
 
       cycle_class = nil
       sorting_dependant_row_cycling = options[:sorting_dependant_row_cycling]
 
       content = GridOutputBuffer.new
-      # Ruby 1.9.1
+      # Ruby 1.9.x
       content.force_encoding('UTF-8') if content.respond_to?(:force_encoding)
 
       content << %!<div class="wice-grid-container" id="#{grid.name}"><div id="#{grid.name}_title">!

@@ -630,7 +630,7 @@ For other classes see <tt>wice_grid.css</tt>. Feel free to customize it accordin
 
 ==== Adding classes and styles
 
-The +grid+ helper accepts parameter <tt>:table_html_attrs</tt> which is a hash of HTML
+The +grid+ helper accepts parameter <tt>:html</tt> which is a hash of HTML
 attributes for the table tag.
 
 Another +grid+ parameter is <tt>header_tr_html_attrs</tt> which is a hash of HTML attributes to be added to the first +tr+ tag (or two first +tr+'s if the filter row is present).
