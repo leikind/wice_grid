@@ -30,10 +30,10 @@ module Wice
     #   In other words, rows with identical values in the ordered column will have the same style (color).
     # * <tt>:allow_showing_all_records</tt> - allow or prohibit the "All Records" mode.
     # * <tt>:hide_reset_button</tt> - Do not show the default Filter Reset button.
-    #   Useful when using a custom reset button (helper +reset_grid_javascript+).
+    #   Useful when using a custom reset button.
     #   By default it is false.
     # * <tt>:hide_submit_button</tt> - Do not show the default Filter Submit button.
-    #   Useful when using a custom submit button (helper +submit_grid_javascript+).
+    #   Useful when using a custom submit button
     #   By default it is false.
     # * <tt>:hide_csv_button</tt> - a boolean value which defines whether the default Export To CSV button
     #   should be rendered. Useful when using a custom Export To CSV button (helper +export_to_csv_javascript+).
@@ -273,7 +273,7 @@ module Wice
         else # some filters are present in the table
 
           filter_row_attrs = header_tr_html_attrs.clone
-          filter_row_attrs.add_or_append_class_value!('wice_grid_filter_row', true)
+          filter_row_attrs.add_or_append_class_value!('wg-filter-row', true)
           filter_row_attrs['id'] = filter_row_id
 
           content << %!<tr #{tag_options(filter_row_attrs, true)} !
@@ -439,18 +439,6 @@ module Wice
         ''
       end
 
-      if rendering.reset_button_present
-        cached_javascript << JsAdaptor.reset_button_initialization(grid.name, reset_grid_javascript(grid))
-      end
-
-      if rendering.submit_button_present
-        cached_javascript << JsAdaptor.submit_button_initialization(grid.name, submit_grid_javascript(grid))
-      end
-
-      if rendering.contains_a_text_input?
-        cached_javascript << JsAdaptor.enter_key_event_registration(grid.name)
-      end
-
       if rendering.csv_export_icon_present
         cached_javascript << JsAdaptor.csv_export_icon_initialization(grid.name)
       end
@@ -522,16 +510,14 @@ module Wice
 
         content_tag(:div, '',
           :title => NlMessage['hide_filter_tooltip'],
-          :id => grid_name + '_hide_icon',
           :style => styles[0],
-          :class => 'clickable  hide-filter'
+          :class => 'clickable  wg-hide-filter'
         ) +
 
         content_tag(:div, '',
           :title => NlMessage['show_filter_tooltip'],
-          :id => grid_name + '_show_icon',
           :style => styles[1],
-          :class => 'clickable  show-filter'
+          :class => 'clickable  wg-show-filter'
         )
 
       end
@@ -565,7 +551,7 @@ module Wice
     # * +filter_key+ an identifier of the filter specified in the column declaration by parameter +:detach_with_id+
     def grid_filter(grid, filter_key)
       unless grid.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("submit_grid_javascript: the parameter must be a WiceGrid instance.")
+        raise WiceGridArgumentError.new("grid_filter: the parameter must be a WiceGrid instance.")
       end
       if grid.output_buffer.nil?
         raise WiceGridArgumentError.new("grid_filter: You have attempted to run 'grid_filter' before 'grid'. Read about detached filters in the documentation.")
@@ -575,27 +561,9 @@ module Wice
           ":show_filters => :no (set :show_filters to :always in this case). Read about detached filters in the documentation.")
       end
 
-      content_tag :span, grid.output_buffer.filter_for(filter_key), :class => "#{grid.name}_detached_filter"
+      content_tag :span, grid.output_buffer.filter_for(filter_key), :class => "wg-detached-filter", 'data-grid-name' => grid.name
     end
 
-    # Returns javascript which applies current filters. The parameter is a WiceGrid instance. Use it with +button_to_function+ to create
-    # your Submit button.
-    def submit_grid_javascript(grid)
-      unless grid.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("submit_grid_javascript: the parameter must be a WiceGrid instance.")
-      end
-      "#{grid.name}.process()"
-    end
-
-    # Returns javascript which resets the grid, clearing the state of filters.
-    # The parameter is a WiceGrid instance. Use it with +button_to_function+ to create
-    # your Reset button.
-    def reset_grid_javascript(grid)
-      unless grid.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("reset_grid_javascript: the parameter must be a WiceGrid instance.")
-      end
-      "#{grid.name}.reset()"
-    end
 
     # Returns javascript which triggers export to CSV.
     # The parameter is a WiceGrid instance. Use it with +button_to_function+ to create
@@ -659,29 +627,31 @@ module Wice
     def show_all_link(collection_total_entries, parameters, grid_name) #:nodoc:
 
       message = NlMessage['all_queries_warning']
-      confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? "if (confirm('#{message}'))" : ''
+      confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? message : nil
 
-      js =  JsAdaptor.show_all_link_initialization(grid_name, confirmation, parameters.to_json)
+      html = content_tag(:a, NlMessage['show_all_records_label'],
+        :href=>"#",
+        :title => NlMessage['show_all_records_tooltip'],
+        :class => 'wg-show-all-link',
+        'data-grid-state' => parameters.to_json,
+        'data-confim-message' => confirmation
+      )
 
-      tooltip = NlMessage['show_all_records_tooltip']
-      html = %/<span class="show_all_link"><a href="#" title="#{tooltip}">/ +
-        NlMessage['show_all_records_label'] +
-        '</a></span>'
-
-      [html, js]
+      [html, '']
     end
 
     def back_to_pagination_link(parameters, grid_name) #:nodoc:
       pagination_override_parameter_name = "#{grid_name}[pp]"
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
 
-      js =  JsAdaptor.back_to_pagination_link_initialization(grid_name, parameters.to_json)
+      html = content_tag(:a, NlMessage['switch_back_to_paginated_mode_label'],
+        :href=>"#",
+        :title => NlMessage['switch_back_to_paginated_mode_tooltip'],
+        :class => 'wg-back-to-pagination-link',
+        'data-grid-state' => parameters.to_json
+      )
 
-      tooltip = NlMessage['switch_back_to_paginated_mode_tooltip']
-      html = %/ <span class="show_all_link"><a href="#" title="#{tooltip}">/ +
-        NlMessage['switch_back_to_paginated_mode_label'] +
-        '</a></span>'
-      [html, js]
+      [html, '']
     end
 
     def pagination_info(grid, allow_showing_all_records)  #:nodoc:

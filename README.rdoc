@@ -585,16 +585,7 @@ Default values like  can be  changed in <tt>config/initializers/wice_grid_config
 
 
 === Submit/Reset buttons
-View helper +submit_grid_javascript+ returns javascript which applies current filters.
-View helper +reset_grid_javascript+ returns javascript which resets the grid, clearing the state of filters.
-This allows to create your own Submit and Reset buttons anywhere on the page with the help of +button_to_function+:
-
-  <%= button_to_function "Submit", submit_grid_javascript(@grid) %>
-  <%= button_to_function "Reset",  reset_grid_javascript(@grid) %>
-
-To complement this feature there are two parameters in the +grid+ helper <tt>:hide_submit_button</tt> and <tt>:hide_reset_button</tt> which
-hide default buttons in the grid if set to true.
-
+TO DO: rewrite
 
 === Auto-reloading filters
 

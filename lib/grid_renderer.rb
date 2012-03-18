@@ -64,10 +64,6 @@ module Wice
       filter_columns(filter).each{|col| yield col}
     end
 
-    def contains_a_text_input?  #:nodoc:
-      filter_columns(:in_html).detect(&:contains_a_text_input)
-    end
-
     def each_column_aware_of_one_last_one(filter = nil)  #:nodoc:
       cols = filter_columns(filter)
       cols[0..-2].each{|col| yield col, false}

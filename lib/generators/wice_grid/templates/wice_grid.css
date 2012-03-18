@@ -29,8 +29,8 @@
   height: 16px;
 }
 
-.wice-grid .show-filter.clickable,
-.wice-grid .hide-filter.clickable{
+.wice-grid .wg-show-filter.clickable,
+.wice-grid .wg-hide-filter.clickable{
   background: transparent url(/assets/icons/grid/page_white_find.png) no-repeat;
   width: 16px;
   height: 16px;
@@ -135,7 +135,7 @@
   text-align: center;
 }
 */
-/*.wice-grid-container .pagination_status .show_all_link a {
+/*.wice-grid-container .pagination_status .show-all-link a {
   text-decoration: none;
   font-size: 80%;
 }

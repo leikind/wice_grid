@@ -16,25 +16,6 @@ module Wice::JsAdaptor   #:nodoc:
         %/$(document).ready(function(){\n/
       end
 
-      def reset_button_initialization(grid_name, reset_grid_javascript)  #:nodoc:
-        %/ $('div##{grid_name}.wice-grid-container .reset').click(function(e){\n/+
-        %/ #{reset_grid_javascript};\n/+
-        %/ });\n/
-      end
-
-      def submit_button_initialization(grid_name, submit_grid_javascript)  #:nodoc:
-        %/ $('div##{grid_name}.wice-grid-container .submit').click(function(e){\n/+
-        %/  #{submit_grid_javascript};\n/+
-        %/ });\n/
-      end
-
-
-      def enter_key_event_registration(grid_name)  #:nodoc:
-        %! $('div##{grid_name}.wice-grid-container .wice_grid_filter_row input[type=text], .#{grid_name}_detached_filter input[type=text]').keydown(function(event){\n! +
-        %!  if (event.keyCode == 13) {#{grid_name}.process()}\n! +
-        %! });\n!
-      end
-
       def csv_export_icon_initialization(grid_name)  #:nodoc:
         %! $('div##{grid_name}.wice-grid-container .export_to_csv_button').click(function(e){\n! +
         %!   #{grid_name}.export_to_csv()\n! +
@@ -66,17 +47,6 @@ module Wice::JsAdaptor   #:nodoc:
         %! });\n!
       end
 
-      def show_all_link_initialization(grid_name, confirmation, parameters_json)  #:nodoc:
-        %/ $('div##{grid_name}.wice-grid-container .show_all_link').click(function(e){  \n/ +
-        %/  #{confirmation} #{grid_name}.reload_page_for_given_grid_state(#{parameters_json})  \n/ +
-        %/})\n/
-      end
-
-      def back_to_pagination_link_initialization(grid_name, parameters_json)  #:nodoc:
-        %/ $('div##{grid_name}.wice-grid-container .show_all_link').click(function(e){\n/ +
-        %/     #{grid_name}.reload_page_for_given_grid_state(#{parameters_json})\n/ +
-        %/ })\n/
-      end
 
       def call_to_save_query_and_key_event_initialization_for_saving_queries(
                                     id_and_name, grid_name, base_path_to_query_controller, parameters_json, ids_json)  #:nodoc:

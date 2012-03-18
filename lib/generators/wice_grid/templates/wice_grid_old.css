@@ -25,15 +25,15 @@
   color: #333;
 }
 
-.wice-grid tr.wice_grid_title_row th,
-.wice-grid tr.wice_grid_filter_row th{
+
+.wice-grid tr.wg-filter-row th{
   background-color: #dddddd;
   vertical-align: top;
 }
 
 
 
-.wice-grid th.filter_icons, .wice-grid th.show-filter, .wice-grid th.hide-filter {
+.wice-grid th.filter_icons, .wice-grid th.wg-show-filter, .wice-grid th.wg-hide-filter {
   text-align: right ;
 }
 
@@ -94,7 +94,7 @@
   float: right;
 }
 
-.wice-grid-container .pagination_status .show_all_link a {
+.wice-grid-container .pagination_status .show-all-link a {
   text-decoration: none;
   font-size: 80%;
 }
