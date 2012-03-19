@@ -103,64 +103,56 @@ jQuery ->
 #
 #
 
-WiceGridProcessor = (name, base_request_for_filter, base_link_for_show_all_records, link_for_export, parameter_name_for_query_loading, parameter_name_for_focus, environment) ->
+class WiceGridProcessor
+  constructor: (@name, @base_request_for_filter, @base_link_for_show_all_records, @link_for_export, @parameter_name_for_query_loading, @parameter_name_for_focus, @environment) ->
+    @filter_declarations = new Array();
+    @checkIfJsFrameworkIsLoaded()
 
-  this.checkIfJsFrameworkIsLoaded =  ->
+  checkIfJsFrameworkIsLoaded :  ->
     if ! jQuery
       alert "jQuery not loaded, WiceGrid cannot proceed!"
 
-
-  this.checkIfJsFrameworkIsLoaded()
-  this.name = name
-  this.parameter_name_for_query_loading = parameter_name_for_query_loading
-  this.parameter_name_for_focus = parameter_name_for_focus
-  this.base_request_for_filter = base_request_for_filter
-  this.base_link_for_show_all_records = base_link_for_show_all_records
-  this.link_for_export = link_for_export
-  this.filter_declarations = new Array()
-  this.environment = environment
-
-  this.toString =  ->
-    "<WiceGridProcessor instance for grid '" + this.name + "'>"
+  toString :  ->
+    "<WiceGridProcessor instance for grid '" + @name + "'>"
 
 
-  this.process = (dom_id_to_focus)->
-    window.location = this.build_url_with_params(dom_id_to_focus)
+  process : (dom_id_to_focus)->
+    window.location = @build_url_with_params(dom_id_to_focus)
 
 
-  this.set_process_timer = (dom_id_to_focus)->
+  set_process_timer : (dom_id_to_focus)->
 
-    if this.timer
-      clearTimeout(this.timer)
-      this.timer = null
+    if @timer
+      clearTimeout(@timer)
+      @timer = null
 
     processor = this
 
-    this.timer = setTimeout(
+    @timer = setTimeout(
       -> processor.process(dom_id_to_focus)
       1000
     )
 
-  this.reload_page_for_given_grid_state = (grid_state)->
-    request_path = this.grid_state_to_request(grid_state)
-    window.location = this.append_to_url(this.base_link_for_show_all_records, request_path)
+  reload_page_for_given_grid_state : (grid_state)->
+    request_path = @grid_state_to_request(grid_state)
+    window.location = @append_to_url(@base_link_for_show_all_records, request_path)
 
 
-  this.load_query = (query_id)->
-    request = this.append_to_url(
-      this.build_url_with_params()
-      this.parameter_name_for_query_loading +  encodeURIComponent(query_id)
+  load_query : (query_id)->
+    request = @append_to_url(
+      @build_url_with_params()
+      @parameter_name_for_query_loading +  encodeURIComponent(query_id)
     )
 
     window.location = request
 
-  this.save_query = (field_id, query_name, base_path_to_query_controller, grid_state, input_ids)->
+  save_query : (field_id, query_name, base_path_to_query_controller, grid_state, input_ids)->
     if input_ids instanceof Array
       input_ids.each (dom_id) ->
         grid_state.push(['extra[' + dom_id + ']', $('#'+ dom_id)[0].value])
 
 
-    request_path = this.grid_state_to_request(grid_state)
+    request_path = @grid_state_to_request(grid_state)
 
     jQuery.ajax
       url: base_path_to_query_controller
@@ -170,14 +162,14 @@ WiceGridProcessor = (name, base_request_for_filter, base_link_for_show_all_recor
       success:  -> $('#' + field_id).val('')
       type: 'POST'
 
-  this.grid_state_to_request = (grid_state)->
+  grid_state_to_request : (grid_state)->
     jQuery.map(
       grid_state
       (pair) -> encodeURIComponent(pair[0]) + '=' + encodeURIComponent(pair[1])
     ).join('&')
 
 
-  this.append_to_url = (url, str)->
+  append_to_url : (url, str)->
 
     sep = if url.indexOf('?') != -1
       if /[&\?]$/.exec(url)
@@ -188,11 +180,11 @@ WiceGridProcessor = (name, base_request_for_filter, base_link_for_show_all_recor
       '?'
     url + sep + str
 
-  this.build_url_with_params = (dom_id_to_focus)->
+  build_url_with_params : (dom_id_to_focus)->
     results = new Array()
     _this =  this
     jQuery.each(
-      this.filter_declarations
+      @filter_declarations
       (i, filter_declaration)->
         param = _this.read_values_and_form_query_string(filter_declaration.filter_name, filter_declaration.detached, filter_declaration.templates, filter_declaration.ids)
 
@@ -200,31 +192,31 @@ WiceGridProcessor = (name, base_request_for_filter, base_link_for_show_all_recor
           results.push(param)
     )
 
-    res = this.base_request_for_filter
+    res = @base_request_for_filter
     if  results.length != 0
       all_filter_params = results.join('&')
-      res = this.append_to_url(res, all_filter_params)
+      res = @append_to_url(res, all_filter_params)
 
     if dom_id_to_focus
-      res = this.append_to_url(res, this.parameter_name_for_focus + dom_id_to_focus)
+      res = @append_to_url(res, @parameter_name_for_focus + dom_id_to_focus)
 
     res
 
 
 
-  this.reset = ->
-    window.location = this.base_request_for_filter
+  reset : ->
+    window.location = @base_request_for_filter
 
 
-  this.export_to_csv = ->
-    window.location = this.link_for_export
+  export_to_csv : ->
+    window.location = @link_for_export
 
 
-  this.register = (func)->
-    this.filter_declarations.push(func)
+  register : (func)->
+    @filter_declarations.push(func)
 
 
-  this.read_values_and_form_query_string = (filter_name, detached, templates, ids)->
+  read_values_and_form_query_string : (filter_name, detached, templates, ids)->
     res = new Array()
 
     for i in [0 .. templates.length-1]
