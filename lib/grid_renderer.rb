@@ -134,7 +134,7 @@ module Wice
     # * <tt>:param_name</tt> - The name of the HTTP parameter.
     #   The complete HTTP parameter is <tt>"#{grid_name}[#{param_name}][]"</tt>.
     #   The default param_name is 'selected'.
-    # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
+    # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
     # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header.
     #   The default is +true+.
     # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
@@ -146,7 +146,7 @@ module Wice
 
       options = {
         :param_name     => :selected,
-        :td_html_attrs  => {},
+        :html           => {},
         :select_all_buttons => true,
         :object_property => :id
       }
@@ -154,7 +154,7 @@ module Wice
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
       @action_column_present = true
-      @columns << ActionViewColumn.new(@grid, options[:td_html_attrs], options[:param_name],
+      @columns << ActionViewColumn.new(@grid, options[:html], options[:param_name],
             options[:select_all_buttons], options[:object_property], @view)
     end
 
@@ -166,8 +166,8 @@ module Wice
     # column with no name, no filtering and no sorting.
     #
     # * <tt>:name</tt> - Name of the column.
-    # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
-    # * <tt>:class</tt> - a shortcut for <tt>:td_html_attrs => {:class => 'css_class'}</tt>
+    # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
+    # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
     # * <tt>:attribute</tt> - name of a database column (which normally correspond to a model attribute with the
     #   same name). By default the field is assumed to belong to the default table (see documentation for the
     #   +initialize_grid+ method). Parameter <tt>:model_class</tt> allows to specify another table. Presence of
@@ -257,8 +257,8 @@ module Wice
     # tag of the current cell.
     #
     # In case of an array output, please note that if you need to define HTML attributes for all <tt><td></tt>'s in a
-    # column, use +td_html_attrs+. Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt>
-    # element, it will not overwrite the class defined in +td_html_attrs+, or classes added by the grid itself
+    # column, use +html+. Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt>
+    # element, it will not overwrite the class defined in +html+, or classes added by the grid itself
     # (+active_filter+ and +sorted+), instead they will be all concatenated:
     # <tt><td class="sorted user_class_for_columns user_class_for_this_specific_cell"></tt>
     #
@@ -284,9 +284,9 @@ module Wice
         :in_html                    => true,
         :model_class                => nil,
         :negation_in_filter         => Defaults::NEGATION_IN_STRING_FILTERS,
-        :filter                  => true,
+        :filter                     => true,
         :table_alias                => nil,
-        :td_html_attrs              => {}
+        :html                       => {}
       }
 
       opts.assert_valid_keys(options.keys)
@@ -306,7 +306,7 @@ module Wice
       end
 
       if options[:class]
-        options[:td_html_attrs].add_or_append_class_value!(options[:class])
+        options[:html].add_or_append_class_value!(options[:class])
         options.delete(:class)
       end
 

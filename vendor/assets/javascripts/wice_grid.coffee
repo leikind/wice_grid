@@ -29,6 +29,19 @@ setupShowingAllRecords = (wiceGridContainer, gridProcessor) ->
       reloadGrid()
 
 
+setupMultiSelectToggle = (wiceGridContainer)->
+  $('.toggle-multi-select-icon', wiceGridContainer).click ->
+    $(this).prev().each (index, select) ->
+      if (select.multiple == true)
+        select.multiple = false
+        # link_obj.title = expand_label
+      else
+        select.multiple = true
+        # link_obj.title = collapse_label
+
+
+
+
 
 setupSubmitReset = (wiceGridContainer, gridProcessor) ->
   $('.submit', wiceGridContainer).click ->
@@ -96,6 +109,7 @@ jQuery ->
     setupHidingShowingOfFilterRow wiceGridContainer
     setupSubmitReset wiceGridContainer, grid
     setupShowingAllRecords wiceGridContainer, grid
+    setupMultiSelectToggle wiceGridContainer
 
     window[gridName] = grid
 

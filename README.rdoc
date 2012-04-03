@@ -633,9 +633,9 @@ For other classes see <tt>wice_grid.css</tt>. Feel free to customize it accordin
 The +grid+ helper accepts parameter <tt>:html</tt> which is a hash of HTML
 attributes for the table tag.
 
-Another +grid+ parameter is <tt>header_tr_html_attrs</tt> which is a hash of HTML attributes to be added to the first +tr+ tag (or two first +tr+'s if the filter row is present).
+Another +grid+ parameter is <tt>header_tr_html</tt> which is a hash of HTML attributes to be added to the first +tr+ tag (or two first +tr+'s if the filter row is present).
 
-<tt>:td_html_attrs</tt> is a parameter for the +column+ method setting HTML attributes of +td+ tags for a certain column.
+<tt>:html</tt> is a parameter for the +column+ method setting HTML attributes of +td+ tags for a certain column.
 
 ==== Adding classes and styles dynamically
 

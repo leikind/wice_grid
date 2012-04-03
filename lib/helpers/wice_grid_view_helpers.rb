@@ -9,7 +9,7 @@ module Wice
     # The second parameter is a hash of options:
     # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>table</tt> tag.
     # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
-    # * <tt>:header_tr_html_attrs</tt> - a hash of HTML attributes to be included into the first <tt>tr</tt> tag
+    # * <tt>:header_tr_html</tt> - a hash of HTML attributes to be included into the first <tt>tr</tt> tag
     #   (or two first <tt>tr</tt>'s if the filter row is present).
     # * <tt>:show_filters</tt> - defines when the filter is shown. Possible values are:
     #   * <tt>:when_filtered</tt> - the filter is shown when the current table is the result of filtering
@@ -45,7 +45,7 @@ module Wice
     # first block is called for cells of the first column for each row (each ActiveRecord instance), the
     # second block is called for cells of the second column, and so on. See the example:
     #
-    #   <%= grid(@accounts_grid, :html => {:class => 'grid_style', :id => 'accounts_grid'}, :header_tr_html_attrs => {:class => 'grid_headers'}) do |g|
+    #   <%= grid(@accounts_grid, :html => {:class => 'grid_style', :id => 'accounts_grid'}, :header_tr_html => {:class => 'grid_headers'}) do |g|
     #
     #     g.column :name => 'Username', :attribute => 'username' do |account|
     #       account.username
@@ -88,7 +88,7 @@ module Wice
         :allow_showing_all_records     => Defaults::ALLOW_SHOWING_ALL_QUERIES,
         :class                         => nil,
         :extra_request_parameters      => {},
-        :header_tr_html_attrs          => {},
+        :header_tr_html                => {},
         :hide_reset_button             => false,
         :hide_submit_button            => false,
         :hide_csv_button               => false,
@@ -155,7 +155,7 @@ module Wice
     # the longest method? :(
     def grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons) #:nodoc:
 
-      table_html_attrs, header_tr_html_attrs = options[:html], options[:header_tr_html_attrs]
+      table_html_attrs, header_tr_html = options[:html], options[:header_tr_html]
 
       table_html_attrs.add_or_append_class_value!('wice-grid', true)
 
@@ -203,7 +203,7 @@ module Wice
         end
       end
 
-      title_row_attrs = header_tr_html_attrs.clone
+      title_row_attrs = header_tr_html.clone
       title_row_attrs.add_or_append_class_value!('wice_grid_title_row', true)
 
       content << %!<tr #{tag_options(title_row_attrs, true)}>!
@@ -279,7 +279,7 @@ module Wice
 
         else # some filters are present in the table
 
-          filter_row_attrs = header_tr_html_attrs.clone
+          filter_row_attrs = header_tr_html.clone
           filter_row_attrs.add_or_append_class_value!('wg-filter-row', true)
           filter_row_attrs['id'] = filter_row_id
 
@@ -320,7 +320,7 @@ module Wice
 
       rendering.each_column(:in_html) do |column|
         unless column.css_class.blank?
-          column.td_html_attrs.add_or_append_class_value!(column.css_class)
+          column.html.add_or_append_class_value!(column.css_class)
         end
       end
 
@@ -360,7 +360,7 @@ module Wice
         rendering.each_column(:in_html) do |column|
           cell_block = column.cell_rendering_block
 
-          opts = column.td_html_attrs.clone
+          opts = column.html.clone
 
           column_block_output = if column.class == Wice::ActionViewColumn
             cell_block.call(ar, params)

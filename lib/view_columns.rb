@@ -8,7 +8,7 @@ module Wice
     include ActionView::Helpers::AssetTagHelper
 
     # fields defined from the options parameter
-    FIELDS = [:attribute, :name, :td_html_attrs, :filter, :model_class, :allow_multiple_selection,
+    FIELDS = [:attribute, :name, :html, :filter, :model_class, :allow_multiple_selection,
               :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload]
 
     attr_accessor *FIELDS
@@ -148,12 +148,12 @@ module Wice
   end
 
   class ActionViewColumn < ViewColumn #:nodoc:
-    def initialize(grid_obj, td_html_attrs, param_name, select_all_buttons, object_property, view)  #:nodoc:
+    def initialize(grid_obj, html, param_name, select_all_buttons, object_property, view)  #:nodoc:
       @view = view
       @select_all_buttons   = select_all_buttons
       self.grid             = grid_obj
-      self.td_html_attrs    = td_html_attrs
-      self.td_html_attrs.add_or_append_class_value!('sel')
+      self.html             = html
+      self.html.add_or_append_class_value!('sel')
       grid_name             = self.grid.name
       @param_name           = param_name
       @cell_rendering_block = lambda do |object, params|
@@ -258,10 +258,9 @@ module Wice
       else
         if self.allow_multiple_selection
           select_options[:multiple] = params.is_a?(Array) && params.size > 1
-          select_toggle = content_tag(:a, '',
+          select_toggle = content_tag(:span, '',
             :title => 'Expand/Collapse',
-            :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');", # TO DO: to locales
-            :class => 'toggle_multi_select_icon clickable'
+            :class => 'toggle-multi-select-icon clickable'
           )
         else
           select_options[:multiple] = false
