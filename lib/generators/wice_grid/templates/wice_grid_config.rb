@@ -131,7 +131,7 @@ if defined?(Wice::Defaults)
   Wice::Defaults::DATE_PARSER = lambda{|date_string| Date.parse(date_string) }
 
   # Icon to popup the calendar.
-  Wice::Defaults::CALENDAR_ICON = "/images/icons/grid/calendar_view_month.png"
+  Wice::Defaults::CALENDAR_ICON = "/assets/icons/grid/calendar_view_month.png"
 
   # popup calendar will be shown relative to the popup trigger element or to the mouse pointer
   Wice::Defaults::POPUP_PLACEMENT_STRATEGY = :trigger # :pointer
