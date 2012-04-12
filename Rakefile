@@ -32,7 +32,7 @@ begin
     gem.email = "yuri.leikind@gmail.com"
     gem.homepage = "http://github.com/lekind/wice_grid"
     gem.authors = ["Yuri Leikind"]
-    gem.add_development_dependency "will_paginate", ">= 3.0.pre2"
+    gem.add_development_dependency "will_paginate", ">= 3.0.3"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new

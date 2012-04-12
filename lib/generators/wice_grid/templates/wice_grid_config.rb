@@ -1,13 +1,5 @@
 if defined?(Wice::Defaults)
 
-  Wice::Defaults::JS_FRAMEWORK = :<%= active_js_framework %>
-  # Wice::Defaults::JS_FRAMEWORK = :<%= inactive_js_framework %>
-
-  # Style of the view helper.
-  # +false+ is a usual view helper.
-  # +true+ will allow to embed erb content in column (cell) definitions.
-  Wice::Defaults::ERB_MODE = false
-
   # Default number of rows to show per page.
   Wice::Defaults::PER_PAGE = 20
 
@@ -23,30 +15,11 @@ if defined?(Wice::Defaults)
   # for filter related icons (filter icon, reset icon, show/hide icon), otherwise an additional table column is added.
   Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS = true
 
-  Wice::Defaults::SHOW_HIDE_FILTER_ICON = 'icons/grid/page_white_find.png'
-
-
-  # Icon to trigger filtering.
-  Wice::Defaults::FILTER_ICON = 'icons/grid/table_refresh.png'
-
-  # Icon to reset the filter.
-  Wice::Defaults::RESET_ICON = "icons/grid/table.png"
-
-  # Icon to reset the filter.
-  Wice::Defaults::TOGGLE_MULTI_SELECT_ICON = "/images/icons/grid/expand.png"
-
-  # CSV Export icon.
-  Wice::Defaults::CSV_EXPORT_ICON = "/images/icons/grid/page_white_excel.png"
-
-  # Tick-All icon for the action column.
-  Wice::Defaults::TICK_ALL_ICON = "/images/icons/grid/tick_all.png"
-
-  # Untick-All icon for the action column.
-  Wice::Defaults::UNTICK_ALL_ICON = "/images/icons/grid/untick_all.png"
-
   # The label of the first option of a custom dropdown list meaning 'All items'
   Wice::Defaults::CUSTOM_FILTER_ALL_LABEL = '--'
 
+  # A list of classes for the table tag of the grid
+  Wice::Defaults::DEFAULT_TABLE_CLASSES = ['table', 'table-bordered', 'table-striped']
 
   # Allow switching between a single and multiple selection modes in custom filters (dropdown boxes)
   Wice::Defaults::ALLOW_MULTIPLE_SELECTION = true
@@ -158,7 +131,7 @@ if defined?(Wice::Defaults)
   Wice::Defaults::DATE_PARSER = lambda{|date_string| Date.parse(date_string) }
 
   # Icon to popup the calendar.
-  Wice::Defaults::CALENDAR_ICON = "/images/icons/grid/calendar_view_month.png"
+  Wice::Defaults::CALENDAR_ICON = "/assets/icons/grid/calendar_view_month.png"
 
   # popup calendar will be shown relative to the popup trigger element or to the mouse pointer
   Wice::Defaults::POPUP_PLACEMENT_STRATEGY = :trigger # :pointer

@@ -8,8 +8,8 @@ module Wice
     include ActionView::Helpers::AssetTagHelper
 
     # fields defined from the options parameter
-    FIELDS = [:attribute_name, :column_name, :td_html_attrs, :no_filter, :model_class, :allow_multiple_selection,
-              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :allow_ordering, :auto_reload]
+    FIELDS = [:attribute, :name, :html, :filter, :model_class, :allow_multiple_selection,
+              :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload]
 
     attr_accessor *FIELDS
 
@@ -45,16 +45,14 @@ module Wice
       (! detach_with_id.blank?).to_s
     end
 
-    def yield_javascript #:nodoc:
+    def yield_declaration #:nodoc:
       declaration = yield_declaration_of_column_filter
       if declaration
-        %!#{@grid.name}.register( {
-          filter_name : "#{self.column_name}",
-          detached : #{detachness},
-          #{declaration}
-        } ); !
-      else
-        ''
+        {
+          :filter_name => self.name,
+          :detached    => detachness,
+          :declaration => declaration
+        }
       end
     end
 
@@ -88,16 +86,16 @@ module Wice
 
     # bad name, because for the main table the name is not really 'fully_qualified'
     def attribute_name_fully_qualified_for_all_but_main_table_columns #:nodoc:
-      self.main_table ? attribute_name : table_alias_or_table_name + '.' + attribute_name
+      self.main_table ? attribute : table_alias_or_table_name + '.' + attribute
     end
 
     def fully_qualified_attribute_name #:nodoc:
-      table_alias_or_table_name + '.' + attribute_name
+      table_alias_or_table_name + '.' + attribute
     end
 
 
     def filter_shown? #:nodoc:
-      self.attribute_name && ! self.no_filter
+      self.attribute && self.filter
     end
 
     def filter_shown_in_main_table? #:nodoc:
@@ -110,7 +108,7 @@ module Wice
     end
 
     def capable_of_hosting_filter_related_icons?  #:nodoc:
-      self.attribute_name.blank? && self.column_name.blank? && ! self.filter_shown?
+      self.attribute.blank? && self.name.blank? && ! self.filter_shown?
     end
 
     def has_auto_reloading_input?  #:nodoc:
@@ -150,12 +148,12 @@ module Wice
   end
 
   class ActionViewColumn < ViewColumn #:nodoc:
-    def initialize(grid_obj, td_html_attrs, param_name, select_all_buttons, object_property, view)  #:nodoc:
+    def initialize(grid_obj, html, param_name, select_all_buttons, object_property, view)  #:nodoc:
       @view = view
       @select_all_buttons   = select_all_buttons
       self.grid             = grid_obj
-      self.td_html_attrs    = td_html_attrs
-      self.td_html_attrs.add_or_append_class_value!('sel')
+      self.html             = html
+      self.html.add_or_append_class_value!('sel')
       grid_name             = self.grid.name
       @param_name           = param_name
       @cell_rendering_block = lambda do |object, params|
@@ -177,15 +175,15 @@ module Wice
       false
     end
 
-    def column_name  #:nodoc:
+    def name  #:nodoc:
       return '' unless @select_all_buttons
-      select_all_tootip   = WiceGridNlMessageProvider.get_message(:SELECT_ALL)
-      deselect_all_tootip = WiceGridNlMessageProvider.get_message(:DESELECT_ALL)
 
-      html = content_tag(:span, image_tag(Defaults::TICK_ALL_ICON, :alt => select_all_tootip),
-                         :class => 'clickable select_all', :title => select_all_tootip) + ' ' +
-             content_tag(:span, image_tag(Defaults::UNTICK_ALL_ICON, :alt => deselect_all_tootip),
-                         :class => 'clickable deselect_all', :title => deselect_all_tootip)
+      html = content_tag(:div, '',
+        :class => 'clickable select-all',
+        :title => NlMessage['select_all']) + ' ' +
+      content_tag(:div, '',
+        :class => 'clickable deselect-all',
+        :title => NlMessage['deselect_all'])
 
       js = JsAdaptor.action_column_initialization(grid.name)
 
@@ -215,9 +213,12 @@ module Wice
     end
 
     def yield_declaration_of_column_filter #:nodoc:
-      %$templates : ['#{@query}', '#{@query2}'],
-          ids : ['#{@dom_id}', '#{@dom_id2}']  $
+      {
+        :templates => [@query, @query2],
+        :ids       => [@dom_id, @dom_id2]
+      }
     end
+
 
     def has_auto_reloading_input? #:nodoc:
       auto_reload
@@ -257,10 +258,10 @@ module Wice
       else
         if self.allow_multiple_selection
           select_options[:multiple] = params.is_a?(Array) && params.size > 1
-          select_toggle = content_tag(:a,
-            tag(:img, :alt => 'Expand/Collapse', :src => Defaults::TOGGLE_MULTI_SELECT_ICON),
-            :href => "javascript: toggle_multi_select('#{@dom_id}', this, 'Expand', 'Collapse');", # TO DO: to locales
-            :class => 'toggle_multi_select_icon', :title => 'Expand')
+          select_toggle = content_tag(:span, '',
+            :title => 'Expand/Collapse',
+            :class => 'toggle-multi-select-icon clickable'
+          )
         else
           select_options[:multiple] = false
           select_toggle = ''
@@ -280,10 +281,14 @@ module Wice
       select_toggle.html_safe_if_necessary + '</span>'.html_safe_if_necessary
     end
 
+
     def yield_declaration_of_column_filter #:nodoc:
-      %$templates : ['#{@query_without_equals_sign}'],
-          ids : ['#{@dom_id}']  $
+      {
+        :templates => [@query_without_equals_sign],
+        :ids       => [@dom_id]
+      }
     end
+
 
     def has_auto_reloading_select? #:nodoc:
       auto_reload
@@ -357,29 +362,28 @@ module Wice
     def render_calendar_filter_internal(params) #:nodoc:
       html1, js1 = datetime_calendar_prototype(params[:fr], @view,
         {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
+        :title => NlMessage['date_selector_tooltip_from'])
       html2, js2 = datetime_calendar_prototype(params[:to], @view,
         {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
+        :title => NlMessage['date_selector_tooltip_to'])
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
 
 
     def render_filter_internal(params) #:nodoc:
       # falling back to the Rails helpers for Datetime
-      if helper_style == :standard || Defaults::JS_FRAMEWORK == :jquery
-        prepare_for_standard_filter
-        render_standard_filter_internal(params)
-      else
-        prepare_for_calendar_filter
-        render_calendar_filter_internal(params)
-      end
+      prepare_for_standard_filter
+      render_standard_filter_internal(params)
     end
 
+
     def yield_declaration_of_column_filter #:nodoc:
-      %$templates : [ #{@queris_ids.collect{|tuple| "'" + tuple[0] + "'"}.join(', ')} ],
-          ids : [ #{@queris_ids.collect{|tuple| "'" + tuple[1] + "'"}.join(', ')} ] $
+      {
+        :templates => @queris_ids.collect{|tuple|  tuple[0] },
+        :ids       => @queris_ids.collect{|tuple|  tuple[1] }
+      }
     end
+
 
     def has_auto_reloading_calendar? #:nodoc:
       auto_reload && helper_style == :calendar
@@ -401,22 +405,16 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
 
-      calendar_helper_method = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
-        :date_calendar_prototype
-      else
-        :date_calendar_jquery
-      end
-
-      html1, js1 = send(calendar_helper_method, params[:fr], @view,
+      html1, js1 = date_calendar_jquery(params[:fr], @view,
         {:include_blank => true, :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_FROM))
-      html2, js2 = send(calendar_helper_method, params[:to], @view,
+        :title => NlMessage['date_selector_tooltip_from'])
+      html2, js2 = date_calendar_jquery(params[:to], @view,
         {:include_blank => true, :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => WiceGridNlMessageProvider.get_message(:DATE_SELECTOR_TOOLTIP_TO))
+        :title => NlMessage['date_selector_tooltip_to'])
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
-    
+
     def render_filter_internal(params) #:nodoc:
 
       if helper_style == :standard
@@ -454,7 +452,7 @@ module Wice
           end +
           check_box_tag(parameter_name2, '1', (params[:n] == '1'),
             :id => @dom_id2,
-            :title => WiceGridNlMessageProvider.get_message(:NEGATION_CHECKBOX_TITLE),
+            :title => NlMessage['negation_checkbox_title'],
             :class => 'negation_checkbox') +
           '</div>'
       else
@@ -463,15 +461,21 @@ module Wice
       end
     end
 
+
     def yield_declaration_of_column_filter #:nodoc:
       if negation
-        %$templates : ['#{@query}', '#{@query2}'],
-            ids : ['#{@dom_id}', '#{@dom_id2}'] $
+        {
+          :templates => [@query, @query2],
+          :ids       => [@dom_id, @dom_id2]
+        }
       else
-        %$templates : ['#{@query}'],
-            ids : ['#{@dom_id}'] $
+        {
+          :templates => [@query],
+          :ids       => [@dom_id]
+        }
       end
     end
+
 
     def has_auto_reloading_input? #:nodoc:
       auto_reload

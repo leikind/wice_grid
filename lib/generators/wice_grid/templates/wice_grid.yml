@@ -4,8 +4,6 @@ en:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Show filter
     hide_filter_tooltip: Hide filter
@@ -14,8 +12,8 @@ en:
     reset_filter_tooltip: Reset
     boolean_filter_true_label: "yes"
     boolean_filter_false_label: "no"
-    previous_label: « Previous
-    next_label: Next »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: From
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -53,8 +51,6 @@ is:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Sýna síumöguleika
     hide_filter_tooltip: Fela síumoguleika
@@ -63,8 +59,8 @@ is:
     reset_filter_tooltip: Hreinsa
     boolean_filter_true_label: Já
     boolean_filter_false_label: Nei
-    previous_label: « Fyrri síða
-    next_label: Næsta síða »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: Frá
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -102,8 +98,6 @@ nl:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Filter tonen
     hide_filter_tooltip: Filter verbergen
@@ -112,8 +106,8 @@ nl:
     reset_filter_tooltip: Terugstellen
     boolean_filter_true_label: ja
     boolean_filter_false_label: neen
-    previous_label: « Vorige
-    next_label: Volgende »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: Vanaf
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -150,8 +144,6 @@ fr:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Afficher le filtre
     hide_filter_tooltip: Cacher le filtrer
@@ -160,8 +152,8 @@ fr:
     reset_filter_tooltip: Effacer
     boolean_filter_true_label: oui
     boolean_filter_false_label: non
-    previous_label: « Page précédente
-    next_label: Page suivante »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: De
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -198,8 +190,6 @@ ru:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Показать фильтр
     hide_filter_tooltip: Спрятать фильтр
@@ -208,8 +198,8 @@ ru:
     reset_filter_tooltip: Сброс
     boolean_filter_true_label: да
     boolean_filter_false_label: нет
-    previous_label: « Предыдущая
-    next_label: Следующая »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: С
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -247,8 +237,6 @@ pt:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Mostrar o filtro
     hide_filter_tooltip: Esconder o filtro
@@ -257,8 +245,8 @@ pt:
     reset_filter_tooltip: Reinicializar
     boolean_filter_true_label: sim
     boolean_filter_false_label: não
-    previous_label: « Página precedente
-    next_label: Página seguinte »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: De
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -295,8 +283,6 @@ pt-BR:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Mostrar o filtro
     hide_filter_tooltip: Esconder o filtro
@@ -305,8 +291,8 @@ pt-BR:
     reset_filter_tooltip: Reinicializar
     boolean_filter_true_label: sim
     boolean_filter_false_label: não
-    previous_label: « Anterior
-    next_label: Próximo »
+    previous_label: «
+    next_label: »
     date_selector_tooltip_from: De
     date_selector_tooltip_to: a
     negation_checkbox_title: Excluir
@@ -335,8 +321,6 @@ sk:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Zobraziť filter
     hide_filter_tooltip: Skryť filter
@@ -345,8 +329,8 @@ sk:
     reset_filter_tooltip: Zrušiť filtre
     boolean_filter_true_label: "áno"
     boolean_filter_false_label: "nie"
-    previous_label: « Predchádzajúci
-    next_label: Následujúci »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: Dátum od
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -383,8 +367,6 @@ cz:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Zobrazit filtr
     hide_filter_tooltip: Skrýt filtr
@@ -393,8 +375,8 @@ cz:
     reset_filter_tooltip: Zrušit filtr
     boolean_filter_true_label: "áno"
     boolean_filter_false_label: "ne"
-    previous_label: « Předešlý
-    next_label: Následující »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: Dátum od
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -431,8 +413,6 @@ de:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: Filter einblenden
     hide_filter_tooltip: Filter ausblenden
@@ -441,8 +421,8 @@ de:
     reset_filter_tooltip: Reset
     boolean_filter_true_label: "Ja"
     boolean_filter_false_label: "Nein"
-    previous_label: « Letzte
-    next_label: Nächste »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: Von
     # Title of the icon clicking on which will show the calendar to set the TO date.
@@ -479,8 +459,6 @@ zh:
       - :year
       - :month
       - :day
-  will_paginate:
-    page_gap: "..."
   wice_grid:
     show_filter_tooltip: 显示过滤
     hide_filter_tooltip: 隐藏过滤
@@ -489,8 +467,8 @@ zh:
     reset_filter_tooltip: 清除过滤
     boolean_filter_true_label: "是"
     boolean_filter_false_label: "否"
-    previous_label: « 前一页
-    next_label: 下一页 »
+    previous_label: «
+    next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
     date_selector_tooltip_from: 从
     # Title of the icon clicking on which will show the calendar to set the TO date.

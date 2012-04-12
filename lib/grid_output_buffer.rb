@@ -7,7 +7,6 @@ module Wice
     attr_accessor :return_empty_strings_for_nonexistent_filters
 
     def stubborn_output_mode=(m)
-      RAILS_DEFAULT_LOGGER.debug("=== WiceGrid: detached filters are requested, postponing output till the second call of the view helper") if m
       @stubborn_output_mode = m
     end
 
@@ -40,7 +39,9 @@ module Wice
           raise  WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!")
         end
       end
-      raise  WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page") if @filters[detach_with_id] == false
+      if @filters[detach_with_id] == false
+        raise  WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page")
+      end
       res = @filters[detach_with_id]
       @filters[detach_with_id] = false
       return res

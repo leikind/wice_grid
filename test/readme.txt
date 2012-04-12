@@ -1,0 +1,1 @@
+all tests are (temporarily) in a separate application: https://github.com/leikind/wice_grid_testbed

@@ -14,7 +14,6 @@ module Wice
     attr_reader :blank_slate_handler
     attr_reader :last_row_handler
     attr_reader :grid
-    attr_accessor :erb_mode
 
     attr_accessor :reset_button_present, :submit_button_present, :show_hide_button_present, :csv_export_icon_present
 
@@ -41,7 +40,7 @@ module Wice
 
 
     def add_column(vc)  #:nodoc:
-      @columns_table[vc.fully_qualified_attribute_name] = vc if vc.attribute_name
+      @columns_table[vc.fully_qualified_attribute_name] = vc if vc.attribute
       @columns << vc
     end
 
@@ -54,19 +53,15 @@ module Wice
     end
 
     def each_column_label(filter = nil)  #:nodoc:
-      filter_columns(filter).each{|col| yield col.column_name}
+      filter_columns(filter).each{|col| yield col.name}
     end
 
     def column_labels(filter = nil)  #:nodoc:
-      filter_columns(filter).collect(&:column_name)
+      filter_columns(filter).collect(&:name)
     end
 
     def each_column(filter = nil)  #:nodoc:
       filter_columns(filter).each{|col| yield col}
-    end
-
-    def contains_a_text_input?  #:nodoc:
-      filter_columns(:in_html).detect(&:contains_a_text_input)
     end
 
     def each_column_aware_of_one_last_one(filter = nil)  #:nodoc:
@@ -89,19 +84,17 @@ module Wice
 
 
     def each_column_with_attribute  #:nodoc:
-      @columns.select(&:attribute_name).each{|col| yield col}
+      @columns.select(&:attribute).each{|col| yield col}
     end
 
     alias_method :each, :each_column
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      tooltip = WiceGridNlMessageProvider.get_message(:CSV_EXPORT_TOOLTIP)
       @csv_export_icon_present = true
-      image_tag(Defaults::CSV_EXPORT_ICON,
-        :title => tooltip,
-        :class => 'clickable export_to_csv_button',
-        :alt   => tooltip
+      content_tag(:div, '',
+        :title => NlMessage['csv_export_tooltip'],
+        :class => 'clickable export_to_csv_button'
       )
     end
 
@@ -141,7 +134,7 @@ module Wice
     # * <tt>:param_name</tt> - The name of the HTTP parameter.
     #   The complete HTTP parameter is <tt>"#{grid_name}[#{param_name}][]"</tt>.
     #   The default param_name is 'selected'.
-    # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
+    # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
     # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header.
     #   The default is +true+.
     # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
@@ -153,7 +146,7 @@ module Wice
 
       options = {
         :param_name     => :selected,
-        :td_html_attrs  => {},
+        :html           => {},
         :select_all_buttons => true,
         :object_property => :id
       }
@@ -161,7 +154,7 @@ module Wice
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
       @action_column_present = true
-      @columns << ActionViewColumn.new(@grid, options[:td_html_attrs], options[:param_name],
+      @columns << ActionViewColumn.new(@grid, options[:html], options[:param_name],
             options[:select_all_buttons], options[:object_property], @view)
     end
 
@@ -172,15 +165,15 @@ module Wice
     # The only parameter is a hash of options. None of them is optional. If no options are supplied, the result will be a
     # column with no name, no filtering and no sorting.
     #
-    # * <tt>:column_name</tt> - Name of the column.
-    # * <tt>:td_html_attrs</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
-    # * <tt>:class</tt> - a shortcut for <tt>:td_html_attrs => {:class => 'css_class'}</tt>
-    # * <tt>:attribute_name</tt> - name of a database column (which normally correspond to a model attribute with the
+    # * <tt>:name</tt> - Name of the column.
+    # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
+    # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
+    # * <tt>:attribute</tt> - name of a database column (which normally correspond to a model attribute with the
     #   same name). By default the field is assumed to belong to the default table (see documentation for the
     #   +initialize_grid+ method). Parameter <tt>:model_class</tt> allows to specify another table. Presence of
     #   this parameter
     #   * adds sorting capabilities by this field
-    #   * automatically creates a filter based on the type of the field unless parameter <tt>:no_filter</tt> is set to true.
+    #   * automatically creates a filter based on the type of the field unless parameter <tt>:filter</tt> is set to false.
     #     The following filters exist for the following types:
     #     * <tt>string</tt> - a text field
     #     * <tt>integer</tt> and <tt>float</tt>  - two text fields to specify the range. Both limits or only one
@@ -190,11 +183,11 @@ module Wice
     #     * <tt>date</tt> - two sets of standard date dropdown lists so specify the time range.
     #     * <tt>datetime</tt> - two sets of standard datetime dropdown lists so specify the time range. This filter
     #       is far from being user-friendly due to the number of dropdown lists.
-    # * <tt>:no_filter</tt> - Turns off filters even if <tt>:attribute_name</tt> is specified.
+    # * <tt>:filter</tt> - Disables filters when set to false.
     #   This is needed if sorting is required while  filters are not.
-    # * <tt>:allow_ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
-    #   (i.e. if <tt>:attribute_name</tt> is defined, ordering is enabled)
-    # * <tt>:model_class</tt> - Name of the model class to which <tt>:attribute_name</tt> belongs to if this is not the main table.
+    # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
+    #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
+    # * <tt>:model_class</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
     # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord
     #   constructs a query where the second join provides an alias for the joined table. Setting <tt>:table_alias</tt>
     #   to this alias will enable WiceGrid to order and filter by columns belonging to different associatiations  but
@@ -208,8 +201,8 @@ module Wice
     #   * Hash - The keys of the hash become the labels of the generated dropdown list,
     #     while the values will be values of options of the dropdown list:
     #   * <tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the field specified by
-    #     <tt>:attribute_name</tt> and <tt>:model_class</tt>.
-    #     <tt>:attribute_name</tt> throughout all pages. In other words, this runs an SQL query without +offset+ and +limit+
+    #     <tt>:attribute</tt> and <tt>:model_class</tt>.
+    #     <tt>:attribute</tt> throughout all pages. In other words, this runs an SQL query without +offset+ and +limit+
     #     clauses and  with <tt>distinct(table.field)</tt> instead of <tt>distinct(*)</tt>
     #   * any other symbol name (method name) - The dropdown list is populated by all unique value returned by the
     #     method with this name sent to <em>all</em> ActiveRecord objects throughout all pages. The main difference
@@ -255,7 +248,7 @@ module Wice
     #   * <tt>:calendar</tt> - a Javascript popup calendar control
     # * <tt>:negation_in_filter</tt> - turn on/off the negation checkbox in string filters
     # * <tt>:auto_reload</tt> - a boolean value specifying if a change in a filter triggers reloading of the grid. Works with all
-    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters. 
+    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters.
     #   The default is false. (see +AUTO_RELOAD+ in the configuration file).
     #
     # The block parameter is an ActiveRecord instance. This block is called for every ActiveRecord shown, and the return
@@ -264,24 +257,24 @@ module Wice
     # tag of the current cell.
     #
     # In case of an array output, please note that if you need to define HTML attributes for all <tt><td></tt>'s in a
-    # column, use +td_html_attrs+. Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt>
-    # element, it will not overwrite the class defined in +td_html_attrs+, or classes added by the grid itself
+    # column, use +html+. Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt>
+    # element, it will not overwrite the class defined in +html+, or classes added by the grid itself
     # (+active_filter+ and +sorted+), instead they will be all concatenated:
     # <tt><td class="sorted user_class_for_columns user_class_for_this_specific_cell"></tt>
     #
     # It is up to the developer to make sure that what in rendered in column cells
-    # corresponds to sorting and filtering specified by parameters <tt>:attribute_name</tt> and <tt>:model_class</tt>.
+    # corresponds to sorting and filtering specified by parameters <tt>:attribute</tt> and <tt>:model_class</tt>.
 
     def column(opts = {}, &block)
       options = {
         :allow_multiple_selection   => Defaults::ALLOW_MULTIPLE_SELECTION,
-        :allow_ordering             => true,
-        :attribute_name             => nil,
+        :ordering                   => true,
+        :attribute                  => nil,
         :auto_reload                => Defaults::AUTO_RELOAD,
-        :boolean_filter_false_label => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_FALSE_LABEL),
-        :boolean_filter_true_label  => WiceGridNlMessageProvider.get_message(:BOOLEAN_FILTER_TRUE_LABEL),
+        :boolean_filter_false_label => NlMessage['boolean_filter_false_label'],
+        :boolean_filter_true_label  => NlMessage['boolean_filter_true_label'],
         :class                      => nil,
-        :column_name                => '',
+        :name                       => '',
         :custom_filter              => nil,
         :custom_order               => nil,
         :detach_with_id             => nil,
@@ -291,9 +284,9 @@ module Wice
         :in_html                    => true,
         :model_class                => nil,
         :negation_in_filter         => Defaults::NEGATION_IN_STRING_FILTERS,
-        :no_filter                  => false,
+        :filter                     => true,
         :table_alias                => nil,
-        :td_html_attrs              => {}
+        :html                       => {}
       }
 
       opts.assert_valid_keys(options.keys)
@@ -304,31 +297,31 @@ module Wice
         raise WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
       end
 
-      if options[:attribute_name].nil? && options[:model_class]
-        raise WiceGridArgumentError.new("Option :model_class is only used together with :attribute_name")
+      if options[:attribute].nil? && options[:model_class]
+        raise WiceGridArgumentError.new("Option :model_class is only used together with :attribute")
       end
 
-      if options[:attribute_name] && options[:attribute_name].index('.')
-        raise WiceGridArgumentError.new("Invalid attribute name #{options[:attribute_name]}. An attribute name must not contain a table name!")
+      if options[:attribute] && options[:attribute].index('.')
+        raise WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
       end
 
       if options[:class]
-        options[:td_html_attrs].add_or_append_class_value!(options[:class])
+        options[:html].add_or_append_class_value!(options[:class])
         options.delete(:class)
       end
 
       if block.nil?
-        if ! options[:attribute_name].blank?
-          block = lambda{|obj| obj.send(options[:attribute_name])}
+        if ! options[:attribute].blank?
+          block = lambda{|obj| obj.send(options[:attribute])}
         else
           raise WiceGridArgumentError.new(
-            "Missing column block without attribute_name defined. You can only omit the block if attribute_name is present.")
+            "Missing column block without attribute defined. You can only omit the block if attribute is present.")
         end
       end
 
       klass = ViewColumn
-      if options[:attribute_name] &&
-          col_type_and_table_name = @grid.declare_column(options[:attribute_name], options[:model_class],
+      if options[:attribute] &&
+          col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model_class],
             options[:custom_filter],  options[:table_alias])
 
         db_column, table_name, main_table = col_type_and_table_name
@@ -373,7 +366,7 @@ module Wice
         else
           klass = ViewColumn.handled_type[col_type] || ViewColumn
         end # custom_filter
-      end # attribute_name
+      end # attribute
 
       vc = klass.new(block, options, @grid, table_name, main_table, custom_filter, @view)
 
@@ -487,10 +480,10 @@ module Wice
 
     def column_link(column, direction, params, extra_parameters = {})   #:nodoc:
 
-      column_attribute_name = if column.attribute_name.index('.') or column.main_table
-        column.attribute_name
+      column_attribute_name = if column.attribute.index('.') or column.main_table
+        column.attribute
       else
-        column.table_alias_or_table_name + '.' + column.attribute_name
+        column.table_alias_or_table_name + '.' + column.attribute
       end
 
       query_params = {@grid.name => {

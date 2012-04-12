@@ -60,14 +60,13 @@ module Wice
     #   all pages with the current filters. Can be a lambda object or a controller method name (symbol). The argument to
     #   the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     #
-    # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, <tt>:name</tt>, and <tt>:erb_mode</tt>
+    # Defaults for parameters <tt>:per_page</tt>, <tt>:order_direction</tt>, and <tt>:name</tt>
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting
     # without having to repeat it for every grid instance.
 
 
     def initialize_grid(klass, opts = {})
       Wice::JsAdaptor.init
-      @__wice_grid_on_page = true
       wg = WiceGrid.new(klass, self, opts)
       self.wice_grid_instances = [] if self.wice_grid_instances.nil?
       self.wice_grid_instances << wg
@@ -134,17 +133,17 @@ module Wice
     # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of
     #   <tt>initialize_grid</tt>, the parameter is optional, and when absent, the name
     #   <tt>'grid'</tt> is assumed
-    # * <tt>:attribute_name</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute_name</tt> and
+    # * <tt>:attribute</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute</tt> and
     #   <tt>:model_class</tt> of the column declaration with the target custom filter.
     # * <tt>:value</tt> - the value of the column filter.
     def wice_grid_custom_filter_params(opts = {})
       options = {:grid_name => 'grid',
-                 :attribute_name => nil,
+                 :attribute => nil,
                  :model_class => nil,
                  :value => nil}
       options.merge!(opts)
 
-      [:attribute_name, :value].each do |key|
+      [:attribute, :value].each do |key|
         raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
       end
 
@@ -153,9 +152,9 @@ module Wice
           options[:model_class] = options[:model_class].constantize if options[:model_class].is_a? String
           raise Wice::WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
         end
-        options[:model_class].table_name + '.' + options[:attribute_name]
+        options[:model_class].table_name + '.' + options[:attribute]
       else
-        options[:attribute_name]
+        options[:attribute]
       end
 
       {"#{options[:grid_name]}[f][#{attr_name}][]" => options[:value]}
@@ -165,7 +164,7 @@ module Wice
 
 
     def send_file_rails2(path, options = {}) #:doc:
-      raise MissingFile, "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
+      raise "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
 
       options[:length]   ||= File.size(path)
       options[:filename] ||= File.basename(path) unless options[:url_based_filename]

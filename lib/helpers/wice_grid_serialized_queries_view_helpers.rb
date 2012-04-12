@@ -26,7 +26,7 @@ module Wice
       end
       parameters <<  ['authenticity_token', form_authenticity_token]
       notification_messages_id = "#{grid_name}_notification_messages"
-      (%! <div class="wice_grid_query_panel"><h3>#{WiceGridNlMessageProvider.get_message(:SAVED_QUERY_PANEL_TITLE)}</h3>! +
+      (%! <div class="wice_grid_query_panel"><h3>#{NlMessage['saved_query_panel_title']}</h3>! +
         saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
         %!<div id="#{notification_messages_id}"  onmouseover="#{Wice::JsAdaptor.fade_this(notification_messages_id)}"></div>! +
         if block_given?
@@ -37,7 +37,7 @@ module Wice
         end +
         '<div class="wg-saved-query-input-controls">'+
         text_field_tag(id_and_name,  '', :size => 20, :onkeydown=>'', :id => id_and_name) +
-        button_to_function(WiceGridNlMessageProvider.get_message(:SAVE_QUERY_BUTTON_LABEL),  "#{grid_name}_save_query()" ) +
+        button_to_function(NlMessage['save_query_button_label'],  "#{grid_name}_save_query()" ) +
         '</div></div>' +
         javascript_tag do
           JsAdaptor.call_to_save_query_and_key_event_initialization_for_saving_queries(
@@ -49,9 +49,9 @@ module Wice
 
     def saved_queries_list(grid_name, saved_query = nil, extra_parameters = {})  #:nodoc:
 
-      link_title            = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_LINK_TITLE)
-      deletion_confirmation = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_DELETION_CONFIRMATION)
-      deletion_link_title   = WiceGridNlMessageProvider.get_message(:SAVED_QUERY_DELETION_LINK_TITLE)
+      link_title            = NlMessage['saved_query_link_title']
+      deletion_confirmation = NlMessage['saved_query_deletion_confirmation']
+      deletion_link_title   = NlMessage['saved_query_deletion_link_title']
 
       query_store_model = ::Wice::get_query_store_model
       currently_loaded_query_id = saved_query ? saved_query.id : nil

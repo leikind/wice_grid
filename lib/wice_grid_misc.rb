@@ -71,11 +71,11 @@ module Wice
   end
 
 
-  module WiceGridNlMessageProvider #:nodoc:
+  module NlMessage #:nodoc:
     class << self
 
-      def get_message(key) #:nodoc:
-        translated = I18n.t(key.to_s.downcase, :scope => 'wice_grid')
+      def [](key) #:nodoc:
+        translated = I18n.t(key, :scope => 'wice_grid')
       end
 
     end

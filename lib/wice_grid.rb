@@ -1,4 +1,5 @@
 # encoding: UTF-8
+
 require 'will_paginate.rb'
 require 'wice_grid_misc.rb'
 require 'wice_grid_core_ext.rb'
@@ -15,7 +16,6 @@ require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
 require 'js_adaptors/js_adaptor.rb'
 require 'js_adaptors/jquery_adaptor.rb'
-require 'js_adaptors/prototype_adaptor.rb'
 require 'view_columns.rb'
 
 
@@ -24,7 +24,7 @@ ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
 
-  class WiceGridRailtie < Rails::Railtie  #:nodoc:
+  class WiceGridEngine < ::Rails::Engine
 
     initializer "wice_grid_railtie.configure_rails_initialization" do |app|
 
@@ -51,6 +51,9 @@ module Wice
         Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
         require 'wice_grid_serialized_query.rb'
       end
+
+      require 'will_paginate_paginator.rb'
+
     end
 
     rake_tasks do
@@ -325,9 +328,9 @@ module Wice
     def ordered_by?(column)  #:nodoc:
       return nil if @status[:order].blank?
       if column.main_table && ! offs = @status[:order].index('.')
-        @status[:order] == column.attribute_name
+        @status[:order] == column.attribute
       else
-        @status[:order] == column.table_alias_or_table_name + '.' + column.attribute_name
+        @status[:order] == column.table_alias_or_table_name + '.' + column.attribute
       end
     end
 

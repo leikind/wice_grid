@@ -28,17 +28,13 @@ module Wice
           if params[:current]
             @current = @query_store_model.find_by_id_and_grid_name(params[:current], @grid_name)
           end
-          @notification_messages = WiceGridNlMessageProvider.get_message(:QUERY_DELETED_MESSAGE)
+          @notification_messages = NlMessage['query_deleted_message']
         else
           @error_messages = sq.errors.full_raw_messages.join(' ')
         end
       end
-      template_name = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
-        'delete'
-      else
-        'delete_jq'
-      end
-      render :file => "#{Pathname.new(__FILE__).dirname}/views/#{template_name}.rjs"
+
+      render :file => "#{Pathname.new(__FILE__).dirname}/views/delete.rjs"
     end
 
     def create  #:nodoc:
@@ -56,16 +52,12 @@ module Wice
 
       if @saved_query.save
         @grid_title_id = "#{@grid_name}_title"
-        @notification_messages = WiceGridNlMessageProvider.get_message(:QUERY_SAVED_MESSAGE)
+        @notification_messages = NlMessage['query_saved_message']
       else
         @error_messages = @saved_query.errors.map{ |_, msg| msg }.join(' ')
       end
-      template_name = if Wice::ConfigurationProvider.value_for(:JS_FRAMEWORK) == :prototype
-        'create'
-      else
-        'create_jq'
-      end
-      render :file => "#{Pathname.new(__FILE__).dirname}/views/#{template_name}.rjs"
+
+      render :file => "#{Pathname.new(__FILE__).dirname}/views/create.rjs"
     end
 
     def extra
