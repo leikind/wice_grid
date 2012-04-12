@@ -210,18 +210,18 @@ module Wice
       end
     end
 
-    def declare_column(column_name, model_class, custom_filter_active, table_alias)  #:nodoc:
-      if model_class # this is an included table
-        column = @table_column_matrix.get_column_by_model_class_and_column_name(model_class, column_name)
-        raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model_class.table_name}'!") if column.nil?
+    def declare_column(column_name, model, custom_filter_active, table_alias)  #:nodoc:
+      if model # this is an included table
+        column = @table_column_matrix.get_column_by_model_class_and_column_name(model, column_name)
+        raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model.table_name}'!") if column.nil?
         main_table = false
-        table_name = model_class.table_name
+        table_name = model.table_name
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
         if column.nil?
           raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " +
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " +
-            "the grid, and specify :model_class in column declaration.")
+            "the grid, and specify :model in column declaration.")
         end
         main_table = true
         table_name = @table_column_matrix.default_model_class.table_name
@@ -396,7 +396,7 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model_klass.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar|
+      res = column.model.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar|
         ar[column.name]
       }.reject{|e| e.blank?}.map{|i|[i,i]}
     end
@@ -602,10 +602,10 @@ module Wice
   # to be mixed in into ActiveRecord::ConnectionAdapters::Column
   module WiceGridExtentionToActiveRecordColumn #:nodoc:
 
-    attr_accessor :model_klass
+    attr_accessor :model
 
     def alias_or_table_name(table_alias)
-      table_alias || self.model_klass.table_name
+      table_alias || self.model.table_name
     end
 
     def wg_initialize_request_parameters(all_filter_params, main_table, table_alias, custom_filter_active)  #:nodoc:
@@ -762,7 +762,7 @@ module Wice
         Wice.log "invalid parameters for the grid string filter - empty string"
         return false
       end
-      [" #{negation}  #{@column.alias_or_table_name(table_alias)}.#{@column.name} #{::Wice.get_string_matching_operators(@column.model_klass)} ?",
+      [" #{negation}  #{@column.alias_or_table_name(table_alias)}.#{@column.name} #{::Wice.get_string_matching_operators(@column.model)} ?",
           '%' + string_fragment + '%']
     end
 

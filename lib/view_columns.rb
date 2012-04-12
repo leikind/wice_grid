@@ -8,12 +8,12 @@ module Wice
     include ActionView::Helpers::AssetTagHelper
 
     # fields defined from the options parameter
-    FIELDS = [:attribute, :name, :html, :filter, :model_class, :allow_multiple_selection,
+    FIELDS = [:attribute, :name, :html, :filter, :model, :allow_multiple_selection,
               :in_html, :in_csv, :helper_style, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload]
 
     attr_accessor *FIELDS
 
-    attr_accessor :cell_rendering_block, :grid, :css_class, :table_name, :main_table, :model_class, :custom_filter
+    attr_accessor :cell_rendering_block, :grid, :css_class, :table_name, :main_table, :model, :custom_filter
 
     attr_reader :contains_a_text_input
 

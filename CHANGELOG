@@ -376,7 +376,7 @@ Creates a new branch for version 2.3
 === 21/10/2008
 
 A bugfix related to custom filters influencing other columns with filters
-A more informative error message if the grid can't find the underlying database column for a view column (incorrect :column_name and :model_class)
+A more informative error message if the grid can't find the underlying database column for a view column (incorrect :column_name and :model)
 
 === 8/10/2008
 

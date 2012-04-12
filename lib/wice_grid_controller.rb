@@ -133,13 +133,13 @@ module Wice
     # * <tt>:grid_name</tt> - The name of the grid. Just like parameter <tt>:name</tt> of
     #   <tt>initialize_grid</tt>, the parameter is optional, and when absent, the name
     #   <tt>'grid'</tt> is assumed
-    # * <tt>:attribute</tt> and <tt>:model_class</tt> - should be the same as <tt>:attribute</tt> and
-    #   <tt>:model_class</tt> of the column declaration with the target custom filter.
+    # * <tt>:attribute</tt> and <tt>:model</tt> - should be the same as <tt>:attribute</tt> and
+    #   <tt>:model</tt> of the column declaration with the target custom filter.
     # * <tt>:value</tt> - the value of the column filter.
     def wice_grid_custom_filter_params(opts = {})
       options = {:grid_name => 'grid',
                  :attribute => nil,
-                 :model_class => nil,
+                 :model => nil,
                  :value => nil}
       options.merge!(opts)
 
@@ -147,12 +147,12 @@ module Wice
         raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
       end
 
-      attr_name = if options[:model_class]
-        unless options[:model_class].nil?
-          options[:model_class] = options[:model_class].constantize if options[:model_class].is_a? String
-          raise Wice::WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
+      attr_name = if options[:model]
+        unless options[:model].nil?
+          options[:model] = options[:model].constantize if options[:model].is_a? String
+          raise Wice::WiceGridArgumentError.new("Option :model can be either a class or a string instance") unless options[:model].is_a? Class
         end
-        options[:model_class].table_name + '.' + options[:attribute]
+        options[:model].table_name + '.' + options[:attribute]
       else
         options[:attribute]
       end

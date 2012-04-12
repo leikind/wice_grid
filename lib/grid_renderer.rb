@@ -170,7 +170,7 @@ module Wice
     # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
     # * <tt>:attribute</tt> - name of a database column (which normally correspond to a model attribute with the
     #   same name). By default the field is assumed to belong to the default table (see documentation for the
-    #   +initialize_grid+ method). Parameter <tt>:model_class</tt> allows to specify another table. Presence of
+    #   +initialize_grid+ method). Parameter <tt>:model</tt> allows to specify another table. Presence of
     #   this parameter
     #   * adds sorting capabilities by this field
     #   * automatically creates a filter based on the type of the field unless parameter <tt>:filter</tt> is set to false.
@@ -187,7 +187,7 @@ module Wice
     #   This is needed if sorting is required while  filters are not.
     # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
-    # * <tt>:model_class</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
+    # * <tt>:model</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
     # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord
     #   constructs a query where the second join provides an alias for the joined table. Setting <tt>:table_alias</tt>
     #   to this alias will enable WiceGrid to order and filter by columns belonging to different associatiations  but
@@ -201,7 +201,7 @@ module Wice
     #   * Hash - The keys of the hash become the labels of the generated dropdown list,
     #     while the values will be values of options of the dropdown list:
     #   * <tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the field specified by
-    #     <tt>:attribute</tt> and <tt>:model_class</tt>.
+    #     <tt>:attribute</tt> and <tt>:model</tt>.
     #     <tt>:attribute</tt> throughout all pages. In other words, this runs an SQL query without +offset+ and +limit+
     #     clauses and  with <tt>distinct(table.field)</tt> instead of <tt>distinct(*)</tt>
     #   * any other symbol name (method name) - The dropdown list is populated by all unique value returned by the
@@ -263,7 +263,7 @@ module Wice
     # <tt><td class="sorted user_class_for_columns user_class_for_this_specific_cell"></tt>
     #
     # It is up to the developer to make sure that what in rendered in column cells
-    # corresponds to sorting and filtering specified by parameters <tt>:attribute</tt> and <tt>:model_class</tt>.
+    # corresponds to sorting and filtering specified by parameters <tt>:attribute</tt> and <tt>:model</tt>.
 
     def column(opts = {}, &block)
       options = {
@@ -282,7 +282,7 @@ module Wice
         :helper_style               => Defaults::HELPER_STYLE,
         :in_csv                     => true,
         :in_html                    => true,
-        :model_class                => nil,
+        :model                      => nil,
         :negation_in_filter         => Defaults::NEGATION_IN_STRING_FILTERS,
         :filter                     => true,
         :table_alias                => nil,
@@ -292,13 +292,13 @@ module Wice
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
 
-      unless options[:model_class].nil?
-        options[:model_class] = options[:model_class].constantize if options[:model_class].is_a? String
-        raise WiceGridArgumentError.new("Option :model_class can be either a class or a string instance") unless options[:model_class].is_a? Class
+      unless options[:model].nil?
+        options[:model] = options[:model].constantize if options[:model].is_a? String
+        raise WiceGridArgumentError.new("Option :model can be either a class or a string instance") unless options[:model].is_a? Class
       end
 
-      if options[:attribute].nil? && options[:model_class]
-        raise WiceGridArgumentError.new("Option :model_class is only used together with :attribute")
+      if options[:attribute].nil? && options[:model]
+        raise WiceGridArgumentError.new("Option :model is only used together with :attribute")
       end
 
       if options[:attribute] && options[:attribute].index('.')
@@ -321,7 +321,7 @@ module Wice
 
       klass = ViewColumn
       if options[:attribute] &&
-          col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model_class],
+          col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
             options[:custom_filter],  options[:table_alias])
 
         db_column, table_name, main_table = col_type_and_table_name

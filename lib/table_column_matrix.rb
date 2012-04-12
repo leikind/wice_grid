@@ -13,7 +13,7 @@ module Wice
     def add_condition(column, conditions)
       @generated_conditions << [column, conditions] unless conditions.blank?
     end
-    
+
     def conditions
       @generated_conditions.collect{|_, cond| cond}
     end
@@ -21,14 +21,14 @@ module Wice
     alias_method :get, :[]
 
     attr_reader :default_model_class
-    def default_model_class=(model_klass)  #:nodoc:
-      init_columns_of_table(model_klass) unless has_key?(model_klass)
-      @default_model_class = model_klass
+    def default_model_class=(model)  #:nodoc:
+      init_columns_of_table(model) unless has_key?(model)
+      @default_model_class = model
     end
 
-    def [](model_klass)  #:nodoc:
-      init_columns_of_table(model_klass) unless has_key?(model_klass)
-      get(model_klass)
+    def [](model)  #:nodoc:
+      init_columns_of_table(model) unless has_key?(model)
+      get(model)
     end
 
     def get_column_by_model_class_and_column_name(model_class, column_name)  #:nodoc:
@@ -40,10 +40,10 @@ module Wice
       self[@default_model_class][column_name]
     end
 
-    def init_columns_of_table(model_klass) #:nodoc:
-      self[model_klass] = HashWithIndifferentAccess.new(model_klass.columns.index_by(&:name))
-      @by_table_names[model_klass.table_name] = self[model_klass]
-      self[model_klass].each_value{|c| c.model_klass = model_klass}
+    def init_columns_of_table(model) #:nodoc:
+      self[model] = HashWithIndifferentAccess.new(model.columns.index_by(&:name))
+      @by_table_names[model.table_name] = self[model]
+      self[model].each_value{|c| c.model = model}
     end
     alias_method :<< , :init_columns_of_table
 

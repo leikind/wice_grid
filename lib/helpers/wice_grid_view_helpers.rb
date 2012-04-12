@@ -51,7 +51,7 @@ module Wice
     #       account.username
     #     end
     #
-    #     g.column :name => 'application_account.field.identity_id'._, :attribute => 'firstname', :model_class =>  Person do |account|
+    #     g.column :name => 'application_account.field.identity_id'._, :attribute => 'firstname', :model =>  Person do |account|
     #       link_to(account.identity.name, identity_path(account.identity))
     #     end
     #

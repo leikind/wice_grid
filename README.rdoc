@@ -7,17 +7,14 @@ Examples online:: http://grid.leikind.org
 News:: http://leikind.org/wicegrid
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
-TO BE REWRITTEN AFTER THE REWRITE OF THE PLUGIN, DOES NOT CORRESPOND TO THE CODE!!!
+WICE_GRID IS UNDER ACTIVE DEVELOPMENT AND API REVISION. THE DOCUMENTATION BELOW CAN BE OUTDATED!
+THIS REWRITE TARGETS RAILS 3.2 WITH ITS ASSET PIPELINE.
 
-== Attention!
-There are three  branches of WiceGrid.
+FOR RAILS 3.0 install version 3.0.4
 
-THIS IS A VERSION OF THE PLUGIN FOR RAILS 3.2.
+FOR RAILS 2 WICEGRID ONLY WORKS AS A RAILS PLUGIN.
+SEE WICEGRID VERSION 0.6 (HTTPS://GITHUB.COM/LEIKIND/WICE_GRID/TREE/MASTER).
 
-For Rails 3.0 see branch rails3 https://github.com/leikind/wice_grid/ .
-
-For Rails 2 WiceGrid only works as a Rails plugin.
-See WiceGrid version 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
 == Intro
 
@@ -232,7 +229,7 @@ If no ordering links are needed, use <tt>:ordering => false</tt>:
 
   g.column :name => 'Added', :attribute => 'created_at', :ordering => false
 
-It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute</tt> (and <tt>:model_class</tt> discussed below).
+It is important to understand that it is up to the developer to make sure that the value returned by a column block (the content of a cell) corresponds to the underlying database column specified by  <tt>:attribute</tt> (and <tt>:model</tt> discussed below).
 
 
 === Rendering filter panel
@@ -333,12 +330,12 @@ To show columns of joined tables in the view table, the ActiveRecord model class
       link_to(product.name, product_path(product))
     end
 
-    g.column :name => 'Category', :attribute => 'name', :model_class => Category |product| # joined table
+    g.column :name => 'Category', :attribute => 'name', :model => Category |product| # joined table
       product.category.name
     end
   %>
 
-Please note that the blockless definition of the column only works with columns from the main table and it won't work with columns with <tt>:model_class</tt>
+Please note that the blockless definition of the column only works with columns from the main table and it won't work with columns with <tt>:model</tt>
 
 === Joined associations referring to the same table
 
@@ -364,11 +361,11 @@ View:
 
     g.column :name => 'Project Name', :attribute => 'name'
 
-    g.column  :name => 'Customer company', :model_class => 'Company', :attribute => 'name' do |task|
+    g.column  :name => 'Customer company', :model => 'Company', :attribute => 'name' do |task|
       task.customer.name if task.customer
     end
 
-    g.column  :name => 'Supplier company', :model_class => 'Company', :attribute => 'name', :table_alias => ' suppliers_projects' do |task|
+    g.column  :name => 'Supplier company', :model => 'Company', :attribute => 'name', :table_alias => ' suppliers_projects' do |task|
       task.supplier.name if task.supplier
     end
 
@@ -448,7 +445,7 @@ It is also possible to submit a array of strings or numbers, in this case every 
 ==== :auto
 
 <tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the column specified by
-<tt>:attribute</tt> and <tt>:model_class</tt>.
+<tt>:attribute</tt> and <tt>:model</tt>.
 
   g.column :name => 'Status', :attribute => 'status',
            :custom_filter => ['development', 'testing', 'production']
@@ -465,13 +462,13 @@ To correctly build a filter condition foreign keys have to be matched.
 
 For example, if there is a column:
 
-  g.column :name => 'Project Name', :attribute => 'name', :model_class => 'Project' do |task|
+  g.column :name => 'Project Name', :attribute => 'name', :model => 'Project' do |task|
     task.project.name if task.project
   end
 
 adding <tt>:custom_filter</tt> like this:
 
-  g.column :name => 'Project Name', :attribute => 'name', :model_class => 'Project',
+  g.column :name => 'Project Name', :attribute => 'name', :model => 'Project',
            :custom_filter => Project.find(:all).map{|pr| [pr.name, pr.name]} do |task|
     task.project.name if task.project
   end
