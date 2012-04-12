@@ -276,7 +276,6 @@ module Wice
         :class                      => nil,
         :name                       => '',
         :custom_filter              => nil,
-        :custom_order               => nil,
         :detach_with_id             => nil,
         :filter_all_label           => Defaults::CUSTOM_FILTER_ALL_LABEL,
         :helper_style               => Defaults::HELPER_STYLE,
