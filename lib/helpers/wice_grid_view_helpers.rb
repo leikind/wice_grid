@@ -204,7 +204,7 @@ module Wice
       end
 
       title_row_attrs = header_tr_html.clone
-      title_row_attrs.add_or_append_class_value!('wice_grid_title_row', true)
+      title_row_attrs.add_or_append_class_value!('wice-grid-title-row', true)
 
       content << %!<tr #{tag_options(title_row_attrs, true)}>!
 
