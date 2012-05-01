@@ -4,6 +4,10 @@
   margin-right: 2px;
 }
 
+.wice-grid .ui-datepicker-trigger, .wg-detached-filter .ui-datepicker-trigger{
+  cursor: pointer;
+}
+
 .wice-grid .desc,  .wice-grid .asc{
   padding-right: 18px;
   text-decoration:none;

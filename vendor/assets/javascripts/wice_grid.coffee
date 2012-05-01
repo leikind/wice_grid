@@ -1,3 +1,55 @@
+# TODO: extract external into a separate function, do not attach callback with if gridName = $(this).data('grid-name')
+# TODO: test page with 2 grid with external filters
+
+# datepicker logic
+setupDatepicker = ->
+  # check if datepicker is loaded
+  if $('.wice-grid-container input.check-for-datepicker[type=hidden], .wg-detached-filter input.check-for-datepicker[type=hidden]').length != 0
+    unless $.datepicker
+      alert """Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)
+        installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in
+        wice_grid_config.rb in order to use standard Rails date helpers
+      """
+
+  # setting up the locale for datepicker
+  if locale = $('.wice-grid-container input[type=hidden], .wg-detached-filter input[type=hidden]').data('locale')
+    $.datepicker.setDefaults($.datepicker.regional[locale]);
+
+
+  $('.wice-grid-container .date-label, .wg-detached-filter .date-label').each  (index, removeLink) ->
+    datepickerHiddenField  = $('#' + $(removeLink).data('dom-id'))
+
+    eventToTriggerOnChange = datepickerHiddenField.data('close-calendar-event-name')
+
+    # setting up the remove link for datepicker
+    $(removeLink).click (event) ->
+      $(this).html('')
+      datepickerHiddenField.val('')
+      if eventToTriggerOnChange
+        datepickerHiddenField.trigger(eventToTriggerOnChange)
+      event.preventDefault()
+      false
+    that = this
+
+    # datepicker constructor
+    datepickerHiddenField.datepicker
+      firstDay:        1
+      showOn:          "button"
+      dateFormat:      datepickerHiddenField.data('date-format')
+      buttonImage:     datepickerHiddenField.data('button-image')
+      buttonImageOnly: true
+      buttonText:      datepickerHiddenField.data('button-text')
+      changeMonth:     true
+      changeYear:      true
+      onSelect: (dateText, inst) ->
+        $(that).html(dateText)
+        if eventToTriggerOnChange
+          datepickerHiddenField.trigger(eventToTriggerOnChange)
+
+
+
+
+
 setupHidingShowingOfFilterRow = (wiceGridContainer) ->
   hideFilter = '.wg-hide-filter'
   showFilter = '.wg-show-filter'
@@ -43,6 +95,8 @@ setupMultiSelectToggle = (wiceGridContainer)->
 
 
 
+
+
 setupSubmitReset = (wiceGridContainer, gridProcessor) ->
   $('.submit', wiceGridContainer).click ->
     gridProcessor.process()
@@ -58,6 +112,8 @@ setupSubmitReset = (wiceGridContainer, gridProcessor) ->
       gridProcessor.process()
       false
 
+  # TODO: extract external into a separate function, do not attach callback with if gridName = $(this).data('grid-name')
+  # TODO: test page with 2 grid with external filters
   $('.wg-external-submit-button').click (event) ->
     event.preventDefault()
     if gridName = $(this).data('grid-name')
@@ -81,6 +137,8 @@ setupSubmitReset = (wiceGridContainer, gridProcessor) ->
 
 
 jQuery ->
+
+  setupDatepicker()
 
   $(".wice-grid-container").each (index, wiceGridContainer) ->
 

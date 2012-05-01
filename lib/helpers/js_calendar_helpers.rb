@@ -1,110 +1,54 @@
 module Wice #:nodoc:
   module JsCalendarHelpers #:nodoc:
 
-    # Jquery
-
-    def date_calendar_jquery(initial_date, view, opts = {}, html_opts = {})  #:nodoc:
+    def date_calendar_jquery(initial_date, title, opts = {})  #:nodoc:
       date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
 
-      options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name  =
+      name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name  =
         prepare_data_for_calendar(opts, date_format, initial_date)
 
-      remove_date_function = %! $('##{date_span_id}').html(''); $('##{dom_id}')[0].value = ''; !
+      hidden_field_tag_options = {
+        :id => dom_id,
+        'data-locale' => I18n.locale,
+        'data-date-format' => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_JQUERY),
+        'data-button-image' => Wice::ConfigurationProvider.value_for(:CALENDAR_ICON),
+        'data-button-text' => title,
+      }
 
-      date_picker =
+      if opts[:fire_event]
+        hidden_field_tag_options['data-close-calendar-event-name'] = close_calendar_event_name
+      end
 
-        hidden_field_tag(name, date_string, :id => dom_id) + ' ' +
+      if Rails.env == 'development'
+        hidden_field_tag_options['class'] = 'check-for-datepicker'
+      end
 
-        link_to_function(
-          content_tag(:span, date_string, :id => date_span_id),
-          remove_date_function,
-          :class => 'date_label',
-          :title => ::Wice::NlMessage['date_string_tooltip'])
+      date_picker = hidden_field_tag(name, date_string, hidden_field_tag_options) + ' ' +
 
-      html = "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
+        link_to(date_string,
+          '#',
+          :id => date_span_id,
+          :class => 'date-label',
+          :title => ::Wice::NlMessage['date_string_tooltip'],
+          'data-dom-id' => dom_id
+        )
 
-      javascript = calendar_constructor_jquery(dom_id, view, Wice::ConfigurationProvider.value_for(:DATE_FORMAT_JQUERY),
-        date_span_id, opts[:fire_event], html_opts[:title], datepicker_placeholder_id, close_calendar_event_name)
-
-      [html, javascript]
+      "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
     end
 
     protected
-
-    # common
 
     def prepare_data_for_calendar(opts, date_format, initial_date)  #:nodoc:
       options = {:prefix => 'date'}
       options.merge!(opts)
       name = options[:prefix]
       date_string = initial_date.nil? ? '' : initial_date.strftime(date_format)
-      dom_id = options[:id] || name.gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
+      dom_id = name.gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
       datepicker_placeholder_id = dom_id + '_date_placeholder'
       date_span_id = dom_id + '_date_view'
-      close_calendar_event_name =  "wg:calendarChanged_#{opts[:grid_name]}"
-      return options, name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name
+      close_calendar_event_name =  "wg:calendarChanged_#{options[:grid_name]}"
+      return name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name
     end
-
-    # jquery
-
-    def calendar_constructor_jquery(dom_id, view, date_format, date_span_id, fireEvent, title,
-        datepicker_placeholder_id, close_calendar_event_name)
-
-      javascript  =  %| $( "##{dom_id}" ).datepicker({\n|
-      javascript <<  %|   firstDay: 1,\n|
-      javascript <<  %|   showOn: "button",\n|
-      javascript <<  %|   dateFormat: "#{date_format}",\n|
-      javascript <<  %|   buttonImage: "#{Wice::ConfigurationProvider.value_for(:CALENDAR_ICON)}",\n|
-      javascript <<  %|   buttonImageOnly: true,\n|
-      javascript <<  %|   buttonText: "#{title}",\n|
-      javascript <<  %|   changeMonth: true,\n|
-      javascript <<  %|   changeYear: true,\n|
-      javascript <<  %|   onSelect: function(dateText, inst) {\n|
-      javascript <<  %|     $("##{date_span_id}").html(dateText);\n|
-      if fireEvent
-        javascript <<  %|     $("##{dom_id}").trigger('#{close_calendar_event_name}');\n|
-      end
-      javascript <<  %|   }\n|
-      javascript <<  %| });\n|
-
-      lang = Object.const_defined?(:I18n) ? I18n.locale : nil
-
-      if Rails.env == 'development'
-        unless view.respond_to? :datepicker_check_done
-
-          javascript <<  %| if (! $.datepicker ){\n|
-          javascript <<  %|    alert("Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)|
-          javascript <<  %| installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in |
-          javascript <<  %| wice_grid_config.rb in order to use standard Rails date helpers")\n|
-          javascript <<  %| }\n|
-
-          def view.datepicker_check_done
-          end
-        end
-      end
-
-      if lang
-        unless view.respond_to? :wg_calendar_lang_set
-
-          javascript <<  %| wgCalendarLangRegionalOptions = $.datepicker.regional['#{lang}'];\n|
-          javascript <<  %| if (wgCalendarLangRegionalOptions){\n|
-          javascript <<  %|   delete wgCalendarLangRegionalOptions.dateFormat ;\n|
-          javascript <<  %|   delete wgCalendarLangRegionalOptions.firstDate ;\n|
-          javascript <<  %| }\n|
-
-          def view.wg_calendar_lang_set
-          end
-        end
-        javascript <<  %| if (wgCalendarLangRegionalOptions){\n|
-        javascript <<  %|   $( "##{dom_id}" ).datepicker("option", wgCalendarLangRegionalOptions);\n|
-        javascript <<  %| }\n|
-      end
-
-      javascript += %| $('##{datepicker_placeholder_id} .ui-datepicker-trigger').addClass('clickable');\n|
-
-      javascript
-    end
-
 
   end
 end

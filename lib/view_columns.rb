@@ -405,14 +405,13 @@ module Wice
 
     def render_calendar_filter_internal(params) #:nodoc:
 
-      html1, js1 = date_calendar_jquery(params[:fr], @view,
-        {:include_blank => true, :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => NlMessage['date_selector_tooltip_from'])
-      html2, js2 = date_calendar_jquery(params[:to], @view,
-        {:include_blank => true, :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => NlMessage['date_selector_tooltip_to'])
+      html1 = date_calendar_jquery(
+        params[:fr], NlMessage['date_selector_tooltip_from'], :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name)
 
-      [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
+      html2 = date_calendar_jquery(
+        params[:to], NlMessage['date_selector_tooltip_to'],   :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name)
+
+      [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, '']
     end
 
     def render_filter_internal(params) #:nodoc:
