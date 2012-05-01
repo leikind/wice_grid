@@ -77,6 +77,10 @@
   position:absolute; top:0; right:0;
 }
 
+.wice-grid-container tr.wg-filter-row  input {
+  width: 100px;
+}
+
 .wice-grid .text_filter_container { position: relative; padding-right: 13px;}
 .wice-grid .text_filter_container .negation_checkbox { position:absolute; top:0; right:0;  }
 
