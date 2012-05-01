@@ -1,0 +1,107 @@
+@mixin icon-dimensions {
+  width: 16px;
+  height: 16px;
+}
+
+.wice-grid{
+
+  .clickable{
+    cursor: pointer;
+    margin-bottom: 2px;
+    margin-right: 2px;
+  }
+
+  .ui-datepicker-trigger, .wg-detached-filter .ui-datepicker-trigger{
+    cursor: pointer;
+  }
+
+  .desc,  .asc{
+    padding-right: 18px;
+    text-decoration:none;
+  }
+
+  .desc {
+    background: transparent url(/assets/icons/grid/arrow_down.gif) right no-repeat
+  }
+  .asc  {
+    background: transparent url(/assets/icons/grid/arrow_up.gif)   right no-repeat
+  }
+
+  .submit.clickable{
+    background: transparent url(/assets/icons/grid/table_refresh.png) no-repeat;
+    @include icon-dimensions;
+  }
+
+  .reset.clickable{
+    background: transparent url(/assets/icons/grid/table.png) no-repeat;
+    @include icon-dimensions;
+  }
+
+  .wg-show-filter.clickable,
+  .wg-hide-filter.clickable{
+    background: transparent url(/assets/icons/grid/page_white_find.png) no-repeat;
+    @include icon-dimensions;
+  }
+
+  .toggle-multi-select-icon.clickable{
+    background: transparent url(/assets/icons/grid/expand.png) no-repeat;
+    @include icon-dimensions;
+  }
+
+  .export_to_csv_button.clickable{
+    background: transparent url(/assets/icons/grid/page_white_excel.png) no-repeat;
+    @include icon-dimensions;
+  }
+
+  .clickable.select-all{
+    background: transparent url(/assets/icons/grid/tick_all.png) no-repeat;
+    @include icon-dimensions;
+    float:left;
+  }
+
+  .clickable.deselect-all{
+    background: transparent url(/assets/icons/grid/untick_all.png) no-repeat;
+    @include icon-dimensions;
+    float:left;
+  }
+
+  .custom_dropdown_container {
+    position: relative;
+    padding-right: 18px;
+
+    .toggle-multi-select-icon {
+      position:absolute; top:0; right:0;
+    }
+  }
+
+  .text_filter_container {
+    position: relative; padding-right: 13px;
+    .negation_checkbox {
+      position:absolute;
+      top:0;
+      right:0;
+    }
+  }
+
+
+  /* in case of twitter bootstrap :) */
+  thead th select{
+    width: auto;
+  }
+
+  .pagination{
+    margin: 0px;
+    float: left;
+  }
+
+
+  tr.wg-filter-row  input {
+    width: 100px;
+  }
+
+  .pagination_status {
+    font-weight: bold;
+    float: right;
+  }
+
+}
