@@ -1,7 +1,46 @@
-
-
-# TODO: extract external into a separate function, do not attach callback with if gridName = $(this).data('grid-name')
 # TODO: test page with 2 grid with external filters
+
+jQuery ->
+  initWiceGrid()
+
+initWiceGrid = ->
+
+
+  $(".wice-grid-container").each (index, wiceGridContainer) ->
+
+    gridName = wiceGridContainer.id
+
+    dataDiv = $(".wg-data", wiceGridContainer)
+
+    processorInitializerArguments = dataDiv.data("processor-initializer-arguments")
+
+    filterDeclarations = dataDiv.data("filter-declarations")
+
+    gridProcessor = new WiceGridProcessor(gridName,
+      processorInitializerArguments[0], processorInitializerArguments[1],
+      processorInitializerArguments[2], processorInitializerArguments[3],
+      processorInitializerArguments[4], processorInitializerArguments[5])
+
+    for filterDeclaration in filterDeclarations
+      do (filterDeclaration) ->
+
+        gridProcessor.register
+          filter_name : filterDeclaration.filter_name
+          detached    : filterDeclaration.detached
+          templates   : filterDeclaration.declaration.templates
+          ids         : filterDeclaration.declaration.ids
+
+    window[gridName] = gridProcessor
+
+    setupDatepicker()
+    setupSubmitReset wiceGridContainer, gridProcessor
+    setupHidingShowingOfFilterRow wiceGridContainer
+    setupShowingAllRecords wiceGridContainer, gridProcessor
+    setupMultiSelectToggle wiceGridContainer
+    setupExternalSubmitReset()
+
+
+
 
 # datepicker logic
 setupDatepicker = ->
@@ -48,10 +87,7 @@ setupDatepicker = ->
         if eventToTriggerOnChange
           datepickerHiddenField.trigger(eventToTriggerOnChange)
 
-
-
-
-
+# hiding and showing the row with filters
 setupHidingShowingOfFilterRow = (wiceGridContainer) ->
   hideFilter = '.wg-hide-filter'
   showFilter = '.wg-show-filter'
@@ -69,36 +105,8 @@ setupHidingShowingOfFilterRow = (wiceGridContainer) ->
     $(filterRow, wiceGridContainer).show()
     false
 
-setupShowingAllRecords = (wiceGridContainer, gridProcessor) ->
-  $('.wg-show-all-link, .wg-back-to-pagination-link', wiceGridContainer).click (event) ->
-    event.preventDefault()
-    gridState = $(this).data("grid-state")
-    confirmationMessage = $(this).data("confim-message")
-    reloadGrid = ->
-      gridProcessor.reload_page_for_given_grid_state gridState
-    if confirmationMessage
-      if confirm(confirmationMessage)
-        reloadGrid()
-    else
-      reloadGrid()
 
-
-setupMultiSelectToggle = (wiceGridContainer)->
-  $('.toggle-multi-select-icon', wiceGridContainer).click ->
-    $(this).prev().each (index, select) ->
-      if (select.multiple == true)
-        select.multiple = false
-        # link_obj.title = expand_label
-      else
-        select.multiple = true
-        # link_obj.title = collapse_label
-
-
-
-
-
-
-
+# trigger submit/reset from within the grid
 setupSubmitReset = (wiceGridContainer, gridProcessor) ->
   $('.submit', wiceGridContainer).click ->
     gridProcessor.process()
@@ -114,61 +122,64 @@ setupSubmitReset = (wiceGridContainer, gridProcessor) ->
       gridProcessor.process()
       false
 
-  # TODO: extract external into a separate function, do not attach callback with if gridName = $(this).data('grid-name')
-  # TODO: test page with 2 grid with external filters
-  $('.wg-external-submit-button').click (event) ->
-    event.preventDefault()
-    if gridName = $(this).data('grid-name')
-      gridProcessor.process()
-    false
 
-  $('.wg-external-reset-button').click (event) ->
+# trigger the all records mode
+setupShowingAllRecords = (wiceGridContainer, gridProcessor) ->
+  $('.wg-show-all-link, .wg-back-to-pagination-link', wiceGridContainer).click (event) ->
     event.preventDefault()
-    if gridName = $(this).data('grid-name')
-      gridProcessor.reset()
-    false
+    gridState = $(this).data("grid-state")
+    confirmationMessage = $(this).data("confim-message")
+    reloadGrid = ->
+      gridProcessor.reload_page_for_given_grid_state gridState
+    if confirmationMessage
+      if confirm(confirmationMessage)
+        reloadGrid()
+    else
+      reloadGrid()
+
+# dropdown filter multiselect
+setupMultiSelectToggle = (wiceGridContainer)->
+  $('.toggle-multi-select-icon', wiceGridContainer).click ->
+    $(this).prev().each (index, select) ->
+      if (select.multiple == true)
+        select.multiple = false
+        # link_obj.title = expand_label
+      else
+        select.multiple = true
+        # link_obj.title = collapse_label
+
+getGridProcessorForElement = (element) ->
+  gridName = $(element).data('grid-name')
+  if gridName
+    window[gridName]
+  else
+    null
+
+
+setupExternalSubmitReset =  ->
+
+  $(".wg-external-submit-button").each (index, externalSubmitButton) ->
+    gridProcessor = getGridProcessorForElement(externalSubmitButton)
+    if gridProcessor
+      $(externalSubmitButton).click (event) ->
+        gridProcessor.process()
+        event.preventDefault()
+        false
+
+  $(".wg-external-reset-button").each (index, externalResetButton) ->
+    gridProcessor = getGridProcessorForElement(externalResetButton)
+    if gridProcessor
+      $(externalResetButton).click (event) ->
+        gridProcessor.reset()
+        event.preventDefault()
+        false
+
 
   $('.wg-detached-filter').each (index, detachedFilterContainer) ->
-    if gridName = $(this).data('grid-name')
+    gridProcessor = getGridProcessorForElement(detachedFilterContainer)
+    if gridProcessor
       $('input[type=text]', this).keydown (event) ->
         if event.keyCode == 13
-          event.preventDefault()
           gridProcessor.process()
+          event.preventDefault()
           false
-
-
-
-jQuery ->
-
-  setupDatepicker()
-
-  $(".wice-grid-container").each (index, wiceGridContainer) ->
-
-    gridName = wiceGridContainer.id
-
-    dataDiv = $(".wg-data", wiceGridContainer)
-
-    processorInitializerArguments = dataDiv.data("processor-initializer-arguments")
-
-    filterDeclarations = dataDiv.data("filter-declarations")
-
-    grid = new WiceGridProcessor(gridName,
-      processorInitializerArguments[0], processorInitializerArguments[1],
-      processorInitializerArguments[2], processorInitializerArguments[3],
-      processorInitializerArguments[4], processorInitializerArguments[5])
-
-    for filterDeclaration in filterDeclarations
-      do (filterDeclaration) ->
-
-        grid.register
-          filter_name : filterDeclaration.filter_name
-          detached    : filterDeclaration.detached
-          templates   : filterDeclaration.declaration.templates
-          ids         : filterDeclaration.declaration.ids
-
-    setupHidingShowingOfFilterRow wiceGridContainer
-    setupSubmitReset wiceGridContainer, grid
-    setupShowingAllRecords wiceGridContainer, grid
-    setupMultiSelectToggle wiceGridContainer
-
-    window[gridName] = grid
