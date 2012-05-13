@@ -45,10 +45,9 @@ module Wice
          ActionView::Helpers::FormTagHelper].each do |m|
           JsCalendarHelpers.send(:include, m)
         end
-      end
 
-      ActiveSupport.on_load :action_view do
         Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
+        ViewColumn.load_columns
         require 'wice_grid_serialized_query.rb'
       end
 
