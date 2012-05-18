@@ -46,20 +46,25 @@ module Wice
     end
 
     def render_calendar_filter_internal(params) #:nodoc:
-      html1, js1 = datetime_calendar_prototype(params[:fr], @view,
-        {:include_blank => true, :prefix => @name1, :id => @dom_id, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => NlMessage['date_selector_tooltip_from'])
-      html2, js2 = datetime_calendar_prototype(params[:to], @view,
-        {:include_blank => true, :prefix => @name2, :id => @dom_id2, :fire_event => auto_reload, :grid_name => self.grid.name},
-        :title => NlMessage['date_selector_tooltip_to'])
-      [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
+
+      html1 = date_calendar_jquery(
+        params[:fr], NlMessage['date_selector_tooltip_from'], :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name)
+
+      html2 = date_calendar_jquery(
+        params[:to], NlMessage['date_selector_tooltip_to'],   :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name)
+
+      [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, '']
     end
 
 
     def render_filter_internal(params) #:nodoc:
-      # falling back to the Rails helpers for Datetime
-      prepare_for_standard_filter
-      render_standard_filter_internal(params)
+      if helper_style == :standard
+        prepare_for_standard_filter
+        render_standard_filter_internal(params)
+      else
+        prepare_for_calendar_filter
+        render_calendar_filter_internal(params)
+      end
     end
 
 
@@ -76,6 +81,5 @@ module Wice
     end
 
   end
-
 
 end

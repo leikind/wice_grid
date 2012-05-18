@@ -3,31 +3,31 @@ module Wice
 
   class ViewColumn  #:nodoc:
 
-    def self.load_columns
-      [
-        ['action_view_column'          , []],
-        ['view_column_string'          , [:string, :text]],
-        ['view_column_datetime'        , [:datetime, :timestamp]],
-        ['view_column_date'            , [:date]],
-        ['view_column_integer'         , [:integer]],
-        ['view_column_float'           , [:decimal, :float]],
-        ['view_column_custom_dropdown' , []],
-        ['view_column_boolean'         , [:boolean]]
-      ].each do |column_source_file, types|
-        require "view_columns/#{column_source_file}.rb"
-        column_class_name = column_source_file.classify
+    class << self
+      def load_column_processors
 
-        unless Wice.const_defined?(column_class_name.intern)
-          raise "#{column_source_file}.rb is expected to define #{column_class_name}!"
-        end
+        loaded_column_processors = Hash.new
+        Wice::COLUMN_PROCESSOR_INDEX.each do |column_type, column_source_file|
+          unless loaded_column_processors[column_source_file]
+            require "view_columns/#{column_source_file}.rb"
+            column_class_name = column_source_file.classify
 
-        column_class = eval("Wice::#{column_class_name}")
-        types.each do |column_type|
-          @@handled_type[column_type] = column_class
+            unless Wice.const_defined?(column_class_name.intern)
+              raise "#{column_source_file}.rb is expected to define #{column_class_name}!"
+            end
+            column_class = eval("Wice::#{column_class_name}")
+
+            loaded_column_processors[column_source_file] = column_class
+          end
+
+          @@handled_type[column_type] = loaded_column_processors[column_source_file]
         end
       end
-    end
 
+      def get_column_processor(column_type)
+        @@handled_type[column_type] || ViewColumn
+      end
+    end
 
     include ActionView::Helpers::FormTagHelper
     include ActionView::Helpers::TagHelper

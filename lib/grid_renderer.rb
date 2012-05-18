@@ -154,7 +154,9 @@ module Wice
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
       @action_column_present = true
-      @columns << ActionViewColumn.new(@grid, options[:html], options[:param_name],
+      column_processor_klass = ViewColumn.get_column_processor(:action)
+
+      @columns << column_processor_klass.new(@grid, options[:html], options[:param_name],
             options[:select_all_buttons], options[:object_property], @view)
     end
 
@@ -361,18 +363,19 @@ module Wice
             end
           end
 
-          klass = ViewColumnCustomDropdown
+          klass = ViewColumn.get_column_processor(:custom)
         else
-          klass = ViewColumn.handled_type[col_type] || ViewColumn
+          klass = ViewColumn.get_column_processor(col_type)
         end # custom_filter
+
       end # attribute
 
       vc = klass.new(block, options, @grid, table_name, main_table, custom_filter, @view)
 
       vc.negation    = options[:negation_in_filter] if vc.respond_to? :negation=
 
-      vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(ViewColumnCustomDropdown)
-      if vc.kind_of?(ViewColumnBoolean)
+      vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(ViewColumn.get_column_processor(:custom))
+      if vc.kind_of?(ViewColumn.get_column_processor(:boolean))
         vc.boolean_filter_true_label = options[:boolean_filter_true_label]
         vc.boolean_filter_false_label = options[:boolean_filter_false_label]
       end
@@ -519,7 +522,7 @@ module Wice
     end
 
     def contains_range_filters
-      filter_columns(:in_html).detect{|column| column.filter_shown? && column.is_a?(ViewColumnInteger)}
+      filter_columns(:in_html).detect{|column| column.filter_shown? && column.is_a?(ViewColumn.get_column_processor(:integer))}
     end
 
     protected
