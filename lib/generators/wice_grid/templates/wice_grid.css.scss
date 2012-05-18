@@ -3,6 +3,11 @@
   height: 16px;
 }
 
+.wg-detached-filter{
+  a.date-label {text-decoration: none;}
+  a.date-label:hover {text-decoration: line-through;}
+}
+
 .wice-grid{
 
   .clickable{
@@ -10,6 +15,10 @@
     margin-bottom: 2px;
     margin-right: 2px;
   }
+
+
+  a.date-label {text-decoration: none;}
+  a.date-label:hover {text-decoration: line-through;}
 
   .ui-datepicker-trigger, .wg-detached-filter .ui-datepicker-trigger{
     cursor: pointer;

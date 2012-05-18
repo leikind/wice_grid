@@ -619,7 +619,7 @@ To make this  behavior default change constant +AUTO_RELOAD+ in the configuratio
 ==== Predefined css classes used by the grid
 
 +td+ tags are assigned two styles automatically - +sorted+ if the column is the one by which the grid is ordered,
-and +active_filter+ if the column's filter is on.
+and +active-filter+ if the column's filter is on.
 
 Odd and even +tr+ tags are assigned styles +odd+ and +even+, correspondingly.
 

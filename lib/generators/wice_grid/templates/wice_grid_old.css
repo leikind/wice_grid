@@ -71,8 +71,8 @@
   text-align: left;
 }
 
-.wice-grid tr.even td.active_filter  { background-color: #ddddff; }
-.wice-grid tr.odd td.active_filter  { background-color: #eeeeff; }
+.wice-grid tr.even td.active-filter  { background-color: #ddddff; }
+.wice-grid tr.odd td.active-filter  { background-color: #eeeeff; }
 
 .wice-grid tr.even td.sorted { background-color: #ffffcc; }
 .wice-grid tr.odd td.sorted { background-color: #ffffee; }

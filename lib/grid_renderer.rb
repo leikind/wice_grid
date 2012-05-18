@@ -261,7 +261,7 @@ module Wice
     # In case of an array output, please note that if you need to define HTML attributes for all <tt><td></tt>'s in a
     # column, use +html+. Also note that if the method returns a hash with a <tt>:class</tt> or <tt>'class'</tt>
     # element, it will not overwrite the class defined in +html+, or classes added by the grid itself
-    # (+active_filter+ and +sorted+), instead they will be all concatenated:
+    # (+active-filter+ and +sorted+), instead they will be all concatenated:
     # <tt><td class="sorted user_class_for_columns user_class_for_this_specific_cell"></tt>
     #
     # It is up to the developer to make sure that what in rendered in column cells

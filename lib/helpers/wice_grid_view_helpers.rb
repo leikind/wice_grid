@@ -230,7 +230,7 @@ module Wice
 
         if column.attribute && column.ordering
 
-          css_class = grid.filtered_by?(column) ? 'active_filter' : nil
+          css_class = grid.filtered_by?(column) ? 'active-filter' : nil
 
           direction = 'asc'
           link_style = nil
