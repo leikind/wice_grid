@@ -29,9 +29,19 @@ module Wice
       else
         if self.allow_multiple_selection
           select_options[:multiple] = params.is_a?(Array) && params.size > 1
+
+          expand_icon_style, collapse_icon_style = nil, 'display: none'
+          expand_icon_style, collapse_icon_style = collapse_icon_style, expand_icon_style if select_options[:multiple]
+
           select_toggle = content_tag(:span, '',
-            :title => 'Expand/Collapse',
-            :class => 'toggle-multi-select-icon clickable'
+            :title => NlMessage['expand'],
+            :class => 'expand-multi-select-icon clickable',
+            :style => expand_icon_style
+          ) +
+          content_tag(:span, '',
+            :title => NlMessage['collapse'],
+            :class => 'collapse-multi-select-icon clickable',
+            :style => collapse_icon_style
           )
         else
           select_options[:multiple] = false
@@ -45,7 +55,7 @@ module Wice
 
       params_for_select = (params.is_a?(Hash) && params.empty?) ? [nil] : params
 
-      '<span class="custom_dropdown_container">'.html_safe_if_necessary +
+      '<div class="custom-dropdown-container">'.html_safe_if_necessary +
         content_tag(:select,
           options_for_select(@custom_filter, params_for_select),
           select_options) +

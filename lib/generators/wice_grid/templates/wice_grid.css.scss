@@ -52,10 +52,6 @@
     @include icon-dimensions;
   }
 
-  .toggle-multi-select-icon.clickable{
-    background: transparent url(/assets/icons/grid/expand.png) no-repeat;
-    @include icon-dimensions;
-  }
 
   .export_to_csv_button.clickable{
     background: transparent url(/assets/icons/grid/page_white_excel.png) no-repeat;
@@ -74,13 +70,27 @@
     float:left;
   }
 
-  .custom_dropdown_container {
+  .custom-dropdown-container {
     position: relative;
     padding-right: 18px;
 
-    .toggle-multi-select-icon {
-      position:absolute; top:0; right:0;
+
+    .collapse-multi-select-icon, .expand-multi-select-icon{
+      width: 12px;
+      height: 12px;
+      position:absolute;
+      top:0;
+      right:0;
     }
+
+    .collapse-multi-select-icon{
+      background: transparent url(/assets/icons/grid/collapse.gif) no-repeat;
+    }
+
+    .expand-multi-select-icon{
+      background: transparent url(/assets/icons/grid/expand.gif) no-repeat;
+    }
+
   }
 
   .text_filter_container {

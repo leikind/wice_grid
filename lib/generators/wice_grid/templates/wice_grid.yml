@@ -43,6 +43,8 @@ en:
     query_saved_message: Query saved.
     select_all: Select all
     deselect_all: Remove selection
+    expand: Expand
+    collapse: Collapse
 
 
 is:

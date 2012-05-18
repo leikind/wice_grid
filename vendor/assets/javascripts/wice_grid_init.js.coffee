@@ -139,14 +139,18 @@ setupShowingAllRecords = (wiceGridContainer, gridProcessor) ->
 
 # dropdown filter multiselect
 setupMultiSelectToggle = (wiceGridContainer)->
-  $('.toggle-multi-select-icon', wiceGridContainer).click ->
+  $('.expand-multi-select-icon', wiceGridContainer).click ->
     $(this).prev().each (index, select) ->
-      if (select.multiple == true)
-        select.multiple = false
-        # link_obj.title = expand_label
-      else
-        select.multiple = true
-        # link_obj.title = collapse_label
+      select.multiple = true
+    $(this).next().show()
+    $(this).hide()
+
+  $('.collapse-multi-select-icon', wiceGridContainer).click ->
+    $(this).prev().prev().each (index, select) ->
+      select.multiple = false
+    $(this).prev().show()
+    $(this).hide()
+
 
 getGridProcessorForElement = (element) ->
   gridName = $(element).data('grid-name')
