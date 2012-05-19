@@ -59,7 +59,7 @@ module Wice
         content_tag(:select,
           options_for_select(@custom_filter, params_for_select),
           select_options) +
-      select_toggle.html_safe_if_necessary + '</span>'.html_safe_if_necessary
+      select_toggle.html_safe_if_necessary + '</div>'.html_safe_if_necessary
     end
 
 

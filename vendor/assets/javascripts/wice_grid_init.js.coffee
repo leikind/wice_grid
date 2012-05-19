@@ -9,7 +9,6 @@ initWiceGrid = ->
   $(".wice-grid-container").each (index, wiceGridContainer) ->
 
     gridName = wiceGridContainer.id
-
     dataDiv = $(".wg-data", wiceGridContainer)
 
     processorInitializerArguments = dataDiv.data("processor-initializer-arguments")
@@ -23,7 +22,6 @@ initWiceGrid = ->
 
     for filterDeclaration in filterDeclarations
       do (filterDeclaration) ->
-
         gridProcessor.register
           filter_name : filterDeclaration.filter_name
           detached    : filterDeclaration.detached
@@ -37,7 +35,8 @@ initWiceGrid = ->
     setupHidingShowingOfFilterRow wiceGridContainer
     setupShowingAllRecords wiceGridContainer, gridProcessor
     setupMultiSelectToggle wiceGridContainer
-    setupExternalSubmitReset()
+
+  setupExternalSubmitReset()
 
 
 
