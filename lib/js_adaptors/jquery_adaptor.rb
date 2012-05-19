@@ -18,7 +18,7 @@ module Wice::JsAdaptor   #:nodoc:
 
       def csv_export_icon_initialization(grid_name)  #:nodoc:
         %! $('div##{grid_name}.wice-grid-container .export_to_csv_button').click(function(e){\n! +
-        %!   #{grid_name}.export_to_csv()\n! +
+        %!   #{grid_name}.exportToCsv()\n! +
         %! });\n!
       end
 
@@ -30,7 +30,7 @@ module Wice::JsAdaptor   #:nodoc:
 
       def auto_reloading_inputs_event_initialization(grid_name)  #:nodoc:
         %! $('div##{grid_name}.wice-grid-container input.auto_reload, .#{grid_name}_detached_filter input.auto_reload').keyup(function(event, element){\n! +
-        %!   #{grid_name}.set_process_timer(this.id);\n! +
+        %!   #{grid_name}.setProcessTimer(this.id);\n! +
         %! });\n!
       end
 
@@ -52,7 +52,7 @@ module Wice::JsAdaptor   #:nodoc:
                                     id_and_name, grid_name, base_path_to_query_controller, parameters_json, ids_json)  #:nodoc:
         %/ function #{grid_name}_save_query(){\n/ +
         %`   if ( typeof(#{grid_name}) != "undefined")\n` +
-        %!      #{grid_name}.save_query('#{id_and_name}', $('##{id_and_name}')[0].value, '#{base_path_to_query_controller}', #{parameters_json}, #{ids_json})\n! +
+        %!      #{grid_name}.saveQuery('#{id_and_name}', $('##{id_and_name}')[0].value, '#{base_path_to_query_controller}', #{parameters_json}, #{ids_json})\n! +
         %/}\n/ +
         %/ $('##{id_and_name}').keydown(function(event){\n/ +
         %/    if (event.keyCode == 13) #{grid_name}_save_query();\n/ +

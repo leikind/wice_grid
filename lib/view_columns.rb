@@ -76,7 +76,7 @@ module Wice
       declaration = yield_declaration_of_column_filter
       if declaration
         {
-          :filter_name => self.name,
+          :filterName => self.name,
           :detached    => detachness,
           :declaration => declaration
         }

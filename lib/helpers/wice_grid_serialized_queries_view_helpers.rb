@@ -76,7 +76,7 @@ module Wice
           :with => 'with'
         )  + ' &nbsp; ' +
         link_to_function(h(sq.name),
-          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.load_query(#{sq.id}) /,
+          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.loadQuery(#{sq.id}) /,
           link_opts) +
         if sq.respond_to? :description
           desc = sq.description

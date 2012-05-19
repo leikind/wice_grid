@@ -587,7 +587,7 @@ module Wice
       unless grid.kind_of? WiceGrid
         raise WiceGridArgumentError.new("export_csv_javascript: the parameter must be a WiceGrid instance.")
       end
-      "#{grid.name}.export_to_csv()"
+      "#{grid.name}.exportToCsv()"
     end
 
 

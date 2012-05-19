@@ -1,5 +1,3 @@
-# TODO: test page with 2 grid with external filters
-
 jQuery ->
   initWiceGrid()
 
@@ -23,7 +21,7 @@ initWiceGrid = ->
     for filterDeclaration in filterDeclarations
       do (filterDeclaration) ->
         gridProcessor.register
-          filter_name : filterDeclaration.filter_name
+          filterName : filterDeclaration.filterName
           detached    : filterDeclaration.detached
           templates   : filterDeclaration.declaration.templates
           ids         : filterDeclaration.declaration.ids
@@ -129,7 +127,7 @@ setupShowingAllRecords = (wiceGridContainer, gridProcessor) ->
     gridState = $(this).data("grid-state")
     confirmationMessage = $(this).data("confim-message")
     reloadGrid = ->
-      gridProcessor.reload_page_for_given_grid_state gridState
+      gridProcessor.reloadPageForGivenGridState gridState
     if confirmationMessage
       if confirm(confirmationMessage)
         reloadGrid()
