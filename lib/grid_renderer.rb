@@ -248,7 +248,7 @@ module Wice
     # * <tt>:helper_style</tt> - Changes the flavor of Date and DateTime filters. The values are:
     #   * <tt>:standard</tt> - the default Rails Date/DateTime helper
     #   * <tt>:calendar</tt> - a Javascript popup calendar control
-    # * <tt>:negation_in_filter</tt> - turn on/off the negation checkbox in string filters
+    # * <tt>:negation</tt> - turn on/off the negation checkbox in string filters
     # * <tt>:auto_reload</tt> - a boolean value specifying if a change in a filter triggers reloading of the grid. Works with all
     #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters.
     #   The default is false. (see +AUTO_RELOAD+ in the configuration file).
@@ -284,7 +284,7 @@ module Wice
         :in_csv                     => true,
         :in_html                    => true,
         :model                      => nil,
-        :negation_in_filter         => Defaults::NEGATION_IN_STRING_FILTERS,
+        :negation                   => Defaults::NEGATION_IN_STRING_FILTERS,
         :filter                     => true,
         :table_alias                => nil,
         :html                       => {}
@@ -372,7 +372,7 @@ module Wice
 
       vc = klass.new(block, options, @grid, table_name, main_table, custom_filter, @view)
 
-      vc.negation    = options[:negation_in_filter] if vc.respond_to? :negation=
+      vc.negation = options[:negation] if vc.respond_to? :negation=
 
       vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(ViewColumn.get_column_processor(:custom))
       if vc.kind_of?(ViewColumn.get_column_processor(:boolean))
