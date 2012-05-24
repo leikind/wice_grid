@@ -15,7 +15,7 @@ module Wice
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:v => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:n => '')
 
-        '<div class="text_filter_container">' +
+        '<div class="text-filter-container">' +
           text_field_tag(parameter_name, params[:v], :size => 8, :id => @dom_id, :class => css_class) +
           if defined?(Wice::Defaults::NEGATION_CHECKBOX_LABEL) && ! Wice::ConfigurationProvider.value_for(:NEGATION_CHECKBOX_LABEL).blank?
             Wice::ConfigurationProvider.value_for(:NEGATION_CHECKBOX_LABEL)
