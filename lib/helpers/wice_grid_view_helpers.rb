@@ -148,8 +148,8 @@ module Wice
       buff
     end
 
-    def call_block(block, ar)  #:nodoc:
-      block.call(ar)
+    def call_block(block, ar, extra_argument = nil)  #:nodoc:
+      extra_argument ? block.call(ar, extra_argument) : block.call(ar)
     end
 
     # the longest method? :(
@@ -194,9 +194,14 @@ module Wice
 
       no_rightmost_column = true if reuse_last_column_for_filter_buttons
 
+      number_of_columns = rendering.number_of_columns(:in_html)
+      number_of_columns -= 1 if no_rightmost_column
+
+      number_of_columns_for_extra_rows = number_of_columns + 1
+
       pagination_panel_content_html, pagination_panel_content_js = nil, nil
       if options[:upper_pagination_panel]
-        content << rendering.pagination_panel(no_rightmost_column, options[:hide_csv_button]) do
+        content << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
           pagination_panel_content_html, pagination_panel_content_js =
             pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
           pagination_panel_content_html
@@ -325,7 +330,7 @@ module Wice
       end
 
       content << '</thead><tfoot>'
-      content << rendering.pagination_panel(no_rightmost_column, options[:hide_csv_button]) do
+      content << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
         if pagination_panel_content_html
           pagination_panel_content_html
         else
@@ -345,13 +350,13 @@ module Wice
       grid.each do |ar| # rows
 
         before_row_output = if rendering.before_row_handler
-          call_block(rendering.before_row_handler, ar)
+          call_block(rendering.before_row_handler, ar, number_of_columns_for_extra_rows)
         else
           nil
         end
 
         after_row_output = if rendering.after_row_handler
-          call_block(rendering.after_row_handler, ar)
+          call_block(rendering.after_row_handler, ar, number_of_columns_for_extra_rows)
         else
           nil
         end
@@ -419,7 +424,7 @@ module Wice
       end
 
       last_row_output = if rendering.last_row_handler
-        call_block(rendering.last_row_handler, nil)
+        call_block(rendering.last_row_handler, number_of_columns_for_extra_rows)
       else
         nil
       end

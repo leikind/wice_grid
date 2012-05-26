@@ -98,13 +98,10 @@ module Wice
       )
     end
 
-    def pagination_panel(no_rightmost_column, hide_csv_button)  #:nodoc:
+    def pagination_panel(number_of_columns, hide_csv_button)  #:nodoc:
       panel = yield
 
       render_csv_button = @grid.export_to_csv_enabled && ! hide_csv_button
-
-      number_of_columns = self.number_of_columns(:in_html)
-      number_of_columns -= 1 if no_rightmost_column
 
       if panel.nil?
         if render_csv_button
