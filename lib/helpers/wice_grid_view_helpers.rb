@@ -451,11 +451,15 @@ module Wice
         end.collect{|column| column.yield_declaration}
       end
 
-      content << content_tag(:div, '',
+      wg_data = {
         'data-processor-initializer-arguments' => processor_initializer_arguments.to_json,
         'data-filter-declarations'             => filter_declarations.to_json,
         :class                                 => 'wg-data'
-      )
+      }
+
+      wg_data['data-foc'] = grid.status['foc'] if grid.status['foc']
+
+      content << content_tag(:div, '', wg_data)
 
       content << '</div>'
 
@@ -474,31 +478,10 @@ module Wice
         cached_javascript << JsAdaptor.csv_export_icon_initialization(grid.name)
       end
 
-      if rendering.contains_auto_reloading_selects
-        cached_javascript << JsAdaptor.auto_reloading_selects_event_initialization(grid.name)
-      end
-
-      if rendering.contains_auto_reloading_inputs
-        cached_javascript << JsAdaptor.auto_reloading_inputs_event_initialization(grid.name)
-      end
-
-      if rendering.contains_auto_reloading_inputs_with_negation_checkboxes
-        cached_javascript << JsAdaptor.auto_reloading_inputs_with_negation_checkboxes_event_initialization(grid.name)
-      end
-
-      if rendering.contains_auto_reloading_calendars
-        cached_javascript << JsAdaptor.auto_reloading_calendar_event_initialization(grid.name)
-      end
-
-      if rendering.element_to_focus
-        cached_javascript << JsAdaptor.focus_element(rendering.element_to_focus)
-      end
 
       if Wice::ConfigurationProvider.value_for(:SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST) && rendering.contains_range_filters
         cached_javascript << JsAdaptor.update_ranges(grid.name)
       end
-
-
 
       content << javascript_tag(
         JsAdaptor.dom_loaded + cached_javascript.compact.join('') + '})'
@@ -581,7 +564,10 @@ module Wice
           ":show_filters => :no (set :show_filters to :always in this case). Read about detached filters in the documentation.")
       end
 
-      content_tag :span, grid.output_buffer.filter_for(filter_key), :class => "wg-detached-filter #{grid.name}_detached_filter", 'data-grid-name' => grid.name
+      content_tag :span,
+        grid.output_buffer.filter_for(filter_key),
+        :class => "wg-detached-filter #{grid.name}_detached_filter",
+        'data-grid-name' => grid.name
     end
 
 

@@ -13,8 +13,8 @@ module Wice
       opts2 = {:size => 3, :id => @dom_id2, :class => 'range-end'}
 
       if auto_reload
-        opts1[:class] += ' auto_reload'
-        opts2[:class] += ' auto_reload'
+        opts1[:class] += ' auto-reload'
+        opts2[:class] += ' auto-reload'
       end
 
       text_field_tag(parameter_name,  params[:fr], opts1) + text_field_tag(parameter_name2, params[:to], opts2)

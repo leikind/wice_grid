@@ -118,11 +118,6 @@ module Wice
       end
     end
 
-    def element_to_focus  #:nodoc:
-      grid.status['foc']
-    end
-
-
     # Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, deleting
     # selected records. Please note that +action_column+ only creates the checkboxes and the 'Select All' and
     # 'Deselect All' buttons, and the form itelf as well as processing the parameters should be taken care of
@@ -502,31 +497,12 @@ module Wice
       '?' + query_params.to_query
     end
 
-    def contains_auto_reloading_inputs #:nodoc:
-      contains_auto_reloading_elements(:has_auto_reloading_input?)
-    end
-
-    def contains_auto_reloading_inputs_with_negation_checkboxes #:nodoc:
-      contains_auto_reloading_elements(:auto_reloading_input_with_negation_checkbox?)
-    end
-
-    def contains_auto_reloading_selects #:nodoc:
-      contains_auto_reloading_elements(:has_auto_reloading_select?)
-    end
-
-    def contains_auto_reloading_calendars #:nodoc:
-      contains_auto_reloading_elements(:has_auto_reloading_calendar?)
-    end
 
     def contains_range_filters
       filter_columns(:in_html).detect{|column| column.filter_shown? && column.is_a?(ViewColumn.get_column_processor(:integer))}
     end
 
     protected
-
-    def contains_auto_reloading_elements(what) #:nodoc:
-      filter_columns(:in_html).detect{|column| column.filter_shown? && column.send(what)}
-    end
 
 
     def filter_columns(method_name = nil) #:nodoc:

@@ -50,7 +50,7 @@ module Wice
       end
 
       if auto_reload
-        select_options[:class] += ' auto_reload'
+        select_options[:class] += ' auto-reload'
       end
 
       params_for_select = (params.is_a?(Hash) && params.empty?) ? [nil] : params

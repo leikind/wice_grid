@@ -13,6 +13,8 @@ initWiceGrid = ->
 
     filterDeclarations = dataDiv.data("filter-declarations")
 
+    focusElementIfNeeded dataDiv.data("foc")
+
     gridProcessor = new WiceGridProcessor(gridName,
       processorInitializerArguments[0], processorInitializerArguments[1],
       processorInitializerArguments[2], processorInitializerArguments[3],
@@ -33,7 +35,9 @@ initWiceGrid = ->
     setupHidingShowingOfFilterRow wiceGridContainer
     setupShowingAllRecords wiceGridContainer, gridProcessor
     setupMultiSelectToggle wiceGridContainer
+    setupAutoreloadsForInternalFilters wiceGridContainer, gridProcessor
 
+  setupAutoreloadsForExternalFilters()
   setupExternalSubmitReset()
 
 
@@ -84,6 +88,8 @@ setupDatepicker = ->
         if eventToTriggerOnChange
           datepickerHiddenField.trigger(eventToTriggerOnChange)
 
+
+
 # hiding and showing the row with filters
 setupHidingShowingOfFilterRow = (wiceGridContainer) ->
   hideFilter = '.wg-hide-filter'
@@ -118,6 +124,45 @@ setupSubmitReset = (wiceGridContainer, gridProcessor) ->
       event.preventDefault()
       gridProcessor.process()
       false
+
+
+focusElementIfNeeded = (focusId) ->
+  elements = $('#' + focusId)
+  if elToFocus = elements[0]
+    elToFocus.value = elToFocus.value
+    elToFocus.focus()
+
+
+# autoreload for internal filters
+setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
+  $('select.auto-reload', wiceGridContainer).change ->
+    gridProcessor.process()
+
+  $('input.auto-reload', wiceGridContainer).keyup ->
+    gridProcessor.setProcessTimer(this.id)
+
+  $('input.negation-checkbox', wiceGridContainer).click ->
+    gridProcessor.process()
+
+  $(document).bind('wg:calendarChanged_' + gridProcessor.name, ->
+    gridProcessor.process()
+  )
+
+
+# autoreload for internal filters
+setupAutoreloadsForExternalFilters =  ->
+
+  $('.wg-detached-filter').each (index, detachedFilterContainer) ->
+    gridProcessor = getGridProcessorForElement(detachedFilterContainer)
+    if gridProcessor
+      $('select.auto-reload', detachedFilterContainer).change ->
+        gridProcessor.process()
+
+      $('input.auto-reload', detachedFilterContainer).keyup ->
+        gridProcessor.setProcessTimer(this.id)
+
+      $('input.negation-checkbox', detachedFilterContainer).click ->
+        gridProcessor.process()
 
 
 # trigger the all records mode
