@@ -35,7 +35,7 @@ module Wice::JsAdaptor   #:nodoc:
       end
 
       def auto_reloading_inputs_with_negation_checkboxes_event_initialization(grid_name)  #:nodoc:
-        %! $('div##{grid_name}.wice-grid-container input.negation_checkbox, .#{grid_name}_detached_filter input.negation_checkbox').click(function(event, element){\n! +
+        %! $('div##{grid_name}.wice-grid-container input.negation-checkbox, .#{grid_name}_detached_filter input.negation-checkbox').click(function(event, element){\n! +
         %!   #{grid_name}.process(this.id);\n! +
         %! });\n!
       end

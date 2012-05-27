@@ -25,7 +25,7 @@ module Wice
           check_box_tag(parameter_name2, '1', (params[:n] == '1'),
             :id => @dom_id2,
             :title => NlMessage['negation_checkbox_title'],
-            :class => 'negation_checkbox') +
+            :class => 'negation-checkbox') +
           '</div>'
       else
         @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query('')
