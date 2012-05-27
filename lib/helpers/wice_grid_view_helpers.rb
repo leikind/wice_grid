@@ -581,7 +581,7 @@ module Wice
           ":show_filters => :no (set :show_filters to :always in this case). Read about detached filters in the documentation.")
       end
 
-      content_tag :span, grid.output_buffer.filter_for(filter_key), :class => "wg-detached-filter", 'data-grid-name' => grid.name
+      content_tag :span, grid.output_buffer.filter_for(filter_key), :class => "wg-detached-filter #{grid.name}_detached_filter", 'data-grid-name' => grid.name
     end
 
 
