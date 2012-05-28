@@ -16,13 +16,6 @@ module Wice::JsAdaptor   #:nodoc:
         %/$(document).ready(function(){\n/
       end
 
-      def csv_export_icon_initialization(grid_name)  #:nodoc:
-        %! $('div##{grid_name}.wice-grid-container .export_to_csv_button').click(function(e){\n! +
-        %!   #{grid_name}.exportToCsv()\n! +
-        %! });\n!
-      end
-
-
       def call_to_save_query_and_key_event_initialization_for_saving_queries(
                                     id_and_name, grid_name, base_path_to_query_controller, parameters_json, ids_json)  #:nodoc:
         %/ function #{grid_name}_save_query(){\n/ +

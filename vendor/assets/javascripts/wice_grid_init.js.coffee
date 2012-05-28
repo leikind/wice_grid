@@ -32,6 +32,7 @@ initWiceGrid = ->
 
     setupDatepicker()
     setupSubmitReset wiceGridContainer, gridProcessor
+    setupCsvExport wiceGridContainer, gridProcessor
     setupHidingShowingOfFilterRow wiceGridContainer
     setupShowingAllRecords wiceGridContainer, gridProcessor
     setupMultiSelectToggle wiceGridContainer
@@ -39,6 +40,7 @@ initWiceGrid = ->
 
   setupAutoreloadsForExternalFilters()
   setupExternalSubmitReset()
+  setupExternalCsvExport()
 
 
 
@@ -100,30 +102,30 @@ setupHidingShowingOfFilterRow = (wiceGridContainer) ->
     $(this).hide()
     $(showFilter, wiceGridContainer).show()
     $(filterRow, wiceGridContainer).hide()
-    false
 
   $(showFilter, wiceGridContainer).click ->
     $(this).hide()
     $(hideFilter, wiceGridContainer).show()
     $(filterRow, wiceGridContainer).show()
-    false
+
+
+setupCsvExport = (wiceGridContainer, gridProcessor) ->
+  $('.export-to-csv-button', wiceGridContainer).click ->
+    gridProcessor.exportToCsv()
 
 
 # trigger submit/reset from within the grid
 setupSubmitReset = (wiceGridContainer, gridProcessor) ->
   $('.submit', wiceGridContainer).click ->
     gridProcessor.process()
-    false
 
   $('.reset', wiceGridContainer).click ->
     gridProcessor.reset()
-    false
 
   $('.wg-filter-row input[type=text]', wiceGridContainer).keydown (event) ->
     if event.keyCode == 13
       event.preventDefault()
       gridProcessor.process()
-      false
 
 
 focusElementIfNeeded = (focusId) ->
@@ -144,10 +146,8 @@ setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
   $('input.negation-checkbox', wiceGridContainer).click ->
     gridProcessor.process()
 
-  $(document).bind('wg:calendarChanged_' + gridProcessor.name, ->
+  $(document).bind 'wg:calendarChanged_' + gridProcessor.name, ->
     gridProcessor.process()
-  )
-
 
 # autoreload for internal filters
 setupAutoreloadsForExternalFilters =  ->
@@ -200,6 +200,15 @@ getGridProcessorForElement = (element) ->
     window[gridName]
   else
     null
+
+
+setupExternalCsvExport =  ->
+
+  $(".wg-external-csv-export-button").each (index, externalCsvExportButton) ->
+    gridProcessor = getGridProcessorForElement(externalCsvExportButton)
+    if gridProcessor
+      $(externalCsvExportButton).click (event) ->
+        gridProcessor.exportToCsv()
 
 
 setupExternalSubmitReset =  ->

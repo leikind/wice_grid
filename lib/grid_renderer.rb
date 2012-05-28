@@ -15,8 +15,6 @@ module Wice
     attr_reader :last_row_handler
     attr_reader :grid
 
-    attr_accessor :reset_button_present, :submit_button_present, :show_hide_button_present, :csv_export_icon_present
-
     @@order_parameter_name = "order"
     @@order_direction_parameter_name = "order_direction"
     @@page_parameter_name = "page"
@@ -91,10 +89,9 @@ module Wice
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      @csv_export_icon_present = true
       content_tag(:div, '',
         :title => NlMessage['csv_export_tooltip'],
-        :class => 'clickable export_to_csv_button'
+        :class => 'clickable export-to-csv-button'
       )
     end
 

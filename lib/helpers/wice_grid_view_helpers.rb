@@ -36,7 +36,7 @@ module Wice
     #   Useful when using a custom submit button
     #   By default it is false.
     # * <tt>:hide_csv_button</tt> - a boolean value which defines whether the default Export To CSV button
-    #   should be rendered. Useful when using a custom Export To CSV button (helper +export_to_csv_javascript+).
+    #   should be rendered. Useful when using a custom Export To CSV button.
     #   By default it is false.
     #   Please read README for more insights.
     #
@@ -474,9 +474,9 @@ module Wice
         ''
       end
 
-      if rendering.csv_export_icon_present
-        cached_javascript << JsAdaptor.csv_export_icon_initialization(grid.name)
-      end
+      # if rendering.csv_export_icon_present
+      #   cached_javascript << JsAdaptor.csv_export_icon_initialization(grid.name)
+      # end
 
 
       if Wice::ConfigurationProvider.value_for(:SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST) && rendering.contains_range_filters
@@ -509,8 +509,6 @@ module Wice
         hide_icon = show_icon = ''
       else
 
-        rendering.show_hide_button_present = true
-
         content_tag(:div, '',
           :title => NlMessage['hide_filter_tooltip'],
           :style => styles[0],
@@ -530,7 +528,6 @@ module Wice
       (if options[:hide_submit_button]
         ''
       else
-        rendering.submit_button_present = true
         content_tag(:div, '',
           :title => NlMessage['filter_tooltip'],
           :id => grid.name + '_submit_grid_icon',
@@ -540,7 +537,7 @@ module Wice
       if options[:hide_reset_button]
         ''
       else
-        rendering.reset_button_present = true
+
         content_tag(:div, '',
           :title => NlMessage['reset_filter_tooltip'],
           :id => grid.name + '_reset_grid_icon',
@@ -568,17 +565,6 @@ module Wice
         grid.output_buffer.filter_for(filter_key),
         :class => "wg-detached-filter #{grid.name}_detached_filter",
         'data-grid-name' => grid.name
-    end
-
-
-    # Returns javascript which triggers export to CSV.
-    # The parameter is a WiceGrid instance. Use it with +button_to_function+ to create
-    # your own Export To CSV button.
-    def export_to_csv_javascript(grid)
-      unless grid.kind_of? WiceGrid
-        raise WiceGridArgumentError.new("export_csv_javascript: the parameter must be a WiceGrid instance.")
-      end
-      "#{grid.name}.exportToCsv()"
     end
 
 
