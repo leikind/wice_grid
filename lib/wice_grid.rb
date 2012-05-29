@@ -64,7 +64,7 @@ module Wice
   class WiceGrid
 
     attr_reader :klass, :name, :resultset, :custom_order, :query_store_model
-    attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :saved_query
+    attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :csv_field_separator, :saved_query
     attr_writer :renderer
     attr_accessor :output_buffer, :view_helper_finished, :csv_tempfile
 
@@ -103,6 +103,7 @@ module Wice
       @options = {
         :conditions           => nil,
         :csv_file_name        => nil,
+        :csv_field_separator  => Defaults::CSV_FIELD_SEPARATOR,
         :custom_order         => {},
         :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
         :group                => nil,
@@ -126,6 +127,7 @@ module Wice
       @options.merge!(opts)
       @export_to_csv_enabled = @options[:enable_export_to_csv]
       @csv_file_name = @options[:csv_file_name]
+      @csv_field_separator = @options[:csv_field_separator]
 
       case @name = @options[:name]
       when String

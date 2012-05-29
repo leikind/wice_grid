@@ -570,9 +570,7 @@ module Wice
 
     def grid_csv(grid, rendering) #:nodoc:
 
-
-      field_separator = (grid.export_to_csv_enabled && grid.export_to_csv_enabled.is_a?(String)) ? grid.export_to_csv_enabled : ','
-      spreadsheet = ::Wice::Spreadsheet.new(grid.name, field_separator)
+      spreadsheet = ::Wice::Spreadsheet.new(grid.name, grid.csv_field_separator)
 
       # columns
       spreadsheet << rendering.column_labels(:in_csv)

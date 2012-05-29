@@ -27,8 +27,11 @@ if defined?(Wice::Defaults)
   # Show the upper pagination panel by default or not
   Wice::Defaults::SHOW_UPPER_PAGINATION_PANEL = false
 
-  # Enabling CSV export by default
+  # Disabling CSV export by default
   Wice::Defaults::ENABLE_EXPORT_TO_CSV = false
+
+  # Default CSV field separator
+  Wice::Defaults::CSV_FIELD_SEPARATOR = ','
 
 
   # The strategy when to show the filter.

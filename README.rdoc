@@ -951,11 +951,11 @@ parameters +in_csv+ and +in_html+ to include one of them to  html output only, t
     task.title
   end
 
-The default field separator in generated CSV is a comma, but it's possible to override this submitting a
-string to the <tt>:enable_export_to_csv</tt> parameter:
+The default field separator in generated CSV is a comma, but it's possible to override :
 
   @products_grid = initialize_grid(Product,
-    :enable_export_to_csv => ';',
+    :enable_export_to_csv => true,
+    :csv_field_separator => ';',
     :csv_file_name => 'products')
 
 
