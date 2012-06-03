@@ -691,8 +691,7 @@ module Wice
   class FilterConditionsGeneratorCustomFilter < FilterConditionsGenerator #:nodoc:
 
     def generate_conditions(table_alias, opts)   #:nodoc:
-      if opts.empty?
-        Wice.log "empty parameters for the grid custom filter"
+      if opts.empty? || (opts.is_a?(Array) && opts.size == 1 && opts[0].blank?)
         return false
       end
       opts = (opts.kind_of?(Array) && opts.size == 1) ? opts[0] : opts
@@ -761,7 +760,6 @@ module Wice
         return false
       end
       if string_fragment.empty?
-        Wice.log "invalid parameters for the grid string filter - empty string"
         return false
       end
       [" #{negation}  #{@column.alias_or_table_name(table_alias)}.#{@column.name} #{::Wice.get_string_matching_operators(@column.model)} ?",
@@ -800,7 +798,6 @@ module Wice
       end
 
       if conditions.size == 1
-        Wice.log "invalid parameters for the grid integer filter - either range limits are not supplied or they are not numeric"
         return false
       end
 
