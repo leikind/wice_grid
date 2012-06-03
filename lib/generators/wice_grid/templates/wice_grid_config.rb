@@ -119,7 +119,9 @@ if defined?(Wice::Defaults)
   # In many cases <tt>Time.zone.parse</tt> is enough, for instance,  <tt>%Y-%m-%d</tt>. If you change the format, make sure to check this code
   # and modify it if needed.
   Wice::Defaults::DATETIME_PARSER = lambda{|datetime_string|
-    if Time.zone
+    if datetime_string.blank?
+      nil
+    elsif Time.zone
       Time.zone.parse(datetime_string)
     else
       Time.parse(datetime_string)
@@ -131,7 +133,13 @@ if defined?(Wice::Defaults)
   # format defined by +DATETIME+ and must generate a Date object.
   # In many cases <tt>Date.parse</tt> is enough, for instance,  <tt>%Y-%m-%d</tt>. If you change the format, make sure to check this code
   # and modify it if needed.
-  Wice::Defaults::DATE_PARSER = lambda{|date_string| Date.parse(date_string) }
+  Wice::Defaults::DATE_PARSER = lambda{|date_string|
+    if date_string.blank?
+      nil
+    else
+      Date.parse(date_string)
+    end
+  }
 
   # Icon to popup the calendar.
   Wice::Defaults::CALENDAR_ICON = "/assets/icons/grid/calendar_view_month.png"

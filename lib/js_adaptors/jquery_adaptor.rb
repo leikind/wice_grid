@@ -28,20 +28,6 @@ module Wice::JsAdaptor   #:nodoc:
       end
 
 
-
-      def action_column_initialization(grid_name)  #:nodoc:
-        %! $('div##{grid_name}.wice-grid-container .select-all').click(function(e){\n! +
-        %!   $('div##{grid_name}.wice-grid-container .sel input').each(function(i, checkbox){\n! +
-        %!     checkbox.checked = true;\n! +
-        %!   })\n! +
-        %! })\n! +
-        %! $('div##{grid_name}.wice-grid-container .deselect-all').click(function(e){\n! +
-        %!   $('div##{grid_name}.wice-grid-container .sel input').each(function(i, checkbox){\n! +
-        %!     checkbox.checked = false;\n! +
-        %!   })\n! +
-        %! })\n!
-      end
-
       def fade_this(notification_messages_id)  #:nodoc:
         "$('##{notification_messages_id}').effect('fade')"
       end

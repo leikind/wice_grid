@@ -37,6 +37,7 @@ initWiceGrid = ->
     setupShowingAllRecords wiceGridContainer, gridProcessor
     setupMultiSelectToggle wiceGridContainer
     setupAutoreloadsForInternalFilters wiceGridContainer, gridProcessor
+    setupBulkToggleForActionColumn wiceGridContainer
 
   setupAutoreloadsForExternalFilters()
   setupExternalSubmitReset()
@@ -143,7 +144,7 @@ setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
   $('input.auto-reload', wiceGridContainer).keyup ->
     gridProcessor.setProcessTimer(this.id)
 
-  $('input.negation-checkbox', wiceGridContainer).click ->
+  $('input.negation-checkbox.auto-reload', wiceGridContainer).click ->
     gridProcessor.process()
 
   $(document).bind 'wg:calendarChanged_' + gridProcessor.name, ->
@@ -161,7 +162,7 @@ setupAutoreloadsForExternalFilters =  ->
       $('input.auto-reload', detachedFilterContainer).keyup ->
         gridProcessor.setProcessTimer(this.id)
 
-      $('input.negation-checkbox', detachedFilterContainer).click ->
+      $('input.negation-checkbox.auto-reload', detachedFilterContainer).click ->
         gridProcessor.process()
 
 
@@ -192,6 +193,14 @@ setupMultiSelectToggle = (wiceGridContainer)->
       select.multiple = false
     $(this).prev().show()
     $(this).hide()
+
+
+setupBulkToggleForActionColumn = (wiceGridContainer) ->
+  $('.select-all', wiceGridContainer).click ->
+    $('.sel input', wiceGridContainer).prop('checked', true)
+
+  $('.deselect-all', wiceGridContainer).click ->
+    $('.sel input', wiceGridContainer).prop('checked', false)
 
 
 getGridProcessorForElement = (element) ->

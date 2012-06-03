@@ -95,8 +95,7 @@ module Wice
 
     def render_filter #:nodoc:
       params = @grid.filter_params(self)
-      res = render_filter_internal(params)
-      return (res.is_a?(Array)) ? res : [res, nil]
+      render_filter_internal(params)
     end
 
     def render_filter_internal(params) #:nodoc:

@@ -32,16 +32,13 @@ module Wice
     def name  #:nodoc:
       return '' unless @select_all_buttons
 
-      html = content_tag(:div, '',
+      content_tag(:div, '',
         :class => 'clickable select-all',
         :title => NlMessage['select_all']) + ' ' +
       content_tag(:div, '',
         :class => 'clickable deselect-all',
         :title => NlMessage['deselect_all'])
 
-      js = JsAdaptor.action_column_initialization(grid.name)
-
-      [html, js]
     end
 
   end

@@ -53,7 +53,7 @@ module Wice
       html2 = date_calendar_jquery(
         params[:to], NlMessage['date_selector_tooltip_to'],   :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name)
 
-      [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, '']
+      %!<div class="date-filter">#{html1}<br/>#{html2}</div>!
     end
 
 
