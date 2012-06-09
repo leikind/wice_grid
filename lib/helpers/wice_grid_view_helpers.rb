@@ -468,15 +468,6 @@ module Wice
         ''
       end
 
-      # if rendering.csv_export_icon_present
-      #   cached_javascript << JsAdaptor.csv_export_icon_initialization(grid.name)
-      # end
-
-
-      if Wice::ConfigurationProvider.value_for(:SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST) && rendering.contains_range_filters
-        cached_javascript << JsAdaptor.update_ranges(grid.name)
-      end
-
       content << javascript_tag(
         JsAdaptor.dom_loaded + cached_javascript.compact.join('') + '})'
       )

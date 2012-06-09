@@ -32,18 +32,6 @@ module Wice::JsAdaptor   #:nodoc:
         "$('##{notification_messages_id}').effect('fade')"
       end
 
-
-      def update_ranges(grid_name)
-        %! $('div##{grid_name}.wice-grid-container .range-start, .#{grid_name}_detached_filter .range-start').keyup(function(e, a){\n! +
-        %!   var endRange = $(e.target).next();\n! +
-        %!   if (e.target.value){\n! +
-        %!     endRange.val(#{Wice::ConfigurationProvider.value_for(:SECOND_RANGE_VALUE_FOLLOWING_THE_FIRST)} + parseInt(e.target.value));\n! +
-        %!     }else{\n! +
-        %!       endRange.val('');\n! +
-        %!     }\n! +
-        %! });\n!
-      end
-
     end
 
   end

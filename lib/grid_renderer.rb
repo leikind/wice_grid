@@ -495,10 +495,6 @@ module Wice
     end
 
 
-    def contains_range_filters
-      filter_columns(:in_html).detect{|column| column.filter_shown? && column.is_a?(ViewColumn.get_column_processor(:integer))}
-    end
-
     protected
 
 
