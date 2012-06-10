@@ -34,7 +34,7 @@ module Wice
         end
       end
 
-      render :file => "#{Pathname.new(__FILE__).dirname}/views/delete.rjs"
+      render_asyns_result
     end
 
     def create  #:nodoc:
@@ -57,7 +57,7 @@ module Wice
         @error_messages = @saved_query.errors.map{ |_, msg| msg }.join(' ')
       end
 
-      render :file => "#{Pathname.new(__FILE__).dirname}/views/create.rjs"
+      render_asyns_result
     end
 
     def extra
@@ -66,13 +66,17 @@ module Wice
 
     protected
 
+    def render_asyns_result
+      render :json => {
+        'error_messages' => @error_messages,
+        'notification_messages' => @notification_messages,
+        'query_list' => render_to_string(:inline => '<%=saved_queries_list(@grid_name, @saved_query, controller.extra).html_safe%>')
+      }
+    end
+
     def init  #:nodoc:
       @query_store_model = ::Wice::get_query_store_model
-
       @grid_name = params[:grid_name]
-      @notification_messages_dom_id = "#{@grid_name}_notification_messages"
-      @query_list_dom_id = "#{@grid_name}_query_list"
-
     end
   end
 end

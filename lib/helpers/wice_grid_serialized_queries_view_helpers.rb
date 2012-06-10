@@ -16,7 +16,7 @@ module Wice
       options.merge!(opts)
 
       grid_name = grid.name
-      id_and_name = "#{grid_name}_saved_query_name"
+      input_field_name = "#{grid_name}_saved_query_name"
       base_path_to_query_controller = create_serialized_query_url(:grid_name => grid_name)
 
       parameters = grid.get_state_as_parameter_value_pairs
@@ -28,7 +28,7 @@ module Wice
       notification_messages_id = "#{grid_name}_notification_messages"
       (%! <div class="wice_grid_query_panel"><h3>#{NlMessage['saved_query_panel_title']}</h3>! +
         saved_queries_list(grid_name, grid.saved_query, options[:extra_parameters]) +
-        %!<div id="#{notification_messages_id}"  onmouseover="#{Wice::JsAdaptor.fade_this(notification_messages_id)}"></div>! +
+        %!<div id="#{notification_messages_id}" ></div>! +
         if block_given?
           view, ids = yield
           view
@@ -36,14 +36,16 @@ module Wice
           ''
         end +
         '<div class="wg-saved-query-input-controls">'+
-        text_field_tag(id_and_name,  '', :size => 20, :onkeydown=>'', :id => id_and_name) +
-        button_to_function(NlMessage['save_query_button_label'],  "#{grid_name}_save_query()" ) +
-        '</div></div>' +
-        javascript_tag do
-          JsAdaptor.call_to_save_query_and_key_event_initialization_for_saving_queries(
-            id_and_name, grid_name, base_path_to_query_controller, parameters.to_json, ids.to_json
-          ).html_safe
-        end
+        text_field_tag(input_field_name,  '', :size => 20, :onkeydown=>'', :class => 'wice-grid-save-query-field') +
+        button_tag(
+          NlMessage['save_query_button_label'],
+          :class => 'wice-grid-save-query-button',
+          'data-grid-name'   => grid_name,
+          'data-base-path-to-query-controller' => base_path_to_query_controller,
+          'data-parameters'  => parameters.to_json,
+          'data-ids'         => ids.to_json
+        ) +
+        '</div></div>'
         ).html_safe
     end
 
@@ -59,7 +61,12 @@ module Wice
 
       %!<ul id="#{grid_name}_query_list" class="query_list"> ! +
       query_store_model.list(grid_name, controller).collect do |sq|
-        link_opts = {:class => 'query_load_link', :title => "#{link_title} #{sq.name}"}
+        link_opts = {
+          :class => 'wice-grid-query-load-link',
+          :title => "#{link_title} #{sq.name}",
+          'data-query-id' => sq.id,
+          'data-grid-name' => grid_name
+        }
         link_opts[:class] += ' current' if saved_query == sq
         "<li>"+
         link_to(
@@ -70,14 +77,12 @@ module Wice
             :current => currently_loaded_query_id,
             :extra => extra_parameters
           ),
-          :remote => true,
-          :confirm => deletion_confirmation,
-          :title => "#{deletion_link_title} #{sq.name}",
-          :with => 'with'
+          :class => 'wice-grid-delete-query',
+          'data-wg-confirm' => deletion_confirmation,
+          'data-grid-name' => grid_name,
+          :title => "#{deletion_link_title} #{sq.name}"
         )  + ' &nbsp; ' +
-        link_to_function(h(sq.name),
-          %/ if (typeof(#{grid_name}) != "undefined") #{grid_name}.loadQuery(#{sq.id}) /,
-          link_opts) +
+        link_to(h(sq.name), '#', link_opts) +
         if sq.respond_to? :description
           desc = sq.description
           desc.blank? ? '' : " <i>#{desc}</i>"

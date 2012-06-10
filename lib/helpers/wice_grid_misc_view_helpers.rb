@@ -26,7 +26,6 @@ module Wice
     # WiceGrid is not a scaffolding solution, I hate scaffolding and how certain idiots associate scaffolding with Rails,
     # so I do not document this method to avoid contributing to this misunderstanding.
     def scaffolded_grid(grid_obj, opts = {}) #:nodoc:
-      Wice::JsAdaptor.init
       unless grid_obj.kind_of? WiceGrid
         raise WiceGridArgumentError.new("scaffolded_grid: the parameter must be a WiceGrid instance.")
       end

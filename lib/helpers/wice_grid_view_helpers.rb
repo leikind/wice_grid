@@ -202,7 +202,7 @@ module Wice
       pagination_panel_content_html, pagination_panel_content_js = nil, nil
       if options[:upper_pagination_panel]
         content << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
-          pagination_panel_content_html, pagination_panel_content_js =
+          pagination_panel_content_html =
             pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
           pagination_panel_content_html
         end
@@ -222,8 +222,6 @@ module Wice
       elsif options[:show_filters] == :always
         true
       end
-
-      cached_javascript = []
 
       rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
 
@@ -328,14 +326,14 @@ module Wice
         if pagination_panel_content_html
           pagination_panel_content_html
         else
-          pagination_panel_content_html, pagination_panel_content_js =
+          pagination_panel_content_html =
             pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
           pagination_panel_content_html
         end
       end
 
       content << '</tfoot><tbody>'
-      cached_javascript << pagination_panel_content_js
+
 
       # rendering  rows
       cell_value_of_the_ordered_column = nil
@@ -457,20 +455,16 @@ module Wice
 
       content << '</div>'
 
-      js_loaded_check  = if Rails.env == 'development'
-        %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
-        %$   alert("wice_grid.js not loaded, WiceGrid cannot proceed!\\n" +\n$ +
-        %$     "Make sure that you have loaded wice_grid.js.\\n" +\n$ +
-        %$     "Add line\\n//= require wice_grid.js\\n" +\n$ +
-        %$     "to app/assets/javascripts/application.js")\n$ +
-        %$ }\n$
-      else
-        ''
+      if Rails.env == 'development'
+        content  <<  javascript_tag(%/ $(document).ready(function(){ \n/ +
+          %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
+          %$   alert("wice_grid.js not loaded, WiceGrid cannot proceed!\\n" +\n$ +
+          %$     "Make sure that you have loaded wice_grid.js.\\n" +\n$ +
+          %$     "Add line\\n//= require wice_grid.js\\n" +\n$ +
+          %$     "to app/assets/javascripts/application.js")\n$ +
+          %$ }\n$ +
+          %$ }) $)
       end
-
-      content << javascript_tag(
-        JsAdaptor.dom_loaded + cached_javascript.compact.join('') + '})'
-      )
 
       if content.stubborn_output_mode
         grid.output_buffer = content
@@ -587,15 +581,15 @@ module Wice
         extra_request_parameters["#{grid.name}[q]"] = grid.saved_query.id
       end
 
-      html, js = pagination_info(grid, allow_showing_all_records)
+      html = pagination_info(grid, allow_showing_all_records)
 
-      [will_paginate(grid.resultset,
+      will_paginate(grid.resultset,
         :previous_label => NlMessage['previous_label'],
         :next_label     => NlMessage['next_label'],
         :param_name     => "#{grid.name}[page]",
         :renderer       => ::Wice::WillPaginatePaginator,
         :params         => extra_request_parameters).to_s +
-        (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary, js]
+        (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary
     end
 
 
@@ -619,14 +613,12 @@ module Wice
       pagination_override_parameter_name = "#{grid_name}[pp]"
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
 
-      html = content_tag(:a, NlMessage['switch_back_to_paginated_mode_label'],
+      content_tag(:a, NlMessage['switch_back_to_paginated_mode_label'],
         :href=>"#",
         :title => NlMessage['switch_back_to_paginated_mode_tooltip'],
         :class => 'wg-back-to-pagination-link',
         'data-grid-state' => parameters.to_json
       )
-
-      [html, '']
     end
 
     def pagination_info(grid, allow_showing_all_records)  #:nodoc:
@@ -651,13 +643,10 @@ module Wice
           end
       end +
       if grid.all_record_mode?
-        res, js = back_to_pagination_link(parameters, grid.name)
-        res
+        back_to_pagination_link(parameters, grid.name)
       else
         ''
       end
-
-      [html, js]
     end
 
   end

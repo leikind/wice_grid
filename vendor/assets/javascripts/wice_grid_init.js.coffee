@@ -3,7 +3,6 @@ jQuery ->
 
 initWiceGrid = ->
 
-
   $(".wice-grid-container").each (index, wiceGridContainer) ->
 
     gridName = wiceGridContainer.id
@@ -42,9 +41,6 @@ initWiceGrid = ->
   setupAutoreloadsForExternalFilters()
   setupExternalSubmitReset()
   setupExternalCsvExport()
-
-
-
 
 # datepicker logic
 setupDatepicker = ->
@@ -247,3 +243,5 @@ setupExternalSubmitReset =  ->
           gridProcessor.process()
           event.preventDefault()
           false
+
+window['getGridProcessorForElement'] = getGridProcessorForElement

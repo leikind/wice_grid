@@ -14,8 +14,6 @@ require 'grid_output_buffer.rb'
 require 'wice_grid_controller.rb'
 require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
-require 'js_adaptors/js_adaptor.rb'
-require 'js_adaptors/jquery_adaptor.rb'
 require 'view_columns/column_processor_index.rb'
 require 'view_columns.rb'
 

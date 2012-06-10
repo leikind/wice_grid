@@ -33,30 +33,6 @@ class WiceGridProcessor
     window.location = @appendToUrl(@baseLinkForShowAllRecords, requestPath)
 
 
-  loadQuery : (queryId)->
-    request = @appendToUrl(
-      @buildUrlWithParams()
-      @parameterNameForQueryLoading +  encodeURIComponent(queryId)
-    )
-
-    window.location = request
-
-  saveQuery : (fieldId, queryName, basePathToQueryController, gridState, inputIds)->
-    if inputIds instanceof Array
-      inputIds.each (domId) ->
-        gridState.push(['extra[' + domId + ']', $('#'+ domId)[0].value])
-
-
-    requestPath = @gridStateToRequest(gridState)
-
-    jQuery.ajax
-      url: basePathToQueryController
-      async: true
-      data: requestPath + '&query_name=' + encodeURIComponent(queryName)
-      dataType: 'script'
-      success:  -> $('#' + fieldId).val('')
-      type: 'POST'
-
   gridStateToRequest : (gridState)->
     jQuery.map(
       gridState
