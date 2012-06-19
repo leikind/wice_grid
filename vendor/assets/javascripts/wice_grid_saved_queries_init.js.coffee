@@ -34,7 +34,14 @@ loadQuery = (loadLink, event) ->
 
 deleteQuery = (deleteQueryButton, event) ->
 
-  if confirm($(deleteQueryButton).data('wg-confirm')) && (gridProcessor = window.getGridProcessorForElement(deleteQueryButton))
+  confirmation = $(deleteQueryButton).data('wg-confirm')
+
+  invokeConfirmation = if confirmation
+    -> confirm(confirmation)
+  else
+    -> true
+
+  if invokeConfirmation() && (gridProcessor = window.getGridProcessorForElement(deleteQueryButton))
 
     jQuery.ajax
       url: $(deleteQueryButton).attr('href')

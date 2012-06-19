@@ -70,12 +70,13 @@ module Wice
       render :json => {
         'error_messages' => @error_messages,
         'notification_messages' => @notification_messages,
-        'query_list' => render_to_string(:inline => '<%=saved_queries_list(@grid_name, @saved_query, controller.extra).html_safe%>')
+        'query_list' => render_to_string(:inline => '<%=saved_queries_list(@grid_name, @saved_query, controller.extra, @confirm).html_safe%>')
       }
     end
 
     def init  #:nodoc:
       @query_store_model = ::Wice::get_query_store_model
+      @confirm = params[:confirm] == '1' || params[:confirm] == 'true'
       @grid_name = params[:grid_name]
     end
   end
