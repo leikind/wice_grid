@@ -38,7 +38,7 @@ module Wice
 
         '<div class="form-horizontal"><div class="wg-saved-query-input-controls input-append">'+
 
-        text_field_tag(input_field_name,  '', :size => 20, :onkeydown=>'', :class => 'wice-grid-save-query-field span2') +
+        text_field_tag(input_field_name,  '',  :onkeydown=>'', :class => 'wice-grid-save-query-field span4') +
         button_tag(
           NlMessage['save_query_button_label'],
           :class => 'wice-grid-save-query-button btn',
