@@ -54,9 +54,6 @@ module Wice
 
     end
 
-    rake_tasks do
-      load 'tasks/wice_grid_tasks.rake'
-    end
   end
 
   class WiceGrid

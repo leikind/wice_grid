@@ -49,7 +49,6 @@ Gem::Specification.new do |s|
     "lib/helpers/wice_grid_serialized_queries_view_helpers.rb",
     "lib/helpers/wice_grid_view_helpers.rb",
     "lib/table_column_matrix.rb",
-    "lib/tasks/wice_grid_tasks.rake",
     "lib/view_columns.rb",
     "lib/views/create.rjs",
     "lib/views/create_jq.rjs",
