@@ -1,0 +1,82 @@
+1. Support for Prototype has been dropped. No hard feelings, Prototype, no matter what
+   others say, I liked you :)
+
+2. All assets are in the asset pipeline. All javascript is now coffeescript. No more Rails
+   2 legacy in the form of obtrusive javascript in the HTML page. The styles file is copied
+   to the application asset directory by a generate task so that is it easy to modify it to
+   the application needs. The javascript and images are loaded from the plugin. Read the
+   Installation section in README for details. Thanks to the asset pipeline taking care of
+   loading assets for us, methods +include_wice_grid_assets+, +names_of_wice_grid_stylesheets+,
+   and +names_of_wice_grid_javascripts+ have been removed
+
+3. ERB mode has been removed. It had never been used by anyone and is bad style anyway. In
+   case you have no idea what it was, here's what it was:
+
+      <% grid(@countries_grid, :erb_mode => true) do |g| %>
+        <% g.column :column_name => 'Name', :attribute_name => 'name' do |country| %>
+          <b>Name: <%= link_to(country.name, country_path(country)) %></b>
+        <% end %>
+      <% end -%>
+
+4. WiceGrid is compatible with Twitter Bootstrap out of the box.
+
+5. Paths to various images used by WiceGrid have been removed from the configuration file
+   and are now defined only in the css file. Developers are encouraged to modify
+   <tt>wice_grid.css.scss</tt> to use other images and to change the styles in general.
+
+6. The markup and css classes that WiceGrid generates have changed, and CSS for older versions
+   of WiceGrid might not work. Inspect the source code.
+
+7. Parameter names in the grid helper have been renamed:
+   * <tt>:table_html_attrs</tt> becomes <tt>:html</tt>
+   * <tt>:header_tr_html_attrs</tt> becomes <tt>:header_tr_html</tt>
+
+8. Parameter names in column definitions have been renamed:
+   * <tt>:column_name</tt> becomes <tt>:name</tt>
+   * <tt>:attribute_name</tt> becomes <tt>:attribute</tt>
+   * <tt>:model_class</tt> becomes <tt>:model</tt>
+   * <tt>:allow_ordering</tt>  becomes <tt>:ordering</tt>
+   * <tt>:td_html_attrs</tt>  becomes <tt>:html</tt>
+   * Negation in the parameter name does not contribute to the simplicity of an API, so
+     <tt>:no_filter</tt> in  becomes <tt>:filter</tt>. Consequently, <tt>:no_filter => true</tt>
+     becomes <tt>:filter => false</tt>
+   * <tt>:negation_in_filter</tt> becomes <tt>:negation</tt>
+
+
+9. New configuration parameter <tt>DEFAULT_TABLE_CLASSES</tt> contains CSS classes added to
+   all WiceGrid tables by default.
+
+10. In previous versions of WiceGrid in the jQuery mode DateTime filters used to automatically
+    fall back on Rails DateTime helpers due to absence of time controls in jQuery DatePicker.
+    In version 3.2 this behavior has been changed to always use jQuery DatePicker, even with
+    DateTime filters. Of course it is possible to force  Rails DateTime with
+    <tt>:helper_style => :standard</tt> in the column definition.
+
+11. The second variable injected into to <tt>before_row</tt> and <tt>after_row</tt> block,
+    and the first parameter injected into the <tt>last_row</tt> is the number of columns in
+    the current grid.
+
+12. <tt>:csv_field_separator</tt> is a new parameter for +initialize_grid+ defining the field
+    separator in CSV files. The default separator is defined by +CSV_FIELD_SEPARATOR+ in the
+    config file.
+
+13. New parameter +:confirm+ for +saved_queries_panel+ which turns on or off the JS confirm
+    dialogs when deleting saved queries.
+
+14. Instead of the old rake task creating a table for serialized queries a generator has been
+    added which adds a migration file to +db/migrations+.
+
+15. Instead of using helpers +submit_grid_javascript+ and +reset_grid_javascript+ to create
+    external Submit and Reset buttons all you have to do is add a button or any other
+    clickable HTML element with class +wg-external-submit-button+ or +wg-external-reset-button+,
+    and attribute +data-grid-name+ whose value is the name of the grid:
+
+      <button class="wg-external-submit-button" data-grid-name="grid">Submit</button>
+      <button class="wg-external-reset-button" data-grid-name="grid">Reset</button>
+
+
+    The same goes for the external CSV export button, only the CSS class is
+    +wg-external-csv-export-button+:
+
+      <button class="wg-external-csv-export-button" data-grid-name="grid">Export To CSV</button>
+

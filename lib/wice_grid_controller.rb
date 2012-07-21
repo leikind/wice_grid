@@ -40,6 +40,7 @@ module Wice
     #   HTTP parametes, DOM IDs, etc. The shorter the name, the shorter the GET request is. The name can only contain alphanumeruc characters.
     # * <tt>:enable_export_to_csv</tt> - <Enable export of the table to CSV. Read the How-To to learn what else is needed to enable CSV export.
     # * <tt>:csv_file_name</tt> - Name of the exported CSV file. If the parameter is missing, the name of the grid will be used instead.
+    # * <tt>:csv_field_separator</tt> - field separator for CSV files. The default is defined in +CSV_FIELD_SEPARATOR+ in the config file.
     # * <tt>:custom_order</tt> - used for overriding the ORDER BY clause with custom sql code (for example, including a function).
     #   The value of the parameter is a hash where keys are fully qualified names
     #   of database columns, and values the required chunks of SQL to use in the ORDER BY clause, either as strings or Proc object

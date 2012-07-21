@@ -4,29 +4,13 @@ WiceGrid allows to save the state of filters as a custom query and later restore
 
 === Step 1: Create the database table to store queries
 
-To get started really fast create the database table to store queries with the following command:
+To get started create the database table to store queries. Run the following generator:
 
-  rake wice_grid:create_queries_table
+  rails g wice_grid:add_migration_for_serialized_queries
 
-This will create the table, but it is preferred to manually create and run a migration in <tt>db/migrate</tt>:
+This add a migration file with the definition of the table. Run the migrate task:
 
-  class CreateWiceGridSerializedQueriesTable < ActiveRecord::Migration
-    def self.up
-      create_table :wice_grid_serialized_queries do |t|
-        t.column :name,      :string
-        t.column :grid_name, :string
-        t.column :query,     :text
-
-        t.timestamps
-      end
-      add_index :wice_grid_serialized_queries, :grid_name
-      add_index :wice_grid_serialized_queries, [:grid_name, :id]
-    end
-
-    def self.down
-      drop_table :wice_grid_serialized_queries
-    end
-  end
+  bundle 'rake db:migrate'
 
 === Step 2: Create the controller to handle AJAX queries.
 
@@ -58,11 +42,11 @@ Just like WiceGrid itself, the query panel contains no forms and is thus form-fr
 *Important*: Saved queries of all grids in the application are stored in one table and differentiated by the name of the grid, thus, for all forms
 with saved queries it is important to define different names! (use parameter <tt>:name</tt> in +initialize_grid+)
 
-It is also possible to initialize a grid with an initial saved query providing the id of the query record or the ActiveRecord 
+It is also possible to initialize a grid with an initial saved query providing the id of the query record or the ActiveRecord
 itself to parameter <tt>saved_query</tt>:
 
-  @products_grid = initialize_grid(Product, 
-    :name => 'prod_grid', 
+  @products_grid = initialize_grid(Product,
+    :name => 'prod_grid',
     :saved_query =>  SavedQuery.find_by_id_and_grid_name(12, 'prod_grid') )
 
 
@@ -70,15 +54,17 @@ itself to parameter <tt>saved_query</tt>:
 
 WiceGrid allows to add application specific logic to saving and restoring queries by substituting the default ActiveRecord model provided by WiceGrid with a custom model.
 
-Copy <tt>vendor/plugins/wice_grid/lib/wice_grid_serialized_query.rb</tt> to <tt>app/models/</tt>, rename the file and the class to your liking.
+Copy <tt>lib/wice_grid_serialized_query.rb</tt> from the gem to <tt>app/models/</tt>, rename the file and the class to your liking.
 
-Next, modify the model to suit your needs. Right after copying  and renaming the model to SavedQuery it looks like this:
+After renaming the model to SavedQuery it looks like this:
 
   class SavedQuery < ActiveRecord::Base  #:nodoc:
     serialize :query
 
-    validates_uniqueness_of :name, :scope => :grid_name, :on => :create, :message => ::Wice::Defaults::VALIDATES_UNIQUENESS_ERROR
-    validates_presence_of :name, :message => ::Wice::Defaults::VALIDATES_PRESENCE_ERROR
+    validates_uniqueness_of :name, :scope => :grid_name, :on => :create,
+      :message => 'A query with this name already exists'
+
+    validates_presence_of :name, :message => 'Please submit the name of the custom query'
 
     def self.list(name, controller)
       conditions = {:grid_name => name}
@@ -93,9 +79,10 @@ store queries for each user, we could add +user_id+ to the table and modify the 
   class SavedQuery < ActiveRecord::Base
     serialize :query
 
-    # the scope is changed to include user_id
-    validates_uniqueness_of :name, :scope => [:grid_name, :user_id], :on => :create, :message => 'A query with this name already exists'
-    validates_presence_of :name, :message => 'Please submit the name of the query'
+    validates_uniqueness_of :name, :scope => :grid_name, :on => :create,
+      :message => 'A query with this name already exists'
+
+    validates_presence_of :name, :message => 'Please submit the name of the custom query'
 
     belongs_to :identity # !
 
@@ -114,7 +101,7 @@ The following step is to make sure that a new query is saved with the correct +u
 
    <%= saved_queries_panel(@identities_grid, :extra_parameters => {:user_id => @current_user.id}) %>
 
-For every key in has :extra_parameters there must exist a field in the model - this hash will be used as a parameter to 
+For every key in has :extra_parameters there must exist a field in the model - this hash will be used as a parameter to
 <tt>attributes=</tt> method of the query object.
 
 Finally, let WiceGrid know which model to use for saving queries by changing constant  +QUERY_STORE_MODEL+

@@ -8,8 +8,7 @@ News:: http://leikind.org/pages/wicegrid/
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 
-FOR RAILS 3.0 install version 3.0.4
-
+FOR RAILS 3.0.X AND 3.1.X USE VERSION 3.0.4.
 FOR RAILS 2 USE VERSION 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
 
@@ -56,10 +55,19 @@ or just view the code ( https://github.com/leikind/wice_grid_testbed ).
 
 == Requirements
 
-Rails version 3.2.x or newer. Use WiceGrid 3.0.4 for older Rails 3.0.x and 3.1.x versions.
-
+Rails version 3.2.x or newer, jQuery, jQuery Datepicker.
+For Rails 3.0.x and 3.1.x versions use version 3.0.4.
+For Rails 2 use version 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
 == How-To
+
+
+=== Support for javascript frameworks
+
+WiceGrid started as a plugin using the Prototype javascript framework.
+Support for jQuery was added for version 0.6.
+Beginning from version 3.2 only jQuery is supported.
+
 
 === Installation
 
@@ -73,13 +81,25 @@ Run the generator:
 
    rails g wice_grid:install
 
-This adds the config file  <tt>config/initializers/wice_grid_config.rb</tt>, the language file
-<tt>config/locales/wice_grid.yml</tt>, and the styles file<tt>app/assets/stylesheets/wice_grid.css.scss</tt>
+This adds the config file <tt>wice_grid_config.rb</tt> to <tt>config/initializers/</tt>, the locale file
+<tt>wice_grid.yml</tt> to <tt>config/locales/</tt>, and the styles file
+<tt>wice_grid.css.scss</tt> to <tt>app/assets/stylesheets/</tt>.
 
-=== Support for Prototype and jQuery
+Require WiceGrid javascript in your js index file:
 
-WiceGrid started as a plugin using the Prototype javascript framework. Support for jQuery was added for version 0.6.
-Beginning from version 3.2 only jQuery is supported.
+  //= require wice_grid
+
+Make sure that jQuery is required, and if the application uses Date and DateTime filters, jQuery Datepicker has
+to be required as well. Here is an example of application.js with everything WiceGrid needs:
+
+  //= require jquery
+  //= require jquery_ujs
+  //= require jquery-ui
+  //= require wice_grid
+  //= require jquery.ui.datepicker
+  //= require_tree .
+
+
 
 
 === Basics
@@ -607,7 +627,19 @@ To only allow single selection use <tt>:allow_multiple_selection</tt>:
 Default values like  can be  changed in <tt>config/initializers/wice_grid_config.rb</tt>.
 
 === Submit/Reset buttons
-TO DO: rewrite
+Instead of using default Submit and Reset icons you can use external HTML elements to trigger
+these actions. Add a button or any other clickable HTML element with class
++wg-external-submit-button+ or +wg-external-reset-button+, and attribute +data-grid-name+
+whose value is the name of the grid:
+
+      <button class="wg-external-submit-button" data-grid-name="grid">Submit</button>
+      <button class="wg-external-reset-button" data-grid-name="grid">Reset</button>
+
+To hide the default icons use <tt>:hide_submit_button => true</tt> and
+<tt>:hide_reset_button => true</tt> in the +grid+ helper.
+
+
+
 
 === Auto-reloading filters
 
@@ -692,7 +724,7 @@ It is possible to add your own handcrafted HTML after and/or before each grid ro
 This works similar to +row_attributes+, by adding blocks +after_row+, +before_row+,  and +last_row+:
 
   <%= grid(@tasks_grid) do |g|
-    g.before_row do |task|
+    g.before_row do |task, number_of_columns|
       if task.active?
         "<tr><td colspan=\"10\">Custom line for #{t.name}</td></tr>"  # this would add a row
                                                                       # before every active task row
@@ -701,7 +733,7 @@ This works similar to +row_attributes+, by adding blocks +after_row+, +before_ro
       end
     end
 
-    g.last_row do          # This row will always be added to the bottom of the grid
+    g.last_row do |number_of_columns|         # This row will always be added to the bottom of the grid
       content_tag(:tr,
         content_tag(:td,
           'Last row',
@@ -717,7 +749,8 @@ return +nil+ if no row is needed for this record.
 Naturally, there is only one +before_row+  definition and one +after_row+
 definition for a WiceGrid instance.
 
-A real life example might be some enterprisy tables inside a table.
+The second variable injected into to <tt>before_row</tt> and <tt>after_row</tt> block, and the first parameter injected
+into the <tt>last_row</tt> is the number of columns in the current grid.
 
 === Rendering a grid without records
 
@@ -803,14 +836,8 @@ localization files if the application is multilingual.
 jQuery datepicker does not have any time related controls, and when dealing with DateTime filters,
 the time value is ignored.
 
-You can also use standard Rails Date and DateTime helpers which are a set of dropdown lists.
-
-
-
-It's possible to change the style of Date/DateTime filters it in
-<tt>config/initializers/wice_grid_config.rb</tt>, variable HELPER_STYLE.
-
-The flavor of the date filter can also be changed on per-column basis:
+Another option is standard Rails helpers. It's possible to change between the two styles of Date/DateTime
+filters in <tt>config/initializers/wice_grid_config.rb</tt> using constant HELPER_STYLE, or set it on per-column basis:
 
   g.column :name => 'Due Date', :attribute => 'due_date', :helper_style => :calendar do |task|
     task.due_date.to_s(:short) if task.due_date
@@ -820,15 +847,9 @@ The flavor of the date filter can also be changed on per-column basis:
     task.created_at.to_s(:short)
   end
 
-Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ define the format of dates the user will see, as well as the
-format of the string sent in a HTTP parameter.
-
-You can change the constants in
-<tt>config/initializers/wice_grid_config.rb</tt>. Doing so,  make sure that lamdbas defined
-in +DATETIME_PARSER+ and +DATE_PARSER+ return valid DateTime and Date objects. The format
-by default is <tt>%Y-%m-%d</tt> for the Date and the date part of DateTime, and <tt>Time.zone.parse</tt>
-and <tt>Date.parse</tt> handle it.
-Make sure it stays so.
+Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ in the configuration file define the format of dates the user will see, as well as the
+format of the string sent in a HTTP parameter. If you change the formats,  make sure that lamdbas defined
+in +DATETIME_PARSER+ and +DATE_PARSER+ return valid DateTime and Date objects.
 
 jQuery +datepicker+ uses a different format flavor, therefore there is an additional constant
 +DATE_FORMAT_JQUERY+. While +DATE_FORMAT_JQUERY+ is fed to +datepicker+, +DATE_FORMAT+ is still used
@@ -962,6 +983,14 @@ The default field separator in generated CSV is a comma, but it's possible to ov
     :csv_field_separator => ';',
     :csv_file_name => 'products')
 
+If you need an external CSV export button , add class +wg-external-csv-export-button+
+to any clickable element on page and set its attribute +data-grid-name+ to the name of
+the grid:
+
+      <button class="wg-external-csv-export-button" data-grid-name="grid">Export To CSV</button>
+
+If you need to disable the default export icon in the grid, add
+<tt>:hide_csv_button => true</tt> to the +grid+ helper.
 
 === Detached Filters
 
