@@ -5,6 +5,7 @@ module Wice
     # View helper to render the list of saved queries and the form to create a new query.
     # Parameters:
     # * <tt>:extra_parameters</tt> -  a hash of additional parameters to use when creating a new query object.
+    # * <tt>:confirm</tt> -  A boolean value which turns on or off the JS confirm dialogs when deleting saved queries.
     # Read section "Adding Application Specific Logic to Saving/Restoring Queries" in README for more details.
     def saved_queries_panel(grid, opts = {})
       unless grid.kind_of? WiceGrid
@@ -72,7 +73,7 @@ module Wice
         link_opts[:class] += ' current' if saved_query == sq
         "<li>"+
         link_to(
-          image_tag(Defaults::DELETE_QUERY_ICON),
+          content_tag(:div, '', :class => 'delete-icon'),
           delete_serialized_query_path(
             :grid_name => grid_name,
             :id        => sq.id,

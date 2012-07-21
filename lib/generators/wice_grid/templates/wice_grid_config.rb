@@ -80,9 +80,6 @@ if defined?(Wice::Defaults)
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                               Saving Queries                              #
 
-  # Icon to delete a saved query
-  Wice::Defaults::DELETE_QUERY_ICON = 'icons/grid/delete.png'
-
   # ActiveRecord model to store queries. Read the documentation for details
   # QUERY_STORE_MODEL = 'WiceGridSerializedQuery'
   Wice::Defaults::QUERY_STORE_MODEL = 'WiceGridSerializedQuery'

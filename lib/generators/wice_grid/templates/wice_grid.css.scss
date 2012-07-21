@@ -46,6 +46,7 @@
     @include icon-dimensions;
   }
 
+
   .wg-show-filter.clickable,
   .wg-hide-filter.clickable{
     background: transparent url(/assets/icons/grid/page_white_find.png) no-repeat;
@@ -125,5 +126,14 @@
 
 }
 
-.wice-grid-query-panel li {list-style-type: none; }
-.wice-grid-query-panel ul {margin-left: 0 }
+.wice-grid-query-panel{
+  li {list-style-type: none; }
+
+  ul {margin-left: 0 }
+
+  a.wice-grid-delete-query .delete-icon{
+    background: transparent url(/assets/icons/grid/delete.png) no-repeat;
+    float: left;
+    @include icon-dimensions;
+  }
+}
