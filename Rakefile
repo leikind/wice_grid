@@ -1,6 +1,6 @@
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -19,11 +19,13 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('SAVED_QUERIES_HOWTO.rdoc')
+  rdoc.rdoc_files.include('RELEASE_NOTES_3.2.pre1.rdoc')
   rdoc.rdoc_files.include('CHANGELOG')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
 begin
+  require 'git'
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "wice_grid"
