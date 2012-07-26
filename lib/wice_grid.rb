@@ -284,13 +284,27 @@ module Wice
       @ar_options[:select]  = @options[:select]
     end
 
+
+    # TO DO: what to do with other @ar_options values?
     def read  #:nodoc:
       form_ar_options
       @klass.unscoped do
         @resultset = if self.output_csv?
-          @relation.find(:all, @ar_options)
+          # @relation.find(:all, @ar_options)
+          @relation.
+            includes(@ar_options[:include]).
+            joins(   @ar_options[:joins]).
+            where(   @ar_options[:conditions])
+
         else
-          @relation.paginate(@ar_options)
+          # p @ar_options
+          @relation.
+            page(    @ar_options[:page]).
+            per(     @ar_options[:per_page]).
+            includes(@ar_options[:include]).
+            joins(   @ar_options[:joins]).
+            where(   @ar_options[:conditions])
+
         end
       end
       invoke_resultset_callbacks
