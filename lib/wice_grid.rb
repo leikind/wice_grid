@@ -50,8 +50,6 @@ module Wice
         require 'wice_grid_serialized_query.rb'
       end
 
-      require 'will_paginate_paginator.rb'
-
     end
 
   end
@@ -294,6 +292,7 @@ module Wice
           @relation.
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).
+            order(   @ar_options[:order]).
             where(   @ar_options[:conditions])
 
         else
@@ -303,6 +302,7 @@ module Wice
             per(     @ar_options[:per_page]).
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).
+            order(   @ar_options[:order]).
             where(   @ar_options[:conditions])
 
         end

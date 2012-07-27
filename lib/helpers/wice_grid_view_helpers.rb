@@ -590,7 +590,12 @@ module Wice
       #   :renderer       => ::Wice::WillPaginatePaginator,
       #   :params         => extra_request_parameters).to_s +
 
-      paginate(grid.resultset, :param_name     => "#{grid.name}[page]") +
+      paginate(grid.resultset,
+        :theme         => 'wice_grid',
+        :param_name    => "#{grid.name}[page]",
+        :inner_window  => 4,
+        :outer_window  => 2
+      ) +
         (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary
     end
 
@@ -624,15 +629,19 @@ module Wice
     end
 
     def pagination_info(grid, allow_showing_all_records)  #:nodoc:
+
+
       collection = grid.resultset
 
       collection_total_entries = collection.total_count
-      collection_total_entries_str = collection_total_entries.to_s
+
 
       current_page = grid.ar_options[:page].to_i
       per_page = grid.ar_options[:per_page].to_i
 
-      offset = per_page * (current_page - 1)
+      first = collection.offset_value + 1
+      last = collection.last_page? ? collection.total_count : collection.offset_value + collection.limit_value
+
 
       parameters = grid.get_state_as_parameter_value_pairs
 
@@ -640,9 +649,9 @@ module Wice
       html = if (collection.num_pages < 2 && collection.length == 0)
         '0'
       else
-        parameters << ["#{grid.name}[pp]", collection_total_entries_str]
+        parameters << ["#{grid.name}[pp]", collection_total_entries]
 
-        "#{offset + 1}-#{offset + collection.count} / #{collection_total_entries_str} " +
+        "#{first}-#{last} / #{collection_total_entries} " +
           if (! allow_showing_all_records) || collection_total_entries <= collection.length
             ''
           else
