@@ -994,30 +994,33 @@ If you need to disable the default export icon in the grid, add
 
 === Detached Filters
 
-It is possible to detach filters and place them anywhere on the page.
-To do so, use parameter <tt>:detach_with_id</tt> for a column whose filter needs to
-be detached, with an arbitrary string or a symbol value which will be used
-later to identify the filter. As soon as there is one column with
-<tt>:detach_with_id</tt>, the behavior of the +grid+ helper changes - it
-becomes an <i>initializer</i> of the grid and doesn't output any HTML code.
-To render the grid, use <tt>grid</tt> for the second time without the block.
-To render a detached output filter, use helper <tt>grid_filter(grid_object, detached_filter_key)</tt>:
+Filters can also be detached from the grid table and placed anywhere on page.
 
-<%= grid(@tasks_grid, :show_filters => :always) do |g|
+This is a 3-step process.
 
-  g.column :name => 'Title', :attribute => 'title', :detach_with_id => :title_filter do |task|
-    link_to('Edit', edit_task_path(task.title))
-  end
+First, define the grid with helper +define_grid+ instead of +grid+.
+Everything should be done the same way as with +grid+, but every column which will have an external filter,
+add <tt>:detach_with_id => :some_filter_name+</tt> in the column definition. The value of +:detach_with_id+ is an arbitrary string
+or a symbol value which will be used later to identify the filter.
 
-  g.column  :name => 'Archived', :attribute => 'archived', :detach_with_id => :archived_filter do |task|
-    task.archived? ? 'Yes' : 'No'
-  end
+  <%= define_grid(@tasks_grid, :show_filters => :always) do |g|
 
-  g.column :name => 'Added', :attribute => 'created_at', :detach_with_id => :created_at_filter do |task|
-    task.created_at.to_s(:short)
-  end
+    g.column :name => 'Title', :attribute => 'title', :detach_with_id => :title_filter do |task|
+      link_to('Edit', edit_task_path(task.title))
+    end
 
-end -%>
+    g.column  :name => 'Archived', :attribute => 'archived', :detach_with_id => :archived_filter do |task|
+      task.archived? ? 'Yes' : 'No'
+    end
+
+    g.column :name => 'Added', :attribute => 'created_at', :detach_with_id => :created_at_filter do |task|
+      task.created_at.to_s(:short)
+    end
+
+  end -%>
+
+
+Then, use <tt>grid_filter(grid, :some_filter_name)</tt> to render filters:
 
   <% # rendering filter with key :title_filter %>
   <%= grid_filter @tasks_grid, :title_filter  %>
@@ -1031,33 +1034,20 @@ end -%>
   <% # Rendering the grid body %>
   <%= grid(@tasks_grid) %>
 
-It is important that the grid initializer goes first, the order of +grid_filter+ and
-the second call to +grid+ is of no importance.
+
+Finally, use <tt>render_grid(@grid)</tt> to actually output the grid table .
+
 
 Using custom submit and reset buttons together with <tt>:hide_submit_button => true</tt>
- and <tt>:hide_reset_button => true</tt>
+and <tt>:hide_reset_button => true</tt>
 allows to completely get rid
 of the default filter row and the default icons (see section 'Submit/Reset Buttons').
 
-For CSV export will continue functioning, just make sure the first call to +grid+
-is still in the template of its own and
-is inside of <tt><%= %></tt>, because when CSV is requested, the first  +grid+ works
-in the old fashioned way producing CSV formatted output.
 
 If a column was declared with <tt>:detach_with_id</tt>, but never output with +grid_filter+,
 filtering the grid in development mode will result
 in an warning javascript message and the missing filter will be ignored.
 There is no such message in production.
-
-<tt>grid</tt> parameter <tt>:show_filter</tt> must not be set to <tt>:no</tt> for detached filters to work.
-
-==== How Does It Work? (For the interested)
-
-When there is at least one column with <tt>:detach_with_id</tt>, the generated HTML code is
-stored in a buffer, code for detached filters is stored
-in buffers of their own identified by the given IDs, and nothing is returned to the view.
-When the helper is called for the second time, the buffer outputs its content.
-In a similar fashion, the +grid_filter+ helper outputs buffers for filters.
 
 
 

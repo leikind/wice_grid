@@ -3,27 +3,15 @@ module Wice
 
   class GridOutputBuffer < String #:nodoc:
 
-    attr_reader :stubborn_output_mode
     attr_accessor :return_empty_strings_for_nonexistent_filters
-
-    def stubborn_output_mode=(m)
-      @stubborn_output_mode = m
-    end
 
     def initialize(*attrs)
       super(*attrs)
       @filters = HashWithIndifferentAccess.new
-      @first_output = false
-      @stubborn_output_mode = false
     end
 
     def to_s
-      if @first_output || ! @stubborn_output_mode
-        super.html_safe_if_necessary
-      else
-        @first_output = true
-        ''
-      end
+      super.html_safe_if_necessary
     end
 
     def add_filter(detach_with_id, filter_code)

@@ -70,18 +70,21 @@ module Wice
     # Pease read documentation about the +column+ method to achieve the enlightenment.
 
     def grid(grid, opts = {}, &block)
+      raise WiceGridArgumentError.new('Missing block for the grid helper.' +
+        ' For detached filters use first define_grid with the same API as grid, ' +
+        'then grid_filter to add filters, and then render_grid to actually show the grid' ) if block.nil?
+      define_grid(grid, opts, &block)
+      render_grid(grid)
+    end
+
+    # Has the same parameters as <tt>grid</tt> but does not output the grid. After <tt>define_grid</tt>
+    # <tt>render_grid</tt> can be used to output the grid HTML code.
+    # Usually used with detached filters: first <tt>define_grid</tt>, then <tt>grid_filter</tt>s, and then
+    # <tt>render_grid</tt>
+    def define_grid(grid, opts = {}, &block)
       # strip the method from HTML stuff
       unless grid.class == WiceGrid
         raise WiceGridArgumentError.new("The first argument for the grid helper must be an instance of the WiceGrid class")
-      end
-
-      if grid.output_buffer
-        if grid.output_buffer == true
-          raise  WiceGridException.new("Second occurence of grid helper with the same grid object. " +
-                                "Did you intend to use detached filters and forget to define them?")
-        else
-          return grid.output_buffer
-        end
       end
 
       options = {
@@ -114,25 +117,38 @@ module Wice
         Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS && rendering.last_column_for_html.capable_of_hosting_filter_related_icons?
 
       if grid.output_csv?
-        content = grid_csv(grid, rendering)
+        grid_csv(grid, rendering)
       else
         # If blank_slate is defined we don't show any grid at all
         if rendering.blank_slate_handler &&  grid.resultset.size == 0 && ! grid.filtering_on?
-          content = generate_blank_slate(grid, rendering)
-          return content
+          generate_blank_slate(grid, rendering)
+        else
+          grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons)
         end
-
-        content = grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons)
       end
 
       grid.view_helper_finished = true
-      content
+      nil
     end
 
-    def generate_blank_slate(grid, rendering) #:nodoc:
-      buff = GridOutputBuffer.new
+    # Used after <tt>define_grid</tt> to actually output the grid HTML code.
+    # Usually used with detached filters: first <tt>define_grid</tt>, then <tt>grid_filter</tt>s, and then
+    # <tt>render_grid</tt>
+    def render_grid(grid)
+      if grid.output_buffer
+        grid.output_buffer
+      elsif grid.csv_tempfile
+        grid.csv_tempfile.path
+      else
+        raise WiceGridException.new("Attempt to use 'render_grid' without 'define_grid' before.")
+      end
+    end
 
-      buff <<  if rendering.blank_slate_handler.is_a?(Proc)
+
+    def generate_blank_slate(grid, rendering) #:nodoc:
+      grid.output_buffer = GridOutputBuffer.new
+
+      grid.output_buffer <<  if rendering.blank_slate_handler.is_a?(Proc)
         call_block(rendering.blank_slate_handler, nil)
       elsif rendering.blank_slate_handler.is_a?(Hash)
         render(rendering.blank_slate_handler)
@@ -141,11 +157,8 @@ module Wice
       end
 
       if rendering.find_one_for(:in_html){|column| column.detach_with_id}
-        buff.stubborn_output_mode = true
-        buff.return_empty_strings_for_nonexistent_filters = true
-        grid.output_buffer   = buff
+        grid.output_buffer.return_empty_strings_for_nonexistent_filters = true
       end
-      buff
     end
 
     def call_block(block, ar, extra_argument = nil)  #:nodoc:
@@ -170,19 +183,18 @@ module Wice
         options.delete(:class)
       end
 
-
-
       cycle_class = nil
       sorting_dependant_row_cycling = options[:sorting_dependant_row_cycling]
 
-      content = GridOutputBuffer.new
-      # Ruby 1.9.x
-      content.force_encoding('UTF-8') if content.respond_to?(:force_encoding)
+      grid.output_buffer = GridOutputBuffer.new
 
-      content << %!<div class="wice-grid-container" id="#{grid.name}"><div id="#{grid.name}_title">!
-      content << content_tag(:h3, grid.saved_query.name) if grid.saved_query
-      content << "</div><table #{tag_options(table_html_attrs, true)}>"
-      content << "<thead>"
+      # Ruby 1.9.x
+      grid.output_buffer.force_encoding('UTF-8') if grid.output_buffer.respond_to?(:force_encoding)
+
+      grid.output_buffer << %!<div class="wice-grid-container" id="#{grid.name}"><div id="#{grid.name}_title">!
+      grid.output_buffer << content_tag(:h3, grid.saved_query.name) if grid.saved_query
+      grid.output_buffer << "</div><table #{tag_options(table_html_attrs, true)}>"
+      grid.output_buffer << "<thead>"
 
       no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?) ? true: false
 
@@ -201,7 +213,7 @@ module Wice
 
       pagination_panel_content_html, pagination_panel_content_js = nil, nil
       if options[:upper_pagination_panel]
-        content << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
+        grid.output_buffer << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
           pagination_panel_content_html =
             pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
           pagination_panel_content_html
@@ -211,7 +223,7 @@ module Wice
       title_row_attrs = header_tr_html.clone
       title_row_attrs.add_or_append_class_value!('wice-grid-title-row', true)
 
-      content << %!<tr #{tag_options(title_row_attrs, true)}>!
+      grid.output_buffer << %!<tr #{tag_options(title_row_attrs, true)}>!
 
       filter_row_id = grid.name + '_filter_row'
 
@@ -243,35 +255,34 @@ module Wice
             column_name,
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
-          content << content_tag(:th, col_link, Hash.make_hash(:class, css_class))
+          grid.output_buffer << content_tag(:th, col_link, Hash.make_hash(:class, css_class))
           column.css_class = css_class
         else
           if reuse_last_column_for_filter_buttons && last
-            content << content_tag(:th,
+            grid.output_buffer << content_tag(:th,
               hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
             )
           else
-            content << content_tag(:th, column_name)
+            grid.output_buffer << content_tag(:th, column_name)
           end
         end
       end
 
-      content << content_tag(:th,
+      grid.output_buffer << content_tag(:th,
         hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
       ) unless no_rightmost_column
 
-      content << '</tr>'
+      grid.output_buffer << '</tr>'
       # rendering first row end
 
 
       unless no_filters_at_all # there are filters, we don't know where, in the table or detached
         if no_filter_row # they are all detached
-          content.stubborn_output_mode = true
           rendering.each_column(:in_html) do |column|
             if column.filter_shown?
               filter_html_code = column.render_filter
               filter_html_code = filter_html_code.html_safe_if_necessary
-              content.add_filter(column.detach_with_id, filter_html_code)
+              grid.output_buffer.add_filter(column.detach_with_id, filter_html_code)
             end
           end
 
@@ -281,9 +292,9 @@ module Wice
           filter_row_attrs.add_or_append_class_value!('wg-filter-row', true)
           filter_row_attrs['id'] = filter_row_id
 
-          content << %!<tr #{tag_options(filter_row_attrs, true)} !
-          content << 'style="display:none"' unless filter_shown
-          content << '>'
+          grid.output_buffer << %!<tr #{tag_options(filter_row_attrs, true)} !
+          grid.output_buffer << 'style="display:none"' unless filter_shown
+          grid.output_buffer << '>'
 
           rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
             if column.filter_shown?
@@ -291,27 +302,26 @@ module Wice
               filter_html_code = column.render_filter
               filter_html_code = filter_html_code.html_safe_if_necessary
               if column.detach_with_id
-                content.stubborn_output_mode = true
-                content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
-                content.add_filter(column.detach_with_id, filter_html_code)
+                grid.output_buffer << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
+                grid.output_buffer.add_filter(column.detach_with_id, filter_html_code)
               else
-                content << content_tag(:th, filter_html_code, Hash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, filter_html_code, Hash.make_hash(:class, column.css_class))
               end
             else
               if reuse_last_column_for_filter_buttons && last
-                content << content_tag(:th,
+                grid.output_buffer << content_tag(:th,
                   reset_submit_buttons(options, grid, rendering),
                   Hash.make_hash(:class, column.css_class).add_or_append_class_value!('filter_icons')
                 )
               else
-                content << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
               end
             end
           end
           unless no_rightmost_column
-            content << content_tag(:th, reset_submit_buttons(options, grid, rendering), :class => 'filter_icons' )
+            grid.output_buffer << content_tag(:th, reset_submit_buttons(options, grid, rendering), :class => 'filter_icons' )
           end
-          content << '</tr>'
+          grid.output_buffer << '</tr>'
         end
       end
 
@@ -321,8 +331,8 @@ module Wice
         end
       end
 
-      content << '</thead><tfoot>'
-      content << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
+      grid.output_buffer << '</thead><tfoot>'
+      grid.output_buffer << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
         if pagination_panel_content_html
           pagination_panel_content_html
         else
@@ -332,7 +342,7 @@ module Wice
         end
       end
 
-      content << '</tfoot><tbody>'
+      grid.output_buffer << '</tfoot><tbody>'
 
 
       # rendering  rows
@@ -408,11 +418,11 @@ module Wice
 
         row_attributes.add_or_append_class_value!(cycle_class)
 
-        content << before_row_output if before_row_output
-        content << "<tr #{tag_options(row_attributes)}>#{row_content}"
-        content << content_tag(:td, '') unless no_rightmost_column
-        content << '</tr>'
-        content << after_row_output if after_row_output
+        grid.output_buffer << before_row_output if before_row_output
+        grid.output_buffer << "<tr #{tag_options(row_attributes)}>#{row_content}"
+        grid.output_buffer << content_tag(:td, '') unless no_rightmost_column
+        grid.output_buffer << '</tr>'
+        grid.output_buffer << after_row_output if after_row_output
       end
 
       last_row_output = if rendering.last_row_handler
@@ -421,9 +431,9 @@ module Wice
         nil
       end
 
-      content << last_row_output if last_row_output
+      grid.output_buffer << last_row_output if last_row_output
 
-      content << '</tbody></table>'
+      grid.output_buffer << '</tbody></table>'
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
 
@@ -451,12 +461,12 @@ module Wice
 
       wg_data['data-foc'] = grid.status['foc'] if grid.status['foc']
 
-      content << content_tag(:div, '', wg_data)
+      grid.output_buffer << content_tag(:div, '', wg_data)
 
-      content << '</div>'
+      grid.output_buffer << '</div>'
 
       if Rails.env == 'development'
-        content  <<  javascript_tag(%/ $(document).ready(function(){ \n/ +
+        grid.output_buffer  <<  javascript_tag(%/ $(document).ready(function(){ \n/ +
           %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
           %$   alert("wice_grid.js not loaded, WiceGrid cannot proceed!\\n" +\n$ +
           %$     "Make sure that you have loaded wice_grid.js.\\n" +\n$ +
@@ -466,14 +476,7 @@ module Wice
           %$ }) $)
       end
 
-      if content.stubborn_output_mode
-        grid.output_buffer = content
-      else
-        # this will serve as a flag that the grid helper has already processed the grid but in a normal mode,
-        # not in the mode with detached filters.
-        grid.output_buffer = true
-      end
-      return content
+      grid.output_buffer
     end
 
     def hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, show_filters, rendering)  #:nodoc:
@@ -572,7 +575,6 @@ module Wice
         spreadsheet << row
       end
       grid.csv_tempfile = spreadsheet.tempfile
-      return grid.csv_tempfile.path
     end
 
     def pagination_panel_content(grid, extra_request_parameters, allow_showing_all_records) #:nodoc:

@@ -1,0 +1,2 @@
+1. The detached filter API has changed. No more magical invocation of the +grid+ helper two times. First, +define_grid+ is used in the same
+   way as +grid+, then +grid_filter+, and then <tt>render_grid(@grid)</tt> to actually output the grid table .
