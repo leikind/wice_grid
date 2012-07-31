@@ -128,7 +128,8 @@ module Wice
       end
 
       grid.view_helper_finished = true
-      nil
+
+      grid.csv_tempfile ? grid.csv_tempfile.path : nil
     end
 
     # Used after <tt>define_grid</tt> to actually output the grid HTML code.
