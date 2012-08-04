@@ -44,7 +44,6 @@ module Wice
           JsCalendarHelpers.send(:include, m)
         end
 
-        Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
         ViewColumn.load_column_processors
         require 'wice_grid_serialized_query.rb'
 
