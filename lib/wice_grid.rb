@@ -16,7 +16,7 @@ require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
 require 'view_columns/column_processor_index.rb'
 require 'view_columns.rb'
-
+require 'kaminari.rb'
 
 
 ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
@@ -48,10 +48,11 @@ module Wice
         Wice::GridRenderer.send(:include, ::WillPaginate::ViewHelpers)
         ViewColumn.load_column_processors
         require 'wice_grid_serialized_query.rb'
+
+        # It is here only until this pull request is pulled: https://github.com/amatsuda/kaminari/pull/267
+        require 'kaminari_monkey_patching.rb'
       end
-
     end
-
   end
 
   class WiceGrid
