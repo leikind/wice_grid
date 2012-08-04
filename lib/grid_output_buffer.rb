@@ -11,7 +11,7 @@ module Wice
     end
 
     def to_s
-      super.html_safe_if_necessary
+      super.html_safe
     end
 
     def add_filter(detach_with_id, filter_code)

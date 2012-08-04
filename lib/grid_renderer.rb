@@ -296,7 +296,7 @@ module Wice
       end
 
       if options[:class]
-        options[:html].add_or_append_class_value!(options[:class])
+        Wice::WgHash.add_or_append_class_value!(options[:html], options[:class])
         options.delete(:class)
       end
 
@@ -333,13 +333,13 @@ module Wice
           elsif options[:custom_filter].class == Array
             if options[:custom_filter].empty?
               []
-            elsif options[:custom_filter].all_items_are_of_class(Symbol)
+            elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], Symbol)
               lambda{ @grid.distinct_values_for_column_in_resultset(options[:custom_filter]) }
 
-            elsif options[:custom_filter].all_items_are_of_class(String) || options[:custom_filter].all_items_are_of_class(Numeric)
+            elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], String) || WgEnumerable.all_items_are_of_class(options[:custom_filter], Numeric)
               options[:custom_filter].map{|i| [i,i]}
 
-            elsif options[:custom_filter].all_items_are_of_class(Array)
+            elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], Array)
               options[:custom_filter]
             else
               raise WiceGridArgumentError.new(
@@ -436,7 +436,7 @@ module Wice
     end
 
     def base_link_for_filter(controller, extra_parameters = {})   #:nodoc:
-      new_params = controller.params.deep_clone_yl
+      new_params = Wice::WgHash.deep_clone controller.params
       new_params.merge!(extra_parameters)
 
       if new_params[@grid.name]
@@ -458,7 +458,7 @@ module Wice
 
 
     def link_for_export(controller, format, extra_parameters = {})   #:nodoc:
-      new_params = controller.params.deep_clone_yl
+      new_params = Wice::WgHash.deep_clone controller.params
       new_params.merge!(extra_parameters)
 
       new_params[@grid.name] = {} unless new_params[@grid.name]
@@ -482,14 +482,14 @@ module Wice
         @@order_direction_parameter_name => direction
       }}
 
-      cleaned_params =  params.deep_clone_yl
+      cleaned_params =  Wice::WgHash.deep_clone params
       cleaned_params.merge!(extra_parameters)
 
       cleaned_params.delete(:controller)
       cleaned_params.delete(:action)
 
 
-      query_params = cleaned_params.rec_merge(query_params)
+      query_params = Wice::WgHash.rec_merge(cleaned_params, query_params)
 
       '?' + query_params.to_query
     end

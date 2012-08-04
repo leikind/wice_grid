@@ -108,7 +108,6 @@ module Wice
         :page                 => 1,
         :per_page             => Defaults::PER_PAGE,
         :saved_query          => nil,
-        :select               => nil,
         :total_entries        => nil,
         :with_paginated_resultset  => nil,
         :with_resultset       => nil
@@ -279,7 +278,6 @@ module Wice
       @ar_options[:joins]   = @options[:joins]
       @ar_options[:include] = @options[:include]
       @ar_options[:group] = @options[:group]
-      @ar_options[:select]  = @options[:select]
     end
 
 
@@ -369,7 +367,7 @@ module Wice
     def get_state_as_parameter_value_pairs(including_saved_query_request = false) #:nodoc:
       res = []
       unless status[:f].blank?
-        status[:f].parameter_names_and_values([name, 'f']).collect do |param_name, value|
+        Wice::WgHash.parameter_names_and_values(status[:f], [name, 'f']).collect do |param_name, value|
           if value.is_a?(Array)
             param_name_ar = param_name + '[]'
             value.each do |v|

@@ -171,16 +171,16 @@ module Wice
 
       table_html_attrs, header_tr_html = options[:html], options[:header_tr_html]
 
-      table_html_attrs.add_or_append_class_value!('wice-grid', true)
+      Wice::WgHash.add_or_append_class_value!(table_html_attrs, 'wice-grid', true)
 
       if Array === Defaults::DEFAULT_TABLE_CLASSES
         Defaults::DEFAULT_TABLE_CLASSES.each do |default_class|
-          table_html_attrs.add_or_append_class_value!(default_class, true)
+          Wice::WgHash.add_or_append_class_value!(table_html_attrs, default_class, true)
         end
       end
 
       if options[:class]
-        table_html_attrs.add_or_append_class_value!(options[:class])
+        Wice::WgHash.add_or_append_class_value!(table_html_attrs, options[:class])
         options.delete(:class)
       end
 
@@ -222,7 +222,7 @@ module Wice
       end
 
       title_row_attrs = header_tr_html.clone
-      title_row_attrs.add_or_append_class_value!('wice-grid-title-row', true)
+      Wice::WgHash.add_or_append_class_value!(title_row_attrs, 'wice-grid-title-row', true)
 
       grid.output_buffer << %!<tr #{tag_options(title_row_attrs, true)}>!
 
@@ -256,7 +256,7 @@ module Wice
             column_name,
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
-          grid.output_buffer << content_tag(:th, col_link, Hash.make_hash(:class, css_class))
+          grid.output_buffer << content_tag(:th, col_link, Wice::WgHash.make_hash(:class, css_class))
           column.css_class = css_class
         else
           if reuse_last_column_for_filter_buttons && last
@@ -281,8 +281,7 @@ module Wice
         if no_filter_row # they are all detached
           rendering.each_column(:in_html) do |column|
             if column.filter_shown?
-              filter_html_code = column.render_filter
-              filter_html_code = filter_html_code.html_safe_if_necessary
+              filter_html_code = column.render_filter.html_safe
               grid.output_buffer.add_filter(column.detach_with_id, filter_html_code)
             end
           end
@@ -290,7 +289,7 @@ module Wice
         else # some filters are present in the table
 
           filter_row_attrs = header_tr_html.clone
-          filter_row_attrs.add_or_append_class_value!('wg-filter-row', true)
+          Wice::WgHash.add_or_append_class_value!(filter_row_attrs, 'wg-filter-row', true)
           filter_row_attrs['id'] = filter_row_id
 
           grid.output_buffer << %!<tr #{tag_options(filter_row_attrs, true)} !
@@ -300,22 +299,21 @@ module Wice
           rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
             if column.filter_shown?
 
-              filter_html_code = column.render_filter
-              filter_html_code = filter_html_code.html_safe_if_necessary
+              filter_html_code = column.render_filter.html_safe
               if column.detach_with_id
-                grid.output_buffer << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', Wice::WgHash.make_hash(:class, column.css_class))
                 grid.output_buffer.add_filter(column.detach_with_id, filter_html_code)
               else
-                grid.output_buffer << content_tag(:th, filter_html_code, Hash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, filter_html_code, Wice::WgHash.make_hash(:class, column.css_class))
               end
             else
               if reuse_last_column_for_filter_buttons && last
                 grid.output_buffer << content_tag(:th,
                   reset_submit_buttons(options, grid, rendering),
-                  Hash.make_hash(:class, column.css_class).add_or_append_class_value!('filter_icons')
+                  Wice::WgHash.add_or_append_class_value!(Wice::WgHash.make_hash(:class, column.css_class), 'filter_icons')
                 )
               else
-                grid.output_buffer << content_tag(:th, '', Hash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', Wice::WgHash.make_hash(:class, column.css_class))
               end
             end
           end
@@ -328,7 +326,7 @@ module Wice
 
       rendering.each_column(:in_html) do |column|
         unless column.css_class.blank?
-          column.html.add_or_append_class_value!(column.css_class)
+          Wice::WgHash.add_or_append_class_value!(column.html, column.css_class)
         end
       end
 
@@ -399,7 +397,7 @@ module Wice
               additional_opts.delete('class')
             end
             opts.merge!(additional_opts)
-            opts.add_or_append_class_value!(additional_css_class) unless additional_css_class.blank?
+            Wice::WgHash.add_or_append_class_value!(opts, additional_css_class) unless additional_css_class.blank?
           end
 
           if sorting_dependant_row_cycling && column.attribute && grid.ordered_by?(column)
@@ -417,7 +415,7 @@ module Wice
           cycle_class = cycle('odd', 'even', :name => grid.name)
         end
 
-        row_attributes.add_or_append_class_value!(cycle_class)
+        Wice::WgHash.add_or_append_class_value!(row_attributes, cycle_class)
 
         grid.output_buffer << before_row_output if before_row_output
         grid.output_buffer << "<tr #{tag_options(row_attributes)}>#{row_content}"
@@ -508,7 +506,7 @@ module Wice
     end
 
     def reset_submit_buttons(options, grid, rendering)  #:nodoc:
-      (if options[:hide_submit_button]
+      if options[:hide_submit_button]
         ''
       else
         content_tag(:div, '',
@@ -516,7 +514,7 @@ module Wice
           :id => grid.name + '_submit_grid_icon',
           :class => 'submit clickable'
         )
-      end + ' ' +
+      end.html_safe + ' ' +
       if options[:hide_reset_button]
         ''
       else
@@ -526,7 +524,7 @@ module Wice
           :id => grid.name + '_reset_grid_icon',
           :class => 'reset clickable'
         )
-      end).html_safe_if_necessary
+      end.html_safe
     end
 
     # Renders a detached filter. The parameters are:
@@ -586,20 +584,13 @@ module Wice
 
       html = pagination_info(grid, allow_showing_all_records)
 
-      # will_paginate(grid.resultset,
-      #   :previous_label => NlMessage['previous_label'],
-      #   :next_label     => NlMessage['next_label'],
-      #   :param_name     => "#{grid.name}[page]",
-      #   :renderer       => ::Wice::WillPaginatePaginator,
-      #   :params         => extra_request_parameters).to_s +
-
       paginate(grid.resultset,
         :theme         => 'wice_grid',
         :param_name    => "#{grid.name}[page]",
         :inner_window  => 4,
         :outer_window  => 2
       ) +
-        (' <div class="pagination_status">' + html + '</div>').html_safe_if_necessary
+        (' <div class="pagination_status">' + html + '</div>').html_safe
     end
 
 

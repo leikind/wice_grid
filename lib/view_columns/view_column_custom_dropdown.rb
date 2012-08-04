@@ -55,11 +55,10 @@ module Wice
 
       params_for_select = (params.is_a?(Hash) && params.empty?) ? [nil] : params
 
-      '<div class="custom-dropdown-container">'.html_safe_if_necessary +
+      '<div class="custom-dropdown-container">'.html_safe +
         content_tag(:select,
           options_for_select(@custom_filter, params_for_select),
-          select_options) +
-      select_toggle.html_safe_if_necessary + '</div>'.html_safe_if_necessary
+          select_options) +  select_toggle.html_safe + '</div>'.html_safe
     end
 
 

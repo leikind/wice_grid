@@ -7,7 +7,7 @@ module Wice
       @select_all_buttons   = select_all_buttons
       self.grid             = grid_obj
       self.html             = html
-      self.html.add_or_append_class_value!('sel')
+      Wice::WgHash.add_or_append_class_value!(self.html, 'sel')
       grid_name             = self.grid.name
       @param_name           = param_name
       @cell_rendering_block = lambda do |object, params|
