@@ -1,6 +1,5 @@
 # encoding: UTF-8
 
-require 'will_paginate.rb'
 require 'wice_grid_misc.rb'
 require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
