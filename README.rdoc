@@ -59,8 +59,7 @@ Rails version 3.2.x or newer, jQuery, jQuery Datepicker.
 For Rails 3.0.x and 3.1.x versions use version 3.0.4.
 For Rails 2 use version 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
-WARNING: Since 3.2.pre2 WiceGrid is not compatible with <tt>will_paginate/tt> because internally it uses <tt>kaminari/tt> for
-pagination, and <tt>kaminari/tt> is not compatible with <tt>will_paginate</tt>!
+WARNING: Since 3.2.pre2 WiceGrid is not compatible with <tt>will_paginate/tt> because internally it uses <tt>kaminari/tt> for pagination, and <tt>kaminari/tt> is not compatible with <tt>will_paginate</tt>!
 
 == How-To
 
