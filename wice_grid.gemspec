@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wice_grid"
-  s.version = "3.2.0.pre3"
+  s.version = "3.2.0.pre4"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
-  s.date = "2012-08-14"
+  s.date = "2012-08-23"
   s.description = "A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters "
   s.email = "yuri.leikind@gmail.com"
   s.extra_rdoc_files = [
@@ -24,11 +24,11 @@ Gem::Specification.new do |s|
     "Rakefile",
     "SAVED_QUERIES_HOWTO.rdoc",
     "VERSION",
-    "app/views/kaminari/wice_grid/_gap.html.haml",
-    "app/views/kaminari/wice_grid/_next_page.html.haml",
-    "app/views/kaminari/wice_grid/_page.html.haml",
-    "app/views/kaminari/wice_grid/_paginator.html.haml",
-    "app/views/kaminari/wice_grid/_prev_page.html.haml",
+    "app/views/kaminari/wice_grid/_gap.html.erb",
+    "app/views/kaminari/wice_grid/_next_page.html.erb",
+    "app/views/kaminari/wice_grid/_page.html.erb",
+    "app/views/kaminari/wice_grid/_paginator.html.erb",
+    "app/views/kaminari/wice_grid/_prev_page.html.erb",
     "lib/generators/wice_grid/add_migration_for_serialized_queries_generator.rb",
     "lib/generators/wice_grid/install_generator.rb",
     "lib/generators/wice_grid/templates/create_wice_grid_serialized_queries.rb",
