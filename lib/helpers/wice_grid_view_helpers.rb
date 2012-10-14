@@ -368,7 +368,7 @@ module Wice
 
           opts = column.html.clone
 
-          column_block_output = if column.class == ViewColumn.get_column_processor(:action)
+          column_block_output = if column.class == Columns.get_view_column_processor(:action)
             cell_block.call(ar, params)
           else
             call_block(cell_block, ar)

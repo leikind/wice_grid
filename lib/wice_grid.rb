@@ -13,8 +13,8 @@ require 'grid_output_buffer.rb'
 require 'wice_grid_controller.rb'
 require 'wice_grid_spreadsheet.rb'
 require 'wice_grid_serialized_queries_controller.rb'
-require 'view_columns/column_processor_index.rb'
-require 'view_columns.rb'
+require 'columns/column_processor_index.rb'
+require 'columns.rb'
 require 'kaminari.rb'
 
 
@@ -44,7 +44,7 @@ module Wice
           JsCalendarHelpers.send(:include, m)
         end
 
-        ViewColumn.load_column_processors
+        Columns.load_column_processors
         require 'wice_grid_serialized_query.rb'
 
         # It is here only until this pull request is pulled: https://github.com/amatsuda/kaminari/pull/267
@@ -447,11 +447,6 @@ module Wice
     end
 
 
-    def selected_records #:nodoc:
-      STDERR.puts "WiceGrid: Parameter :#{selected_records} is deprecated, use :#{all_pages_records} or :#{current_page_records} instead!"
-      all_pages_records
-    end
-
     # Returns the list of objects browsable through all pages with the current filters.
     # Should only be called after the +grid+ helper.
     def all_pages_records
@@ -556,7 +551,7 @@ module Wice
     def resultset_without_paging_with_user_filters  #:nodoc:
       form_ar_options
       @klass.unscoped do
-        @relation.find(:all, :joins      => @ar_options[:joins],
+        @relation.find(:all, :joins   => @ar_options[:joins],
                           :include    => @ar_options[:include],
                           :group      => @ar_options[:group],
                           :conditions => @ar_options[:conditions],
@@ -575,7 +570,7 @@ module Wice
 
   end
 
-  # routines called from WiceGridExtentionToActiveRecordColumn (ActiveRecord::ConnectionAdapters::Column) or FilterConditionsGenerator classes
+  # routines called from WiceGridExtentionToActiveRecordColumn (ActiveRecord::ConnectionAdapters::Column) or ConditionsGeneratorColumn classes
   module GridTools   #:nodoc:
     class << self
       def special_value(str)   #:nodoc:
@@ -667,12 +662,12 @@ module Wice
       return nil if @request_params.nil?
 
       if custom_filter_active
-        return ::Wice::FilterConditionsGeneratorCustomFilter.new(self).generate_conditions(table_alias, @request_params)
+        return ::Wice::Columns.get_conditions_generator_column_processor(:custom).new(self).generate_conditions(table_alias, @request_params)
       end
 
       column_type = self.type.to_s
 
-      processor_class = ::Wice::FilterConditionsGenerator.handled_type[column_type]
+      processor_class = ::Wice::Columns.get_conditions_generator_column_processor(column_type)
 
       if processor_class
         return processor_class.new(self).generate_conditions(table_alias, @request_params)
@@ -684,157 +679,6 @@ module Wice
 
   end
 
-  class FilterConditionsGenerator   #:nodoc:
 
-    cattr_accessor :handled_type
-    @@handled_type = HashWithIndifferentAccess.new
-
-    def initialize(column)   #:nodoc:
-      @column = column
-    end
-  end
-
-  class FilterConditionsGeneratorCustomFilter < FilterConditionsGenerator #:nodoc:
-
-    def generate_conditions(table_alias, opts)   #:nodoc:
-      if opts.empty? || (opts.is_a?(Array) && opts.size == 1 && opts[0].blank?)
-        return false
-      end
-      opts = (opts.kind_of?(Array) && opts.size == 1) ? opts[0] : opts
-
-      if opts.kind_of?(Array)
-        opts_with_special_values, normal_opts = opts.partition{|v| ::Wice::GridTools.special_value(v)}
-
-        conditions_ar = if normal_opts.size > 0
-          [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
-        else
-          []
-        end
-
-        if opts_with_special_values.size > 0
-          special_conditions = opts_with_special_values.collect{|v| " #{@column.alias_or_table_name(table_alias)}.#{@column.name} is " + v}.join(' or ')
-          if conditions_ar.size > 0
-            conditions_ar[0] = " (#{conditions_ar[0]} or #{special_conditions} ) "
-          else
-            conditions_ar = " ( #{special_conditions} ) "
-          end
-        end
-        conditions_ar
-      else
-        if ::Wice::GridTools.special_value(opts)
-          " #{@column.alias_or_table_name(table_alias)}.#{@column.name} is " + opts
-        else
-          [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ?", opts]
-        end
-      end
-    end
-
-  end
-
-  class FilterConditionsGeneratorBoolean < FilterConditionsGenerator  #:nodoc:
-    @@handled_type[:boolean] = self
-
-    def  generate_conditions(table_alias, opts)   #:nodoc:
-      unless (opts.kind_of?(Array) && opts.size == 1)
-        Wice.log "invalid parameters for the grid boolean filter - must be an one item array: #{opts.inspect}"
-        return false
-      end
-      opts = opts[0]
-      if opts == 'f'
-        [" (#{@column.alias_or_table_name(table_alias)}.#{@column.name} = ? or #{@column.alias_or_table_name(table_alias)}.#{@column.name} is null) ", false]
-      elsif opts == 't'
-        [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ?", true]
-      else
-        nil
-      end
-    end
-  end
-
-  class FilterConditionsGeneratorString < FilterConditionsGenerator  #:nodoc:
-    @@handled_type[:string] = self
-    @@handled_type[:text]   = self
-
-    def generate_conditions(table_alias, opts)   #:nodoc:
-      if opts.kind_of? String
-        string_fragment = opts
-        negation = ''
-      elsif (opts.kind_of? Hash) && opts.has_key?(:v)
-        string_fragment = opts[:v]
-        negation = opts[:n] == '1' ? 'NOT' : ''
-      else
-        Wice.log "invalid parameters for the grid string filter - must be a string: #{opts.inspect} or a Hash with keys :v and :n"
-        return false
-      end
-      if string_fragment.empty?
-        return false
-      end
-      [" #{negation}  #{@column.alias_or_table_name(table_alias)}.#{@column.name} #{::Wice.get_string_matching_operators(@column.model)} ?",
-          '%' + string_fragment + '%']
-    end
-
-  end
-
-  class FilterConditionsGeneratorInteger < FilterConditionsGenerator  #:nodoc:
-    @@handled_type[:integer] = self
-    @@handled_type[:float]   = self
-    @@handled_type[:decimal] = self
-
-    def  generate_conditions(table_alias, opts)   #:nodoc:
-      unless opts.kind_of? Hash
-        Wice.log "invalid parameters for the grid integer filter - must be a hash"
-        return false
-      end
-      conditions = [[]]
-      if opts[:fr]
-        if opts[:fr] =~ /\d/
-          conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} >= ? "
-          conditions << opts[:fr]
-        else
-          opts.delete(:fr)
-        end
-      end
-
-      if opts[:to]
-        if opts[:to] =~ /\d/
-          conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} <= ? "
-          conditions << opts[:to]
-        else
-          opts.delete(:to)
-        end
-      end
-
-      if conditions.size == 1
-        return false
-      end
-
-      conditions[0] = conditions[0].join(' and ')
-
-      return conditions
-    end
-  end
-
-  class FilterConditionsGeneratorDate < FilterConditionsGenerator  #:nodoc:
-    @@handled_type[:date]      = self
-    @@handled_type[:datetime]  = self
-    @@handled_type[:timestamp] = self
-
-    def generate_conditions(table_alias, opts)   #:nodoc:
-      conditions = [[]]
-      if opts[:fr]
-        conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} >= ? "
-        conditions << opts[:fr]
-      end
-
-      if opts[:to]
-        conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} <= ? "
-        conditions << opts[:to]
-      end
-
-      return false if conditions.size == 1
-
-      conditions[0] = conditions[0].join(' and ')
-      return conditions
-    end
-  end
 
 end

@@ -44,7 +44,7 @@ Gem::Specification.new do |s|
     "lib/kaminari_monkey_patching.rb",
     "lib/table_column_matrix.rb",
     "lib/view_columns.rb",
-    "lib/view_columns/action_view_column.rb",
+    "lib/view_columns/view_column_action.rb",
     "lib/view_columns/column_processor_index.rb",
     "lib/view_columns/view_column_boolean.rb",
     "lib/view_columns/view_column_custom_dropdown.rb",

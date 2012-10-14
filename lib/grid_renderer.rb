@@ -143,7 +143,7 @@ module Wice
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
       @action_column_present = true
-      column_processor_klass = ViewColumn.get_column_processor(:action)
+      column_processor_klass = Columns.get_view_column_processor(:action)
 
       @columns << column_processor_klass.new(@grid, options[:html], options[:param_name],
             options[:select_all_buttons], options[:object_property], @view)
@@ -309,7 +309,7 @@ module Wice
         end
       end
 
-      klass = ViewColumn
+      klass = Columns::ViewColumn
       if options[:attribute] &&
           col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
             options[:custom_filter],  options[:table_alias])
@@ -352,9 +352,9 @@ module Wice
             end
           end
 
-          klass = ViewColumn.get_column_processor(:custom)
+          klass = Columns.get_view_column_processor(:custom)
         else
-          klass = ViewColumn.get_column_processor(col_type)
+          klass = Columns.get_view_column_processor(col_type)
         end # custom_filter
 
       end # attribute
@@ -363,8 +363,8 @@ module Wice
 
       vc.negation = options[:negation] if vc.respond_to? :negation=
 
-      vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(ViewColumn.get_column_processor(:custom))
-      if vc.kind_of?(ViewColumn.get_column_processor(:boolean))
+      vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(Columns.get_view_column_processor(:custom))
+      if vc.kind_of?(Columns.get_view_column_processor(:boolean))
         vc.boolean_filter_true_label = options[:boolean_filter_true_label]
         vc.boolean_filter_false_label = options[:boolean_filter_false_label]
       end

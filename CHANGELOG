@@ -83,9 +83,6 @@ This version of WiceGrid is accompanied by an application called _WiceGrid Examp
 
 Here's a list of changes as compared with "version 0.4":https://blog.wice.eu/2009/7/6/moving-to-github-and-wicegrid-version-0-4 :
 
-h4. selected_records
-
-Method @selected_records@ of WiceGrid instances allows to  access the list of all records of the current selection throughout all pages in the context of a view:
 
 --- RHTML
 <%= grid(@tasks_grid) do |g|
