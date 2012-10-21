@@ -91,19 +91,19 @@ module Wice
       def generate_conditions(table_alias, opts)   #:nodoc:
         conditions = [[]]
         if opts[:fr]
-          conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} >= ? "
+          conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} >= ? "
           conditions << opts[:fr]
         end
 
         if opts[:to]
-          conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} <= ? "
+          conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} <= ? "
           conditions << opts[:to]
         end
 
         return false if conditions.size == 1
 
         conditions[0] = conditions[0].join(' and ')
-        return conditions
+        conditions
       end
     end
 

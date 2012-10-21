@@ -203,8 +203,8 @@ module Wice
 
     class ConditionsGeneratorColumn   #:nodoc:
 
-      def initialize(column)   #:nodoc:
-        @column = column
+      def initialize(column_wrapper)   #:nodoc:
+        @column_wrapper = column_wrapper
       end
     end
 

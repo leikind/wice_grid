@@ -29,9 +29,9 @@ module Wice
         end
         opts = opts[0]
         if opts == 'f'
-          [" (#{@column.alias_or_table_name(table_alias)}.#{@column.name} = ? or #{@column.alias_or_table_name(table_alias)}.#{@column.name} is null) ", false]
+          [" (#{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} = ? or #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} is null) ", false]
         elsif opts == 't'
-          [" #{@column.alias_or_table_name(table_alias)}.#{@column.name} = ?", true]
+          [" #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} = ?", true]
         else
           nil
         end

@@ -78,12 +78,12 @@ module Wice
         if string_fragment.empty?
           return false
         end
-        [" #{negation}  #{@column.alias_or_table_name(table_alias)}.#{@column.name} #{::Wice.get_string_matching_operators(@column.model)} ?",
-            '%' + string_fragment + '%']
+        [
+          " #{negation}  #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} #{::Wice.get_string_matching_operators(@column_wrapper.model)} ?",
+          '%' + string_fragment + '%'
+        ]
       end
 
     end
-
   end
-
 end

@@ -29,13 +29,10 @@ module Wice
         }
       end
 
-
       def has_auto_reloading_input? #:nodoc:
         auto_reload
       end
-
     end
-
 
 
     class ConditionsGeneratorColumnInteger < ConditionsGeneratorColumn  #:nodoc:
@@ -48,7 +45,7 @@ module Wice
         conditions = [[]]
         if opts[:fr]
           if opts[:fr] =~ /\d/
-            conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} >= ? "
+            conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} >= ? "
             conditions << opts[:fr]
           else
             opts.delete(:fr)
@@ -57,7 +54,7 @@ module Wice
 
         if opts[:to]
           if opts[:to] =~ /\d/
-            conditions[0] << " #{@column.alias_or_table_name(table_alias)}.#{@column.name} <= ? "
+            conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} <= ? "
             conditions << opts[:to]
           else
             opts.delete(:to)
@@ -70,10 +67,8 @@ module Wice
 
         conditions[0] = conditions[0].join(' and ')
 
-        return conditions
+        conditions
       end
     end
-
   end
-
 end

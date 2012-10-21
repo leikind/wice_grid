@@ -4,6 +4,7 @@ require 'wice_grid_misc.rb'
 require 'wice_grid_core_ext.rb'
 require 'grid_renderer.rb'
 require 'table_column_matrix.rb'
+require 'active_record_column_wrapper.rb'
 require 'helpers/wice_grid_view_helpers.rb'
 require 'helpers/wice_grid_misc_view_helpers.rb'
 require 'helpers/wice_grid_serialized_queries_view_helpers.rb'
@@ -221,7 +222,9 @@ module Wice
       end
 
       if column
-        conditions, current_parameter_name = column.wg_initialize_request_parameters(@status[:f], main_table, table_alias, custom_filter_active)
+        conditions_generator = ActiveRecordColumnWrapper.new(column, @status[:f], main_table, table_alias, custom_filter_active)
+        conditions, current_parameter_name = conditions_generator.wg_initialize_request_parameters
+
         if @status[:f] && conditions.blank?
           @status[:f].delete(current_parameter_name)
         end
@@ -600,83 +603,6 @@ module Wice
       end
 
     end
-  end
-
-  # to be mixed in into ActiveRecord::ConnectionAdapters::Column
-  module WiceGridExtentionToActiveRecordColumn #:nodoc:
-
-    attr_accessor :model
-
-    def alias_or_table_name(table_alias)
-      table_alias || self.model.table_name
-    end
-
-    def wg_initialize_request_parameters(all_filter_params, main_table, table_alias, custom_filter_active)  #:nodoc:
-      @request_params = nil
-      return if all_filter_params.nil?
-
-      # if the parameter does not specify the table name we only allow columns in the default table to use these parameters
-      if main_table && @request_params  = all_filter_params[self.name]
-        current_parameter_name = self.name
-      elsif @request_params = all_filter_params[alias_or_table_name(table_alias) + '.' + self.name]
-        current_parameter_name = alias_or_table_name(table_alias) + '.' + self.name
-      end
-
-      # Preprocess incoming parameters for datetime, if what's coming in is
-      # a datetime (with custom_filter it can be anything else, and not
-      # the datetime hash {:fr => ..., :to => ...})
-      if @request_params
-        if (self.type == :datetime || self.type == :timestamp) && @request_params.is_a?(Hash)
-          [:fr, :to].each do |sym|
-            if @request_params[sym]
-              if @request_params[sym].is_a?(String)
-                @request_params[sym] = Wice::ConfigurationProvider.value_for(:DATETIME_PARSER).call(@request_params[sym])
-              elsif @request_params[sym].is_a?(Hash)
-                @request_params[sym] = Wice::GridTools.params_2_datetime(@request_params[sym])
-              end
-            end
-          end
-
-        end
-
-        # Preprocess incoming parameters for date, if what's coming in is
-        # a date (with custom_filter it can be anything else, and not
-        # the date hash {:fr => ..., :to => ...})
-        if self.type == :date && @request_params.is_a?(Hash)
-          [:fr, :to].each do |sym|
-            if @request_params[sym]
-              if @request_params[sym].is_a?(String)
-                @request_params[sym] = Wice::ConfigurationProvider.value_for(:DATE_PARSER).call(@request_params[sym])
-              elsif @request_params[sym].is_a?(Hash)
-                @request_params[sym] = ::Wice::GridTools.params_2_date(@request_params[sym])
-              end
-            end
-          end
-        end
-      end
-
-      return wg_generate_conditions(table_alias, custom_filter_active), current_parameter_name
-    end
-
-    def wg_generate_conditions(table_alias, custom_filter_active)  #:nodoc:
-      return nil if @request_params.nil?
-
-      if custom_filter_active
-        return ::Wice::Columns.get_conditions_generator_column_processor(:custom).new(self).generate_conditions(table_alias, @request_params)
-      end
-
-      column_type = self.type.to_s
-
-      processor_class = ::Wice::Columns.get_conditions_generator_column_processor(column_type)
-
-      if processor_class
-        return processor_class.new(self).generate_conditions(table_alias, @request_params)
-      else
-        Wice.log("No processor for database type #{column_type}!!!")
-        nil
-      end
-    end
-
   end
 
 
