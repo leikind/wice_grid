@@ -1,7 +1,13 @@
 
+to do: docs and spec for :filter_type
+
 A fix: the css class submitted to column is also added to <th> tags of the column
 
 Filter related code has been refactored: condition generators are unified together with view column processors into one module. Writing your own filters has been simplified.
+
+The default filter for numeric columns has been replaced by a simple one field filter which checks the values for equality, not the inclusion in a range.
+New column parameter :filter_type allows to load custom alternative filters. The old numeric range filter can still be used by specifying  filter_type: :range.
+See lib/columns/column_processor_index.rb</tt> for the list of available filters.
 
 +++++++
 +++++++

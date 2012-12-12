@@ -9,9 +9,9 @@ module Wice
 
 
   class ActiveRecordColumnWrapper
-    def initialize(column, all_filter_params, main_table, table_alias, custom_filter_active)
+    def initialize(column, all_filter_params, main_table, table_alias, custom_filter_active, filter_type)
       @column = column
-
+      @filter_type = filter_type
       @all_filter_params, @main_table, @table_alias, @custom_filter_active =
         all_filter_params, main_table, table_alias, custom_filter_active
     end
@@ -73,7 +73,7 @@ module Wice
         return custom_processor.generate_conditions(@table_alias, @request_params)
       end
 
-      column_type = @column.type.to_s
+      column_type = @filter_type || @column.type.to_s
 
       processor_class = ::Wice::Columns.get_conditions_generator_column_processor(column_type)
 

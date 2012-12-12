@@ -204,7 +204,7 @@ module Wice
       end
     end
 
-    def declare_column(column_name, model, custom_filter_active, table_alias)  #:nodoc:
+    def declare_column(column_name, model, custom_filter_active, table_alias, filter_type)  #:nodoc:
       if model # this is an included table
         column = @table_column_matrix.get_column_by_model_class_and_column_name(model, column_name)
         raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model.table_name}'!") if column.nil?
@@ -222,7 +222,7 @@ module Wice
       end
 
       if column
-        conditions_generator = ActiveRecordColumnWrapper.new(column, @status[:f], main_table, table_alias, custom_filter_active)
+        conditions_generator = ActiveRecordColumnWrapper.new(column, @status[:f], main_table, table_alias, custom_filter_active, filter_type)
         conditions, current_parameter_name = conditions_generator.wg_initialize_request_parameters
 
         if @status[:f] && conditions.blank?

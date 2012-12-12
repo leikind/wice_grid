@@ -176,6 +176,9 @@ module Wice
     #       is far from being user-friendly due to the number of dropdown lists.
     # * <tt>:filter</tt> - Disables filters when set to false.
     #   This is needed if sorting is required while  filters are not.
+    # * <tt>:filter_type</tt> - Using a column filter different from the default filter chosen automatically based on the
+    #   data type or the <tt>:custom_filter</tt> argument. See <tt>lib/columns/column_processor_index.rb</tt> for the
+    #   list of available filters.
     # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
     # * <tt>:model</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
@@ -275,6 +278,7 @@ module Wice
         :model                      => nil,
         :negation                   => Defaults::NEGATION_IN_STRING_FILTERS,
         :filter                     => true,
+        :filter_type                => nil,
         :table_alias                => nil,
         :html                       => {}
       }
@@ -312,7 +316,7 @@ module Wice
       klass = Columns::ViewColumn
       if options[:attribute] &&
           col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
-            options[:custom_filter],  options[:table_alias])
+            options[:custom_filter],  options[:table_alias], options[:filter_type])
 
         db_column, table_name, main_table = col_type_and_table_name
         col_type = db_column.type
@@ -353,6 +357,8 @@ module Wice
           end
 
           klass = Columns.get_view_column_processor(:custom)
+        elsif options[:filter_type]
+          klass = Columns.get_view_column_processor(options[:filter_type])
         else
           klass = Columns.get_view_column_processor(col_type)
         end # custom_filter

@@ -9,6 +9,7 @@ module Wice
       :datetime , 'column_datetime',
       :date     , 'column_date',
       :integer  , 'column_integer',
+      :range    , 'column_range',
       :float    , 'column_float',
       :decimal  , 'column_float',
       :custom   , 'column_custom_dropdown',  # Special processor for custom filter columns
