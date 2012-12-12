@@ -242,12 +242,12 @@ module Wice
 
         if column.attribute && column.ordering
 
-          css_class = grid.filtered_by?(column) ? 'active-filter' : nil
+          column.add_css_class('active-filter') if grid.filtered_by?(column)
 
           direction = 'asc'
           link_style = nil
           if grid.ordered_by?(column)
-            css_class = css_class.nil? ? 'sorted' : css_class + ' sorted'
+            column.add_css_class('sorted')
             link_style = grid.order_direction
             direction = 'desc' if grid.order_direction == 'asc'
           end
@@ -256,8 +256,9 @@ module Wice
             column_name,
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
-          grid.output_buffer << content_tag(:th, col_link, Wice::WgHash.make_hash(:class, css_class))
-          column.css_class = css_class
+
+          grid.output_buffer << content_tag(:th, col_link, Wice::WgHash.make_hash(:class, column.css_class))
+
         else
           if reuse_last_column_for_filter_buttons && last
             grid.output_buffer << content_tag(:th,
@@ -324,11 +325,6 @@ module Wice
         end
       end
 
-      rendering.each_column(:in_html) do |column|
-        unless column.css_class.blank?
-          Wice::WgHash.add_or_append_class_value!(column.html, column.css_class)
-        end
-      end
 
       grid.output_buffer << '</thead><tfoot>'
       grid.output_buffer << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do

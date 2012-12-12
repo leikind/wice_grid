@@ -1,7 +1,7 @@
-to do:
 
-1) get rid of this :href => "javascript: toggle_multi_select
-   at view_columns
+A fix: the css class submitted to column is also added to <th> tags of the column
+
+Filter related code has been refactored: condition generators are unified together with view column processors into one module. Writing your own filters has been simplified.
 
 +++++++
 +++++++

@@ -69,7 +69,7 @@ module Wice
 
       attr_accessor *FIELDS
 
-      attr_accessor :cell_rendering_block, :grid, :css_class, :table_name, :main_table, :model, :custom_filter
+      attr_accessor :cell_rendering_block, :grid,  :table_name, :main_table, :model, :custom_filter
 
       attr_reader :contains_a_text_input
 
@@ -87,8 +87,17 @@ module Wice
       end
 
 
+      def add_css_class(klass_value)
+        if html[:class].nil?
+          html[:class] = klass_value
+        else
+          html[:class] << ' ' unless html[:class].empty?
+          html[:class] << klass_value
+        end
+      end
+
       def css_class #:nodoc:
-        @css_class || ''
+        html[:class] || ''
       end
 
       def yield_declaration_of_column_filter #:nodoc:
