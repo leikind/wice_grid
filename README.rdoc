@@ -624,6 +624,17 @@ To only allow single selection use <tt>:allow_multiple_selection</tt>:
   end
 
 
+==== Numeric Filters
+
+Before version 3.2.1 the filter used for numeric columns was a range filter with two limits. Beginning with version  3.2.1
+the default is a direct comparison filter with one input field. The old range filter can still be loaded using parameter <tt>:filter_type</tt>
+with value <tt>:range</tt>:
+
+  g.column :filter_type => :range do |task|
+    ...
+  end
+
+
 === Defaults
 
 Default values like  can be  changed in <tt>config/initializers/wice_grid_config.rb</tt>.
