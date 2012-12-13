@@ -1,10 +1,10 @@
 # encoding: UTF-8
-module Wice
+module Wice #:nodoc:
 
-  module Columns
+  module Columns #:nodoc:
 
-    class << self
-      def load_column_processors
+    class << self #:nodoc:
+      def load_column_processors #:nodoc:
 
         require_columns
 
@@ -14,11 +14,11 @@ module Wice
         @@handled_type_conditions_generator = build_table_of_processors 'conditions_generator'
       end
 
-      def get_view_column_processor(column_type)
+      def get_view_column_processor(column_type) #:nodoc:
         @@handled_type_view[column_type] || ViewColumn
       end
 
-      def get_conditions_generator_column_processor(column_type)
+      def get_conditions_generator_column_processor(column_type) #:nodoc:
         column_type = column_type.intern if column_type.is_a? String
         @@handled_type_conditions_generator[column_type] || raise("Could not find conditions generator processor for column_type #{column_type}")
       end

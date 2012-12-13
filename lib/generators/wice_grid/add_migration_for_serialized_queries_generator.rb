@@ -1,7 +1,7 @@
 module WiceGrid #:nodoc:
   module Generators #:nodoc:
 
-    class AddMigrationForSerializedQueriesGenerator < Rails::Generators::Base
+    class AddMigrationForSerializedQueriesGenerator < Rails::Generators::Base  #:nodoc:
 
       include Rails::Generators::Migration
 

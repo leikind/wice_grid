@@ -8,8 +8,8 @@ module Wice
 
 
 
-  class ActiveRecordColumnWrapper
-    def initialize(column, all_filter_params, main_table, table_alias, custom_filter_active, filter_type)
+  class ActiveRecordColumnWrapper #:nodoc:
+    def initialize(column, all_filter_params, main_table, table_alias, custom_filter_active, filter_type) #:nodoc:
       @column = column
       @filter_type = filter_type
       @all_filter_params, @main_table, @table_alias, @custom_filter_active =
@@ -85,16 +85,16 @@ module Wice
       end
     end
 
-    def name
+    def name #:nodoc:
       @column.name
     end
 
-    def model
+    def model #:nodoc:
       @column.model
     end
 
 
-    def alias_or_table_name(table_alias)
+    def alias_or_table_name(table_alias) #:nodoc:
       table_alias || @column.model.table_name
     end
 

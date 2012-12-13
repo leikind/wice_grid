@@ -1,7 +1,7 @@
 # encoding: UTF-8
 module Wice
 
-  module Columns
+  module Columns #:nodoc:
 
 
     class ViewColumnAction < ViewColumn #:nodoc:
@@ -42,6 +42,6 @@ module Wice
 
     end
 
-    ConditionsGeneratorColumnAction = ConditionsGeneratorColumn
+    ConditionsGeneratorColumnAction = ConditionsGeneratorColumn #:nodoc:
   end
 end

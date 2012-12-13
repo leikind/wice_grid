@@ -1,7 +1,7 @@
 # encoding: UTF-8
 module Wice
 
-  module Columns
+  module Columns #:nodoc:
 
     class ViewColumnBoolean < ViewColumnCustomDropdown #:nodoc:
       include ActionView::Helpers::FormOptionsHelper

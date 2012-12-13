@@ -1,13 +1,13 @@
 # encoding: UTF-8
-module Wice
+module Wice #:nodoc:
 
 
-  module Columns
+  module Columns #:nodoc:
 
     class ViewColumnFloat < ViewColumnInteger #:nodoc:
     end
 
-    ConditionsGeneratorColumnFloat = ConditionsGeneratorColumnInteger
+    ConditionsGeneratorColumnFloat = ConditionsGeneratorColumnInteger #:nodoc:
 
   end
 

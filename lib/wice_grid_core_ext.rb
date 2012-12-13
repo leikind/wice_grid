@@ -1,8 +1,8 @@
 # encoding: UTF-8
 
 module Wice
-  module WgHash
-    class << self
+  module WgHash #:nodoc:
+    class << self #:nodoc:
 
       # if there's a hash of hashes, the original structure and the
       # returned structure should not contain any shared deep hashes
@@ -105,7 +105,7 @@ module Wice
 
   end
 
-  module WgArray
+  module WgArray #:nodoc:
     # Only used by Hash#parameter_names_and_values
     # Transforms ['foo', 'bar', 'baz'] to 'foo[bar][baz]'
     def self.to_parameter_name(array) #:nodoc:

@@ -23,7 +23,7 @@ ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
 
-  class WiceGridEngine < ::Rails::Engine
+  class WiceGridEngine < ::Rails::Engine #:nodoc:
 
     initializer "wice_grid_railtie.configure_rails_initialization" do |app|
 
@@ -56,10 +56,10 @@ module Wice
 
   class WiceGrid
 
-    attr_reader :klass, :name, :resultset, :custom_order, :query_store_model
-    attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :csv_field_separator, :saved_query
-    attr_writer :renderer
-    attr_accessor :output_buffer, :view_helper_finished, :csv_tempfile
+    attr_reader :klass, :name, :resultset, :custom_order, :query_store_model #:nodoc:
+    attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :csv_field_separator, :saved_query #:nodoc:
+    attr_writer :renderer #:nodoc:
+    attr_accessor :output_buffer, :view_helper_finished, :csv_tempfile #:nodoc:
 
     # core workflow methods START
 

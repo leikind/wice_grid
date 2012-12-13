@@ -17,7 +17,7 @@ module Wice
 
     protected
 
-    attr_accessor :wice_grid_instances
+    attr_accessor :wice_grid_instances #:nodoc:
 
     # Creates a grid object to be used in the view. This is the <i>main</i> model, and the underlying table is the default table -
     # if in other parameters a column name is mentioned without the name of the table, this table is implied.
@@ -163,7 +163,7 @@ module Wice
     private
 
 
-    def send_file_rails2(path, options = {}) #:doc:
+    def send_file_rails2(path, options = {}) #:nodoc:
       raise "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
 
       options[:length]   ||= File.size(path)
@@ -177,7 +177,7 @@ module Wice
     end
 
 
-    DEFAULT_SEND_FILE_OPTIONS_RAILS2 = {
+    DEFAULT_SEND_FILE_OPTIONS_RAILS2 = { #:nodoc:
       :type         => 'application/octet-stream'.freeze,
       :disposition  => 'attachment'.freeze,
       :stream       => true,
@@ -185,7 +185,7 @@ module Wice
       :x_sendfile   => false
     }.freeze
 
-    def send_file_headers_rails2!(options) #:doc:
+    def send_file_headers_rails2!(options) #:nodoc:
 
       options.update(DEFAULT_SEND_FILE_OPTIONS_RAILS2.merge(options))
       [:length, :type, :disposition].each do |arg|
