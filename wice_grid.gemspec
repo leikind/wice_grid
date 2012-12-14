@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wice_grid"
-  s.version = "3.2.0"
+  s.version = "3.2.1.pre1"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
-  s.date = "2012-09-30"
+  s.date = "2012-12-14"
   s.description = "A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters "
   s.email = "yuri.leikind@gmail.com"
   s.extra_rdoc_files = [
@@ -29,6 +29,18 @@ Gem::Specification.new do |s|
     "app/views/kaminari/wice_grid/_page.html.erb",
     "app/views/kaminari/wice_grid/_paginator.html.erb",
     "app/views/kaminari/wice_grid/_prev_page.html.erb",
+    "lib/active_record_column_wrapper.rb",
+    "lib/columns.rb",
+    "lib/columns/column_action.rb",
+    "lib/columns/column_boolean.rb",
+    "lib/columns/column_custom_dropdown.rb",
+    "lib/columns/column_date.rb",
+    "lib/columns/column_datetime.rb",
+    "lib/columns/column_float.rb",
+    "lib/columns/column_integer.rb",
+    "lib/columns/column_processor_index.rb",
+    "lib/columns/column_range.rb",
+    "lib/columns/column_string.rb",
     "lib/generators/wice_grid/add_migration_for_serialized_queries_generator.rb",
     "lib/generators/wice_grid/install_generator.rb",
     "lib/generators/wice_grid/templates/create_wice_grid_serialized_queries.rb",
@@ -43,16 +55,6 @@ Gem::Specification.new do |s|
     "lib/helpers/wice_grid_view_helpers.rb",
     "lib/kaminari_monkey_patching.rb",
     "lib/table_column_matrix.rb",
-    "lib/view_columns.rb",
-    "lib/view_columns/view_column_action.rb",
-    "lib/view_columns/column_processor_index.rb",
-    "lib/view_columns/view_column_boolean.rb",
-    "lib/view_columns/view_column_custom_dropdown.rb",
-    "lib/view_columns/view_column_date.rb",
-    "lib/view_columns/view_column_datetime.rb",
-    "lib/view_columns/view_column_float.rb",
-    "lib/view_columns/view_column_integer.rb",
-    "lib/view_columns/view_column_string.rb",
     "lib/wice_grid.rb",
     "lib/wice_grid_controller.rb",
     "lib/wice_grid_core_ext.rb",
