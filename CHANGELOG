@@ -1,5 +1,5 @@
 
-to do: docs and spec for :filter_type
+action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered
 
 A fix: the css class submitted to column is also added to <th> tags of the column
 

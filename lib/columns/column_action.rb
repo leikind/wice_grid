@@ -5,7 +5,7 @@ module Wice
 
 
     class ViewColumnAction < ViewColumn #:nodoc:
-      def initialize(grid_obj, html, param_name, select_all_buttons, object_property, view)  #:nodoc:
+      def initialize(grid_obj, html, param_name, select_all_buttons, object_property, view, block = nil)  #:nodoc:
         @view = view
         @select_all_buttons   = select_all_buttons
         self.grid             = grid_obj
@@ -14,9 +14,12 @@ module Wice
         grid_name             = self.grid.name
         @param_name           = param_name
         @cell_rendering_block = lambda do |object, params|
-          selected =
-            params[grid_name] && params[grid_name][param_name] && params[grid_name][param_name].index(object.send(object_property).to_s)
-          check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
+          if block && ! block.call(object)
+            ''
+          else
+            selected = params[grid_name] && params[grid_name][param_name] && params[grid_name][param_name].index(object.send(object_property).to_s)
+            check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
+          end
         end
       end
 

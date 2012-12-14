@@ -127,7 +127,11 @@ module Wice
     # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header.
     #   The default is +true+.
     # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
-    def action_column(opts = {})
+    #
+    # You can hide a certain action checkbox if you add the usual block to +g.action_column+, just like with the
+    # +g.column+ definition. If the block returns +nil+ or +false+ no checkbox will be rendered.
+
+    def action_column(opts = {}, &block)
 
       if @action_column_present
         raise Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
@@ -146,7 +150,7 @@ module Wice
       column_processor_klass = Columns.get_view_column_processor(:action)
 
       @columns << column_processor_klass.new(@grid, options[:html], options[:param_name],
-            options[:select_all_buttons], options[:object_property], @view)
+            options[:select_all_buttons], options[:object_property], @view, block)
     end
 
     # Defines everything related to a column in a grid - column name, filtering, rendering cells, etc.

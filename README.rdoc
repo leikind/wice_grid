@@ -812,6 +812,24 @@ taken care of by the application code.
 By default the name of the HTTP parameter follows pattern <tt>"#{grid_name}[#{param_name}][]"</tt>, thus
 <tt>params[grid_name][param_name]</tt> will contain an array of object IDs.
 
+
+You can hide a certain action checkbox if you add the usual block to +g.action_column+, just like with the
++g.column+ definition. If the block returns +nil+ or +false+ no checkbox will be rendered.
+
+  <%= grid(@tasks_grid, :show_filters => :always) do |g|
+
+    ...
+
+    g.action_column do |task|
+      task.finished?
+    end
+
+    ...
+
+  end -%>
+
+
+
 WiceGrid is form-friendly: submitting grid in a form retains the state of the form.
 
 
