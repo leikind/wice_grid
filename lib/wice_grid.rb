@@ -265,21 +265,16 @@ module Wice
         @ar_options[:order] += ' ' + @status[:order_direction]
       end
 
-      if self.output_html?
-        @ar_options[:per_page] = if all_record_mode?
-          # reset the :pp value in all records mode
-          @status[:pp] = count_resultset_without_paging_without_user_filters
-        else
-          @status[:per_page]
-        end
+      @ar_options[:joins]   = @options[:joins]
+      @ar_options[:include] = @options[:include]
+      @ar_options[:group]   = @options[:group]
 
+      if self.output_html?
+        @ar_options[:per_page] = @status[:per_page]
         @ar_options[:page] = @status[:page]
         @ar_options[:total_entries] = @status[:total_entries] if @status[:total_entries]
       end
 
-      @ar_options[:joins]   = @options[:joins]
-      @ar_options[:include] = @options[:include]
-      @ar_options[:group] = @options[:group]
     end
 
 
@@ -287,7 +282,7 @@ module Wice
     def read  #:nodoc:
       form_ar_options
       @klass.unscoped do
-        @resultset = if self.output_csv?
+        @resultset = if self.output_csv? || all_record_mode?
           # @relation.find(:all, @ar_options)
           @relation.
             includes(@ar_options[:include]).
@@ -538,17 +533,18 @@ module Wice
       end
     end
 
-    def count_resultset_without_paging_without_user_filters  #:nodoc:
-      form_ar_options
-      @klass.unscoped do
-        @relation.count(
-          :joins => @ar_options[:joins],
-          :include => @ar_options[:include],
-          :group => @ar_options[:group],
-          :conditions => @options[:conditions]
-        )
-      end
-    end
+    # not used right now
+    # def count_resultset_without_paging_without_user_filters  #:nodoc:
+    #   form_ar_options
+    #   @klass.unscoped do
+    #     @relation.count(
+    #       :joins => @ar_options[:joins],
+    #       :include => @ar_options[:include],
+    #       :group => @ar_options[:group],
+    #       :conditions => @options[:conditions]
+    #     )
+    #   end
+    # end
 
 
     def resultset_without_paging_with_user_filters  #:nodoc:

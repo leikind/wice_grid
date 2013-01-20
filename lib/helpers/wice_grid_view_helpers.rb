@@ -623,20 +623,42 @@ module Wice
 
       collection = grid.resultset
 
-      collection_total_entries = collection.total_count
+      if grid.all_record_mode?
 
+        collection_total_entries = collection.size
+        current_page = 1
+        per_page = collection_total_entries
 
-      current_page = grid.ar_options[:page].to_i
-      per_page = grid.ar_options[:per_page].to_i
+        first = 1
+        last = collection.size
 
-      first = collection.offset_value + 1
-      last = collection.last_page? ? collection.total_count : collection.offset_value + collection.limit_value
+        num_pages = 1
 
+        class << collection
+          def current_page
+            1
+          end
+
+          def total_pages
+            1
+          end
+        end
+
+      else
+        collection_total_entries = collection.total_count
+        current_page = grid.ar_options[:page].to_i
+        per_page = grid.ar_options[:per_page].to_i
+
+        first = collection.offset_value + 1
+        last = collection.last_page? ? collection.total_count : collection.offset_value + collection.limit_value
+
+        num_pages = collection.num_pages
+      end
 
       parameters = grid.get_state_as_parameter_value_pairs
 
       js = ''
-      html = if (collection.num_pages < 2 && collection.length == 0)
+      html = if (num_pages < 2 && collection.length == 0)
         '0'
       else
         parameters << ["#{grid.name}[pp]", collection_total_entries]
