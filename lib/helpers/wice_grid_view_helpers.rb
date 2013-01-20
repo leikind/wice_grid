@@ -461,14 +461,14 @@ module Wice
       grid.output_buffer << '</div>'
 
       if Rails.env == 'development'
-        grid.output_buffer  <<  javascript_tag(%/ $(document).ready(function(){ \n/ +
+        grid.output_buffer  <<  javascript_tag(%/ window.onload = function(){ \n/ +
           %$ if (typeof(WiceGridProcessor) == "undefined"){\n$ +
           %$   alert("wice_grid.js not loaded, WiceGrid cannot proceed!\\n" +\n$ +
           %$     "Make sure that you have loaded wice_grid.js.\\n" +\n$ +
           %$     "Add line\\n//= require wice_grid.js\\n" +\n$ +
           %$     "to app/assets/javascripts/application.js")\n$ +
           %$ }\n$ +
-          %$ }) $)
+          %$ } $)
       end
 
       grid.output_buffer
