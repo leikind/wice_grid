@@ -81,7 +81,7 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/wice_grid_saved_queries_init.js.coffee",
     "wice_grid.gemspec"
   ]
-  s.homepage = "http://github.com/lekind/wice_grid"
+  s.homepage = "http://github.com/leikind/wice_grid"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.23"
   s.summary = "Rails Grid Plugin"
