@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wice_grid"
-  s.version = "3.2.1.pre1"
+  s.version = "3.2.1.pre2"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
-  s.date = "2012-12-14"
+  s.date = "2013-01-21"
   s.description = "A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters "
   s.email = "yuri.leikind@gmail.com"
   s.extra_rdoc_files = [
