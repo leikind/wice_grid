@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "wice_grid"
-  s.version = "3.2.1.pre2"
+  s.version = "3.2.1.pre3"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
@@ -81,7 +81,7 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/wice_grid_saved_queries_init.js.coffee",
     "wice_grid.gemspec"
   ]
-  s.homepage = "http://github.com/leikind/wice_grid"
+  s.homepage = "http://github.com/lekind/wice_grid"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.23"
   s.summary = "Rails Grid Plugin"
