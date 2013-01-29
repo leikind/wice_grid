@@ -32,7 +32,7 @@ begin
     gem.summary = %Q{Rails Grid Plugin}
     gem.description = %Q{A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters }
     gem.email = "yuri.leikind@gmail.com"
-    gem.homepage = "http://github.com/lekind/wice_grid"
+    gem.homepage = "http://github.com/leikind/wice_grid"
     gem.authors = ["Yuri Leikind"]
     gem.add_dependency "kaminari", ">= 0.13.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings

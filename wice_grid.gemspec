@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "wice_grid"
-  s.version = "3.2.1.pre3"
+  s.version = "3.2.1"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Yuri Leikind"]
-  s.date = "2013-01-21"
+  s.date = "2013-01-29"
   s.description = "A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters "
   s.email = "yuri.leikind@gmail.com"
   s.extra_rdoc_files = [
@@ -81,7 +81,7 @@ Gem::Specification.new do |s|
     "vendor/assets/javascripts/wice_grid_saved_queries_init.js.coffee",
     "wice_grid.gemspec"
   ]
-  s.homepage = "http://github.com/lekind/wice_grid"
+  s.homepage = "http://github.com/leikind/wice_grid"
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.23"
   s.summary = "Rails Grid Plugin"
