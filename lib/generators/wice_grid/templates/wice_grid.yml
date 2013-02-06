@@ -500,3 +500,51 @@ zh:
     query_saved_message: 查询已储存
     select_all: 全选
     deselect_all: 全清
+
+ja:
+  date:
+    order:
+      - :年
+      - :月
+      - :日
+  wice_grid:
+    show_filter_tooltip: フィルタ表示
+    hide_filter_tooltip: フィルタ非表示
+    csv_export_tooltip: CSVエクスポート
+    filter_tooltip: フィルタ
+    reset_filter_tooltip: リセット
+    boolean_filter_true_label: "yes"
+    boolean_filter_false_label: "no"
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: From
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: To
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: 除外する
+    # link to switch to show all records
+    show_all_records_label: すべて表示
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: 前レコード表示
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: 全てのレコードを表示しますか？
+    # link to paginated view
+    switch_back_to_paginated_mode_label: 戻る
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: 戻る
+    # Title of the date string.
+    date_string_tooltip: 削除
+    saved_query_panel_title: クエリ保存
+    save_query_button_label: フィルタ保存
+    saved_query_deletion_confirmation: 本当によろしいですか？
+    saved_query_deletion_link_title: クエリ削除
+    saved_query_link_title: クエリのロード
+    validates_uniqueness_error: 同じ名前がすでに存在します
+    validates_presence_error: クエリ名を記入して下さい
+    query_deleted_message: クエリの削除が完了しました
+    query_saved_message: クエリを保存しました
+    select_all: 全てを選択
+    deselect_all: 選択を解除
+    expand: 開く
+    collapse: 閉じる
