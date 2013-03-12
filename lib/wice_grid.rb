@@ -240,6 +240,12 @@ module Wice
         @ar_options[:order] += ' ' + @status[:order_direction]
       end
 
+
+      @ar_options[:joins]   = @options[:joins]
+      @ar_options[:include] = @options[:include]
+      @ar_options[:group] = @options[:group]
+      @ar_options[:select]  = @options[:select]
+
       if self.output_html?
         @ar_options[:per_page] = if all_record_mode?
           # reset the :pp value in all records mode
@@ -252,10 +258,6 @@ module Wice
         @ar_options[:total_entries] = @status[:total_entries] if @status[:total_entries]
       end
 
-      @ar_options[:joins]   = @options[:joins]
-      @ar_options[:include] = @options[:include]
-      @ar_options[:group] = @options[:group]
-      @ar_options[:select]  = @options[:select]
     end
 
     def read  #:nodoc:
