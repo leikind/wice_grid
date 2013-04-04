@@ -3,12 +3,10 @@
   height: 16px;
 }
 
-.wg-detached-filter{
+.wg-detached-filter, .wice-grid{
+
   a.date-label {text-decoration: none;}
   a.date-label:hover {text-decoration: line-through;}
-}
-
-.wice-grid{
 
   .clickable{
     cursor: pointer;
@@ -16,13 +14,48 @@
     margin-right: 2px;
   }
 
-
-  a.date-label {text-decoration: none;}
-  a.date-label:hover {text-decoration: line-through;}
-
   .ui-datepicker-trigger, .wg-detached-filter .ui-datepicker-trigger{
     cursor: pointer;
   }
+
+  .custom-dropdown-container {
+    position: relative;
+    padding-right: 18px;
+
+
+    .collapse-multi-select-icon, .expand-multi-select-icon{
+      width: 12px;
+      height: 12px;
+      position:absolute;
+      top:0;
+      right:0;
+    }
+
+    .collapse-multi-select-icon{
+      background: transparent url(/assets/icons/grid/collapse.gif) no-repeat;
+    }
+
+    .expand-multi-select-icon{
+      background: transparent url(/assets/icons/grid/expand.gif) no-repeat;
+    }
+
+  }
+
+  .text-filter-container {
+    position: relative; padding-right: 13px;
+    .negation-checkbox {
+      position:absolute;
+      top:0;
+      right:0;
+    }
+  }
+
+
+}
+
+
+.wice-grid{
+
 
   .desc,  .asc{
     padding-right: 18px;
@@ -69,38 +102,6 @@
     background: transparent url(/assets/icons/grid/untick_all.png) no-repeat;
     @include icon-dimensions;
     float:left;
-  }
-
-  .custom-dropdown-container {
-    position: relative;
-    padding-right: 18px;
-
-
-    .collapse-multi-select-icon, .expand-multi-select-icon{
-      width: 12px;
-      height: 12px;
-      position:absolute;
-      top:0;
-      right:0;
-    }
-
-    .collapse-multi-select-icon{
-      background: transparent url(/assets/icons/grid/collapse.gif) no-repeat;
-    }
-
-    .expand-multi-select-icon{
-      background: transparent url(/assets/icons/grid/expand.gif) no-repeat;
-    }
-
-  }
-
-  .text-filter-container {
-    position: relative; padding-right: 13px;
-    .negation-checkbox {
-      position:absolute;
-      top:0;
-      right:0;
-    }
   }
 
 

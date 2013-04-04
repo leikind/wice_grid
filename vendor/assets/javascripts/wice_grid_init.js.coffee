@@ -42,6 +42,9 @@ initWiceGrid = ->
   setupExternalSubmitReset()
   setupExternalCsvExport()
 
+  # for all grids on oage because it does not matter which grid it is
+  setupMultiSelectToggle $('.wg-detached-filter')
+
 # datepicker logic
 setupDatepicker = ->
   # check if datepicker is loaded
