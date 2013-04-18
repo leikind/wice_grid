@@ -240,11 +240,11 @@ module Wice
         @ar_options[:order] += ' ' + @status[:order_direction]
       end
 
-
       @ar_options[:joins]   = @options[:joins]
       @ar_options[:include] = @options[:include]
       @ar_options[:group] = @options[:group]
       @ar_options[:select]  = @options[:select]
+
 
       if self.output_html?
         @ar_options[:per_page] = if all_record_mode?
