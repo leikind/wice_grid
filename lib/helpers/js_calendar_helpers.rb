@@ -1,53 +1,74 @@
 module Wice #:nodoc:
   module JsCalendarHelpers #:nodoc:
 
-    def date_calendar_jquery(initial_date, title, opts = {})  #:nodoc:
-      date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
+    class CalendarData
+      attr_accessor :name,
+                    :date_string,
+                    :dom_id,
+                    :datepicker_placeholder_id,
+                    :date_span_id,
+                    :close_calendar_event_name,
+                    :title,
+                    :fire_event,
+                    :the_other_datepicker_id_to,
+                    :the_other_datepicker_id_from
+    end
 
-      name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name  =
-        prepare_data_for_calendar(opts, date_format, initial_date)
+    def date_calendar_jquery(calendar_data)  #:nodoc:
 
       hidden_field_tag_options = {
-        :id => dom_id,
-        'data-locale' => I18n.locale,
-        'data-date-format' => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_JQUERY),
+        :id                 => calendar_data.dom_id,
+        'data-locale'       => I18n.locale,
+        'data-date-format'  => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_JQUERY),
         'data-button-image' => Wice::ConfigurationProvider.value_for(:CALENDAR_ICON),
-        'data-button-text' => title,
+        'data-button-text'  => calendar_data.title
       }
 
-      if opts[:fire_event]
-        hidden_field_tag_options['data-close-calendar-event-name'] = close_calendar_event_name
+      if calendar_data.fire_event
+        hidden_field_tag_options['data-close-calendar-event-name'] = calendar_data.close_calendar_event_name
       end
 
       if Rails.env == 'development'
         hidden_field_tag_options['class'] = 'check-for-datepicker'
       end
 
-      date_picker = hidden_field_tag(name, date_string, hidden_field_tag_options) + ' ' +
+      if calendar_data.the_other_datepicker_id_to
+        hidden_field_tag_options['data-the-other-datepicker-id-to'] = calendar_data.the_other_datepicker_id_to
+      end
 
-        link_to(date_string,
+      if calendar_data.the_other_datepicker_id_from
+        hidden_field_tag_options['data-the-other-datepicker-id-from'] = calendar_data.the_other_datepicker_id_from
+      end
+
+      date_picker = hidden_field_tag(calendar_data.name, calendar_data.date_string, hidden_field_tag_options) + ' ' +
+
+        link_to(calendar_data.date_string,
           '#',
-          :id => date_span_id,
+          :id => calendar_data.date_span_id,
           :class => 'date-label',
           :title => ::Wice::NlMessage['date_string_tooltip'],
-          'data-dom-id' => dom_id
+          'data-dom-id' => calendar_data.dom_id
         )
 
-      "<span id=\"#{datepicker_placeholder_id}\">#{date_picker}</span>"
+      "<span id=\"#{calendar_data.datepicker_placeholder_id}\">#{date_picker}</span>"
     end
 
-    protected
+    def prepare_data_for_calendar(options)  #:nodoc:
 
-    def prepare_data_for_calendar(opts, date_format, initial_date)  #:nodoc:
-      options = {:prefix => 'date'}
-      options.merge!(opts)
-      name = options[:prefix]
-      date_string = initial_date.nil? ? '' : initial_date.strftime(date_format)
-      dom_id = name.gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
-      datepicker_placeholder_id = dom_id + '_date_placeholder'
-      date_span_id = dom_id + '_date_view'
-      close_calendar_event_name =  "wg:calendarChanged_#{options[:grid_name]}"
-      return name, date_string, dom_id, datepicker_placeholder_id, date_span_id, close_calendar_event_name
+      date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
+
+      CalendarData.new.tap do |calendar_data|
+
+        calendar_data.name                      = options[:name]
+        calendar_data.date_string               = options[:initial_date].nil? ? '' : options[:initial_date].strftime(date_format)
+        calendar_data.dom_id                    = options[:name].gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
+        calendar_data.datepicker_placeholder_id = calendar_data.dom_id + '_date_placeholder'
+        calendar_data.date_span_id              = calendar_data.dom_id + '_date_view'
+        calendar_data.close_calendar_event_name =  "wg:calendarChanged_#{options[:grid_name]}"
+        calendar_data.title                     = options[:title]
+        calendar_data.fire_event                = options[:fire_event]
+
+      end
     end
 
   end

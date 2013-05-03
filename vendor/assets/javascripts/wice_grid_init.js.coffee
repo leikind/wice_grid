@@ -45,6 +45,19 @@ initWiceGrid = ->
   # for all grids on oage because it does not matter which grid it is
   setupMultiSelectToggle $('.wg-detached-filter')
 
+
+
+moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerHiddenField, selectedDate, dateFormat, predicate) ->
+  if (datepickerId = datepickerHiddenField.data(dataFieldNameWithTheOtherDatepicker)) &&
+    (theOtherDatepicker = $(_datepickerId = "#" + datepickerId)) &&
+    (theOtherDate = theOtherDatepicker.datepicker('getDate')) &&
+
+    predicate(theOtherDate, selectedDate)
+      theOtherDatepicker.datepicker("setDate", selectedDate)
+      theOtherDatepicker.next().next().html  $.datepicker.formatDate(dateFormat, selectedDate)
+
+
+
 # datepicker logic
 setupDatepicker = ->
   # check if datepicker is loaded
@@ -75,20 +88,42 @@ setupDatepicker = ->
       false
     that = this
 
+    dateFormat = datepickerHiddenField.data('date-format')
+
     # datepicker constructor
     datepickerHiddenField.datepicker
       firstDay:        1
       showOn:          "button"
-      dateFormat:      datepickerHiddenField.data('date-format')
+      dateFormat:      dateFormat
       buttonImage:     datepickerHiddenField.data('button-image')
       buttonImageOnly: true
       buttonText:      datepickerHiddenField.data('button-text')
       changeMonth:     true
       changeYear:      true
+
       onSelect: (dateText, inst) ->
+
+        selectedDate = $(this).datepicker("getDate")
+
+        moveDateBoundIfInvalidPeriod(
+          'the-other-datepicker-id-to',
+          datepickerHiddenField,
+          selectedDate,
+          dateFormat,
+          (theOther, selected)-> theOther < selected
+        )
+
+        moveDateBoundIfInvalidPeriod(
+          'the-other-datepicker-id-from',
+          datepickerHiddenField,
+          selectedDate,
+          dateFormat,
+          (theOther, selected)-> theOther > selected
+        )
+
         $(that).html(dateText)
         if eventToTriggerOnChange
-          datepickerHiddenField.trigger(eventToTriggerOnChange)
+         datepickerHiddenField.trigger(eventToTriggerOnChange)
 
 
 

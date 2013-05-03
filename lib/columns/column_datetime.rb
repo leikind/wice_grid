@@ -49,11 +49,28 @@ module Wice
 
       def render_calendar_filter_internal(params) #:nodoc:
 
-        html1 = date_calendar_jquery(
-          params[:fr], NlMessage['date_selector_tooltip_from'], :prefix => @name1, :fire_event => auto_reload, :grid_name => self.grid.name)
+        calendar_data_from = prepare_data_for_calendar(
+          :initial_date => params[:fr],
+          :title        => NlMessage['date_selector_tooltip_from'],
+          :name         => @name1,
+          :fire_event   => auto_reload,
+          :grid_name    => self.grid.name
+        )
 
-        html2 = date_calendar_jquery(
-          params[:to], NlMessage['date_selector_tooltip_to'],   :prefix => @name2, :fire_event => auto_reload, :grid_name => self.grid.name)
+        calendar_data_to = prepare_data_for_calendar(
+          :initial_date => params[:to],
+          :title        => NlMessage['date_selector_tooltip_to'],
+          :name         => @name2,
+          :fire_event   => auto_reload,
+          :grid_name    => self.grid.name
+        )
+
+        calendar_data_from.the_other_datepicker_id_to   = calendar_data_to.dom_id
+        calendar_data_to.the_other_datepicker_id_from   = calendar_data_from.dom_id
+
+        html1 = date_calendar_jquery calendar_data_from
+
+        html2 = date_calendar_jquery calendar_data_to
 
         %!<div class="date-filter">#{html1}<br/>#{html2}</div>!
       end
