@@ -5,6 +5,8 @@ Vice versa: if the TO field is set to a value before FROM, FROM is set to the va
 
 Wice::Defaults::DATEPICKER_YEAR_RANGE added to the config to define the default year range in Datepicker (https://github.com/leikind/wice_grid/issues/61)
 
+support for Ruby 2.0
+
 3.2.1
 
 action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered.
