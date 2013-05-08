@@ -1,10 +1,25 @@
-3.2.0pre2
+3.2.2
+
+improvement of the javascript calendar control: if the FROM field is set to a value after TO, TO is set to the value of FROM.
+Vice versa: if the TO field is set to a value before FROM, FROM is set to the value of TO
+
+3.2.1
+
+action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered.
+
+A fix: the css class submitted to column is also added to the <th> tags of the column.
+
+Filter related code has been refactored: condition generators are unified together with view column processors into one module. Writing your own filters has been simplified.
+
+The default filter for numeric columns has been replaced by a simple one field filter which checks the values for equality, not the inclusion in a range.
+New column parameter :filter_type allows to load custom alternative filters.
+The old numeric range filter can still be used by specifying filter_type: :range. See lib/columns/column_processor_index.rb for the list of available filters.
+
+3.2.0
 
 Fixes:
 https://github.com/leikind/wice_grid/issues/83
 https://github.com/leikind/wice_grid/issues/82
-
-3.2.0pre1
 
 action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered
 
@@ -17,12 +32,9 @@ New column parameter :filter_type allows to load custom alternative filters. The
 See lib/columns/column_processor_index.rb</tt> for the list of available filters.
 
 
-3.2.0pre1
-
-
 3.0.4
 
-bugxixes
+bugfixes
 
 3.0.3
 
