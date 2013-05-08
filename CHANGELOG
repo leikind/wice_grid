@@ -3,6 +3,8 @@
 improvement of the javascript calendar control: if the FROM field is set to a value after TO, TO is set to the value of FROM.
 Vice versa: if the TO field is set to a value before FROM, FROM is set to the value of TO
 
+Wice::Defaults::DATEPICKER_YEAR_RANGE added to the config to define the default year range in Datepicker (https://github.com/leikind/wice_grid/issues/61)
+
 3.2.1
 
 action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered.

@@ -90,6 +90,8 @@ setupDatepicker = ->
 
     dateFormat = datepickerHiddenField.data('date-format')
 
+    yearRange = datepickerHiddenField.data('date-year-range')
+
     # datepicker constructor
     datepickerHiddenField.datepicker
       firstDay:        1
@@ -100,6 +102,7 @@ setupDatepicker = ->
       buttonText:      datepickerHiddenField.data('button-text')
       changeMonth:     true
       changeYear:      true
+      yearRange:       yearRange
 
       onSelect: (dateText, inst) ->
 
