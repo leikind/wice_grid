@@ -120,6 +120,11 @@ if defined?(Wice::Defaults)
     end
   }
 
+  # The range of years to display in jQuery Datepicker.
+  # It can always be changed dynamically with the following javascript:
+  #  $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
+  Wice::Defaults::DATEPICKER_YEAR_RANGE = (from = Date.current.year - 10).to_s + ':' + (from + 15).to_s
+
 
   # With Calendar helpers enabled the parameter sent is the string displayed. This lambda will be given a date string in the
   # format defined by +DATETIME+ and must generate a Date object.

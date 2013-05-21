@@ -195,6 +195,7 @@ module Wice
       grid.output_buffer << %!<div class="wice-grid-container" id="#{grid.name}"><div id="#{grid.name}_title">!
       grid.output_buffer << content_tag(:h3, grid.saved_query.name) if grid.saved_query
       grid.output_buffer << "</div><table #{tag_options(table_html_attrs, true)}>"
+      grid.output_buffer << "<caption>#{rendering.kaption}</caption>" if rendering.kaption
       grid.output_buffer << "<thead>"
 
       no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?) ? true: false

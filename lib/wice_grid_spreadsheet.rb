@@ -6,7 +6,7 @@ module Wice
 
     attr_reader :tempfile
     # CSV in 1.9.1 is a version of FasterCSV
-    if RUBY_VERSION =~ /1\.9\./
+    if RUBY_VERSION =~ /^1\.9\./ || RUBY_VERSION =~ /^2\./
 
       def initialize(name, field_separator)  #:nodoc:
         @tempfile = Tempfile.new(name)

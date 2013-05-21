@@ -40,6 +40,12 @@ module Wice #:nodoc:
         hidden_field_tag_options['data-the-other-datepicker-id-from'] = calendar_data.the_other_datepicker_id_from
       end
 
+
+      if year_range = ConfigurationProvider.value_for(:DATEPICKER_YEAR_RANGE)
+        hidden_field_tag_options['data-date-year-range'] = year_range
+      end
+
+
       date_picker = hidden_field_tag(calendar_data.name, calendar_data.date_string, hidden_field_tag_options) + ' ' +
 
         link_to(calendar_data.date_string,

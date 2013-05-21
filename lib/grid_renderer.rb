@@ -14,6 +14,7 @@ module Wice
     attr_reader :blank_slate_handler
     attr_reader :last_row_handler
     attr_reader :grid
+    attr_reader :kaption
 
     @@order_parameter_name = "order"
     @@order_direction_parameter_name = "order_direction"
@@ -113,6 +114,12 @@ module Wice
           "<tr><td colspan=\"#{number_of_columns + 1}\">#{panel}</td></tr>"
         end
       end
+    end
+
+    # Takes one argument and adds the  <caption></caption> tag to the table with the argument value as
+    # the contents of <caption>.
+    def caption kaption
+      @kaption = kaption
     end
 
     # Adds a column with checkboxes for each record. Useful for actions with multiple records, for example, deleting

@@ -88,7 +88,10 @@ module Wice
         if Wice::Defaults.const_defined?(key)
           Wice::Defaults.const_get(key)
         else
-          raise WiceGridException.new("Could not find constant #{key} in the configuration file! Please run the generator command to update the configuration file:\n   rails g  wice_grid:wice_grid_assets_jquery\nor   rails g wice_grid:wice_grid_assets_prototype\ndepending on your JS framework")
+          raise WiceGridMissingConfigurationConstantException.new("Could not find constant #{key} in the configuration file!" +
+              " It is possible that the version of WiceGrid you are using is newer than the installed configuration file in config/initializers. " +
+              "Constant Wice::Defaults::#{key} is missing  and you need to add it manually to wice_grid_config.rb or run the generator task=:\n" +
+              "   rails g wice_grid:install")
         end
       end
 
@@ -109,4 +112,8 @@ module Wice
   class WiceGridException < Exception #:nodoc:
     include ExceptionsMixin
   end
+  class WiceGridMissingConfigurationConstantException < Exception #:nodoc:
+    include ExceptionsMixin
+  end
+
 end

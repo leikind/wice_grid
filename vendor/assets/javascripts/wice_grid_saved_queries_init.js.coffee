@@ -88,13 +88,13 @@ onChangeToQueryList = (data, gridName, queryName, inputField) ->
   queryListId  = "##{gridName}_query_list"
   inputField.val('') if queryName
   if errorMessages = data['error_messages']
-    $(notificationMessagesDomId).text(errorExplanation)
+    $(notificationMessagesDomId).text(errorMessages)
   else
     if notificationMessages = data['notification_messages']
       $(notificationMessagesDomId).text(notificationMessages)
     $(gridTitleId).html("<h3>#{queryName}</h3>") if queryName
     $(queryListId).replaceWith(data['query_list'])
-    $(queryListId).effect('highlight')
+    $(queryListId).effect('highlight') if jQuery.ui
 
     $(".wice-grid-delete-query", $(queryListId)).click (event) ->
       deleteQuery(this, event)
