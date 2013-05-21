@@ -583,6 +583,7 @@ module Wice
       paginate(grid.resultset,
         :theme         => 'wice_grid',
         :param_name    => "#{grid.name}[page]",
+        :params        => extra_request_parameters,
         :inner_window  => 4,
         :outer_window  => 2
       ) +
