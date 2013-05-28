@@ -7,6 +7,12 @@ Wice::Defaults::DATEPICKER_YEAR_RANGE added to the config to define the default 
 
 support for Ruby 2.0
 
+<caption> supported
+
+2 js errors fixed in the Saved Queries UI ( https://github.com/leikind/wice_grid/issues/89
+
+helpers filter_and_order_state_as_hash(grid) and filter_state_as_hash(grid)
+
 3.2.1
 
 action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered.

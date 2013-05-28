@@ -15,11 +15,34 @@ module Wice
       grid.get_state_as_parameter_value_pairs(true).collect{|param_name, value|
         hidden_field_tag(param_name, value, :id => "hidden-#{param_name.gsub(/[\[\]]/, '-')}")
       }.join("\n").html_safe
+    end
 
+    # This method dumps all HTTP parameters related to filtering of a certain grid in the form of a hash.
+    # This might be required if you want to keep the state of a grid while reloading the page using Rails routing helpers.
+    # Attention: this does not return parameters for ordering the grid, use +filter_and_order_state_as_hash+ if you
+    # need it.
+    #
+    # The only parameter is a grid object returned by +initialize_grid+ in the controller.
+    def filter_state_as_hash(grid)
+      {grid.name => {'f' => grid.status[:f]}}
+    end
+
+    # This method dumps all HTTP parameters related to filtering and ordering of a certain grid in the form of a hash.
+    # This might be required if you want to keep the state of a grid while reloading the page using Rails routing helpers.
+    #
+    # The only parameter is a grid object returned by +initialize_grid+ in the controller.
+    def filter_and_order_state_as_hash(grid)
+      {
+        grid.name => {
+          'f'               => grid.status[:f],
+          'order'           => grid.status[:order],
+          'order_direction' => grid.status[:order_direction]
+        }
+      }
     end
 
     def dump_state(grid)  #:nodoc:
-      debug(grid.get_state_as_parameter_value_pairs)
+      debug(grid.get_state_as_parameter_value_pairs())
     end
 
 
