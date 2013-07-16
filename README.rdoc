@@ -1173,14 +1173,14 @@ There are two callbacks:
 * <tt>:with_resultset</tt> - used to process all records browsable through all pages with the current filters
 
 While the <tt>:with_paginated_resultset</tt> callback just receives the list of records, <tt>:with_resultset</tt>
-receives a lambda object which, when called, returns the list of all records:
+receives an ActiveRelation object which can be used to obtain the list of all records:
 
 
   def index
     @tasks_grid = initialize_grid(Task)
 
-    @tasks_grid.with_resultset do |wrapper|
-      all_records = wrapper.call
+    @tasks_grid.with_resultset do |active_relation|
+      all_records = active_relation.find(:first)
       ...
     end
   end

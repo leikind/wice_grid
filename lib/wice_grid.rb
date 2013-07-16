@@ -473,7 +473,7 @@ module Wice
 
     def invoke_resultset_callbacks #:nodoc:
       invoke_resultset_callback(@options[:with_paginated_resultset], @resultset)
-      invoke_resultset_callback(@options[:with_resultset], lambda{self.send(:resultset_without_paging_with_user_filters)})
+      invoke_resultset_callback(@options[:with_resultset], self.active_relation_for_resultset_without_paging_with_user_filters)
     end
 
 
@@ -546,17 +546,25 @@ module Wice
     #   end
     # end
 
-
     def resultset_without_paging_with_user_filters  #:nodoc:
-      form_ar_options
       @klass.unscoped do
-        @relation.find(:all, :joins   => @ar_options[:joins],
-                          :include    => @ar_options[:include],
-                          :group      => @ar_options[:group],
-                          :conditions => @ar_options[:conditions],
-                          :order      => @ar_options[:order])
+        active_relation_for_resultset_without_paging_with_user_filters.find(:all)
       end
     end
+
+    def active_relation_for_resultset_without_paging_with_user_filters  #:nodoc:
+      form_ar_options
+      relation = nil
+      @klass.unscoped do
+        relation = @relation.
+          where(@ar_options[:conditions]).
+          joins(@ar_options[:joins]).
+          includes(@ar_options[:include]).
+          order(@ar_options[:order])
+      end
+      relation
+    end
+
 
 
     def load_query(query_id) #:nodoc:

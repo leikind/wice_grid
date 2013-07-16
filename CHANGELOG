@@ -13,6 +13,8 @@ support for Ruby 2.0
 
 helpers filter_and_order_state_as_hash(grid) and filter_state_as_hash(grid)
 
+the with_paginated_resultset callback receives an ActiveRelation object, not a lambda
+
 3.2.1
 
 action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered.
