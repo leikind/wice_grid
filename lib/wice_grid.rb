@@ -1,21 +1,21 @@
 # encoding: UTF-8
 
-require 'wice_grid_misc.rb'
-require 'wice_grid_core_ext.rb'
-require 'grid_renderer.rb'
-require 'table_column_matrix.rb'
-require 'active_record_column_wrapper.rb'
-require 'helpers/wice_grid_view_helpers.rb'
-require 'helpers/wice_grid_misc_view_helpers.rb'
-require 'helpers/wice_grid_serialized_queries_view_helpers.rb'
-require 'helpers/wice_grid_view_helpers.rb'
-require 'helpers/js_calendar_helpers.rb'
-require 'grid_output_buffer.rb'
-require 'wice_grid_controller.rb'
-require 'wice_grid_spreadsheet.rb'
-require 'wice_grid_serialized_queries_controller.rb'
-require 'columns/column_processor_index.rb'
-require 'columns.rb'
+require 'wice/wice_grid_misc.rb'
+require 'wice/wice_grid_core_ext.rb'
+require 'wice/grid_renderer.rb'
+require 'wice/table_column_matrix.rb'
+require 'wice/active_record_column_wrapper.rb'
+require 'wice/helpers/wice_grid_view_helpers.rb'
+require 'wice/helpers/wice_grid_misc_view_helpers.rb'
+require 'wice/helpers/wice_grid_serialized_queries_view_helpers.rb'
+require 'wice/helpers/wice_grid_view_helpers.rb'
+require 'wice/helpers/js_calendar_helpers.rb'
+require 'wice/grid_output_buffer.rb'
+require 'wice/wice_grid_controller.rb'
+require 'wice/wice_grid_spreadsheet.rb'
+require 'wice/wice_grid_serialized_queries_controller.rb'
+require 'wice/columns/column_processor_index.rb'
+require 'wice/columns.rb'
 require 'kaminari.rb'
 
 
@@ -46,10 +46,10 @@ module Wice
         end
 
         Columns.load_column_processors
-        require 'wice_grid_serialized_query.rb'
+        require 'wice/wice_grid_serialized_query.rb'
 
         # It is here only until this pull request is pulled: https://github.com/amatsuda/kaminari/pull/267
-        require 'kaminari_monkey_patching.rb'
+        require 'wice/kaminari_monkey_patching.rb'
       end
     end
   end

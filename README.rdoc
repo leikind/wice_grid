@@ -1,14 +1,13 @@
 = WiceGrid
 
-Version:: 3.2.2
+Version:: 3.3.0
 Author::  Yuri Leikind
 Sources:: https://github.com/leikind/wice_grid/
-Examples online:: http://grid.leikind.org
+Examples online:: http://wicegrid.herokuapp.com
 News:: http://leikind.org/pages/wicegrid/
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
-
-FOR RAILS 3.0.X AND 3.1.X USE VERSION 3.0.4.
+FOR RAILS 3 USE VERSION 3.x
 FOR RAILS 2 USE VERSION 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
 
@@ -49,7 +48,7 @@ WiceGrid is known to work with MySQL and Postgres.
 === Examples
 
 This tutorial is accompanied by a sample application with WiceGrid examples which you
-can browse online ( http://grid.leikind.org ),
+can browse online ( http://wicegrid.herokuapp.com ),
 or just view the code ( https://github.com/leikind/wice_grid_testbed ).
 
 

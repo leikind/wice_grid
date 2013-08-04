@@ -49,7 +49,7 @@ module Wice #:nodoc:
 
       def require_columns
         Wice::Columns::COLUMN_PROCESSOR_INDEX.values.uniq do |column_source_file|
-          require "columns/#{column_source_file}.rb"
+          require "wice/columns/#{column_source_file}.rb"
         end
       end
 

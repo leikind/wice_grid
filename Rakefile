@@ -1,16 +1,9 @@
-require 'rake'
-require 'rake/testtask'
-require 'rdoc/task'
+require "bundler/gem_tasks"
+require "rspec/core/rake_task"
 
-desc 'Default: run unit tests.'
-task :default => :test
+RSpec::Core::RakeTask.new
 
-desc 'Test the wice_grid plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
+task :default => :rdoc
 
 desc 'Generate documentation for the wice_grid plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
@@ -23,22 +16,3 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('CHANGELOG')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-
-begin
-  require 'git'
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "wice_grid"
-    gem.summary = %Q{Rails Grid Plugin}
-    gem.description = %Q{A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters }
-    gem.email = "yuri.leikind@gmail.com"
-    gem.homepage = "http://github.com/leikind/wice_grid"
-    gem.authors = ["Yuri Leikind"]
-    gem.add_dependency "kaminari", ">= 0.13.0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
-end
-
