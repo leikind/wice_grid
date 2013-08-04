@@ -8,6 +8,7 @@ News:: http://leikind.org/pages/wicegrid/
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 FOR RAILS 3 USE VERSION 3.x
+
 FOR RAILS 2 USE VERSION 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
 
