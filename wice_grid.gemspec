@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.authors       = ['Yuri Leikind']
   s.email         = 'yuri.leikind@gmail.com'
   s.files         = `git ls-files`.split($/)
+  s.license    = 'MIT'
 
   kaminary         = 'kaminari'
   kaminary_version = '>= 0.13.0'
