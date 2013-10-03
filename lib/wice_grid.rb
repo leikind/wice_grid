@@ -402,7 +402,7 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar|
+      res = column.model.select("distinct #{column.name}").order("#{column.name} asc").collect{|ar|
         ar[column.name]
       }.reject{|e| e.blank?}.map{|i|[i,i]}
     end
@@ -526,10 +526,10 @@ module Wice
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
       @klass.unscoped do
-        @relation.find(:all, :joins => @ar_options[:joins],
-                          :include => @ar_options[:include],
-                          :group => @ar_options[:group],
-                          :conditions => @options[:conditions])
+        @relation.joins(@ar_options[:joins]).
+                  includes(@ar_options[:include]).
+                  group(@ar_options[:group]).
+                  where(@options[:conditions])
       end
     end
 
