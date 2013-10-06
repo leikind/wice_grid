@@ -60,7 +60,7 @@ module Wice
 
         conditions.each do |condition|
           unless condition.blank?
-            sql = sanitize_sql(condition)
+            sql = sanitize_sql_for_conditions condition
             segments << sql unless sql.blank?
           end
         end
