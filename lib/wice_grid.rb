@@ -257,6 +257,7 @@ module Wice
       end
 
       @ar_options[:conditions] = klass.send(:merge_conditions, @status[:conditions], * @table_column_matrix.conditions )
+
       # conditions processed
 
       if (! opts[:skip_ordering]) && @status[:order]
@@ -402,7 +403,7 @@ module Wice
 
     # with this variant we get even those values which do not appear in the resultset
     def distinct_values_for_column(column)  #:nodoc:
-      res = column.model.find(:all, :select => "distinct #{column.name}", :order => "#{column.name} asc").collect{|ar|
+      res = column.model.select("distinct #{column.name}").order("#{column.name} asc").collect{|ar|
         ar[column.name]
       }.reject{|e| e.blank?}.map{|i|[i,i]}
     end
@@ -548,7 +549,7 @@ module Wice
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       @klass.unscoped do
-        active_relation_for_resultset_without_paging_with_user_filters.find(:all)
+        active_relation_for_resultset_without_paging_with_user_filters.load
       end
     end
 
