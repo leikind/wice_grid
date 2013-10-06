@@ -9,11 +9,11 @@ module Wice
     def define_routes(map, controller)
       controller = controller.to_s
 
-      map.match '/wice_grid_serialized_queries/:grid_name',
+      map.get '/wice_grid_serialized_queries/:grid_name',
         :to => "#{controller}#create",
         :as => 'create_serialized_query'
 
-      map.match '/wice_grid_serialized_queries/:grid_name/:id',
+      map.get '/wice_grid_serialized_queries/:grid_name/:id',
         :to => "#{controller}#delete",
         :as => 'delete_serialized_query'
     end
