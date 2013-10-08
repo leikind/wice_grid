@@ -59,7 +59,11 @@ module Wice
       end
       query_params.delete(:page)
 
-      @saved_query = @query_store_model.new(:grid_name => @grid_name, :name => params[:query_name], :query => query_params)
+      @saved_query = @query_store_model.new
+
+      @saved_query.grid_name = @grid_name
+      @saved_query.name      = params[:query_name]
+      @saved_query.query     = query_params
 
       @saved_query.attributes = params[:extra] unless params[:extra].blank?
 
