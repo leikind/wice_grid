@@ -55,12 +55,23 @@ module Wice
     end
 
     module ClassMethods #:nodoc:
+
+      def _sanitize_sql_hash_for_conditions(attrs, default_table_name = self.table_name)
+        attrs = expand_hash_conditions_for_aggregates(attrs)
+
+        table = Arel::Table.new(table_name, arel_engine).alias(default_table_name)
+        ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map { |b|
+          connection.visitor.accept b
+        }.join(' AND ')
+      end
+
+
       def merge_conditions(*conditions) #:nodoc:
         segments = []
 
         conditions.each do |condition|
           unless condition.blank?
-            sql = sanitize_sql_for_conditions condition
+            sql = _sanitize_sql_hash_for_conditions condition
             segments << sql unless sql.blank?
           end
         end
