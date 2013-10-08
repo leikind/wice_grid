@@ -8,14 +8,27 @@ module Wice
     # Read section "Saving Queries How-To" in README for more details.
     def define_routes(map, controller)
       controller = controller.to_s
+      # if Rails.version[0..1] == '3.'
 
-      map.get '/wice_grid_serialized_queries/:grid_name',
-        :to => "#{controller}#create",
-        :as => 'create_serialized_query'
+      #   map.match '/wice_grid_serialized_queries/:grid_name',
+      #     :to => "#{controller}#create",
+      #     :as => 'create_serialized_query'
 
-      map.get '/wice_grid_serialized_queries/:grid_name/:id',
-        :to => "#{controller}#delete",
-        :as => 'delete_serialized_query'
+      #   map.match '/wice_grid_serialized_queries/:grid_name/:id',
+      #     :to => "#{controller}#delete",
+      #     :as => 'delete_serialized_query'
+
+      # else
+
+        map.post '/wice_grid_serialized_queries/:grid_name',
+          :to => "#{controller}#create",
+          :as => 'create_serialized_query'
+
+        map.post '/wice_grid_serialized_queries/:grid_name/:id',
+          :to => "#{controller}#delete",
+          :as => 'delete_serialized_query'
+
+      # end
     end
   end
 
