@@ -71,7 +71,7 @@ module Wice
 
         conditions.each do |condition|
           unless condition.blank?
-            sql = _sanitize_sql_hash_for_conditions condition
+            sql = condition.is_a?(Hash) ? _sanitize_sql_hash_for_conditions(condition) : sanitize_sql_array(condition)
             segments << sql unless sql.blank?
           end
         end
