@@ -1,17 +1,27 @@
 = WiceGrid
 
-Version:: 3.3.1
+Version:: 3.4.0
 Author::  Yuri Leikind
 Sources:: https://github.com/leikind/wice_grid/
 Examples online:: http://wicegrid.herokuapp.com
 News:: http://leikind.org/pages/wicegrid/
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
-FOR RAILS 3 USE VERSION 3.x
-
 FOR RAILS 2 USE VERSION 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
+FOR RAILS 3 USE VERSION 3.3.x
 
+FOR RAILS 4 USE VERSION 3.4.x. However with WiceGrid 3.4.0 Rails 4 produdes the following deprecation message:
+
+  DEPRECATION WARNING: It looks like you are eager loading table(s) (one of: tasks, statuses) that are referenced in a string SQL snippet. For example:
+
+  Post.includes(:comments).where("comments.title = 'foo'")
+
+  Currently, Active Record recognizes the table in the string, and knows to JOIN the comments table to the query, rather than loading comments in a separate query. However, doing this without writing a full-blown SQL parser is inherently flawed. Since we don't want to write an SQL parser, we are removing this functionality. From now on, you must explicitly tell Active Record when you are referencing a table from a string:
+
+  Post.includes(:comments).where("comments.title = 'foo'").references(:comments)
+
+This will be fixed in future versions of WiceGrid.
 
 == Intro
 
