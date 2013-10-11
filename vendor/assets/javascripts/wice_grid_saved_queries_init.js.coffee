@@ -1,5 +1,5 @@
-jQuery ->
-  savedQueriesInit()
+$(document).on 'page:load ready', -> savedQueriesInit()
+
 
 savedQueriesInit = ->
 
