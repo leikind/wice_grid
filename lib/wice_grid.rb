@@ -257,6 +257,7 @@ module Wice
       end
 
       @ar_options[:conditions] = klass.send(:merge_conditions, @status[:conditions], * @table_column_matrix.conditions )
+
       # conditions processed
 
       if (! opts[:skip_ordering]) && @status[:order]
@@ -548,7 +549,7 @@ module Wice
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       @klass.unscoped do
-        active_relation_for_resultset_without_paging_with_user_filters.find(:all)
+        active_relation_for_resultset_without_paging_with_user_filters.load
       end
     end
 

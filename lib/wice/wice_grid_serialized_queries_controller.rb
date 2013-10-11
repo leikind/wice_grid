@@ -8,14 +8,27 @@ module Wice
     # Read section "Saving Queries How-To" in README for more details.
     def define_routes(map, controller)
       controller = controller.to_s
+      # if Rails.version[0..1] == '3.'
 
-      map.match '/wice_grid_serialized_queries/:grid_name',
-        :to => "#{controller}#create",
-        :as => 'create_serialized_query'
+      #   map.match '/wice_grid_serialized_queries/:grid_name',
+      #     :to => "#{controller}#create",
+      #     :as => 'create_serialized_query'
 
-      map.match '/wice_grid_serialized_queries/:grid_name/:id',
-        :to => "#{controller}#delete",
-        :as => 'delete_serialized_query'
+      #   map.match '/wice_grid_serialized_queries/:grid_name/:id',
+      #     :to => "#{controller}#delete",
+      #     :as => 'delete_serialized_query'
+
+      # else
+
+        map.post '/wice_grid_serialized_queries/:grid_name',
+          :to => "#{controller}#create",
+          :as => 'create_serialized_query'
+
+        map.post '/wice_grid_serialized_queries/:grid_name/:id',
+          :to => "#{controller}#delete",
+          :as => 'delete_serialized_query'
+
+      # end
     end
   end
 
@@ -46,7 +59,11 @@ module Wice
       end
       query_params.delete(:page)
 
-      @saved_query = @query_store_model.new(:grid_name => @grid_name, :name => params[:query_name], :query => query_params)
+      @saved_query = @query_store_model.new
+
+      @saved_query.grid_name = @grid_name
+      @saved_query.name      = params[:query_name]
+      @saved_query.query     = query_params
 
       @saved_query.attributes = params[:extra] unless params[:extra].blank?
 

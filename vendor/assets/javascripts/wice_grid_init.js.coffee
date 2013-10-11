@@ -1,5 +1,4 @@
-jQuery ->
-  initWiceGrid()
+$(document).on 'page:load ready', -> initWiceGrid()
 
 initWiceGrid = ->
 
