@@ -5,6 +5,14 @@
 
 .wg-detached-filter, .wice-grid{
 
+  .text-filter-container {
+    input{
+      width:auto;
+      margin-right: 10px;
+      display: inline;
+    }
+  }
+
   a.date-label {text-decoration: none;}
   a.date-label:hover {text-decoration: line-through;}
 
@@ -19,16 +27,13 @@
   }
 
   .custom-dropdown-container {
-    position: relative;
-    padding-right: 18px;
 
-
-    .collapse-multi-select-icon, .expand-multi-select-icon{
-      width: 12px;
-      height: 12px;
-      position:absolute;
-      top:0;
-      right:0;
+    .expand-multi-select-icon, .collapse-multi-select-icon{
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-left: 5px;
+      vertical-align: top;
     }
 
     .collapse-multi-select-icon{
@@ -40,19 +45,7 @@
     }
 
   }
-
-  .text-filter-container {
-    position: relative; padding-right: 13px;
-    .negation-checkbox {
-      position:absolute;
-      top:0;
-      right:0;
-    }
-  }
-
-
 }
-
 
 .wice-grid{
 
@@ -138,3 +131,10 @@
     @include icon-dimensions;
   }
 }
+
+input.wice-grid-save-query-field{
+  width: auto;
+  display: inline-block;
+  margin-right: 10px;
+}
+

@@ -12,6 +12,8 @@ module Wice
 
         opts = {:size => 3, :id => @dom_id,  :class => 'range-start'}
 
+        opts[:class] += ' form-control input-sm'
+
         if auto_reload
           opts[:class] += ' auto-reload'
         end

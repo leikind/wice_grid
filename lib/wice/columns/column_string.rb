@@ -9,7 +9,7 @@ module Wice
 
       def render_filter_internal(params) #:nodoc:
         @contains_a_text_input = true
-        css_class = auto_reload ? 'auto-reload' : nil
+        css_class = 'form-control input-sm ' + (auto_reload ? 'auto-reload' : '')
 
         if negation
           self.auto_reloading_input_with_negation_checkbox = true if auto_reload
