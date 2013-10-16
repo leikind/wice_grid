@@ -549,7 +549,7 @@ module Wice
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       @klass.unscoped do
-        active_relation_for_resultset_without_paging_with_user_filters.load
+        active_relation_for_resultset_without_paging_with_user_filters.all
       end
     end
 
