@@ -11,6 +11,7 @@ module Wice
     attr_reader :page_parameter_name
     attr_reader :after_row_handler
     attr_reader :before_row_handler
+    attr_reader :replace_row_handler
     attr_reader :blank_slate_handler
     attr_reader :last_row_handler
     attr_reader :grid
@@ -407,6 +408,12 @@ module Wice
     # Nothing is added if the block return +false+ or +nil+.
     def before_row(&block)
       @before_row_handler = block
+    end
+
+    # Can be used to replace the HTML code (for example to make a multi-column spanning row) of a row.
+    # Nothing is replaced if the block return +false+ or +nil+.
+    def replace_row(&block)
+      @replace_row_handler = block
     end
 
     # Can be used to add HTML code (calculation results, for example) after all rows.
