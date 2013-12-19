@@ -9,9 +9,9 @@ Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 FOR RAILS 2 USE VERSION 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
-FOR RAILS 3 USE VERSION 3.3.x
+FOR RAILS 3 USE THE NEWEST VERSION.
 
-FOR RAILS 4 USE VERSION 3.4.x. However with WiceGrid 3.4.0 Rails 4 produdes the following deprecation message:
+FOR RAILS 4 USE VERSION 3.4.x. However with WiceGrid 3.4.0 Rails 4 produces the following deprecation message:
 
   DEPRECATION WARNING: It looks like you are eager loading table(s) (one of: tasks, statuses) that are referenced in a string SQL snippet. For example:
 
@@ -22,6 +22,8 @@ FOR RAILS 4 USE VERSION 3.4.x. However with WiceGrid 3.4.0 Rails 4 produdes the 
   Post.includes(:comments).where("comments.title = 'foo'").references(:comments)
 
 This will be fixed in future versions of WiceGrid.
+
+The main supported branch is <tt>rails3</tt>. Branch <tt>master</tt> is for Rails 2.
 
 == Intro
 
