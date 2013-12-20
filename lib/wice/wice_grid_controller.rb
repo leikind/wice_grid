@@ -65,7 +65,6 @@ module Wice
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting
     # without having to repeat it for every grid instance.
 
-
     def initialize_grid(klass, opts = {})
       wg = WiceGrid.new(klass, self, opts)
       self.wice_grid_instances = [] if self.wice_grid_instances.nil?

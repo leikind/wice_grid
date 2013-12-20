@@ -3,6 +3,7 @@
 require 'wice/wice_grid_misc.rb'
 require 'wice/wice_grid_core_ext.rb'
 require 'wice/grid_renderer.rb'
+require 'wice/memory_adapter.rb'
 require 'wice/table_column_matrix.rb'
 require 'wice/active_record_column_wrapper.rb'
 require 'wice/helpers/wice_grid_view_helpers.rb'
@@ -63,16 +64,22 @@ module Wice
 
     # core workflow methods START
 
-    def initialize(klass_or_relation, controller, opts = {})  #:nodoc:
+    def initialize(klass_or_relation_or_memory_adapter, controller, opts = {})  #:nodoc:
       @controller = controller
 
-      @relation = klass_or_relation
-      @klass = klass_or_relation.is_a?(ActiveRecord::Relation) ?
-        klass_or_relation.klass :
-        klass_or_relation
+      @relation = klass_or_relation_or_memory_adapter
+      if klass_or_relation_or_memory_adapter.is_a?(Wice::MemoryAdapter::MemoryAdapter)
+        @klass = klass_or_relation_or_memory_adapter.klass
+      elsif klass_or_relation_or_memory_adapter.is_a?(ActiveRecord::Relation)
+        @klass = klass_or_relation_or_memory_adapter.klass
+      else
+        @klass = klass_or_relation_or_memory_adapter
+      end
 
-      unless @klass.kind_of?(Class) && @klass.ancestors.index(ActiveRecord::Base)
-        raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
+      if not @klass.is_a?(Wice::MemoryAdapter::MemoryAdapterKlass)
+        unless @klass.kind_of?(Class) && @klass.ancestors.index(ActiveRecord::Base)
+          raise WiceGridArgumentError.new("Data model class must be a relation, memory adapter, or derived from active record")
+        end
       end
 
       # validate :with_resultset & :with_paginated_resultset
