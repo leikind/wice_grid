@@ -35,20 +35,20 @@ module Wice
 
 
     class ConditionsGeneratorColumnInteger < ConditionsGeneratorColumn  #:nodoc:
-      def get_op_and_value( val )
-        num=nil
-        op=nil
+      def get_op_and_value(val)
+        num = nil
+        op  = nil
 
         # remove spaces
         val = val.gsub(' ','')
 
         first_digit_or_dot_index = val =~ /[0-9.]/
         if first_digit_or_dot_index
-          op=val[0...first_digit_or_dot_index]
-          op='=' if op==''
+          op = val[0...first_digit_or_dot_index]
+          op = '=' if op == ''
           num = Float(val[first_digit_or_dot_index..-1]) rescue nil
-        
-          op=nil unless ['<','>','<=','>=','='].include?(op)
+
+          op = nil unless ['<','>','<=','>=','='].include?(op)
         end
         [op, num]
       end
@@ -60,7 +60,7 @@ module Wice
         end
         conditions = [[]]
         if opts[:eq]
-          op, num = get_op_and_value( opts[:eq] )
+          op, num = get_op_and_value(opts[:eq])
           if op && num
             conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} " + op + " ? "
             conditions << num

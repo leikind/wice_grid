@@ -2,25 +2,25 @@
 module Wice
   module MemoryAdapter
     class MemoryAdapter
-      def initialize( rows, columns, kaminarafy=true )
+      def initialize(rows, columns, kaminarafy = true)
         @rows = rows
         @klass = MemoryAdapterKlass.new(columns, self)
-        @columns=Set.new
+        @columns = Set.new
         columns.each do |col|
           @columns << col.name.to_sym
         end
-        @page_num=1
-        @per_page=20
+        @page_num = 1
+        @per_page = 20
       end
 
       def klass
         @klass
-      end    
+      end
 
       def total_count
         length
       end
-      
+
       def length
         @rows.length
       end
@@ -42,7 +42,7 @@ module Wice
       # 0-based index into array
       def offset_value
         @page_num = total_pages if current_page > total_pages
-            
+
         offset_value = (current_page-1) * @per_page
         offset_value
       end
@@ -82,7 +82,7 @@ module Wice
         @per_page=num.to_i
         @per_page = 1 if @per_page < 1
         self
-      end      
+      end
 
       def each
         start_index = offset_value
@@ -101,7 +101,7 @@ module Wice
     end
 
     class MemoryAdapterKlass
-      def initialize( columns, memory_adapter )
+      def initialize(columns, memory_adapter)
         @columns = columns
         @memory_adapter = memory_adapter
       end
@@ -152,7 +152,7 @@ module Wice
       def name
         @name
       end
-      
+
       def model
         @model
       end
@@ -165,7 +165,7 @@ module Wice
         :string
       end
     end
-    
+
     class Model
     end
   end
