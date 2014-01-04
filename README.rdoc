@@ -376,7 +376,7 @@ to be specified, that corresponds to the joined table:
       link_to(product.name, product_path(product))
     end
 
-    g.column :name => 'Category', :attribute => 'name', :model => Category |product| # joined table
+    g.column :name => 'Category', :attribute => 'name', :model => Category do |product| # joined table
       product.category.name
     end
   %>
