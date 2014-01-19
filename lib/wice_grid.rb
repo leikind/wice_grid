@@ -267,7 +267,7 @@ module Wice
 
       # conditions processed
 
-      if (! opts[:skip_ordering]) && @status[:order]
+      if (! opts[:skip_ordering]) && ! @status[:order].blank?
         @ar_options[:order] = add_custom_order_sql(complete_column_name(@status[:order]))
 
         @ar_options[:order] += ' ' + @status[:order_direction]
