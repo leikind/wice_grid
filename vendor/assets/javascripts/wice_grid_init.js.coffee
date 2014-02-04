@@ -182,14 +182,20 @@ setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
   $('select.auto-reload', wiceGridContainer).change ->
     gridProcessor.process()
 
-  $('input.auto-reload', wiceGridContainer).keyup ->
-    gridProcessor.setProcessTimer(this.id)
+  $('input.auto-reload', wiceGridContainer).keyup (event)->
+    if isKeySignificant event.which
+      gridProcessor.setProcessTimer(this.id)
 
   $('input.negation-checkbox.auto-reload', wiceGridContainer).click ->
     gridProcessor.process()
 
   $(document).bind 'wg:calendarChanged_' + gridProcessor.name, ->
     gridProcessor.process()
+
+
+
+isKeySignificant = (keyCode, func)->
+  [37, 38, 39, 40, 9, 27].indexOf(keyCode) == -1
 
 # autoreload for internal filters
 setupAutoreloadsForExternalFilters =  ->
@@ -200,8 +206,9 @@ setupAutoreloadsForExternalFilters =  ->
       $('select.auto-reload', detachedFilterContainer).change ->
         gridProcessor.process()
 
-      $('input.auto-reload', detachedFilterContainer).keyup ->
-        gridProcessor.setProcessTimer(this.id)
+      $('input.auto-reload', detachedFilterContainer).keyup (event)->
+        if isKeySignificant event.which
+          gridProcessor.setProcessTimer(this.id)
 
       $('input.negation-checkbox.auto-reload', detachedFilterContainer).click ->
         gridProcessor.process()
