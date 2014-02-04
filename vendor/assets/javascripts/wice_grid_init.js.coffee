@@ -1,5 +1,7 @@
 $(document).on 'page:load ready', -> initWiceGrid()
 
+globalVarForAllGrids = 'wiceGrids'
+
 initWiceGrid = ->
 
   $(".wice-grid-container").each (index, wiceGridContainer) ->
@@ -26,7 +28,10 @@ initWiceGrid = ->
           templates   : filterDeclaration.declaration.templates
           ids         : filterDeclaration.declaration.ids
 
-    window[gridName] = gridProcessor
+    unless window[globalVarForAllGrids]
+      window[globalVarForAllGrids] = {}
+
+    window[globalVarForAllGrids][gridName] = gridProcessor
 
     setupDatepicker()
     setupSubmitReset wiceGridContainer, gridProcessor
@@ -241,8 +246,8 @@ setupBulkToggleForActionColumn = (wiceGridContainer) ->
 
 getGridProcessorForElement = (element) ->
   gridName = $(element).data('grid-name')
-  if gridName
-    window[gridName]
+  if gridName && window[globalVarForAllGrids]
+    window[globalVarForAllGrids][gridName]
   else
     null
 
