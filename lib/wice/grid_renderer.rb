@@ -280,7 +280,7 @@ module Wice
         :boolean_filter_false_label => NlMessage['boolean_filter_false_label'],
         :boolean_filter_true_label  => NlMessage['boolean_filter_true_label'],
         :class                      => nil,
-        :name                       => '',
+        :name                       => nil,
         :custom_filter              => nil,
         :detach_with_id             => nil,
         :filter_all_label           => Defaults::CUSTOM_FILTER_ALL_LABEL,
@@ -309,6 +309,10 @@ module Wice
 
       if options[:attribute] && options[:attribute].index('.')
         raise WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
+      end
+
+      if options[:attribute].present? and options[:name].nil?
+        options[:name] = @grid.klass.human_attribute_name opts[:attribute]
       end
 
       if options[:class]
