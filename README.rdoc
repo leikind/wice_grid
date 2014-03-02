@@ -512,7 +512,7 @@ renders one input field. But it is also possible to use another Column Processor
 <tt>'column_range'</tt> which renders two input fields and searches for values in the given
 the range instead of searching for values which equal the given search term.
 
-It also possible to define and use your own column processors outside of the plug, in
+It also possible to define and use your own column processors outside of the plugin, in
 you application. Read more about this in section "Defining your own external filter processors".
 
 
@@ -787,7 +787,55 @@ There is no such message in production.
 
 === Defining your own external filter processors
 
-TO DO
+
+It possible to define and use your own column processors outside of the plugin, in
+you application.
+
+The first step is to edit <tt>Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS</tt> in
+<tt>wice_grid_config.rb</tt>:
+
+
+  Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS = {
+    my_own_filter:    ['ViewColumnMyOwnFilter',   'ConditionsGeneratorMyOwnFilter'],
+    another_filter:   ['ViewColumnAnotherFilter', 'ConditionsGeneratorAnotherFilter']
+  }
+
+The first element in the two-item array is the name of a class responsible for rendering
+the filter view. The second element  is the name of a class responsible for processing
+filter parameters.
+
+For examples of these two classes look at the existing column processors in <tt>lib/wice/columns/</tt>
+
+The structure of these two classes is as follows:
+
+  class ViewColumnMyOwnFilter < Wice::Columns::ViewColumn
+
+    def render_filter_internal(params)
+      ...
+    end
+
+    def yield_declaration_of_column_filter
+      {
+        :templates => [...],
+        :ids       => [...]
+      }
+    end
+  end
+
+
+  class ConditionsGeneratorMyOwnFilter < Wice::Columns::ConditionsGeneratorColumn
+
+    def generate_conditions(table_name, opts)
+      ...
+    end
+
+  end
+
+To use an external column processor use <tt>:filter_type</tt> in a column definition:
+
+  column name: 'name', attribute: 'attribute', filter_type: :my_own_filter do |rec|
+    ...
+  end
 
 == Defaults
 
