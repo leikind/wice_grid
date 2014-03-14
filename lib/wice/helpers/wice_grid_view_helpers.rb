@@ -317,7 +317,7 @@ module Wice
               hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
             )
           else
-            grid.output_buffer << content_tag(:th, column_name)
+            grid.output_buffer << content_tag(:th, column_name, Wice::WgHash.make_hash(:class, column.css_class))
           end
         end
       end
