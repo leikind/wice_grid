@@ -172,7 +172,9 @@ module Wice
       rendering.each_column(:in_html) do |column|
         cell_block = column.cell_rendering_block
 
-        opts = column.html.clone
+        opts = column.html
+
+        opts = opts ? opts = opts.clone : {}
 
         column_block_output = if column.class == Columns.get_view_column_processor(:action)
           cell_block.call(ar, params)
@@ -306,7 +308,10 @@ module Wice
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
 
-          opts = column.html.clone
+          opts = column.html
+
+          opts = opts ? opts = opts.clone : {}
+
           Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
 
           grid.output_buffer << content_tag(:th, col_link, opts)

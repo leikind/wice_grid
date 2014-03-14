@@ -136,6 +136,7 @@ module Wice #:nodoc:
 
 
       def add_css_class(klass_value)
+        self.html ||= {}
         if html[:class].nil?
           html[:class] = klass_value
         else
@@ -145,7 +146,11 @@ module Wice #:nodoc:
       end
 
       def css_class #:nodoc:
-        html[:class] || ''
+        if html && html[:class]
+          html[:class]
+        else
+          ''
+        end
       end
 
       def yield_declaration_of_column_filter #:nodoc:

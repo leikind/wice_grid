@@ -312,6 +312,7 @@ module Wice
       end
 
       if options[:class]
+        options[:html] ||= {}
         Wice::WgHash.add_or_append_class_value!(options[:html], options[:class])
         options.delete(:class)
       end
