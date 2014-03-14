@@ -174,7 +174,7 @@ module Wice
 
         opts = column.html
 
-        opts = opts ? opts = opts.clone : {}
+        opts = opts ? opts.clone : {}
 
         column_block_output = if column.class == Columns.get_view_column_processor(:action)
           cell_block.call(ar, params)
@@ -310,7 +310,7 @@ module Wice
 
           opts = column.html
 
-          opts = opts ? opts = opts.clone : {}
+          opts = opts ? opts.clone : {}
 
           Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
 
