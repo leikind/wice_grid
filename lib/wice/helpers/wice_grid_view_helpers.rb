@@ -306,7 +306,10 @@ module Wice
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
 
-          grid.output_buffer << content_tag(:th, col_link, Wice::WgHash.make_hash(:class, column.css_class))
+          opts = column.html.clone
+          Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
+
+          grid.output_buffer << content_tag(:th, col_link, opts)
 
         else
           if reuse_last_column_for_filter_buttons && last
@@ -347,23 +350,27 @@ module Wice
           grid.output_buffer << '>'
 
           rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
+
+            opts = column.html.clone
+            Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
+
             if column.filter_shown?
 
               filter_html_code = column.render_filter.html_safe
               if column.detach_with_id
-                grid.output_buffer << content_tag(:th, '', Wice::WgHash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', opts)
                 grid.output_buffer.add_filter(column.detach_with_id, filter_html_code)
               else
-                grid.output_buffer << content_tag(:th, filter_html_code, Wice::WgHash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, filter_html_code, opts)
               end
             else
               if reuse_last_column_for_filter_buttons && last
                 grid.output_buffer << content_tag(:th,
                   reset_submit_buttons(options, grid, rendering),
-                  Wice::WgHash.add_or_append_class_value!(Wice::WgHash.make_hash(:class, column.css_class), 'filter_icons')
+                  Wice::WgHash.add_or_append_class_value!(opts, 'filter_icons')
                 )
               else
-                grid.output_buffer << content_tag(:th, '', Wice::WgHash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', opts)
               end
             end
           end
