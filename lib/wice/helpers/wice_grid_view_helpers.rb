@@ -291,6 +291,13 @@ module Wice
 
         column_name = column.name
 
+        opts = column.html
+
+        opts = opts ? opts.clone : {}
+
+        Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
+
+
         if column.attribute && column.ordering
 
           column.add_css_class('active-filter') if grid.filtered_by?(column)
@@ -308,12 +315,6 @@ module Wice
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
 
-          opts = column.html
-
-          opts = opts ? opts.clone : {}
-
-          Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
-
           grid.output_buffer << content_tag(:th, col_link, opts)
 
         else
@@ -322,7 +323,7 @@ module Wice
               hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
             )
           else
-            grid.output_buffer << content_tag(:th, column_name, Wice::WgHash.make_hash(:class, column.css_class))
+            grid.output_buffer << content_tag(:th, column_name, opts)
           end
         end
       end
@@ -356,7 +357,7 @@ module Wice
 
           rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
 
-            opts = column.html.clone
+            opts = column.html ? column.html.clone : {}
             Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
 
             if column.filter_shown?
