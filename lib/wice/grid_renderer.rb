@@ -464,15 +464,13 @@ module Wice
       end
 
       new_params[:only_path] = false
-      base_link_with_pp_info = controller.url_for(new_params).gsub(/\?+$/,'')
+      base_link_with_pp_info = omit_empty_query controller.url_for(new_params)
 
       if new_params[@grid.name]
         new_params[@grid.name].delete(:pp)    # and reset back to pagination if show all mode is on
       end
-      [base_link_with_pp_info, controller.url_for(new_params).gsub(/\?+$/,'')]
+      [base_link_with_pp_info, omit_empty_query(controller.url_for(new_params))]
     end
-
-
 
     def link_for_export(controller, format, extra_parameters = {})   #:nodoc:
       new_params = Wice::WgHash.deep_clone controller.params
@@ -517,6 +515,16 @@ module Wice
 
     def filter_columns(method_name = nil) #:nodoc:
       method_name ? @columns.select(&method_name) : @columns
+    end
+
+    def omit_empty_query(url) #:nodoc:
+      # /foo?                --> /foo
+      # /foo?grid=           --> /foo
+      # /foo?grid=&page=1    --> /foo?page=1
+      # /foo?grid=some_value --> /foo?grid=some_value
+
+      empty_hash_rx = Regexp.new "([&?])#{Regexp.escape @grid.name}=([&?]|$)" # c.f., issue #140
+      url.gsub(empty_hash_rx, '\1').gsub /\?+$/, ''
     end
 
   end
