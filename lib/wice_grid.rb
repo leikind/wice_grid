@@ -260,7 +260,7 @@ module Wice
 
       # conditions processed
 
-      if (! opts[:skip_ordering]) && @status[:order]
+      if (! opts[:skip_ordering]) && ! @status[:order].blank?
         @ar_options[:order] = add_custom_order_sql(complete_column_name(@status[:order]))
 
         @ar_options[:order] += ' ' + @status[:order_direction]
@@ -527,10 +527,10 @@ module Wice
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
       @klass.unscoped do
-        @relation.find(:all, :joins => @ar_options[:joins],
-                          :include => @ar_options[:include],
-                          :group => @ar_options[:group],
-                          :conditions => @options[:conditions])
+        @relation.joins(@ar_options[:joins]).
+                  includes(@ar_options[:include]).
+                  group(@ar_options[:group]).
+                  where(@options[:conditions])
       end
     end
 
@@ -549,7 +549,7 @@ module Wice
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       @klass.unscoped do
-        active_relation_for_resultset_without_paging_with_user_filters.load
+        active_relation_for_resultset_without_paging_with_user_filters.all
       end
     end
 

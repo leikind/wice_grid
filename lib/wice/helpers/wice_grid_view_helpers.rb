@@ -166,6 +166,56 @@ module Wice
       extra_argument ? block.call(ar, extra_argument) : block.call(ar)
     end
 
+    def get_row_content(rendering, ar, sorting_dependant_row_cycling)
+      cell_value_of_the_ordered_column = nil
+      row_content = ''
+      rendering.each_column(:in_html) do |column|
+        cell_block = column.cell_rendering_block
+
+        opts = column.html
+
+        opts = opts ? opts.clone : {}
+
+        column_block_output = if column.class == Columns.get_view_column_processor(:action)
+          cell_block.call(ar, params)
+        else
+          call_block(cell_block, ar)
+        end
+
+        if column_block_output.kind_of?(Array)
+
+          unless column_block_output.size == 2
+            raise WiceGridArgumentError.new('When WiceGrid column block returns an array it is expected to contain 2 elements only - '+
+                                            'the first is the contents of the table cell and the second is a hash containing HTML attributes for the <td> tag.')
+          end
+
+          column_block_output, additional_opts = column_block_output
+
+          unless additional_opts.is_a?(Hash)
+            raise WiceGridArgumentError.new('When WiceGrid column block returns an array its second element is expected to be a ' +
+                                            "hash containing HTML attributes for the <td> tag. The returned value is #{additional_opts.inspect}. Read documentation.")
+          end
+
+          additional_css_class = nil
+          if additional_opts.has_key?(:class)
+            additional_css_class = additional_opts[:class]
+            additional_opts.delete(:class)
+          elsif additional_opts.has_key?('class')
+            additional_css_class = additional_opts['class']
+            additional_opts.delete('class')
+          end
+          opts.merge!(additional_opts)
+          Wice::WgHash.add_or_append_class_value!(opts, additional_css_class) unless additional_css_class.blank?
+        end
+
+        if sorting_dependant_row_cycling && column.attribute && grid.ordered_by?(column)
+          cell_value_of_the_ordered_column = column_block_output
+        end
+        row_content += content_tag(:td, column_block_output, opts)
+      end
+      [row_content, cell_value_of_the_ordered_column]
+    end
+
     # the longest method? :(
     def grid_html(grid, options, rendering, reuse_last_column_for_filter_buttons) #:nodoc:
 
@@ -192,7 +242,7 @@ module Wice
       # Ruby 1.9.x
       grid.output_buffer.force_encoding('UTF-8') if grid.output_buffer.respond_to?(:force_encoding)
 
-      grid.output_buffer << %!<div class="wice-grid-container" id="#{grid.name}"><div id="#{grid.name}_title">!
+      grid.output_buffer << %!<div class="wice-grid-container" data-grid-name="#{grid.name}" id="#{grid.name}"><div id="#{grid.name}_title">!
       grid.output_buffer << content_tag(:h3, grid.saved_query.name) if grid.saved_query
       grid.output_buffer << "</div><table #{tag_options(table_html_attrs, true)}>"
       grid.output_buffer << "<caption>#{rendering.kaption}</caption>" if rendering.kaption
@@ -241,6 +291,13 @@ module Wice
 
         column_name = column.name
 
+        opts = column.html
+
+        opts = opts ? opts.clone : {}
+
+        Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
+
+
         if column.attribute && column.ordering
 
           column.add_css_class('active-filter') if grid.filtered_by?(column)
@@ -258,7 +315,7 @@ module Wice
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
             :class => link_style)
 
-          grid.output_buffer << content_tag(:th, col_link, Wice::WgHash.make_hash(:class, column.css_class))
+          grid.output_buffer << content_tag(:th, col_link, opts)
 
         else
           if reuse_last_column_for_filter_buttons && last
@@ -266,7 +323,7 @@ module Wice
               hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
             )
           else
-            grid.output_buffer << content_tag(:th, column_name)
+            grid.output_buffer << content_tag(:th, column_name, opts)
           end
         end
       end
@@ -299,23 +356,27 @@ module Wice
           grid.output_buffer << '>'
 
           rendering.each_column_aware_of_one_last_one(:in_html) do |column, last|
+
+            opts = column.html ? column.html.clone : {}
+            Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
+
             if column.filter_shown?
 
               filter_html_code = column.render_filter.html_safe
               if column.detach_with_id
-                grid.output_buffer << content_tag(:th, '', Wice::WgHash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', opts)
                 grid.output_buffer.add_filter(column.detach_with_id, filter_html_code)
               else
-                grid.output_buffer << content_tag(:th, filter_html_code, Wice::WgHash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, filter_html_code, opts)
               end
             else
               if reuse_last_column_for_filter_buttons && last
                 grid.output_buffer << content_tag(:th,
                   reset_submit_buttons(options, grid, rendering),
-                  Wice::WgHash.add_or_append_class_value!(Wice::WgHash.make_hash(:class, column.css_class), 'filter_icons')
+                  Wice::WgHash.add_or_append_class_value!(opts, 'filter_icons')
                 )
               else
-                grid.output_buffer << content_tag(:th, '', Wice::WgHash.make_hash(:class, column.css_class))
+                grid.output_buffer << content_tag(:th, '', opts)
               end
             end
           end
@@ -359,48 +420,19 @@ module Wice
           nil
         end
 
-        row_content = ''
-        rendering.each_column(:in_html) do |column|
-          cell_block = column.cell_rendering_block
+        replace_row_output = if rendering.replace_row_handler
+          call_block(rendering.replace_row_handler, ar, number_of_columns_for_extra_rows)
+        else
+          nil
+        end
 
-          opts = column.html.clone
-
-          column_block_output = if column.class == Columns.get_view_column_processor(:action)
-            cell_block.call(ar, params)
-          else
-            call_block(cell_block, ar)
-          end
-
-          if column_block_output.kind_of?(Array)
-
-            unless column_block_output.size == 2
-              raise WiceGridArgumentError.new('When WiceGrid column block returns an array it is expected to contain 2 elements only - '+
-                'the first is the contents of the table cell and the second is a hash containing HTML attributes for the <td> tag.')
-            end
-
-            column_block_output, additional_opts = column_block_output
-
-            unless additional_opts.is_a?(Hash)
-              raise WiceGridArgumentError.new('When WiceGrid column block returns an array its second element is expected to be a ' +
-                "hash containing HTML attributes for the <td> tag. The returned value is #{additional_opts.inspect}. Read documentation.")
-            end
-
-            additional_css_class = nil
-            if additional_opts.has_key?(:class)
-              additional_css_class = additional_opts[:class]
-              additional_opts.delete(:class)
-            elsif additional_opts.has_key?('class')
-              additional_css_class = additional_opts['class']
-              additional_opts.delete('class')
-            end
-            opts.merge!(additional_opts)
-            Wice::WgHash.add_or_append_class_value!(opts, additional_css_class) unless additional_css_class.blank?
-          end
-
-          if sorting_dependant_row_cycling && column.attribute && grid.ordered_by?(column)
-            cell_value_of_the_ordered_column = column_block_output
-          end
-          row_content += content_tag(:td, column_block_output, opts)
+        row_content = if replace_row_output
+          no_rightmost_column = true
+          replace_row_output
+        else
+          row_content, tmp_cell_value_of_the_ordered_column = get_row_content(rendering,ar,sorting_dependant_row_cycling)
+          cell_value_of_the_ordered_column = tmp_cell_value_of_the_ordered_column if tmp_cell_value_of_the_ordered_column
+          row_content
         end
 
         row_attributes = rendering.get_row_attributes(ar)

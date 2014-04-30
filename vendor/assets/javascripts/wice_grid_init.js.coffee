@@ -1,5 +1,7 @@
 $(document).on 'page:load ready', -> initWiceGrid()
 
+globalVarForAllGrids = 'wiceGrids'
+
 initWiceGrid = ->
 
   $(".wice-grid-container").each (index, wiceGridContainer) ->
@@ -26,7 +28,10 @@ initWiceGrid = ->
           templates   : filterDeclaration.declaration.templates
           ids         : filterDeclaration.declaration.ids
 
-    window[gridName] = gridProcessor
+    unless window[globalVarForAllGrids]
+      window[globalVarForAllGrids] = {}
+
+    window[globalVarForAllGrids][gridName] = gridProcessor
 
     setupDatepicker()
     setupSubmitReset wiceGridContainer, gridProcessor
@@ -177,14 +182,20 @@ setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
   $('select.auto-reload', wiceGridContainer).change ->
     gridProcessor.process()
 
-  $('input.auto-reload', wiceGridContainer).keyup ->
-    gridProcessor.setProcessTimer(this.id)
+  $('input.auto-reload', wiceGridContainer).keyup (event)->
+    if isKeySignificant event.which
+      gridProcessor.setProcessTimer(this.id)
 
   $('input.negation-checkbox.auto-reload', wiceGridContainer).click ->
     gridProcessor.process()
 
   $(document).bind 'wg:calendarChanged_' + gridProcessor.name, ->
     gridProcessor.process()
+
+
+
+isKeySignificant = (keyCode, func)->
+  [37, 38, 39, 40, 9, 27].indexOf(keyCode) == -1
 
 # autoreload for internal filters
 setupAutoreloadsForExternalFilters =  ->
@@ -195,8 +206,9 @@ setupAutoreloadsForExternalFilters =  ->
       $('select.auto-reload', detachedFilterContainer).change ->
         gridProcessor.process()
 
-      $('input.auto-reload', detachedFilterContainer).keyup ->
-        gridProcessor.setProcessTimer(this.id)
+      $('input.auto-reload', detachedFilterContainer).keyup (event)->
+        if isKeySignificant event.which
+          gridProcessor.setProcessTimer(this.id)
 
       $('input.negation-checkbox.auto-reload', detachedFilterContainer).click ->
         gridProcessor.process()
@@ -233,16 +245,16 @@ setupMultiSelectToggle = (wiceGridContainer)->
 
 setupBulkToggleForActionColumn = (wiceGridContainer) ->
   $('.select-all', wiceGridContainer).click ->
-    $('.sel input', wiceGridContainer).prop('checked', true)
+    $('.sel input', wiceGridContainer).prop('checked', true).trigger('change')
 
   $('.deselect-all', wiceGridContainer).click ->
-    $('.sel input', wiceGridContainer).prop('checked', false)
+    $('.sel input', wiceGridContainer).prop('checked', false).trigger('change')
 
 
 getGridProcessorForElement = (element) ->
   gridName = $(element).data('grid-name')
-  if gridName
-    window[gridName]
+  if gridName && window[globalVarForAllGrids]
+    window[globalVarForAllGrids][gridName]
   else
     null
 

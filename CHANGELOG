@@ -1,3 +1,40 @@
+3.5.0
+
+External columns processors
+
+Operators '<','>','<=','>=','=' in the integer column
+
+Bugfixes
+
+3.4.1
+
+Support for Bootstrap 3
+
+3.4.0
+
+Support for Rails 4
+
+3.3.0
+
+The with_paginated_resultset callback receives an ActiveRelation object, not a lambda
+
+Wice::Defaults::DATEPICKER_YEAR_RANGE added to the config to define the default year range in Datepicker (https://github.com/leikind/wice_grid/issues/61)
+
+Improvement of the javascript calendar control: if the FROM field is set to a value after TO, TO is set to the value of FROM.
+Vice versa: if the TO field is set to a value before FROM, FROM is set to the value of TO
+
+New view helpers filter_and_order_state_as_hash(grid) and filter_state_as_hash(grid)
+
+HTML tag caption supported
+
+Support for Ruby 2.0
+
+2 errors fixed in the Saved Queries UI ( https://github.com/leikind/wice_grid/issues/89 )
+
+Bug fixed: extra_request_parameters not propagating to the pagination panel
+
+Documentation improvements
+
 3.2.2
 
 improvement of the javascript calendar control: if the FROM field is set to a value after TO, TO is set to the value of FROM.

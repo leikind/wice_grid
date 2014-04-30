@@ -8,18 +8,21 @@ module Wice
       def render_filter_internal(params) #:nodoc:
         @contains_a_text_input = true
 
-        @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:fr => '')
+        @query,  _, parameter_name,  @dom_id  = form_parameter_name_id_and_query(:fr => '')
         @query2, _, parameter_name2, @dom_id2 = form_parameter_name_id_and_query(:to => '')
 
-        opts1 = {:size => 3, :id => @dom_id,  :class => 'range-start'}
-        opts2 = {:size => 3, :id => @dom_id2, :class => 'range-end'}
+        opts1 = {:size => 2, :id => @dom_id,  :class => 'form-control input-sm range-start'}
+        opts2 = {:size => 2, :id => @dom_id2, :class => 'form-control input-sm range-end'}
 
         if auto_reload
           opts1[:class] += ' auto-reload'
           opts2[:class] += ' auto-reload'
         end
 
-        text_field_tag(parameter_name,  params[:fr], opts1) + text_field_tag(parameter_name2, params[:to], opts2)
+        content_tag(
+          :div,
+          text_field_tag(parameter_name,  params[:fr], opts1) + text_field_tag(parameter_name2, params[:to], opts2),
+          :class => 'form-inline')
       end
 
       def yield_declaration_of_column_filter #:nodoc:

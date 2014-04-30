@@ -66,6 +66,28 @@ if defined?(Wice::Defaults)
   Wice::Defaults::NEGATION_IN_STRING_FILTERS = false
 
 
+  # Each WiceGrid filter column is defined in two classes, one used for rendering the filter, the other
+  # for generating query conditions. All these columns are in lib/wice/columns/*.rb .
+  # File lib/wice/columns/column_processor_index.rb lists all predefined processors.
+  # In most cases a processor is chosen automatically based on the DB column type,
+  # for example, integer columns
+  # can have two of processors, the default one with one input field, and a processor called "range",
+  # with 2 input fields. In this case it is possible to specify a processor in the column definition:
+  #
+  #     g.column filter_type: :range
+  #
+  # It is also possible to define you own processors:
+  #
+  #     Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS = {
+  #       some_key_identifying_new_column_type:  ['AViewColumnProcessorClass', 'ConditionsGeneratorClass'],
+  #       another_key_identifying_new_column_type:  ['AnotherViewColumnProcessorClass', 'AnotherConditionsGeneratorClass']
+  #     }
+  #
+  # Column processor keys/names should not coincide with the existing keys/names (see lib/wice/columns/column_processor_index.rb)
+  # the value is a 2-element array with 2 strings, the first should be a name of view processor class inherited from
+  # Wice::Columns::ViewColumn, the second should be a name of conditions generator class inherited from
+  # Wice::Columns::ConditionsGeneratorColumn .
+
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                              Showing All Queries                          #
