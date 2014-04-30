@@ -39,10 +39,10 @@ module Wice
 
         '<div class="form-horizontal"><div class="wg-saved-query-input-controls input-append">'+
 
-        text_field_tag(input_field_name,  '',  :onkeydown=>'', :class => 'wice-grid-save-query-field span4') +
+        text_field_tag(input_field_name,  '',  :onkeydown=>'', :class => 'wice-grid-save-query-field form-control ') +
         button_tag(
           NlMessage['save_query_button_label'],
-          :class => 'wice-grid-save-query-button btn',
+          :class => 'wice-grid-save-query-button btn btn-primary',
           'data-grid-name'   => grid_name,
           'data-base-path-to-query-controller' => base_path_to_query_controller,
           'data-parameters'  => parameters.to_json,

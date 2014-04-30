@@ -3,7 +3,10 @@ module Wice #:nodoc:
 
   module Columns #:nodoc:
 
+    mattr_reader :handled_type_view, :handled_type_conditions_generator
+
     class << self #:nodoc:
+
       def load_column_processors #:nodoc:
 
         require_columns
@@ -12,6 +15,51 @@ module Wice #:nodoc:
 
         @@handled_type_view                 = build_table_of_processors 'view'
         @@handled_type_conditions_generator = build_table_of_processors 'conditions_generator'
+
+        if Wice::Defaults.const_defined?(:ADDITIONAL_COLUMN_PROCESSORS)
+
+          common_error_prefix = "Error loading Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS. "
+
+          Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS.each do |key, value|
+            unless key.is_a?(Symbol)
+              raise common_error_prefix + "A key of Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS should be a Symbol!"
+            end
+
+            if @@handled_type_view.has_key?(key)
+              raise common_error_prefix +
+                "Column with key \"#{key}\" already exists in WiceGrid, overwriting existing columns is forbidden, please choose another key!"
+            end
+
+            if ! value.is_a?(Array) || value.size != 2
+              raise common_error_prefix +
+                "A value of Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS should be a a 2-element array!"
+            end
+
+            view_processor, conditions_generator  = value.map(&:to_s).map do |klass|
+              begin
+                eval(klass)
+              rescue NameError
+                raise common_error_prefix + "Class #{klass} is not defined!"
+              end
+            end
+
+            unless view_processor.ancestors.include?(::Wice::Columns::ViewColumn)
+              raise common_error_prefix +
+                "#{view_processor} should be inherited from Wice::Columns::ViewColumn!"
+            end
+
+
+            unless conditions_generator.ancestors.include?(::Wice::Columns::ConditionsGeneratorColumn)
+              raise common_error_prefix +
+                "#{conditions_generator} should be inherited from Wice::Columns::ConditionsGeneratorColumn!"
+            end
+
+            @@handled_type_view[key] = view_processor
+            @@handled_type_conditions_generator[key] = conditions_generator
+
+          end
+        end
+
       end
 
       def get_view_column_processor(column_type) #:nodoc:
@@ -88,6 +136,7 @@ module Wice #:nodoc:
 
 
       def add_css_class(klass_value)
+        self.html ||= {}
         if html[:class].nil?
           html[:class] = klass_value
         else
@@ -97,7 +146,11 @@ module Wice #:nodoc:
       end
 
       def css_class #:nodoc:
-        html[:class] || ''
+        if html && html[:class]
+          html[:class]
+        else
+          ''
+        end
       end
 
       def yield_declaration_of_column_filter #:nodoc:
