@@ -21,11 +21,11 @@ module Wice
       # else
 
         map.post '/wice_grid_serialized_queries/:grid_name',
-          :to => "#{controller}#create",
+          :to => "#{controller}#create_saved_query",
           :as => 'create_serialized_query'
 
         map.post '/wice_grid_serialized_queries/:grid_name/:id',
-          :to => "#{controller}#delete",
+          :to => "#{controller}#delete_saved_query",
           :as => 'delete_serialized_query'
 
       # end
@@ -34,7 +34,7 @@ module Wice
 
   module SerializedQueriesControllerMixin   #:nodoc:
 
-    def delete  #:nodoc:
+    def delete_saved_query  #:nodoc:
       init
       if sq = @query_store_model.find_by_id_and_grid_name(params[:id], @grid_name)
         if sq.destroy
@@ -50,7 +50,7 @@ module Wice
       render_asyns_result
     end
 
-    def create  #:nodoc:
+    def create_saved_query  #:nodoc:
       init
       query_params = if params[@grid_name]
         params[@grid_name]
