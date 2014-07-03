@@ -23,7 +23,7 @@ module Wice
 
         end
 
-        select_options = {:name => @parameter_name + '[]', :id => @dom_id, :class => 'custom-dropdown'}
+        select_options = {:name => @parameter_name + '[]', :id => @dom_id, :class => 'custom-dropdown form-control'}
 
         if @turn_off_select_toggling
           select_toggle = ''
