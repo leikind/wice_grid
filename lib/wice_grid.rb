@@ -293,7 +293,7 @@ module Wice
 
         else
           # p @ar_options
-          @relation.
+          relation = @relation.
             page(    @ar_options[:page]).
             per(     @ar_options[:per_page]).
             includes(@ar_options[:include]).
@@ -301,6 +301,11 @@ module Wice
             order(   @ar_options[:order]).
             where(   @ar_options[:conditions])
 
+          if relation.respond_to?(:references)
+            relation = relation.references(@ar_options[:include])
+          end
+
+          relation
         end
       end
       invoke_resultset_callbacks
