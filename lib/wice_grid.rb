@@ -279,12 +279,19 @@ module Wice
     end
 
 
+    def add_references relation   #:nodoc:
+      if @ar_options[:include] && relation.respond_to?(:references)
+        refs = [@ar_options[:include]] unless @ar_options[:include].is_a?(Array)
+        relation =  relation.references(* @ar_options[:include])
+      end
+      relation
+    end
+
     # TO DO: what to do with other @ar_options values?
     def read  #:nodoc:
       form_ar_options
       @klass.unscoped do
         @resultset = if self.output_csv? || all_record_mode?
-          # @relation.find(:all, @ar_options)
           @relation.
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).
@@ -301,9 +308,7 @@ module Wice
             order(   @ar_options[:order]).
             where(   @ar_options[:conditions])
 
-          if relation.respond_to?(:references)
-            relation = relation.references(@ar_options[:include])
-          end
+          relation = add_references relation
 
           relation
         end
@@ -532,10 +537,14 @@ module Wice
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
       @klass.unscoped do
-        @relation.joins(@ar_options[:joins]).
-                  includes(@ar_options[:include]).
-                  group(@ar_options[:group]).
-                  where(@options[:conditions])
+        relation = @relation.joins(@ar_options[:joins]).
+          includes(@ar_options[:include]).
+          group(@ar_options[:group]).
+          where(@options[:conditions])
+
+        relation = add_references relation
+
+        relation
       end
     end
 
@@ -554,7 +563,7 @@ module Wice
 
     def resultset_without_paging_with_user_filters  #:nodoc:
       @klass.unscoped do
-        active_relation_for_resultset_without_paging_with_user_filters.all
+        active_relation_for_resultset_without_paging_with_user_filters.to_a
       end
     end
 
@@ -567,6 +576,8 @@ module Wice
           joins(@ar_options[:joins]).
           includes(@ar_options[:include]).
           order(@ar_options[:order])
+
+        relation = add_references relation
       end
       relation
     end
