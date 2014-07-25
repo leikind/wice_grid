@@ -306,6 +306,7 @@ module Wice
           link_style = nil
           if grid.ordered_by?(column)
             column.add_css_class('sorted')
+            Wice::WgHash.add_or_append_class_value!(opts, 'sorted')
             link_style = grid.order_direction
             direction = 'desc' if grid.order_direction == 'asc'
           end

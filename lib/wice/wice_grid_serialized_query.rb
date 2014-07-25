@@ -9,7 +9,7 @@ class WiceGridSerializedQuery < ActiveRecord::Base  #:nodoc:
 
   def self.list(name, controller)
     conditions = {:grid_name => name}
-    self.where(conditions).all
+    self.where(conditions).to_a
   end
 
 end

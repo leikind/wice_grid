@@ -279,7 +279,7 @@ module Wice
     end
 
 
-    def add_references relation   #:nodoc:
+    def add_references relation
       if @ar_options[:include] && relation.respond_to?(:references)
         refs = [@ar_options[:include]] unless @ar_options[:include].is_a?(Array)
         relation =  relation.references(* @ar_options[:include])
