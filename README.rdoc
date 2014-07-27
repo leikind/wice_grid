@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 3.4.7
+Version:: 3.4.8
 Author::  Yuri Leikind
 Sources:: https://github.com/leikind/wice_grid/
 Examples online:: http://wicegrid.herokuapp.com
