@@ -92,28 +92,33 @@ module Wice
         raise WiceGridArgumentError.new(":order_direction must be either 'asc' or 'desc'.")
       end
 
-      # options that are understood
-      @options = {
-        :conditions           => nil,
-        :csv_file_name        => nil,
-        :csv_field_separator  => Defaults::CSV_FIELD_SEPARATOR,
-        :custom_order         => {},
-        :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
-        :group                => nil,
-        :include              => nil,
-        :joins                => nil,
-        :name                 => Defaults::GRID_NAME,
-        :order                => nil,
-        :order_direction      => Defaults::ORDER_DIRECTION,
-        :page                 => 1,
-        :page_method_name     => Defaults::PAGE_METHOD_NAME,
-        :per_page             => Defaults::PER_PAGE,
-        :saved_query          => nil,
-        :total_entries        => nil,
-        :with_paginated_resultset  => nil,
-        :with_resultset       => nil
-      }
-
+      begin
+        # options that are understood
+        @options = {
+          :conditions           => nil,
+          :csv_file_name        => nil,
+          :csv_field_separator  => Defaults::CSV_FIELD_SEPARATOR,
+          :custom_order         => {},
+          :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
+          :group                => nil,
+          :include              => nil,
+          :joins                => nil,
+          :name                 => Defaults::GRID_NAME,
+          :order                => nil,
+          :order_direction      => Defaults::ORDER_DIRECTION,
+          :page                 => 1,
+          :page_method_name     => Defaults::PAGE_METHOD_NAME,
+          :per_page             => Defaults::PER_PAGE,
+          :saved_query          => nil,
+          :total_entries        => nil,
+          :with_paginated_resultset  => nil,
+          :with_resultset       => nil
+        }
+      rescue NameError
+        raise NameError.new('A constant is missing in wice_grid_config.rb: ' + $!.message +
+          '. This can happen when you upgrade the WiceGrid to a newer version with a new configuration constant. ' +
+          'Add the constant manually or re-run `bundle exec rails g wice_grid:install`.')
+      end
       # validate parameters
       opts.assert_valid_keys(@options.keys)
 
