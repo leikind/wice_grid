@@ -166,4 +166,6 @@ if defined?(Wice::Defaults)
   # popup calendar will be shown relative to the popup trigger element or to the mouse pointer
   Wice::Defaults::POPUP_PLACEMENT_STRATEGY = :trigger # :pointer
 
+  # The name of the page method (should correspond to Kaminari.config.page_method_name)
+  Wice::Defaults::PAGE_METHOD_NAME = :page
 end

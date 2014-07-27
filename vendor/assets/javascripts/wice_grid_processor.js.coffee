@@ -12,8 +12,13 @@ class WiceGridProcessor
 
 
   process : (domIdToFocus)->
-    window.location = @buildUrlWithParams(domIdToFocus)
+    @visit @buildUrlWithParams(domIdToFocus)
 
+  visit : (path) ->
+    if Turbolinks?
+      Turbolinks.visit path
+    else
+      window.location = path
 
   setProcessTimer : (domIdToFocus)->
 
@@ -30,7 +35,7 @@ class WiceGridProcessor
 
   reloadPageForGivenGridState : (gridState)->
     requestPath = @gridStateToRequest(gridState)
-    window.location = @appendToUrl(@baseLinkForShowAllRecords, requestPath)
+    @visit @appendToUrl(@baseLinkForShowAllRecords, requestPath)
 
 
   gridStateToRequest : (gridState)->
@@ -75,11 +80,11 @@ class WiceGridProcessor
 
 
   reset : ->
-    window.location = @baseRequestForFilter
+    @visit @baseRequestForFilter
 
 
   exportToCsv : ->
-    window.location = @linkForExport
+    @visit @linkForExport
 
 
   register : (func)->

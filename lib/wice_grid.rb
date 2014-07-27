@@ -106,6 +106,7 @@ module Wice
         :order                => nil,
         :order_direction      => Defaults::ORDER_DIRECTION,
         :page                 => 1,
+        :page_method_name     => Defaults::PAGE_METHOD_NAME,
         :per_page             => Defaults::PER_PAGE,
         :saved_query          => nil,
         :total_entries        => nil,
@@ -301,7 +302,7 @@ module Wice
         else
           # p @ar_options
           relation = @relation.
-            page(    @ar_options[:page]).
+            send(    @options[:page_method_name], @ar_options[:page]).
             per(     @ar_options[:per_page]).
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).

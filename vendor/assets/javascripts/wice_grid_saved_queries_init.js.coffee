@@ -25,7 +25,7 @@ loadQuery = (loadLink, event) ->
       gridProcessor.parameterNameForQueryLoading +  encodeURIComponent(queryId)
     )
 
-    window.location = request
+    gridProcessor.visit request
 
   event.preventDefault()
   event.stopPropagation()
