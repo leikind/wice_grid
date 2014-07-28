@@ -52,6 +52,10 @@ module Wice
         require 'wice/kaminari_monkey_patching.rb'
       end
     end
+
+    initializer "wice_grid_railtie.configure_rails_assets_precompilation" do |app|
+      app.config.assets.precompile << 'icons/grid/*'
+    end
   end
 
   class WiceGrid
