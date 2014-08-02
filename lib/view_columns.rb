@@ -140,7 +140,8 @@ module Wice
   end
 
   class ActionViewColumn < ViewColumn #:nodoc:
-    def initialize(grid_obj, td_html_attrs, param_name, select_all_buttons, object_property, view)  #:nodoc:
+    def initialize(grid_obj, td_html_attrs, param_name, select_all_buttons, object_property, view, condition)  #:nodoc:
+      @condition = condition
       @view = view
       @select_all_buttons   = select_all_buttons
       self.grid             = grid_obj
@@ -149,13 +150,22 @@ module Wice
       grid_name             = self.grid.name
       @param_name           = param_name
       @cell_rendering_block = lambda do |object, params|
-        selected = if params[grid_name] && params[grid_name][param_name] &&
-                      params[grid_name][param_name].index(object.send(object_property).to_s)
-          true
+
+        if @condition.nil? || @condition.call(object)
+
+          selected = if params[grid_name] && params[grid_name][param_name] &&
+                        params[grid_name][param_name].index(object.send(object_property).to_s)
+            true
+          else
+            false
+          end
+
+          check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
+
         else
-          false
+          ''
         end
-        check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
+
       end
     end
 
@@ -399,7 +409,7 @@ module Wice
 
       [%!<div class="date-filter">#{html1}<br/>#{html2}</div>!, js1 + js2]
     end
-    
+
     def render_filter_internal(params) #:nodoc:
 
       if helper_style == :standard

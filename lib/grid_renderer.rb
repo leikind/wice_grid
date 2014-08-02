@@ -137,6 +137,7 @@ module Wice
     # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header.
     #   The default is +true+.
     # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
+
     def action_column(opts = {})
 
       if @action_column_present
@@ -144,17 +145,18 @@ module Wice
       end
 
       options = {
-        :param_name     => :selected,
-        :td_html_attrs  => {},
+        :param_name         => :selected,
+        :td_html_attrs      => {},
         :select_all_buttons => true,
-        :object_property => :id
+        :object_property    => :id,
+        :if                 => nil
       }
 
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
       @action_column_present = true
       @columns << ActionViewColumn.new(@grid, options[:td_html_attrs], options[:param_name],
-            options[:select_all_buttons], options[:object_property], @view)
+            options[:select_all_buttons], options[:object_property], @view, options[:if])
     end
 
     # Defines everything related to a column in a grid - column name, filtering, rendering cells, etc.
@@ -251,7 +253,7 @@ module Wice
     #   * <tt>:calendar</tt> - a Javascript popup calendar control
     # * <tt>:negation_in_filter</tt> - turn on/off the negation checkbox in string filters
     # * <tt>:auto_reload</tt> - a boolean value specifying if a change in a filter triggers reloading of the grid. Works with all
-    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters. 
+    #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters.
     #   The default is false. (see +AUTO_RELOAD+ in the configuration file).
     #
     # The block parameter is an ActiveRecord instance. This block is called for every ActiveRecord shown, and the return
