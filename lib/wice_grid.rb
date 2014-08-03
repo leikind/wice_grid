@@ -262,9 +262,11 @@ module Wice
       end
 
       # conditions
-      if @table_column_matrix.generated_conditions.size == 0
-        @status.delete(:f)
-      end
+      # do not delete for a while
+      # https://github.com/leikind/wice_grid/issues/144
+      # if @table_column_matrix.generated_conditions.size == 0
+      #   @status.delete(:f)
+      # end
 
       @ar_options[:conditions] = klass.send(:merge_conditions, @status[:conditions], * @table_column_matrix.conditions )
 
