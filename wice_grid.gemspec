@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '3.4.8'
+  s.version       = '3.4.9'
   s.homepage      = 'https://github.com/leikind/wice_grid'
-  s.date          = '2014-08-27'
+  s.date          = '2014-08-03'
   s.summary       = 'A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters.'
   s.description   = 'A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters.' +
                     'One of the goals of this plugin was to allow the programmer to define the contents of the cell by himself, '  +
@@ -22,11 +22,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(kaminary, [kaminary_version])
+      s.add_runtime_dependency('coffee-rails')
     else
       s.add_dependency(kaminari, [kaminary_version])
+      s.add_dependency('coffee-rails')
     end
   else
     s.add_dependency(kaminari, [kaminary_version])
+    s.add_dependency('coffee-rails')
   end
 
 end

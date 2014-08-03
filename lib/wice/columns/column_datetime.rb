@@ -89,8 +89,8 @@ module Wice
 
       def yield_declaration_of_column_filter #:nodoc:
         {
-          :templates => @queris_ids.collect{|tuple|  tuple[0] },
-          :ids       => @queris_ids.collect{|tuple|  tuple[1] }
+          templates: @queris_ids.collect{|tuple|  tuple[0] },
+          ids:       @queris_ids.collect{|tuple|  tuple[1] }
         }
       end
 
