@@ -709,7 +709,7 @@ jQuery +datepicker+ uses a different format flavor, therefore there is an additi
 for presenting initial date values in filters, so make sure that +DATE_FORMAT_JQUERY+ and +DATE_FORMAT+
 result in an identical date representation.
 
-Constant +DATEPICKER_YEAR_RANGE+ defined the range of years in the Datepicker year dropdown. Alternatively,
+Constant +DATEPICKER_YEAR_RANGE+ defines the range of years in the Datepicker year dropdown. Alternatively,
 you can always change this range dynamically with the following javascript:
 
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
