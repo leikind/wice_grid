@@ -1,4 +1,40 @@
-3.5.0
+3.4.9
+
+better support for Asset Pipeline
+
+bugfixes
+
+dropped support for Ruby 1.8
+
+3.4.8
+
+a friendlier exception message when a constant is missing in wice_grid_config.rb
+
+bugfixes
+
+3.4.6
+
+Better support for Turbolinks
+
+Better support for ActiveRelation #references
+
+variable Wice::Defaults::PAGE_METHOD_NAME
+
+3.4.5
+
+Support for ActiveRelation #references
+
+bugfixes
+
+3.4.4
+
+bugfixes
+
+3.4.3
+
+bugfixes
+
+3.4.2
 
 External columns processors
 
