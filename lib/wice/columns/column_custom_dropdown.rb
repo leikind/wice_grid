@@ -16,14 +16,12 @@ module Wice
         @custom_filter = @custom_filter.call if @custom_filter.kind_of? Proc
 
         if @custom_filter.kind_of? Array
-
           @custom_filter = [[@filter_all_label, nil]] + @custom_filter.map{|label, value|
             [label.to_s, value.to_s]
           }
-
         end
 
-        select_options = {:name => @parameter_name + '[]', :id => @dom_id, :class => 'custom-dropdown form-control'}
+        select_options = {name: @parameter_name + '[]', id: @dom_id, class: 'custom-dropdown form-control'}
 
         if @turn_off_select_toggling
           select_toggle = ''
@@ -35,14 +33,14 @@ module Wice
             expand_icon_style, collapse_icon_style = collapse_icon_style, expand_icon_style if select_options[:multiple]
 
             select_toggle = content_tag(:span, '',
-              :title => NlMessage['expand'],
-              :class => 'expand-multi-select-icon clickable',
-              :style => expand_icon_style
+              title: NlMessage['expand'],
+              class: 'expand-multi-select-icon clickable',
+              style: expand_icon_style
             ) +
             content_tag(:span, '',
-              :title => NlMessage['collapse'],
-              :class => 'collapse-multi-select-icon clickable',
-              :style => collapse_icon_style
+              title: NlMessage['collapse'],
+              class: 'collapse-multi-select-icon clickable',
+              style: collapse_icon_style
             )
           else
             select_options[:multiple] = false
@@ -65,8 +63,8 @@ module Wice
 
       def yield_declaration_of_column_filter #:nodoc:
         {
-          :templates => [@query_without_equals_sign],
-          :ids       => [@dom_id]
+          templates: [@query_without_equals_sign],
+          ids:       [@dom_id]
         }
       end
 

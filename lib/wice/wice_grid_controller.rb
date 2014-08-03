@@ -90,7 +90,7 @@ module Wice
     # This convention can be easily overridden by supplying a hash parameter to +export_grid_if_requested+ where each key is the name of
     # a grid, and the value is the name of the template (like it is specified for +render+, i.e. without '_' and extensions):
     #
-    #   export_grid_if_requested(:grid => 'orders', 'grid2' => 'invoices')
+    #   export_grid_if_requested(grid: => 'orders', 'grid2' => 'invoices')
     #
     # If the request is not a CSV export request, the method does nothing and returns +false+, if it is a CSV export request,
     # the method returns +true+.
@@ -98,12 +98,12 @@ module Wice
     # If the action has no explicit +render+ call, it's OK to just place +export_grid_if_requested+ as the last line of the action. Otherwise,
     # to avoid double rendering, use the return value of the method to conditionally call your +render+ :
     #
-    #    export_grid_if_requested || render(:action => 'index')
+    #    export_grid_if_requested || render(action: 'index')
     #
     # It's also possible to supply a block which will be called if no CSV export is requested:
     #
     #    export_grid_if_requested do
-    #     render(:action => 'index')
+    #     render(action: 'index')
     #    end
 
     def export_grid_if_requested(opts = {})
@@ -112,11 +112,11 @@ module Wice
       if grid
         template_name = opts[grid.name] || opts[grid.name.intern]
         template_name ||= grid.name + '_grid'
-        temp_filename = render_to_string(:partial => template_name)
+        temp_filename = render_to_string(partial: template_name)
         temp_filename = temp_filename.strip
         filename = (grid.csv_file_name || grid.name ) + '.csv'
         grid.csv_tempfile.close
-        send_file_rails2 temp_filename, :filename => filename, :type => 'text/csv; charset=utf-8'
+        send_file_rails2 temp_filename, filename: filename, type: 'text/csv; charset=utf-8'
         grid.csv_tempfile = nil
         true
       else
@@ -137,10 +137,12 @@ module Wice
     #   <tt>:model</tt> of the column declaration with the target custom filter.
     # * <tt>:value</tt> - the value of the column filter.
     def wice_grid_custom_filter_params(opts = {})
-      options = {:grid_name => 'grid',
-                 :attribute => nil,
-                 :model => nil,
-                 :value => nil}
+      options = {
+        :grid_name => 'grid',
+        :attribute => nil,
+        :model => nil,
+        :value => nil
+      }
       options.merge!(opts)
 
       [:attribute, :value].each do |key|
@@ -173,16 +175,16 @@ module Wice
       @performed_render = false
 
       logger.info "Sending file #{path}" unless logger.nil?
-      File.open(path, 'rb') { |file| render :status => options[:status], :text => file.read }
+      File.open(path, 'rb') { |file| render status: options[:status], text: file.read }
     end
 
 
     DEFAULT_SEND_FILE_OPTIONS_RAILS2 = { #:nodoc:
-      :type         => 'application/octet-stream'.freeze,
-      :disposition  => 'attachment'.freeze,
-      :stream       => true,
-      :buffer_size  => 4096,
-      :x_sendfile   => false
+      type:         'application/octet-stream'.freeze,
+      disposition:  'attachment'.freeze,
+      stream:       true,
+      buffer_size:  4096,
+      x_sendfile:   false
     }.freeze
 
     def send_file_headers_rails2!(options) #:nodoc:

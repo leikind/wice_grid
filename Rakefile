@@ -1,7 +1,7 @@
 require "bundler/gem_tasks"
 require 'rdoc/task'
 
-task :default => :rdoc
+task default: :rdoc
 
 desc 'Generate documentation for the wice_grid plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|

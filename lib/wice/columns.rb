@@ -165,9 +165,9 @@ module Wice #:nodoc:
         declaration = yield_declaration_of_column_filter
         if declaration
           {
-            :filterName => self.name,
-            :detached    => detachness,
-            :declaration => declaration
+            filterName:  self.name,
+            detached:    detachness,
+            declaration: declaration
           }
         end
       end
@@ -245,7 +245,7 @@ module Wice #:nodoc:
       protected
 
       def form_parameter_template(v) #:nodoc:
-        {@grid.name => {:f => {self.attribute_name_fully_qualified_for_all_but_main_table_columns => v}}}.to_query
+        {@grid.name => {f: {self.attribute_name_fully_qualified_for_all_but_main_table_columns => v}}}.to_query
       end
 
       def form_parameter_name(v) #:nodoc:

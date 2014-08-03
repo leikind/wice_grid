@@ -8,9 +8,9 @@ module Wice
       def render_filter_internal(params) #:nodoc:
         @contains_a_text_input = true
 
-        @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(:eq => '')
+        @query, _, parameter_name, @dom_id = form_parameter_name_id_and_query(eq: '')
 
-        opts = {:size => 3, :id => @dom_id,  :class => 'range-start'}
+        opts = {size: 3, id: @dom_id, class: 'range-start'}
 
         opts[:class] += ' form-control input-sm'
 
@@ -23,8 +23,8 @@ module Wice
 
       def yield_declaration_of_column_filter #:nodoc:
         {
-          :templates => [@query],
-          :ids       => [@dom_id]
+          templates: [@query],
+          ids:       [@dom_id]
         }
       end
 

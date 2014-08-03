@@ -92,8 +92,8 @@ module Wice
 
     def csv_export_icon #:nodoc:
       content_tag(:div, '',
-        :title => NlMessage['csv_export_tooltip'],
-        :class => 'clickable export-to-csv-button'
+        title: NlMessage['csv_export_tooltip'],
+        class: 'clickable export-to-csv-button'
       )
     end
 
@@ -146,10 +146,10 @@ module Wice
       end
 
       options = {
-        :param_name     => :selected,
-        :html           => {},
-        :select_all_buttons => true,
-        :object_property => :id
+        param_name:          :selected,
+        html:                {},
+        select_all_buttons:  true,
+        object_property:     :id
       }
 
       opts.assert_valid_keys(options.keys)
@@ -157,8 +157,15 @@ module Wice
       @action_column_present = true
       column_processor_klass = Columns.get_view_column_processor(:action)
 
-      @columns << column_processor_klass.new(@grid, options[:html], options[:param_name],
-            options[:select_all_buttons], options[:object_property], @view, block)
+      @columns << column_processor_klass.new(
+        @grid,
+        options[:html],
+        options[:param_name],
+        options[:select_all_buttons],
+        options[:object_property],
+        @view,
+        block
+      )
     end
 
     # Defines everything related to a column in a grid - column name, filtering, rendering cells, etc.
@@ -170,7 +177,7 @@ module Wice
     #
     # * <tt>:name</tt> - Name of the column.
     # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>td</tt> tag.
-    # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
+    # * <tt>:class</tt> - a shortcut for <tt>html: {class: 'css_class'}</tt>
     # * <tt>:attribute</tt> - name of a database column (which normally correspond to a model attribute with the
     #   same name). By default the field is assumed to belong to the default table (see documentation for the
     #   +initialize_grid+ method). Parameter <tt>:model</tt> allows to specify another table. Presence of
@@ -273,26 +280,26 @@ module Wice
 
     def column(opts = {}, &block)
       options = {
-        :allow_multiple_selection   => Defaults::ALLOW_MULTIPLE_SELECTION,
-        :ordering                   => true,
-        :attribute                  => nil,
-        :auto_reload                => Defaults::AUTO_RELOAD,
-        :boolean_filter_false_label => NlMessage['boolean_filter_false_label'],
-        :boolean_filter_true_label  => NlMessage['boolean_filter_true_label'],
-        :class                      => nil,
-        :name                       => '',
-        :custom_filter              => nil,
-        :detach_with_id             => nil,
-        :filter_all_label           => Defaults::CUSTOM_FILTER_ALL_LABEL,
-        :helper_style               => Defaults::HELPER_STYLE,
-        :in_csv                     => true,
-        :in_html                    => true,
-        :model                      => nil,
-        :negation                   => Defaults::NEGATION_IN_STRING_FILTERS,
-        :filter                     => true,
-        :filter_type                => nil,
-        :table_alias                => nil,
-        :html                       => {}
+        allow_multiple_selection:    Defaults::ALLOW_MULTIPLE_SELECTION,
+        ordering:                    true,
+        attribute:                   nil,
+        auto_reload:                 Defaults::AUTO_RELOAD,
+        boolean_filter_false_label:  NlMessage['boolean_filter_false_label'],
+        boolean_filter_true_label:   NlMessage['boolean_filter_true_label'],
+        class:                       nil,
+        name:                        '',
+        custom_filter:               nil,
+        detach_with_id:              nil,
+        filter_all_label:            Defaults::CUSTOM_FILTER_ALL_LABEL,
+        helper_style:                Defaults::HELPER_STYLE,
+        in_csv:                      true,
+        in_html:                     true,
+        model:                       nil,
+        negation:                    Defaults::NEGATION_IN_STRING_FILTERS,
+        filter:                      true,
+        filter_type:                 nil,
+        table_alias:                 nil,
+        html:                        {}
       }
 
       opts.assert_valid_keys(options.keys)
@@ -426,14 +433,14 @@ module Wice
     # and there are no records to render.
     # In addition to the block style two other variants are accepted:
     # *   <tt>g.blank_slate "some text to be rendered"</tt>
-    # *   <tt>g.blank_slate :partial => "partial_name"</tt>
+    # *   <tt>g.blank_slate partial: "partial_name"</tt>
     def blank_slate(opts = nil, &block)
       if (opts.is_a?(Hash) && opts.has_key?(:partial) && block.nil?) || (opts.is_a?(String) && block.nil?)
         @blank_slate_handler = opts
       elsif opts.nil? && block
         @blank_slate_handler = block
       else
-        raise WiceGridArgumentError.new("blank_slate accepts only a string, a block, or :template => 'path_to_template' ")
+        raise WiceGridArgumentError.new("blank_slate accepts only a string, a block, or template: 'path_to_template' ")
       end
     end
 
@@ -501,7 +508,7 @@ module Wice
       end
 
       query_params = {@grid.name => {
-        @@order_parameter_name => column_attribute_name,
+        @@order_parameter_name           => column_attribute_name,
         @@order_direction_parameter_name => direction
       }}
 

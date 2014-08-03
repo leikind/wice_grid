@@ -30,7 +30,7 @@ module Wice
 
       # Preprocess incoming parameters for datetime, if what's coming in is
       # a datetime (with custom_filter it can be anything else, and not
-      # the datetime hash {:fr => ..., :to => ...})
+      # the datetime hash {fr: ..., to: ...})
       if @request_params
         if (@column.type == :datetime || @column.type == :timestamp) && @request_params.is_a?(Hash)
           [:fr, :to].each do |sym|
@@ -47,7 +47,7 @@ module Wice
 
         # Preprocess incoming parameters for date, if what's coming in is
         # a date (with custom_filter it can be anything else, and not
-        # the date hash {:fr => ..., :to => ...})
+        # the date hash {fr: ..., to: ...})
         if @column.type == :date && @request_params.is_a?(Hash)
           [:fr, :to].each do |sym|
             if @request_params[sym]

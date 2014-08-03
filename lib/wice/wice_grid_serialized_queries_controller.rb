@@ -11,22 +11,22 @@ module Wice
       # if Rails.version[0..1] == '3.'
 
       #   map.match '/wice_grid_serialized_queries/:grid_name',
-      #     :to => "#{controller}#create",
-      #     :as => 'create_serialized_query'
+      #     to: "#{controller}#create",
+      #     as: 'create_serialized_query'
 
       #   map.match '/wice_grid_serialized_queries/:grid_name/:id',
-      #     :to => "#{controller}#delete",
-      #     :as => 'delete_serialized_query'
+      #     to: "#{controller}#delete",
+      #     as: 'delete_serialized_query'
 
       # else
 
         map.post '/wice_grid_serialized_queries/:grid_name',
-          :to => "#{controller}#create_saved_query",
-          :as => 'create_serialized_query'
+          to: "#{controller}#create_saved_query",
+          as: 'create_serialized_query'
 
         map.post '/wice_grid_serialized_queries/:grid_name/:id',
-          :to => "#{controller}#delete_saved_query",
-          :as => 'delete_serialized_query'
+          to: "#{controller}#delete_saved_query",
+          as: 'delete_serialized_query'
 
       # end
     end
@@ -84,10 +84,10 @@ module Wice
     protected
 
     def render_asyns_result
-      render :json => {
-        'error_messages' => @error_messages,
+      render json: {
+        'error_messages'        => @error_messages,
         'notification_messages' => @notification_messages,
-        'query_list' => render_to_string(:inline => '<%=saved_queries_list(@grid_name, @saved_query, controller.extra, @confirm).html_safe%>')
+        'query_list'            => render_to_string(inline: '<%=saved_queries_list(@grid_name, @saved_query, controller.extra, @confirm).html_safe%>')
       }
     end
 

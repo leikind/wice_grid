@@ -27,14 +27,14 @@ module Wice
 
         @queris_ids = x.call(:fr) + x.call(:to)
 
-        _, _, @name1, _ = form_parameter_name_id_and_query({:fr => ''})
-        _, _, @name2, _ = form_parameter_name_id_and_query({:to => ''})
+        _, _, @name1, _ = form_parameter_name_id_and_query({fr: ''})
+        _, _, @name2, _ = form_parameter_name_id_and_query({to: ''})
       end
 
 
       def prepare_for_calendar_filter #:nodoc:
-        query, _, @name1, @dom_id = form_parameter_name_id_and_query(:fr => '')
-        query2, _, @name2, @dom_id2 = form_parameter_name_id_and_query(:to => '')
+        query, _, @name1, @dom_id = form_parameter_name_id_and_query(fr: '')
+        query2, _, @name2, @dom_id2 = form_parameter_name_id_and_query(to: '')
 
         @queris_ids = [[query, @dom_id], [query2, @dom_id2] ]
       end
@@ -42,27 +42,27 @@ module Wice
 
       def render_standard_filter_internal(params) #:nodoc:
         '<div class="date-filter">' +
-        select_datetime(params[:fr], {:include_blank => true, :prefix => @name1}) + '<br/>' +
-        select_datetime(params[:to], {:include_blank => true, :prefix => @name2}) +
+        select_datetime(params[:fr], {include_blank: true, prefix: @name1}) + '<br/>' +
+        select_datetime(params[:to], {include_blank: true, prefix: @name2}) +
         '</div>'
       end
 
       def render_calendar_filter_internal(params) #:nodoc:
 
         calendar_data_from = prepare_data_for_calendar(
-          :initial_date => params[:fr],
-          :title        => NlMessage['date_selector_tooltip_from'],
-          :name         => @name1,
-          :fire_event   => auto_reload,
-          :grid_name    => self.grid.name
+          initial_date: params[:fr],
+          title:        NlMessage['date_selector_tooltip_from'],
+          name:         @name1,
+          fire_event:   auto_reload,
+          grid_name:    self.grid.name
         )
 
         calendar_data_to = prepare_data_for_calendar(
-          :initial_date => params[:to],
-          :title        => NlMessage['date_selector_tooltip_to'],
-          :name         => @name2,
-          :fire_event   => auto_reload,
-          :grid_name    => self.grid.name
+          initial_date: params[:to],
+          title:        NlMessage['date_selector_tooltip_to'],
+          name:         @name2,
+          fire_event:   auto_reload,
+          grid_name:    self.grid.name
         )
 
         calendar_data_from.the_other_datepicker_id_to   = calendar_data_to.dom_id

@@ -66,9 +66,9 @@ module Wice
       # Used to transform a traditional params hash
       # into an array of two element arrays where element zero is a parameter name as it appears in HTTP requests,
       # and the first element is the value:
-      # { :a => { :b => 3, :c => 4, :d => { :e => 5 }} }.parameter_names_and_values #=>  [["a[d][e]", 5], ["a[b]", 3], ["a[c]", 4]]
+      # { a: { b: 3, c: 4, d: { e: 5 }} }.parameter_names_and_values #=>  [["a[d][e]", 5], ["a[b]", 3], ["a[c]", 4]]
       # The parameter is an optional array of parameter names to prepend:
-      # { :a => { :b => 3, :c => 4, :d => { :e => 5 }} }.parameter_names_and_values(['foo', 'baz']) #=>
+      # { a: { b: 3, c: 4, d: { e: 5 }} }.parameter_names_and_values(['foo', 'baz']) #=>
       #                         [["foo[baz][a][d][e]", 5], ["foo[baz][a][b]", 3], ["foo[baz][a][c]", 4]]
       def parameter_names_and_values(hash, initial = []) #:nodoc:
         res = []

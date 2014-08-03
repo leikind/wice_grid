@@ -86,7 +86,7 @@ module Wice
     class << self
 
       def [](key) #:nodoc:
-        translated = I18n.t(key, :scope => 'wice_grid')
+        translated = I18n.t(key, scope: 'wice_grid')
       end
 
     end

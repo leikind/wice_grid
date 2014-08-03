@@ -18,7 +18,7 @@ module Wice
             ''
           else
             selected = params[grid_name] && params[grid_name][param_name] && params[grid_name][param_name].index(object.send(object_property).to_s)
-            check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, :id => nil)
+            check_box_tag("#{grid_name}[#{param_name}][]", object.send(object_property), selected, id: nil)
           end
         end
       end
@@ -35,12 +35,11 @@ module Wice
         return '' unless @select_all_buttons
 
         content_tag(:div, '',
-          :class => 'clickable select-all',
-          :title => NlMessage['select_all']) + ' ' +
+          class: 'clickable select-all',
+          title: NlMessage['select_all']) + ' ' +
         content_tag(:div, '',
-          :class => 'clickable deselect-all',
-          :title => NlMessage['deselect_all'])
-
+          class: 'clickable deselect-all',
+          title: NlMessage['deselect_all'])
       end
 
     end

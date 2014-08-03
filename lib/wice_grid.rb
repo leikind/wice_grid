@@ -99,24 +99,24 @@ module Wice
       begin
         # options that are understood
         @options = {
-          :conditions           => nil,
-          :csv_file_name        => nil,
-          :csv_field_separator  => Defaults::CSV_FIELD_SEPARATOR,
-          :custom_order         => {},
-          :enable_export_to_csv => Defaults::ENABLE_EXPORT_TO_CSV,
-          :group                => nil,
-          :include              => nil,
-          :joins                => nil,
-          :name                 => Defaults::GRID_NAME,
-          :order                => nil,
-          :order_direction      => Defaults::ORDER_DIRECTION,
-          :page                 => 1,
-          :page_method_name     => Defaults::PAGE_METHOD_NAME,
-          :per_page             => Defaults::PER_PAGE,
-          :saved_query          => nil,
-          :total_entries        => nil,
-          :with_paginated_resultset  => nil,
-          :with_resultset       => nil
+          conditions:                 nil,
+          csv_file_name:              nil,
+          csv_field_separator:        Defaults::CSV_FIELD_SEPARATOR,
+          custom_order:               {},
+          enable_export_to_csv:       Defaults::ENABLE_EXPORT_TO_CSV,
+          group:                      nil,
+          include:                    nil,
+          joins:                      nil,
+          name:                       Defaults::GRID_NAME,
+          order:                      nil,
+          order_direction:            Defaults::ORDER_DIRECTION,
+          page:                       1,
+          page_method_name:           Defaults::PAGE_METHOD_NAME,
+          per_page:                   Defaults::PER_PAGE,
+          saved_query:                nil,
+          total_entries:              nil,
+          with_paginated_resultset:   nil,
+          with_resultset:             nil
         }
       rescue NameError
         raise NameError.new('A constant is missing in wice_grid_config.rb: ' + $!.message +
@@ -411,8 +411,13 @@ module Wice
     end
 
     def count  #:nodoc:
-      form_ar_options(:skip_ordering => true, :forget_generated_options => true)
-      @relation.count(:conditions => @ar_options[:conditions], :joins => @ar_options[:joins], :include => @ar_options[:include], :group => @ar_options[:group])
+      form_ar_options(skip_ordering: true, forget_generated_options: true)
+      @relation.count(
+        conditions: @ar_options[:conditions],
+        joins:      @ar_options[:joins],
+        include:    @ar_options[:include],
+        group:      @ar_options[:group]
+      )
     end
 
     alias_method :size, :count
@@ -563,10 +568,10 @@ module Wice
     #   form_ar_options
     #   @klass.unscoped do
     #     @relation.count(
-    #       :joins => @ar_options[:joins],
-    #       :include => @ar_options[:include],
-    #       :group => @ar_options[:group],
-    #       :conditions => @options[:conditions]
+    #       joins:      @ar_options[:joins],
+    #       include:    @ar_options[:include],
+    #       group:      @ar_options[:group],
+    #       conditions: @options[:conditions]
     #     )
     #   end
     # end
