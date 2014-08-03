@@ -27,7 +27,7 @@ This is it. The controller now has the required action methods.
 
 If the name of the query controller is QueriesController, add the following to <tt>routes.rb</tt>:
 
-  Wice::define_routes(map, 'queries')
+  Wice::define_routes(self, 'queries')
 
 === Step 4: Add the saved query panel to the view.
 

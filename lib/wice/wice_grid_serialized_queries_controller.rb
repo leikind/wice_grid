@@ -3,32 +3,21 @@ module Wice
   class <<self
     # Used in routes.rb to define routes to the query processing controller.
     # Parameters:
-    # * map - the mapper object used in routes.rb to defined routes (instance of <tt>ActionController::Routing::RouteSet::Mapper</tt>)
+    # * map - the context of the routes execution (instance of <tt>ActionDispatch::Routing::Mapper</tt>).
+    #   Normally use +self+ for the first argument: <tt>Wice::define_routes(self, 'queries')</tt>
     # * controller - name of the query processing controller, i.e.  <tt>'queries'</tt> if the controller is +QueriesController+ .
     # Read section "Saving Queries How-To" in README for more details.
     def define_routes(map, controller)
       controller = controller.to_s
-      # if Rails.version[0..1] == '3.'
 
-      #   map.match '/wice_grid_serialized_queries/:grid_name',
-      #     to: "#{controller}#create",
-      #     as: 'create_serialized_query'
+      map.post '/wice_grid_serialized_queries/:grid_name',
+        to: "#{controller}#create_saved_query",
+        as: 'create_serialized_query'
 
-      #   map.match '/wice_grid_serialized_queries/:grid_name/:id',
-      #     to: "#{controller}#delete",
-      #     as: 'delete_serialized_query'
+      map.post '/wice_grid_serialized_queries/:grid_name/:id',
+        to: "#{controller}#delete_saved_query",
+        as: 'delete_serialized_query'
 
-      # else
-
-        map.post '/wice_grid_serialized_queries/:grid_name',
-          to: "#{controller}#create_saved_query",
-          as: 'create_serialized_query'
-
-        map.post '/wice_grid_serialized_queries/:grid_name/:id',
-          to: "#{controller}#delete_saved_query",
-          as: 'delete_serialized_query'
-
-      # end
     end
   end
 
