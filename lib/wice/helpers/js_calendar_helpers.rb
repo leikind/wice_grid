@@ -28,7 +28,7 @@ module Wice #:nodoc:
         hidden_field_tag_options['data-close-calendar-event-name'] = calendar_data.close_calendar_event_name
       end
 
-      if Rails.env == 'development'
+      if Rails.env.development?
         hidden_field_tag_options['class'] = 'check-for-datepicker'
       end
 
