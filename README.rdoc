@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 3.4.8
+Version:: 3.4.9
 Author::  Yuri Leikind
 Sources:: https://github.com/leikind/wice_grid/
 Examples online:: http://wicegrid.herokuapp.com
@@ -8,11 +8,9 @@ News:: http://leikind.org/tag/wicegrid/
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 
-The main supported branch is +rails3+.
+The main supported branch is +rails3+. Rails 3 and Rails 4 are supported.
 
 For rails 2 use the +master+ branch:  https://github.com/leikind/wice_grid/tree/master
-
-Rails 4 is supported beginning with version 3.4.x.
 
 
 == Intro
