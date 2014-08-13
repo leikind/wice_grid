@@ -321,7 +321,7 @@ module Wice
         else
           if reuse_last_column_for_filter_buttons && last
             grid.output_buffer << content_tag(:th,
-              hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering)
+              hide_show_icon(filter_row_id, grid, filter_shown, no_filter_row, options[:show_filters], rendering), opts
             )
           else
             grid.output_buffer << content_tag(:th, column_name, opts)
