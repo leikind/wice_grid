@@ -289,6 +289,7 @@ module Wice
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).
             order(   @ar_options[:order]).
+            group(   @ar_options[:group]).
             where(   @ar_options[:conditions])
 
         else
@@ -299,6 +300,7 @@ module Wice
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).
             order(   @ar_options[:order]).
+            group(   @ar_options[:group]).
             where(   @ar_options[:conditions])
 
         end
