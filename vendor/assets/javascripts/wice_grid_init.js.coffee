@@ -203,7 +203,7 @@ setupAutoreloadsForExternalFilters =  ->
   $('.wg-detached-filter').each (index, detachedFilterContainer) ->
     gridProcessor = getGridProcessorForElement(detachedFilterContainer)
     if gridProcessor
-      $('select.auto-reload', detachedFilterContainer).change ->
+      $('select.auto-reload, input.native-datepicker.auto-reload', detachedFilterContainer).change ->
         gridProcessor.process()
 
       $('input.auto-reload', detachedFilterContainer).keyup (event)->
