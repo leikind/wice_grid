@@ -50,9 +50,10 @@ module Wice
 
       def render_html5_filter_internal(params) #:nodoc:
         css_class = 'form-control input-sm native-datepicker ' + (auto_reload ? 'auto-reload' : '')
+        date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
         '<div class="date-filter">' +
-        date_field_tag(@name1, params[:fr], {class: css_class, id: @dom_id}) + '<br/>' +
-        date_field_tag(@name2, params[:to], {class: css_class, id: @dom_id2}) +
+        date_field_tag(@name1, params[:fr].try(:strftime, date_format), {class: css_class, id: @dom_id}) + '<br/>' +
+        date_field_tag(@name2, params[:to].try(:strftime, date_format), {class: css_class, id: @dom_id2}) +
         '</div>'
       end
 
