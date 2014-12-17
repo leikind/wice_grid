@@ -677,26 +677,35 @@ with value <tt>:range</tt>:
   end
 
 
-=== Javascript Calendar for Date and DateTime Filters.
+=== Date and DateTime Filters
 
-WiceGrid uses jQuery datepicker[http://jqueryui.com/demos/datepicker/] for Date and DateTime filters by default.
-Because this is part of the standard jQuery codebase, it is not bundled together with the plugin,
-and it is the responsibility of the programmer to include all necessary assets including
-localization files if the application is multilingual.
-
-
-jQuery datepicker does not have any time related controls, and when dealing with DateTime filters, the time value is ignored.
-
-Another option is standard Rails helpers. It's possible to change between the two styles of Date/DateTime
-filters in <tt>config/initializers/wice_grid_config.rb</tt> using constant HELPER_STYLE, or set it on per-column basis:
+WiceGrid provides three ways of selecting dates and times. The default style is
+set in <tt>config/initializers/wice_grid_config.rb</tt> using the HELPER_STYLE
+constant. The available options are <tt>:calendar</tt> (jQueryUI datepicker),
+<tt>:html5</tt> and <tt>:standard</tt>. The style can also be individually
+configured via the <tt>helper_style</tt> option on a Date/DateTime filter
+column configuration:
 
   g.column name: 'Due Date', attribute: 'due_date', helper_style: :calendar do |task|
     task.due_date.to_s(:short) if task.due_date
   end
 
+  g.column name: 'Created', attribute: 'created_at', helper_style: :html5 do |task|
+    task.created_at.to_s(:short)
+  end
+
   g.column name: 'Updated', attribute: 'updated_at', helper_style: :standard do |task|
     task.created_at.to_s(:short)
   end
+
+==== jQueryUI DatePicker
+
+By default WiceGrid uses jQueryUI datepicker[http://jqueryui.com/demos/datepicker/] for Date and DateTime filters.
+Because this is part of the standard jQueryUI codebase, it is not bundled together with the plugin,
+and it is the responsibility of the programmer to include all necessary assets including
+localization files if the application is multilingual.
+
+jQueryUI datepicker does not have any time related controls, and when dealing with DateTime filters, the time value is ignored.
 
 Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ in the configuration file define the format of dates the user will see, as well as the
 format of the string sent in a HTTP parameter. If you change the formats,  make sure that lamdbas defined
@@ -712,7 +721,24 @@ you can always change this range dynamically with the following javascript:
 
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
 
+==== HTML5 input[type=date] DatePicker
 
+In stead of the jQueryUI version of the datepicker some Browsers implement
+their own datepicker which can be used as well without having to rely on
+jQueryUI.
+
+This helper_style actually also lets you use other javascript datepickers as
+well. For example if you want to use the
+bootstrap-datetimepicker[https://github.com/Eonasdan/bootstrap-datetimepicker]
+with a timepicker, you would do this:
+
+  $('input[type=date]').attr("type","text").datetimepicker();
+
+==== Rails standard input fields
+
+Another option is standard Rails helpers for date fields, these are separate
+select fields for years, months and days (also for hour and minute if it is a
+datetime field).
 
 == Detached Filters
 
