@@ -71,9 +71,9 @@ module Wice
       @controller = controller
 
       @relation = klass_or_relation
-      @klass = klass_or_relation.is_a?(ActiveRecord::Relation) ?
-        klass_or_relation.klass :
-        klass_or_relation
+      @klass = @relation.kind_of?(Class) && @relation.ancestors.index(ActiveRecord::Base) ?
+        klass_or_relation :
+        klass_or_relation.klass
 
       unless @klass.kind_of?(Class) && @klass.ancestors.index(ActiveRecord::Base)
         raise WiceGridArgumentError.new("ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base")
