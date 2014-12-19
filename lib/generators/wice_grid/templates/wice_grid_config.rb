@@ -112,6 +112,7 @@ if defined?(Wice::Defaults)
 
   # The default style of the date and datetime helper
   # * <tt>:calendar</tt> - JS calendar
+  # * <tt>:html5</tt> - HTML5 date input field
   # * <tt>:standard</tt> - standard Rails date and datetime helpers
   Wice::Defaults::HELPER_STYLE = :calendar
 

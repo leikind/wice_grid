@@ -179,7 +179,7 @@ focusElementIfNeeded = (focusId) ->
 
 # autoreload for internal filters
 setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
-  $('select.auto-reload', wiceGridContainer).change ->
+  $('select.auto-reload, input.native-datepicker.auto-reload', wiceGridContainer).change ->
     gridProcessor.process()
 
   $('input.auto-reload', wiceGridContainer).keyup (event)->
@@ -203,7 +203,7 @@ setupAutoreloadsForExternalFilters =  ->
   $('.wg-detached-filter').each (index, detachedFilterContainer) ->
     gridProcessor = getGridProcessorForElement(detachedFilterContainer)
     if gridProcessor
-      $('select.auto-reload', detachedFilterContainer).change ->
+      $('select.auto-reload, input.native-datepicker.auto-reload', detachedFilterContainer).change ->
         gridProcessor.process()
 
       $('input.auto-reload', detachedFilterContainer).keyup (event)->

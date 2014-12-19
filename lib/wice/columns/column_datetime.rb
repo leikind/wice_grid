@@ -47,6 +47,16 @@ module Wice
         '</div>'
       end
 
+
+      def render_html5_filter_internal(params) #:nodoc:
+        css_class = 'form-control input-sm native-datepicker ' + (auto_reload ? 'auto-reload' : '')
+        date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
+        '<div class="date-filter">' +
+        date_field_tag(@name1, params[:fr].try(:strftime, date_format), {class: css_class, id: @dom_id}) + '<br/>' +
+        date_field_tag(@name2, params[:to].try(:strftime, date_format), {class: css_class, id: @dom_id2}) +
+        '</div>'
+      end
+
       def render_calendar_filter_internal(params) #:nodoc:
 
         calendar_data_from = prepare_data_for_calendar(
@@ -80,7 +90,10 @@ module Wice
         if helper_style == :standard
           prepare_for_standard_filter
           render_standard_filter_internal(params)
-        else
+        elsif helper_style == :html5
+          prepare_for_calendar_filter
+          render_html5_filter_internal(params)
+        else # :calendar
           prepare_for_calendar_filter
           render_calendar_filter_internal(params)
         end
