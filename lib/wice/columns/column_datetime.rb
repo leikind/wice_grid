@@ -15,11 +15,13 @@ module Wice
         options[:id] = options[:name].gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
       end
 
-      @@datetime_chunk_names = %w(year month day hour minute)
+      def chunk_names
+        %w(year month day hour minute)
+      end
 
       def prepare_for_standard_filter #:nodoc:
         x = lambda{|sym|
-          @@datetime_chunk_names.collect{|datetime_chunk_name|
+          chunk_names.map{|datetime_chunk_name|
             triple = form_parameter_name_id_and_query(sym => {datetime_chunk_name => ''})
             [triple[0], triple[3]]
           }
@@ -122,12 +124,12 @@ module Wice
         conditions = [[]]
         if opts[:fr]
           conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} >= ? "
-          conditions << opts[:fr].to_date
+          conditions << opts[:fr]
         end
 
         if opts[:to]
           conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} < ? "
-          conditions << (opts[:to].to_date + 1)
+          conditions << (opts[:to])
         end
 
         return false if conditions.size == 1
