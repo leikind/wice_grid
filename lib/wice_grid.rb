@@ -304,13 +304,15 @@ module Wice
       form_ar_options
       @klass.unscoped do
         @resultset = if self.output_csv? || all_record_mode?
-          @relation.
+          relation = @relation.
             includes(@ar_options[:include]).
             joins(   @ar_options[:joins]).
             order(   @ar_options[:order]).
             group(   @ar_options[:group]).
             where(   @ar_options[:conditions])
-
+          relation = add_references relation
+          
+          relation
         else
           # p @ar_options
           relation = @relation.
