@@ -101,7 +101,7 @@ if defined?(Wice::Defaults)
 
   # Hide the "show all" link if the number of all records is more than...
   # set to nil to shows it always
-  Wice::Defaults::HIDE_ALL_LINK_FROM = 500
+  Wice::Defaults::HIDE_ALL_LINK_FROM = nil
 
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
