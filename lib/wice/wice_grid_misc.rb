@@ -95,14 +95,16 @@ module Wice
   module ConfigurationProvider #:nodoc:
     class << self
 
-      def value_for(key) #:nodoc:
+      def value_for(key, strict: true) #:nodoc:
         if Wice::Defaults.const_defined?(key)
           Wice::Defaults.const_get(key)
         else
-          raise WiceGridMissingConfigurationConstantException.new("Could not find constant #{key} in the configuration file!" +
-              " It is possible that the version of WiceGrid you are using is newer than the installed configuration file in config/initializers. " +
-              "Constant Wice::Defaults::#{key} is missing  and you need to add it manually to wice_grid_config.rb or run the generator task=:\n" +
-              "   rails g wice_grid:install")
+          if strict
+            raise WiceGridMissingConfigurationConstantException.new("Could not find constant #{key} in the configuration file!" +
+                " It is possible that the version of WiceGrid you are using is newer than the installed configuration file in config/initializers. " +
+                "Constant Wice::Defaults::#{key} is missing  and you need to add it manually to wice_grid_config.rb or run the generator task=:\n" +
+                "   rails g wice_grid:install")
+          end # else nil
         end
       end
 

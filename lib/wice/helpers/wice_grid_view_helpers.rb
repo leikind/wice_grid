@@ -700,12 +700,18 @@ module Wice
       else
         parameters << ["#{grid.name}[pp]", collection_total_entries]
 
+        show_all_records_link = allow_showing_all_records && collection_total_entries > collection.length
+
+        if show_all_records_link && limit = Wice::ConfigurationProvider.value_for(:HIDE_ALL_LINK_FROM, strict: false)
+          show_all_records_link = limit > collection_total_entries
+        end
+
         "#{first}-#{last} / #{collection_total_entries} " +
-          if (! allow_showing_all_records) || collection_total_entries <= collection.length
-            ''
-          else
+          if show_all_records_link
             res, js = show_all_link(collection_total_entries, parameters, grid.name)
             res
+          else
+            ''
           end
       end +
       if grid.all_record_mode?

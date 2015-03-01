@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '3.4.12'
+  s.version       = '3.4.13'
   s.homepage      = 'https://github.com/leikind/wice_grid'
-  s.date          = '2014-12-31'
+  s.date          = '2015-03-01'
   s.summary       = 'A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters.'
   s.description   = 'A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters.' +
                     'One of the goals of this plugin was to allow the programmer to define the contents of the cell by himself, '  +

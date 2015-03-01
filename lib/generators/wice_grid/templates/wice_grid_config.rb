@@ -92,11 +92,16 @@ if defined?(Wice::Defaults)
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
   #                              Showing All Queries                          #
 
-  # Enable or disable showing all queries (non-paginated table)
+  # Enable or disable showing all records (non-paginated table)
   Wice::Defaults::ALLOW_SHOWING_ALL_QUERIES = true
 
   # If number of all queries is more than this value, the user will be given a warning message
   Wice::Defaults::START_SHOWING_WARNING_FROM = 100
+
+
+  # Hide the "show all" link if the number of all records is more than...
+  # set to nil to shows it always
+  Wice::Defaults::HIDE_ALL_LINK_FROM = 500
 
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
