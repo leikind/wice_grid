@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.date          = '2015-03-01'
   s.summary       = 'A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters.'
   s.description   = 'A Rails grid plugin to create grids with sorting, pagination, and (automatically generated) filters.' +
-                    'One of the goals of this plugin was to allow the programmer to define the contents of the cell by himself, '  +
+                    'One of the goals of this plugin was to allow the programmer to define the contents of the cell on their own, '  +
                     'just like one does when rendering a collection via a simple table (and this is what differentiates WiceGrid ' +
                     'from various scaffolding solutions), but automate implementation of filters, ordering, paginations, CSV '     +
                     'export, and so on. Ruby blocks provide an elegant means for this.'

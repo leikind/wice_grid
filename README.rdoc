@@ -17,7 +17,7 @@ For rails 2 use the +master+ branch:  https://github.com/leikind/wice_grid/tree/
 
 WiceGrid is a Rails grid plugin.
 
-One of the goals of this plugin was to allow the programmer to define the contents of the cell by himself,
+One of the goals of this plugin was to allow the programmer to define the contents of the cell on their own,
 just like one does when rendering a collection via a simple table (and this is what differentiates WiceGrid
 from various scaffolding solutions), but automate implementation of filters, ordering, paginations,
 CSV export, and so on. Ruby blocks provide an elegant means for this.
