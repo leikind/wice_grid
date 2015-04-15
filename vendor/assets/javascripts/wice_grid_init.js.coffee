@@ -250,6 +250,9 @@ setupBulkToggleForActionColumn = (wiceGridContainer) ->
   $('.deselect-all', wiceGridContainer).click ->
     $('.sel input', wiceGridContainer).prop('checked', false).trigger('change')
 
+  $('.wg-select-all', wiceGridContainer).click ->
+    $('.sel input', wiceGridContainer).prop('checked', $(this).prop('checked')).trigger('change')
+
 
 getGridProcessorForElement = (element) ->
   gridName = $(element).data('grid-name')
