@@ -135,7 +135,7 @@ module Wice
     # * <tt>:select_all_buttons</tt> - show/hide buttons 'Select All' and 'Deselect All' in the column header.
     #   The default is +true+.
     # * <tt>:object_property</tt> - a method used to obtain the value for the HTTP parameter. The default is +id+.
-    # * <tt>:html_check_box</tt> - can be used to switch from two images to a real check box. The default is +false+.
+    # * <tt>:html_check_box</tt> - can be used to switch from a real check box to two images. The default is +true+.
     #
     # You can hide a certain action checkbox if you add the usual block to +g.action_column+, just like with the
     # +g.column+ definition. If the block returns +nil+ or +false+ no checkbox will be rendered.
