@@ -151,7 +151,7 @@ module Wice
         html:                {},
         select_all_buttons:  true,
         object_property:     :id,
-        html_check_box:      false,
+        html_check_box:      true,
       }
 
       opts.assert_valid_keys(options.keys)
