@@ -34,6 +34,7 @@ initWiceGrid = ->
     window[globalVarForAllGrids][gridName] = gridProcessor
 
     setupDatepicker()
+    setupBsDatepicker()
     setupSubmitReset wiceGridContainer, gridProcessor
     setupCsvExport wiceGridContainer, gridProcessor
     setupHidingShowingOfFilterRow wiceGridContainer
@@ -60,6 +61,19 @@ moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerH
       theOtherDatepicker.datepicker("setDate", selectedDate)
       theOtherDatepicker.next().next().html  $.datepicker.formatDate(dateFormat, selectedDate)
 
+
+
+setupBsDatepicker = ->
+  if $('.wice-grid-container input:text.check-for-bsdatepicker, .wg-detached-filter input:text.check-for-bsdatepicker').length != 0
+    if !$.datepicker
+      alert 'Seems like you do not have Bootstrap datetimepicker gem (https://github.com/Nerian/bootstrap-datepicker-rails)\ninstalled. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in\nwice_grid_config.rb in order to use standard Rails date helpers'
+  $('.wice-grid-container .date-filter div[id$=_date_placeholder] input:text.check-for-bsdatepicker').each (index, removeLink) ->
+    $(removeLink).datepicker().on 'changeDate', (hello) ->
+      $self = $(hello.currentTarget)
+      if $self.attr('id').split('_').pop() == 'fr'
+        $to = $self.parent().next().find('input:text.check-for-bsdatepicker')
+        if $to.length > 0
+          $to.attr('data-date-start-date', $self.val()).datepicker 'show'
 
 
 # datepicker logic
