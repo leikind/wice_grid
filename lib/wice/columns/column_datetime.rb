@@ -5,6 +5,7 @@ module Wice
 
     class ViewColumnDatetime < ViewColumn #:nodoc:
       include ActionView::Helpers::DateHelper
+      include Wice::BsCalendarHelpers
       include Wice::JsCalendarHelpers
 
 
@@ -59,6 +60,31 @@ module Wice
         '</div>'
       end
 
+      def render_bs_filter_internal(params) #:nodoc:
+        calendar_data_from = prepare_data_for_bscalendar(
+            initial_date: params[:fr],
+            name:         @name1,
+            fire_event:   auto_reload,
+            grid_name:    self.grid.name
+        )
+
+        calendar_data_to = prepare_data_for_bscalendar(
+            initial_date: params[:to],
+            name:         @name2,
+            fire_event:   auto_reload,
+            grid_name:    self.grid.name
+        )
+
+        calendar_data_from.the_other_datepicker_id_to   = calendar_data_to.dom_id
+        calendar_data_to.the_other_datepicker_id_from   = calendar_data_from.dom_id
+
+        html1 = date_calendar_bs calendar_data_from
+
+        html2 = date_calendar_bs calendar_data_to
+
+        %!<div class="date-filter">#{html1}#{html2}</div>!
+      end
+
       def render_calendar_filter_internal(params) #:nodoc:
 
         calendar_data_from = prepare_data_for_calendar(
@@ -95,6 +121,9 @@ module Wice
         elsif helper_style == :html5
           prepare_for_calendar_filter
           render_html5_filter_internal(params)
+        elsif helper_style == :bootstrap
+          prepare_for_calendar_filter
+          render_bs_filter_internal(params)
         else # :calendar
           prepare_for_calendar_filter
           render_calendar_filter_internal(params)
@@ -111,12 +140,10 @@ module Wice
 
 
       def has_auto_reloading_calendar? #:nodoc:
-        auto_reload && helper_style == :calendar
+        auto_reload && [:bootstrap, :calendar].include?(helper_style)
       end
 
     end
-
-
 
     class ConditionsGeneratorColumnDatetime < ConditionsGeneratorColumn  #:nodoc:
 

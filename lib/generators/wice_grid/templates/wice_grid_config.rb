@@ -119,6 +119,7 @@ if defined?(Wice::Defaults)
   # * <tt>:calendar</tt> - JS calendar
   # * <tt>:html5</tt> - HTML5 date input field
   # * <tt>:standard</tt> - standard Rails date and datetime helpers
+  # * <tt>:bootstrap</tt> - Bootstrap datepicker helper
   Wice::Defaults::HELPER_STYLE = :calendar
 
   # Format of the datetime displayed.
@@ -132,6 +133,11 @@ if defined?(Wice::Defaults)
   # Format of the date displayed in jQuery's Datepicker
   # If you change the format, make sure to check if +DATE_PARSER+ can still parse this string.
   Wice::Defaults::DATE_FORMAT_JQUERY     =  "yy-mm-dd"
+
+
+  # Format of the date displayed in Bootstrap's Datepicker
+  # If you change the format, make sure to check if +DATE_PARSER+ can still parse this string.
+  Wice::Defaults::DATE_FORMAT_BOOTSTRAP     =  "yyyy-mm-dd"
 
 
   # With Calendar helpers enabled the parameter sent is the string displayed. This lambda will be given a date string in the

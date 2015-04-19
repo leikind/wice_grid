@@ -61,17 +61,51 @@ moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerH
       theOtherDatepicker.next().next().html  $.datepicker.formatDate(dateFormat, selectedDate)
 
 
+setupDatepicker = ->
+  # check if a javascript datepicker is set
+  whichDatepicker = null
+  if $('.wice-grid-container .date-filter input:hidden, .wg-detached-filter .date-filter .date-filter input:hidden').length != 0
+    whichDatepicker = 'js'
+  else if $('.wice-grid-container input:text[data-provide=datepicker], .wg-detached-filter input:text[data-provide=datepicker]').length != 0
+    whichDatepicker = 'bs'
+
+  if whichDatepicker == 'js'
+    setupJsDatepicker()
+  else if whichDatepicker == 'bs'
+    setupBsDatepicker()
+
+
+setupBsDatepicker = ->
+  # check for bootstrap datepicker
+  unless $.fn.datepicker
+    alert """Seems like you do not have Bootstrap datepicker gem (https://github.com/Nerian/bootstrap-datepicker-rails)
+      installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in
+      wice_grid_config.rb in order to use standard Rails date helpers
+    """
+    return
+
+  $('.wice-grid-container .date-filter div[id$=_date_placeholder] input:text[data-provide=datepicker]').each (index, removeLink) ->
+    $(removeLink).datepicker().on 'hide', (event) ->
+      $self = $(event.currentTarget)
+
+      eventToTriggerOnChange = $self.data('close-calendar-event-name')
+
+      if eventToTriggerOnChange
+        $self.trigger(eventToTriggerOnChange)
+      else if $self.attr('id').split('_').pop() == 'fr'
+        $to = $self.parent().next().find('input:text.check-for-bsdatepicker')
+        if $to.length > 0
+          $to.attr('data-date-start-date', $self.val()).datepicker 'show'
+
 
 # datepicker logic
-setupDatepicker = ->
-  # check if datepicker is loaded
-  if $('.wice-grid-container input.check-for-datepicker[type=hidden], .wg-detached-filter input.check-for-datepicker[type=hidden]').length != 0
-    unless $.datepicker
-      alert """Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)
+setupJsDatepicker = ->
+  # check jquery ui datepickeer
+  unless $.datepicker
+    alert """Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)
         installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in
         wice_grid_config.rb in order to use standard Rails date helpers
       """
-
   # setting up the locale for datepicker
   if locale = $('.wice-grid-container input[type=hidden], .wg-detached-filter input[type=hidden]').data('locale')
     $.datepicker.setDefaults($.datepicker.regional[locale]);
@@ -130,7 +164,7 @@ setupDatepicker = ->
 
         $(that).html(dateText)
         if eventToTriggerOnChange
-         datepickerHiddenField.trigger(eventToTriggerOnChange)
+          datepickerHiddenField.trigger(eventToTriggerOnChange)
 
 
 
