@@ -29,7 +29,7 @@ module Wice
         end
 
         if opts[:to]
-          conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} < ? "
+          conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} <= ? "
           conditions << (opts[:to].to_date + 1)
         end
 
