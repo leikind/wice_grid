@@ -87,7 +87,12 @@ setupBsDatepicker = ->
   $('.wice-grid-container .date-filter div[id$=_date_placeholder] input:text[data-provide=datepicker]').each (index, removeLink) ->
     $(removeLink).datepicker().on 'changeDate', (hello) ->
       $self = $(hello.currentTarget)
-      if $self.attr('id').split('_').pop() == 'fr'
+
+      eventToTriggerOnChange = $self.data('close-calendar-event-name')
+
+      if eventToTriggerOnChange
+        $self.trigger(eventToTriggerOnChange)
+      else if $self.attr('id').split('_').pop() == 'fr'
         $to = $self.parent().next().find('input:text.check-for-bsdatepicker')
         if $to.length > 0
           $to.attr('data-date-start-date', $self.val()).datepicker 'show'
@@ -159,7 +164,7 @@ setupJsDatepicker = ->
 
         $(that).html(dateText)
         if eventToTriggerOnChange
-         datepickerHiddenField.trigger(eventToTriggerOnChange)
+          datepickerHiddenField.trigger(eventToTriggerOnChange)
 
 
 

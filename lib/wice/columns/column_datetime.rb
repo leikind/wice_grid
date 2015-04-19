@@ -61,16 +61,17 @@ module Wice
       end
 
       def render_bs_filter_internal(params) #:nodoc:
-
         calendar_data_from = prepare_data_for_bscalendar(
             initial_date: params[:fr],
             name:         @name1,
+            fire_event:   auto_reload,
             grid_name:    self.grid.name
         )
 
         calendar_data_to = prepare_data_for_bscalendar(
             initial_date: params[:to],
             name:         @name2,
+            fire_event:   auto_reload,
             grid_name:    self.grid.name
         )
 
@@ -139,12 +140,10 @@ module Wice
 
 
       def has_auto_reloading_calendar? #:nodoc:
-        auto_reload && helper_style == :calendar
+        auto_reload && [:bootstrap, :calendar].include?(helper_style)
       end
 
     end
-
-
 
     class ConditionsGeneratorColumnDatetime < ConditionsGeneratorColumn  #:nodoc:
 
