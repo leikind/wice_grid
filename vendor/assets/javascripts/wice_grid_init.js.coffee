@@ -85,7 +85,7 @@ setupBsDatepicker = ->
     return
 
   $('.wice-grid-container .date-filter div[id$=_date_placeholder] input:text[data-provide=datepicker]').each (index, removeLink) ->
-    $(removeLink).datepicker().on 'changeDate', (hello) ->
+    $(removeLink).datepicker().on 'hide', (hello) ->
       $self = $(hello.currentTarget)
 
       eventToTriggerOnChange = $self.data('close-calendar-event-name')
