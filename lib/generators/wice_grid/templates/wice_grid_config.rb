@@ -168,7 +168,11 @@ if defined?(Wice::Defaults)
     if date_string.blank?
       nil
     else
-      Date.parse(date_string)
+      begin
+        Date.parse(date_string)
+      rescue ArgumentError
+        nil
+      end
     end
   }
 
