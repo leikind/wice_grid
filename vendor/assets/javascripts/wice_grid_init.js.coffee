@@ -63,15 +63,15 @@ moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerH
 
 setupDatepicker = ->
   # check if a javascript datepicker is set
-  which_datepicker = null
+  whichDatepicker = null
   if $('.wice-grid-container .date-filter input:hidden, .wg-detached-filter .date-filter .date-filter input:hidden').length != 0
-    which_datepicker = 'js'
+    whichDatepicker = 'js'
   else if $('.wice-grid-container input:text[data-provide=datepicker], .wg-detached-filter input:text[data-provide=datepicker]').length != 0
-    which_datepicker = 'bs'
+    whichDatepicker = 'bs'
 
-  if which_datepicker == 'js'
+  if whichDatepicker == 'js'
     setupJsDatepicker()
-  else if which_datepicker == 'bs'
+  else if whichDatepicker == 'bs'
     setupBsDatepicker()
 
 
@@ -85,8 +85,8 @@ setupBsDatepicker = ->
     return
 
   $('.wice-grid-container .date-filter div[id$=_date_placeholder] input:text[data-provide=datepicker]').each (index, removeLink) ->
-    $(removeLink).datepicker().on 'hide', (hello) ->
-      $self = $(hello.currentTarget)
+    $(removeLink).datepicker().on 'hide', (event) ->
+      $self = $(event.currentTarget)
 
       eventToTriggerOnChange = $self.data('close-calendar-event-name')
 
