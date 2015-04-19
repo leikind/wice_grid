@@ -548,3 +548,42 @@ ja:
     deselect_all: 選択を解除
     expand: 開く
     collapse: 閉じる
+
+it:
+  date:
+    order:
+      - :day
+      - :month
+      - :year
+  wice_grid:
+    show_filter_tooltip: Mostra filtri
+    hide_filter_tooltip: Nascondi filtri
+    csv_export_tooltip: Esporta in CSV
+    filter_tooltip: Filtri
+    reset_filter_tooltip: Cancella
+    boolean_filter_true_label: "si"
+    boolean_filter_false_label: "no"
+    previous_label: «
+    next_label: »
+    date_selector_tooltip_from: Da
+    date_selector_tooltip_to: A
+    negation_checkbox_title: Escludi
+    show_all_records_label: Tutti i risultati
+    show_all_records_tooltip: Mostra tutti i risultati
+    all_queries_warning: Sei sicuro di voler mostrare tutti i risultati?
+    switch_back_to_paginated_mode_label: torna alla vista paginata
+    switch_back_to_paginated_mode_tooltip: Per tornare alla paginazione
+    date_string_tooltip: Clicca per cancellare
+    saved_query_panel_title: Ricerche salvate
+    save_query_button_label: Salva il valore dei filtri
+    saved_query_deletion_confirmation: Sei sicuro?
+    saved_query_deletion_link_title: Cancella la ricerca
+    saved_query_link_title: Carica ricerca
+    validates_uniqueness_error: Una ricerca con questo nome già esiste
+    validates_presence_error: Per favore inserisci il nome per questa ricerca personalizzata
+    query_deleted_message: Ricerca cancellata
+    query_saved_message: Ricerca salvata
+    select_all: Seleziona tutti
+    deselect_all: Deseleziona tutti
+    expand: Espandi
+    collapse: Chiudi
