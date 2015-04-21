@@ -53,7 +53,7 @@ or just view the code: https://github.com/leikind/wice_grid_testbed.
 
 == Requirements
 
-Rails version 3.2.x or newer, jQuery, jQuery Datepicker.
+Rails version 3.2.x or newer, jQuery, jQuery Datepicker or Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails).
 For Rails 3.0.x and 3.1.x versions use version 3.0.4.
 For Rails 2 use version 0.6 (https://github.com/leikind/wice_grid/tree/master).
 
@@ -92,6 +92,7 @@ Require WiceGrid javascript in your js index file:
 
 Make sure that jQuery is loaded.
 If the application uses Date and DateTime filters, you have to install jQuery Datepicker by yourself.
+You can also use Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails).
 
 Here is an example of application.js with everything WiceGrid needs:
 
@@ -679,9 +680,10 @@ with value <tt>:range</tt>:
 
 === Date and DateTime Filters
 
-WiceGrid provides three ways of selecting dates and times. The default style is
+WiceGrid provides four ways of selecting dates and times. The default style is
 set in <tt>config/initializers/wice_grid_config.rb</tt> using the HELPER_STYLE
 constant. The available options are <tt>:calendar</tt> (jQueryUI datepicker),
+<tt>:bootstrap</tt> (Bootstrap datepicker https://github.com/Nerian/bootstrap-datepicker-rails),
 <tt>:html5</tt> and <tt>:standard</tt>. The style can also be individually
 configured via the <tt>helper_style</tt> option on a Date/DateTime filter
 column configuration:
@@ -690,7 +692,7 @@ column configuration:
     task.due_date.to_s(:short) if task.due_date
   end
 
-  g.column name: 'Created', attribute: 'created_at', helper_style: :html5 do |task|
+  g.column name: 'Created', attribute: 'created_at', helper_style: :bootstrap do |task|
     task.created_at.to_s(:short)
   end
 
@@ -721,18 +723,6 @@ you can always change this range dynamically with the following javascript:
 
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
 
-==== HTML5 input[type=date] DatePicker
-
-In stead of the jQueryUI version of the datepicker some Browsers implement
-their own datepicker which can be used as well without having to rely on
-jQueryUI.
-
-This helper_style actually also lets you use other javascript datepickers as
-well. For example if you want to use the
-bootstrap-datetimepicker[https://github.com/Eonasdan/bootstrap-datetimepicker]
-with a timepicker, you would do this:
-
-  $('input[type=date]').attr("type","text").datetimepicker();
 
 ==== Rails standard input fields
 

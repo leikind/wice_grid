@@ -33,18 +33,19 @@ initWiceGrid = ->
 
     window[globalVarForAllGrids][gridName] = gridProcessor
 
-    setupDatepicker()
-    setupSubmitReset wiceGridContainer, gridProcessor
-    setupCsvExport wiceGridContainer, gridProcessor
-    setupHidingShowingOfFilterRow wiceGridContainer
-    setupShowingAllRecords wiceGridContainer, gridProcessor
-    setupMultiSelectToggle wiceGridContainer
+    # setting up stuff for in the context of each grid
+    setupSubmitReset                   wiceGridContainer, gridProcessor
+    setupCsvExport                     wiceGridContainer, gridProcessor
+    setupHidingShowingOfFilterRow      wiceGridContainer
+    setupShowingAllRecords             wiceGridContainer, gridProcessor
+    setupMultiSelectToggle             wiceGridContainer
     setupAutoreloadsForInternalFilters wiceGridContainer, gridProcessor
-    setupBulkToggleForActionColumn wiceGridContainer
+    setupBulkToggleForActionColumn     wiceGridContainer
 
   setupAutoreloadsForExternalFilters()
   setupExternalSubmitReset()
   setupExternalCsvExport()
+  setupDatepicker()
 
   # for all grids on oage because it does not matter which grid it is
   setupMultiSelectToggle $('.wg-detached-filter')
@@ -62,20 +63,13 @@ moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerH
 
 
 setupDatepicker = ->
-  # check if a javascript datepicker is set
-  whichDatepicker = null
   if $('.wice-grid-container .date-filter input:hidden, .wg-detached-filter .date-filter .date-filter input:hidden').length != 0
-    whichDatepicker = 'js'
+    setupJqueryUiDatepicker()
   else if $('.wice-grid-container input:text[data-provide=datepicker], .wg-detached-filter input:text[data-provide=datepicker]').length != 0
-    whichDatepicker = 'bs'
-
-  if whichDatepicker == 'js'
-    setupJsDatepicker()
-  else if whichDatepicker == 'bs'
-    setupBsDatepicker()
+    setupBootstrapDatepicker()
 
 
-setupBsDatepicker = ->
+setupBootstrapDatepicker = ->
   # check for bootstrap datepicker
   unless $.fn.datepicker
     alert """Seems like you do not have Bootstrap datepicker gem (https://github.com/Nerian/bootstrap-datepicker-rails)
@@ -84,13 +78,7 @@ setupBsDatepicker = ->
     """
     return
 
-  $('.wice-grid-container .date-filter div[id$=_date_placeholder] input:text[data-provide=datepicker]').each (index, dateField) ->
-
-    $(dateField).keydown (event) ->
-      if event.keyCode == 13
-        $self = $(event.currentTarget)
-        eventToTriggerOnChange = $self.data('close-calendar-event-name')
-        $(dateField).trigger(eventToTriggerOnChange)
+  $('.wice-grid-container .date-filter input:text[data-provide=datepicker], .wg-detached-filter .date-filter input:text[data-provide=datepicker]').each (index, dateField) ->
 
     $(dateField).datepicker().on 'hide', (event) ->
       $self = $(event.currentTarget)
@@ -105,8 +93,7 @@ setupBsDatepicker = ->
           $to.attr('data-date-start-date', $self.val()).datepicker 'show'
 
 
-# datepicker logic
-setupJsDatepicker = ->
+setupJqueryUiDatepicker = ->
   # check jquery ui datepickeer
   unless $.datepicker
     alert """Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)
@@ -205,7 +192,7 @@ setupSubmitReset = (wiceGridContainer, gridProcessor) ->
   $('.reset', wiceGridContainer).click ->
     gridProcessor.reset()
 
-  $('.wg-filter-row input[type=text]', wiceGridContainer).keydown (event) ->
+  $('.wg-filter-row input[type=text], .wg-filter-row input:text[data-provide=datepicker]', wiceGridContainer).keydown (event) ->
     if event.keyCode == 13
       event.preventDefault()
       gridProcessor.process()
@@ -334,7 +321,7 @@ setupExternalSubmitReset =  ->
   $('.wg-detached-filter').each (index, detachedFilterContainer) ->
     gridProcessor = getGridProcessorForElement(detachedFilterContainer)
     if gridProcessor
-      $('input[type=text]', this).keydown (event) ->
+      $('input[type=text], input:text[data-provide=datepicker]', this).keydown (event) ->
         if event.keyCode == 13
           gridProcessor.process()
           event.preventDefault()
