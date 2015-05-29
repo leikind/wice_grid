@@ -54,7 +54,7 @@ module Wice
       def render_html5_filter_internal(params) #:nodoc:
         css_class = 'form-control input-sm native-datepicker ' + (auto_reload ? 'auto-reload' : '')
         date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
-        '<div class="date-filter">' +
+        '<div class="date-filter wg-html5-datepicker">' +
         date_field_tag(@name1, params[:fr].try(:strftime, date_format), {class: css_class, id: @dom_id}) + '<br/>' +
         date_field_tag(@name2, params[:to].try(:strftime, date_format), {class: css_class, id: @dom_id2}) +
         '</div>'
@@ -82,7 +82,7 @@ module Wice
 
         html2 = date_calendar_bs calendar_data_to
 
-        %!<div class="date-filter">#{html1}#{html2}</div>!
+        %!<div class="date-filter wg-bootstrap-datepicker">#{html1}#{html2}</div>!
       end
 
       def render_calendar_filter_internal(params) #:nodoc:
@@ -110,7 +110,7 @@ module Wice
 
         html2 = date_calendar_jquery calendar_data_to
 
-        %!<div class="date-filter">#{html1}<br/>#{html2}</div>!
+        %!<div class="date-filter wg-jquery-datepicker">#{html1}<br/>#{html2}</div>!
       end
 
 

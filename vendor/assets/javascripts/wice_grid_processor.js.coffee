@@ -128,6 +128,6 @@ class WiceGridProcessor
   this
 
 
-WiceGridProcessor._version = '3.2'
+WiceGridProcessor._version = '3.4'
 
 window['WiceGridProcessor'] = WiceGridProcessor

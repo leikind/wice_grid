@@ -64,9 +64,10 @@ moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerH
 
 
 setupDatepicker = ->
-  if $('.wice-grid-container .date-filter input:hidden, .wg-detached-filter .date-filter .date-filter input:hidden').length != 0
+  if $('.date-filter.wg-jquery-datepicker').length != 0
     setupJqueryUiDatepicker()
-  else if $('.wice-grid-container input:text[data-provide=datepicker], .wg-detached-filter input:text[data-provide=datepicker]').length != 0
+
+  if $('.date-filter.wg-bootstrap-datepicker').length != 0
     setupBootstrapDatepicker()
 
 
@@ -79,7 +80,7 @@ setupBootstrapDatepicker = ->
     """
     return
 
-  $('.wice-grid-container .date-filter input:text[data-provide=datepicker], .wg-detached-filter .date-filter input:text[data-provide=datepicker]').each (index, dateField) ->
+  $('.date-filter.wg-bootstrap-datepicker input:text[data-provide=datepicker]').each (index, dateField) ->
 
     $(dateField).datepicker().on 'hide', (event) ->
       $self = $(event.currentTarget)
@@ -88,10 +89,11 @@ setupBootstrapDatepicker = ->
 
       if eventToTriggerOnChange
         $self.trigger(eventToTriggerOnChange)
+
       else if $self.attr('id').split('_').pop() == 'fr'
         $to = $self.parent().next().find('input:text.check-for-bsdatepicker')
         if $to.length > 0
-          $to.attr('data-date-start-date', $self.val()).datepicker 'show'
+          $to.datepicker 'show'
 
 
 setupJqueryUiDatepicker = ->
@@ -102,11 +104,11 @@ setupJqueryUiDatepicker = ->
         wice_grid_config.rb in order to use standard Rails date helpers
       """
   # setting up the locale for datepicker
-  if locale = $('.wice-grid-container input[type=hidden], .wg-detached-filter input[type=hidden]').data('locale')
+  if locale = $('.date-filter.wg-jquery-datepicker input[type=hidden]').data('locale')
     $.datepicker.setDefaults($.datepicker.regional[locale]);
 
 
-  $('.wice-grid-container .date-label, .wg-detached-filter .date-label').each  (index, removeLink) ->
+  $('.date-filter.wg-jquery-datepicker .date-label').each  (index, removeLink) ->
     datepickerHiddenField  = $('#' + $(removeLink).data('dom-id'))
 
     eventToTriggerOnChange = datepickerHiddenField.data('close-calendar-event-name')
