@@ -22,11 +22,12 @@ initWiceGrid = ->
 
     for filterDeclaration in filterDeclarations
       do (filterDeclaration) ->
-        gridProcessor.register
-          filterName : filterDeclaration.filterName
-          detached    : filterDeclaration.detached
-          templates   : filterDeclaration.declaration.templates
-          ids         : filterDeclaration.declaration.ids
+        if filterDeclaration?
+          gridProcessor.register
+            filterName : filterDeclaration.filterName
+            detached    : filterDeclaration.detached
+            templates   : filterDeclaration.declaration.templates
+            ids         : filterDeclaration.declaration.ids
 
     unless window[globalVarForAllGrids]
       window[globalVarForAllGrids] = {}
