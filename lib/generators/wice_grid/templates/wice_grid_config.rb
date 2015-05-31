@@ -53,7 +53,7 @@ if defined?(Wice::Defaults)
   # when you connect to two databases one of which is MySQL and the other is Postgresql.
   # If the key for an adapter is missing it will fall back to Wice::Defaults::STRING_MATCHING_OPERATOR
   Wice::Defaults::STRING_MATCHING_OPERATORS = {
-    'ActiveRecord::ConnectionAdapters::MysqlAdapter' => 'LIKE',
+    'ActiveRecord::ConnectionAdapters::MysqlAdapter'      => 'LIKE',
     'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
   }
 
@@ -98,10 +98,14 @@ if defined?(Wice::Defaults)
   # If number of all queries is more than this value, the user will be given a warning message
   Wice::Defaults::START_SHOWING_WARNING_FROM = 100
 
-
   # Hide the "show all" link if the number of all records is more than...
-  # set to nil to shows it always
-  Wice::Defaults::HIDE_ALL_LINK_FROM = nil
+  # Force-resets back to pagination starting from this value.
+  # Set to nil to always show it
+  Wice::Defaults::SHOW_ALL_ALLOWED_UP_TO = nil
+
+  #
+  # set to nil to skip the check
+  Wice::Defaults::SWITCH_BACK_TO_PAGINATION_FROM = nil
 
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

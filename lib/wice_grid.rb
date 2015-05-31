@@ -148,18 +148,17 @@ module Wice
       @status = HashWithIndifferentAccess.new
 
       if @options[:order]
-        @options[:order] = @options[:order].to_s
+        @options[:order]           = @options[:order].to_s
         @options[:order_direction] = @options[:order_direction].to_s
 
-        @status[:order_direction] = @options[:order_direction]
-        @status[:order] = @options[:order]
+        @status[:order_direction]  = @options[:order_direction]
+        @status[:order]            = @options[:order]
 
       end
-      @status[:total_entries] = @options[:total_entries]
-      @status[:per_page] = @options[:per_page]
-      @status[:page] = @options[:page]
-      @status[:conditions] = @options[:conditions]
-      @status[:f] = @options[:f]
+      @status[:per_page]      = @options[:per_page]
+      @status[:page]          = @options[:page]
+      @status[:conditions]    = @options[:conditions]
+      @status[:f]             = @options[:f]
 
       process_loading_query
       process_params
@@ -284,9 +283,17 @@ module Wice
       @ar_options[:group]   = @options[:group]
 
       if self.output_html?
-        @ar_options[:per_page] = @status[:per_page]
-        @ar_options[:page] = @status[:page]
-        @ar_options[:total_entries] = @status[:total_entries] if @status[:total_entries]
+        @ar_options[:per_page]      = @status[:per_page]
+        @ar_options[:page]          = @status[:page]
+
+        if (show_all_limit = Wice::ConfigurationProvider.value_for(:SHOW_ALL_ALLOWED_UP_TO, strict: false)) && all_record_mode?
+          if do_count > show_all_limit # force-reset SHOW-ALL to pagination
+            @status[:pp] = nil
+          else
+            # no resetting
+          end
+        end
+
       end
 
     end
@@ -312,7 +319,7 @@ module Wice
             group(   @ar_options[:group]).
             where(   @ar_options[:conditions])
           relation = add_references relation
-          
+
           relation
         else
           # p @ar_options
@@ -419,6 +426,10 @@ module Wice
 
     def count  #:nodoc:
       form_ar_options(skip_ordering: true, forget_generated_options: true)
+      do_count
+    end
+
+    def do_count
       @relation.count(
         conditions: @ar_options[:conditions],
         joins:      @ar_options[:joins],

@@ -617,11 +617,11 @@ module Wice
       html = pagination_info(grid, allow_showing_all_records)
 
       paginate(grid.resultset,
-        :theme         => 'wice_grid',
-        :param_name    => "#{grid.name}[page]",
-        :params        => extra_request_parameters,
-        :inner_window  => 4,
-        :outer_window  => 2
+        theme:         'wice_grid',
+        param_name:    "#{grid.name}[page]",
+        params:        extra_request_parameters,
+        inner_window:  4,
+        outer_window:  2
       ) +
         (' <div class="pagination_status">' + html + '</div>').html_safe
     end
@@ -633,10 +633,10 @@ module Wice
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? message : nil
 
       html = content_tag(:a, NlMessage['show_all_records_label'],
-        :href=>"#",
+        :href  => "#",
         :title => NlMessage['show_all_records_tooltip'],
         :class => 'wg-show-all-link',
-        'data-grid-state' => parameters.to_json,
+        'data-grid-state'     => parameters.to_json,
         'data-confim-message' => confirmation
       )
 
@@ -648,7 +648,7 @@ module Wice
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
 
       content_tag(:a, NlMessage['switch_back_to_paginated_mode_label'],
-        :href=>"#",
+        :href  =>"#",
         :title => NlMessage['switch_back_to_paginated_mode_tooltip'],
         :class => 'wg-back-to-pagination-link',
         'data-grid-state' => parameters.to_json
@@ -656,7 +656,6 @@ module Wice
     end
 
     def pagination_info(grid, allow_showing_all_records)  #:nodoc:
-
 
       collection = grid.resultset
 
@@ -683,11 +682,11 @@ module Wice
 
       else
         collection_total_entries = collection.total_count
-        current_page = grid.ar_options[:page].to_i
-        per_page = grid.ar_options[:per_page].to_i
+        current_page             = grid.ar_options[:page].to_i
+        per_page                 = grid.ar_options[:per_page].to_i
 
         first = collection.offset_value + 1
-        last = collection.last_page? ? collection.total_count : collection.offset_value + collection.limit_value
+        last  = collection.last_page? ? collection.total_count : collection.offset_value + collection.limit_value
 
         num_pages = collection.num_pages
       end
@@ -702,7 +701,7 @@ module Wice
 
         show_all_records_link = allow_showing_all_records && collection_total_entries > collection.length
 
-        if show_all_records_link && limit = Wice::ConfigurationProvider.value_for(:HIDE_ALL_LINK_FROM, strict: false)
+        if show_all_records_link && limit = Wice::ConfigurationProvider.value_for(:SHOW_ALL_ALLOWED_UP_TO, strict: false)
           show_all_records_link = limit > collection_total_entries
         end
 
