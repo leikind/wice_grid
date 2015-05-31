@@ -88,17 +88,17 @@ module Wice
       end
 
       options = {
-        :allow_showing_all_records     => Defaults::ALLOW_SHOWING_ALL_QUERIES,
-        :class                         => nil,
-        :extra_request_parameters      => {},
-        :header_tr_html                => {},
-        :hide_reset_button             => false,
-        :hide_submit_button            => false,
-        :hide_csv_button               => false,
-        :show_filters                  => Defaults::SHOW_FILTER,
-        :sorting_dependant_row_cycling => false,
-        :html                          => {},
-        :upper_pagination_panel        => Defaults::SHOW_UPPER_PAGINATION_PANEL
+        allow_showing_all_records:      Defaults::ALLOW_SHOWING_ALL_RECORDS,
+        class:                          nil,
+        extra_request_parameters:       {},
+        header_tr_html:                 {},
+        hide_reset_button:              false,
+        hide_submit_button:             false,
+        hide_csv_button:                false,
+        show_filters:                   Defaults::SHOW_FILTER,
+        sorting_dependant_row_cycling:  false,
+        html:                           {},
+        upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL
       }
 
       opts.assert_valid_keys(options.keys)

@@ -1057,7 +1057,7 @@ all current sorting and filtering parameters as hidden fields. Just include
 
 It is possible to switch to the All Records mode clicking on link "show all" in the bottom right corner.
 This functionality should be used with care. To turn this mode off for all grid instances,
-change constant +ALLOW_SHOWING_ALL_QUERIES+ in <tt>config/initializers/wice_grid_config.rb</tt> to
+change constant +ALLOW_SHOWING_ALL_RECORDS+ in <tt>config/initializers/wice_grid_config.rb</tt> to
 +false+. To do so for a specific grid, use initializer parameter <tt>:allow_showing_all_records</tt>.
 
 Configuration constant +START_SHOWING_WARNING_FROM+ sets the threshold number of all records after
