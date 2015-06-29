@@ -38,6 +38,8 @@ module Wice
     # * <tt>:hide_csv_button</tt> - a boolean value which defines whether the default Export To CSV button
     #   should be rendered. Useful when using a custom Export To CSV button.
     #   By default it is false.
+    # * <tt>:no_rightmost_column</tt> - controls whether the right-most, often empty column is rendered
+    #   or not. Setting this to true or false, overrides settings which are a result of using other options.
     #   Please read README for more insights.
     #
     # The block contains definitions of grid columns using the +column+ method sent to the object yielded into
@@ -95,6 +97,7 @@ module Wice
         hide_reset_button:              false,
         hide_submit_button:             false,
         hide_csv_button:                false,
+        no_rightmost_column:            nil,
         show_filters:                   Defaults::SHOW_FILTER,
         sorting_dependant_row_cycling:  false,
         html:                           {},
@@ -257,7 +260,10 @@ module Wice
       end
 
       no_rightmost_column = true if reuse_last_column_for_filter_buttons
-
+      if !options[:no_rightmost_column].nil?
+        no_rightmost_column = options[:no_rightmost_column]
+      end
+      
       number_of_columns = rendering.number_of_columns(:in_html)
       number_of_columns -= 1 if no_rightmost_column
 
