@@ -241,7 +241,7 @@ module Wice
       # Ruby 1.9.x
       grid.output_buffer.force_encoding('UTF-8') if grid.output_buffer.respond_to?(:force_encoding)
 
-      grid.output_buffer << %!<div class="wice-grid-container" data-grid-name="#{grid.name}" id="#{grid.name}"><div id="#{grid.name}_title">!
+      grid.output_buffer << %!<div class="wice-grid-container table-responsive" data-grid-name="#{grid.name}" id="#{grid.name}"><div id="#{grid.name}_title">!
       grid.output_buffer << content_tag(:h3, grid.saved_query.name) if grid.saved_query
       grid.output_buffer << "</div><table #{tag_options(table_html_attrs, true)}>"
       grid.output_buffer << "<caption>#{rendering.kaption}</caption>" if rendering.kaption
