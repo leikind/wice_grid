@@ -93,13 +93,21 @@ Make sure that jQuery is loaded.
 If the application uses Date and DateTime filters, you have to install jQuery Datepicker by yourself.
 You can also use Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails).
 
-Here is an example of application.js with everything WiceGrid needs:
-
+Here are an examples of application.js with everything WiceGrid needs:
+  #Using jquery.ui.datepicker
   //= require jquery
   //= require jquery_ujs
   //= require jquery-ui
   //= require wice_grid
   //= require jquery.ui.datepicker
+  //= require_tree .
+
+  #Using Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails).
+  //= require jquery
+  //= require jquery_ujs
+  //= require jquery-ui
+  //= require wice_grid
+  //= require bootstrap-datepicker
   //= require_tree .
 
 WiceGrid provides some very basic styles, not specifying exactly how the table should look like,
@@ -1302,4 +1310,3 @@ only under certain circumstances:
 
 Icons used by the plugin are courtesy of Mark James, the creator of the SILK icon set -
 http://www.famfamfam.com/lab/icons/silk/.
-
