@@ -7,9 +7,6 @@ Examples online:: http://wicegrid.herokuapp.com
 Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 
-The main supported branch is +rails3+. Rails 3 and Rails 4 are supported.
-
-For rails 2 use the +master+ branch:  https://github.com/leikind/wice_grid/tree/master
 
 
 == Intro
@@ -25,20 +22,22 @@ CSV export, and so on. Ruby blocks provide an elegant means for this.
 WiceGrid builds the call to the ActiveRecord layer for you and creates a table view with the results
 of the call including:
 
-* paging
+* pagination
 * sortable columns
 * filtering by multiple columns
 * CSV export
-* saving queries
+* saved queries
 
-All working nicely together. Filters are added automatically according to the type of the underlying DB column.
+Filters are added automatically according to the type of the underlying DB column.
 Filtering by more than one column at the same time is possible.
 More than one such grid can appear on a page, and manipulations with one grid do not have any impact on the other.
 
 WiceGrid does not take a collection as an input, it works directly with ActiveRecord.
 
 WiceGrid does not use XHR calls to reload itself, instead simple GET requests are used for this,
-nevertheless, all other page parameters are respected and preserved.
+nevertheless, all other page parameters are respected and preserved. WiceGrid works well with Turbolinks.
+
+
 WiceGrid views do not contain forms so you can include it in your own forms.
 
 WiceGrid is known to work with MySQL and Postgres.
@@ -50,15 +49,23 @@ can browse online: http://wicegrid.herokuapp.com,
 or just view the code: https://github.com/leikind/wice_grid_testbed.
 
 
-== Requirements
+== Requirements and Rails versions
 
-Rails version 3.2.x or newer, jQuery, jQuery Datepicker or Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails).
-For Rails 3.0.x and 3.1.x versions use version 3.0.4.
-For Rails 2 use version 0.6 (https://github.com/leikind/wice_grid/tree/master).
+For rails 2 use version 0.6 in {the master branch}[https://github.com/leikind/wice_grid/tree/master].
+That branch is hardly supported.
 
-WARNING: Since 3.2.pre2 WiceGrid is not compatible with <tt>will_paginate</tt> because internally it
-uses <tt>kaminari</tt> for pagination, and <tt>kaminari</tt> is not compatible with <tt>will_paginate</tt>!
+The main supported branch is +rails3+. Latest Rails 3.2.x and Rails 4.x.x are supported in this branch.
 
+If you need to use the plugin in with Rails 3.0.x and 3.1.x versions, please use WiceGrid version 3.0.4.
+
+WiceGrid relies on jQuery.
+
+If you need a JS Datepicker, WiceGrid supports jQuery Datepicker or {Bootstrap
+Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails], so you might need one of those. See section
+Installation for details on how to use datepickers.
+
+WARNING: Since 3.2.pre2 WiceGrid is not compatible with +will_paginate+ because internally it
+uses +kaminari+ for pagination, and +kaminari+ is not compatible with +will_paginate+!
 
 
 == Installation
@@ -67,15 +74,15 @@ Add the following to your Gemfile:
 
   gem "wice_grid", '3.5.0pre1'
 
-and run the <tt>bundle</tt> command.
+and run the +bundle+ command.
 
 Run the generator:
 
    rails g wice_grid:install
 
-This adds the config file <tt>wice_grid_config.rb</tt> to <tt>config/initializers/</tt>, the locale file
-<tt>wice_grid.yml</tt> to <tt>config/locales/</tt>, and the styles file
-<tt>wice_grid.css.scss</tt> to <tt>app/assets/stylesheets/</tt>.
+This adds the config file +wice_grid_config.rb+ to +config/initializers/+, the locale file
++wice_grid.yml+ to +config/locales/+, and the styles file
++wice_grid.css.scss+ to +app/assets/stylesheets/+.
 
 Require WiceGrid javascript in your js index file:
 
@@ -83,9 +90,9 @@ Require WiceGrid javascript in your js index file:
 
 Make sure that jQuery is loaded.
 If the application uses Date and DateTime filters, you have to install jQuery Datepicker by yourself.
-You can also use Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails).
+You can also use {Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails].
 
-Here are an examples of <tt>application.js</tt> if jquery.ui.datepicker is used:
+Here are an examples of +application.js+ if jquery.ui.datepicker is used:
   //= require jquery
   //= require jquery_ujs
   //= require jquery-ui
@@ -93,7 +100,7 @@ Here are an examples of <tt>application.js</tt> if jquery.ui.datepicker is used:
   //= require jquery.ui.datepicker
   //= require_tree .
 
-Here are <tt>application.js</tt> if Bootstrap Datepicker (https://github.com/Nerian/bootstrap-datepicker-rails) is used:
+Here is +application.js+ if {Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails] is used:
   //= require jquery
   //= require jquery_ujs
   //= require jquery-ui
@@ -148,7 +155,7 @@ defines everything related to a column in the resulting view table including col
 filtering, the content of the column cells, etc.
 The return value of the block is the table cell content.
 
-Column names are defined with parameter <tt>:name</tt>:
+Column names are defined with parameter +:name+:
 
   <%= grid(@tasks_grid) do |g|
 
@@ -174,7 +181,7 @@ Column names are defined with parameter <tt>:name</tt>:
   end -%>
 
 To add filtering and ordering, declare to which column in the underlying database
-table(s) the view column corresponds using parameter <tt>:attribute</tt> :
+table(s) the view column corresponds using parameter +:attribute+:
 
   <%= grid(@tasks_grid) do |g|
 
@@ -206,7 +213,7 @@ for column +Archived+ a dropdown filter will be created with options 'Yes', 'No'
 and for the integer ID two short text fields are
 added which can contain the numeric range (more than, less than).
 
-It is important to remember that <tt>:attribute</tt> is the name of the database column,
+It is important to remember that +:attribute+ is the name of the database column,
 not a model attribute.
 Of course, all database columns have corresponding model attributes,
 but not all model attributes map to columns in the same table with the same name.
@@ -245,7 +252,7 @@ where the block contains just a call to the same attribute declared by :attribut
 
 In this case +name+ will be used as the method name to send to the ActiveRecord instance.
 
-If only ordering is needed, and no filter, we can turn off filters using <tt>:filter</tt> :
+If only ordering is needed, and no filter, we can turn off filters using +:filter+ :
 
   g.column name: 'ID', attribute: 'id', filter: false
 
@@ -255,7 +262,7 @@ If no ordering links are needed, use <tt>ordering: false</tt>:
 
 It is important to understand that it is up to the developer to make sure that the value
 returned by a column block (the content of a cell) corresponds to the underlying database
-column specified by  <tt>:attribute</tt> (and <tt>:model</tt> discussed below).
+column specified by  +:attribute+ (and +:model+ discussed below).
 
 
 == Rendering filter panel
@@ -263,12 +270,12 @@ column specified by  <tt>:attribute</tt> (and <tt>:model</tt> discussed below).
 The filter panel can be shown and hidden clicking the icon with binoculars.
 
 The way the filter panel is shown after the page is loaded is controlled via parameter
-<tt>:show_filters</tt> of the <tt>grid</tt> helper.
++:show_filters+ of the +grid+ helper.
 Possible values are:
 
-* <tt>:when_filtered</tt> - the filter is shown when the current table is the result of filtering
-* <tt>:always</tt> - always show the filter
-* <tt>:no</tt> - never show the filter
+* +:when_filtered+ - the filter is shown when the current table is the result of filtering
+* +:always+ - always show the filter
+* +:no+ - never show the filter
 
 Example:
 
@@ -296,13 +303,13 @@ setting by clicking the column label, and the order direction:
 
 == Records Per Page
 
-The number of rows per page is set with <tt>:per_page</tt>:
+The number of rows per page is set with +:per_page+:
 
   @tasks_grid = initialize_grid(Task, per_page: 40)
 
 == Conditions
 
-The +initialize_grid+ method supports a <tt>:conditions</tt> parameter which is passed
+The +initialize_grid+ method supports a +:conditions+ parameter which is passed
 on to the underlying ActiveRecord, so it can be in any format processable by ActiveRecord:
 
   @tasks_grid = initialize_grid(Task,
@@ -336,7 +343,7 @@ Alternatively, instead of a Class object as the first parameter, you can use  Ac
 
 Please note that though all queries inside of WiceGrid are run without the default
 scope, if you use an ActiveRecord::Relation instance to initialize grid, it will
-already include the default scope. Thus you might consider using <tt>unscoped</tt>:
+already include the default scope. Thus you might consider using +unscoped+:
 
   @tasks_grid = initialize_grid(
     Task.unscoped.where(archived: false, projects: {active: true}).joins(:project)
@@ -344,7 +351,7 @@ already include the default scope. Thus you might consider using <tt>unscoped</t
 
 == Queries with join tables
 
-WiceGrid also supports ActiveRecord's <tt>:joins</tt> and <tt>:include</tt>.
+WiceGrid also supports ActiveRecord's +:joins+ and +:include+.
 
   @products_grid = initialize_grid(Product,
     include:  :category,
@@ -680,11 +687,14 @@ with value <tt>:range</tt>:
 
 WiceGrid provides four ways of selecting dates and times. The default style is
 set in <tt>config/initializers/wice_grid_config.rb</tt> using the HELPER_STYLE
-constant. The available options are <tt>:calendar</tt> (jQueryUI datepicker),
-<tt>:bootstrap</tt> (Bootstrap datepicker https://github.com/Nerian/bootstrap-datepicker-rails),
-<tt>:html5</tt> and <tt>:standard</tt>. The style can also be individually
-configured via the <tt>helper_style</tt> option on a Date/DateTime filter
-column configuration:
+constant. The available options are
+
+* <tt>:calendar</tt> (jQuery UI datepicker),
+* <tt>:bootstrap</tt> {Bootstrap datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails],
+* <tt>:standard</tt>.
+
+The style can also be individually configured via the <tt>helper_style</tt> option on a
+Date/DateTime filter column configuration:
 
   g.column name: 'Due Date', attribute: 'due_date', helper_style: :calendar do |task|
     task.due_date.to_s(:short) if task.due_date
@@ -698,14 +708,16 @@ column configuration:
     task.created_at.to_s(:short)
   end
 
-==== jQueryUI DatePicker
 
-By default WiceGrid uses jQueryUI datepicker[http://jqueryui.com/demos/datepicker/] for Date and DateTime filters.
-Because this is part of the standard jQueryUI codebase, it is not bundled together with the plugin,
+
+==== jQuery UI DatePicker <tt>(HELPER_STYLE = :calendar)</tt>
+
+By default WiceGrid uses jQuery UI datepicker[http://jqueryui.com/demos/datepicker/] for Date and DateTime filters.
+Because this is part of the standard jQuery UI codebase, it is not bundled together with the plugin,
 and it is the responsibility of the programmer to include all necessary assets including
 localization files if the application is multilingual.
 
-jQueryUI datepicker does not have any time related controls, and when dealing with DateTime filters, the time value is ignored.
+jQuery UI datepicker does not have any time related controls, and when dealing with DateTime filters, the time value is ignored.
 
 Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ in the configuration file define the format of dates the user will see, as well as the
 format of the string sent in a HTTP parameter. If you change the formats,  make sure that lamdbas defined
@@ -722,7 +734,11 @@ you can always change this range dynamically with the following javascript:
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
 
 
-==== Rails standard input fields
+==== jQuery UI DatePicker <tt>(HELPER_STYLE = :bootstrap)</tt>
+
+WiceGrid also supports {Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails].
+
+==== Rails standard input fields <tt>(HELPER_STYLE = :standard)</tt>
 
 Another option is standard Rails helpers for date fields, these are separate
 select fields for years, months and days (also for hour and minute if it is a
@@ -1299,5 +1315,11 @@ only under certain circumstances:
 
 == Icons
 
-Icons used by the plugin are courtesy of Mark James, the creator of the SILK icon set -
-http://www.famfamfam.com/lab/icons/silk/.
+Icons used by the plugin are courtesy of Mark James, the creator of {the SILK icon set}[http://www.famfamfam.com/lab/icons/silk/].
+
+== Bug reports
+
+The author of the plugins welcomes any contribution.
+Please follow {these guidelines}[https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question] when submitting a bug report.
+
+
