@@ -3,7 +3,7 @@ module WiceGrid #:nodoc:
     class InstallGenerator < Rails::Generators::Base #:nodoc:
 
       desc 'Copy WiceGrid wice_grid_config.rb to config/initializers, ' +
-        'wice_grid.yml to config/locales/, and wice_grid.css.scss to assets/stylesheets'
+        'wice_grid.yml to config/locales/, and wice_grid.scss to assets/stylesheets'
 
       source_root File.expand_path('../templates', __FILE__)
 
@@ -12,7 +12,7 @@ module WiceGrid #:nodoc:
 
         copy_file 'wice_grid.yml',  'config/locales/wice_grid.yml'
 
-        copy_file 'wice_grid.css.scss',  'app/assets/stylesheets/wice_grid.css.scss'
+        copy_file 'wice_grid.scss',  'app/assets/stylesheets/wice_grid.scss'
 
       end
     end

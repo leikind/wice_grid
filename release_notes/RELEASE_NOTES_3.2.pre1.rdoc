@@ -22,7 +22,7 @@
 
 5. Paths to various images used by WiceGrid have been removed from the configuration file
    and are now defined only in the css file. Developers are encouraged to modify
-   <tt>wice_grid.css.scss</tt> to use other images and to change the styles in general.
+   <tt>wice_grid.scss</tt> to use other images and to change the styles in general.
 
 6. The markup and css classes that WiceGrid generates have changed, and CSS for older versions
    of WiceGrid might not work. Inspect the source code.
@@ -79,4 +79,3 @@
     +wg-external-csv-export-button+:
 
       <button class="wg-external-csv-export-button" data-grid-name="grid">Export To CSV</button>
-
