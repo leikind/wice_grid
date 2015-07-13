@@ -80,9 +80,9 @@ Run the generator:
 
    rails g wice_grid:install
 
-This adds the config file +wice_grid_config.rb+ to +config/initializers/+, the locale file
-+wice_grid.yml+ to +config/locales/+, and the styles file
-+wice_grid.css.scss+ to +app/assets/stylesheets/+.
+This adds the config file <tt>wice_grid_config.rb</tt> to <tt>config/initializers/</tt>, the locale file
+<tt>wice_grid.yml</tt> to <tt>config/locales/</tt>, and the styles file
+<tt>wice_grid.scss</tt> to <tt>app/assets/stylesheets/</tt>.
 
 Require WiceGrid javascript in your js index file:
 
