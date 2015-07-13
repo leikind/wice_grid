@@ -58,8 +58,8 @@ es:
     csv_export_tooltip: Exportar a CSV
     filter_tooltip: Filtro
     reset_filter_tooltip: Reset
-    boolean_filter_true_label: "si"
-    boolean_filter_false_label: "no"
+    boolean_filter_true_label: "Si"
+    boolean_filter_false_label: "No"
     previous_label: «
     next_label: »
     # Title of the icon clicking on which will show the calendar to set the FROM date.
@@ -73,7 +73,7 @@ es:
     # tooltip for the link to switch to show all records
     show_all_records_tooltip: Mostrar todos los registros
     # Warning message shown when the user wants to switch to all-records mode
-    all_queries_warning: Estas seguro que quieres mostrar todos los registros?
+    all_queries_warning: ¿Estás seguro que quieres mostrar todos los registros?
     # link to paginated view
     switch_back_to_paginated_mode_label: volver a la vista paginada
     # tooltip for the link to paginated view
@@ -82,11 +82,11 @@ es:
     date_string_tooltip: Click en borrar
     saved_query_panel_title: Consultas salvadas
     save_query_button_label: Salvar el estado de los filtros
-    saved_query_deletion_confirmation: Estas seguro?
+    saved_query_deletion_confirmation: ¿Estás seguro?
     saved_query_deletion_link_title: Borrar consulta
     saved_query_link_title: Cargar consulta
     validates_uniqueness_error: Una consulta con este nombre ya existe
-    validates_presence_error: Porfavor tramita el nombre la consulta modificada
+    validates_presence_error: Por favor tramita el nombre la consulta modificada
     query_deleted_message: Salvada la consulta borrado.
     query_saved_message: Consulta salvada.
     select_all: Selecciona todo

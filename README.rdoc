@@ -99,7 +99,7 @@ Here is an example of application.js with everything WiceGrid needs:
   //= require jquery_ujs
   //= require jquery-ui
   //= require wice_grid
-  //= require jquery.ui.datepicker
+  //= require bootstrap-datepicker
   //= require_tree .
 
 WiceGrid provides some very basic styles, not specifying exactly how the table should look like,
@@ -1302,4 +1302,3 @@ only under certain circumstances:
 
 Icons used by the plugin are courtesy of Mark James, the creator of the SILK icon set -
 http://www.famfamfam.com/lab/icons/silk/.
-
