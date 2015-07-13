@@ -123,7 +123,7 @@ Controller:
 
 It is also possible to use an  ActiveRecord::Relation instance as the first argument:
 
-  @tasks_grid = initialize_grid(Task.where(:active => true))
+  @tasks_grid = initialize_grid(Task.where(active: true))
 
 View:
 
@@ -654,7 +654,7 @@ and not as strings. Value +null+ is transformed into SQL condition +IS NULL+, an
 
 Thus, if in a filter defined by
 
-     :custom_filter => {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
+     custom_filter: {'No' => 'null', 'Yes' => 'not null', '1' => 1, '2' => '2', '3' => '3'}
 
 values '1', '2' and 'No' are selected (in a multi-select mode),  this will result in the following SQL:
 
@@ -791,8 +791,8 @@ Then, use <tt>grid_filter(grid, :some_filter_name)</tt> to render filters:
 Finally, use <tt>render_grid(@grid)</tt> to actually output the grid table.
 
 
-Using custom submit and reset buttons together with <tt>:hide_submit_button => true</tt> and
-<tt>:hide_reset_button => true</tt> allows to completely get rid of the default filter row and the default
+Using custom submit and reset buttons together with <tt>hide_submit_button: true</tt> and
+<tt>hide_reset_button: true</tt> allows to completely get rid of the default filter row and the default
 icons (see section 'Submit/Reset Buttons').
 
 
@@ -831,8 +831,8 @@ The structure of these two classes is as follows:
 
     def yield_declaration_of_column_filter
       {
-        :templates => [...],
-        :ids       => [...]
+        templates:  [...],
+        ids:        [...]
       }
     end
   end
@@ -865,8 +865,8 @@ whose value is the name of the grid:
       <button class="wg-external-submit-button" data-grid-name="grid">Submit</button>
       <button class="wg-external-reset-button" data-grid-name="grid">Reset</button>
 
-To hide the default icons use <tt>:hide_submit_button => true</tt> and
-<tt>:hide_reset_button => true</tt> in the +grid+ helper.
+To hide the default icons use <tt>hide_submit_button: true</tt> and
+<tt>hide_reset_button: true</tt> in the +grid+ helper.
 
 
 
@@ -924,7 +924,7 @@ string output whole the second is a hash of HTML attributes to be added for the
 
   g.column  do |portal_application|
     css_class = portal_application.public? ? 'public' : 'private'
-    [portal_application.name, {:class => css_class}]
+    [portal_application.name, {class: css_class}]
   end
 
 For adding classes/styles to <tt><TR></tt> use special clause  +row_attributes+ ,
@@ -933,7 +933,7 @@ similar to +column+, only returning a hash:
     <%= grid(@versions_grid) do |g|
       g.row_attributes do |version|
         if version.in_production?
-          {:style => 'background-color: rgb(255, 255, 204);'}
+          {style: 'background-color: rgb(255, 255, 204);'}
         end
       end
 
@@ -965,8 +965,8 @@ This works similar to +row_attributes+, by adding blocks +after_row+, +before_ro
       content_tag(:tr,
         content_tag(:td,
           'Last row',
-        :colspan => 10),
-       :class => 'last_row')
+        colspan: 10),
+       class: 'last_row')
     end
 
     .......
@@ -1002,7 +1002,7 @@ There are two alternative ways to do the same, submitting a string to +blank_sla
 
 Or a partial:
 
-  g.blank_slate :partial => "partial_name"
+  g.blank_slate partial: "partial_name"
 
 
 == Action Column
@@ -1012,7 +1012,7 @@ for example, deleting selected records. Please note that +action_column+ only cr
 'Select All' and 'Deselect All' buttons, and the form itself as well as processing the parameters should be
 taken care of by the application code.
 
-  <%= grid(@tasks_grid, :show_filters => :always) do |g|
+  <%= grid(@tasks_grid, show_filters: :always) do |g|
 
     ...
 
@@ -1029,7 +1029,7 @@ By default the name of the HTTP parameter follows pattern <tt>"#{grid_name}[#{pa
 You can hide a certain action checkbox if you add the usual block to +g.action_column+, just like with the
 +g.column+ definition. If the block returns +nil+ or +false+ no checkbox will be rendered.
 
-  <%= grid(@tasks_grid, :show_filters => :always) do |g|
+  <%= grid(@tasks_grid, show_filters: :always) do |g|
 
     ...
 
@@ -1058,11 +1058,11 @@ WiceGrid allows to keep the status of the grid with all the filtering and sortin
 all current sorting and filtering parameters as hidden fields. Just include
 <tt>dump_filter_parameters_as_hidden_fields(@grid)</tt> inside your form, and the newly rendered grid will keep ordering and filtering.
 
-  <% form_tag('', :method => :get) do %>
+  <% form_tag('', method: :get) do %>
     <%= dump_filter_parameters_as_hidden_fields(@tasks_grid) %>
     <%= select_tag 'archived',
        options_for_select([['View active tasks', 0], ['View archived tasks', 1]], @archived ? 1 : 0),
-      :onchange => 'this.form.submit()' %>
+      onchange: 'this.form.submit()' %>
   <% end -%>
 
 

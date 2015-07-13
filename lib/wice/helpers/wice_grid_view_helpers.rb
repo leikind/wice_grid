@@ -1,4 +1,3 @@
-# encoding: UTF-8
 module Wice
   module GridViewHelper
 
@@ -8,7 +7,7 @@ module Wice
     #
     # The second parameter is a hash of options:
     # * <tt>:html</tt> - a hash of HTML attributes to be included into the <tt>table</tt> tag.
-    # * <tt>:class</tt> - a shortcut for <tt>:html => {:class => 'css_class'}</tt>
+    # * <tt>:class</tt> - a shortcut for <tt>html: {class: 'css_class'}</tt>
     # * <tt>:header_tr_html</tt> - a hash of HTML attributes to be included into the first <tt>tr</tt> tag
     #   (or two first <tt>tr</tt>'s if the filter row is present).
     # * <tt>:show_filters</tt> - defines when the filter is shown. Possible values are:
@@ -45,13 +44,13 @@ module Wice
     # first block is called for cells of the first column for each row (each ActiveRecord instance), the
     # second block is called for cells of the second column, and so on. See the example:
     #
-    #   <%= grid(@accounts_grid, :html => {:class => 'grid_style', :id => 'accounts_grid'}, :header_tr_html => {:class => 'grid_headers'}) do |g|
+    #   <%= grid(@accounts_grid, html: {class: 'grid_style', id: 'accounts_grid'}, header_tr_html: {class: 'grid_headers'}) do |g|
     #
-    #     g.column :name => 'Username', :attribute => 'username' do |account|
+    #     g.column name: 'Username', attribute: 'username' do |account|
     #       account.username
     #     end
     #
-    #     g.column :name => 'application_account.field.identity_id'._, :attribute => 'firstname', :model =>  Person do |account|
+    #     g.column name: 'application_account.field.identity_id'._, attribute: 'firstname', model:  Person do |account|
     #       link_to(account.identity.name, identity_path(account.identity))
     #     end
     #
@@ -248,7 +247,7 @@ module Wice
       grid.output_buffer << "<caption>#{rendering.kaption}</caption>" if rendering.kaption
       grid.output_buffer << "<thead>"
 
-      no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?) ? true: false
+      no_filters_at_all = (options[:show_filters] == :no || rendering.no_filter_needed?)
 
       if no_filters_at_all
         no_rightmost_column = no_filter_row = no_filters_at_all
@@ -314,7 +313,7 @@ module Wice
           col_link = link_to(
             column_name,
             rendering.column_link(column, direction, params, options[:extra_request_parameters]),
-            :class => link_style)
+            class: link_style)
 
           grid.output_buffer << content_tag(:th, col_link, opts)
 
@@ -382,7 +381,7 @@ module Wice
             end
           end
           unless no_rightmost_column
-            grid.output_buffer << content_tag(:th, reset_submit_buttons(options, grid, rendering), :class => 'filter_icons' )
+            grid.output_buffer << content_tag(:th, reset_submit_buttons(options, grid, rendering), class: 'filter_icons' )
           end
           grid.output_buffer << '</tr>'
         end
@@ -439,10 +438,10 @@ module Wice
         row_attributes = rendering.get_row_attributes(ar)
 
         if sorting_dependant_row_cycling
-          cycle_class = cycle('odd', 'even', :name => grid.name) if cell_value_of_the_ordered_column != previous_cell_value_of_the_ordered_column
+          cycle_class = cycle('odd', 'even', name: grid.name) if cell_value_of_the_ordered_column != previous_cell_value_of_the_ordered_column
           previous_cell_value_of_the_ordered_column = cell_value_of_the_ordered_column
         else
-          cycle_class = cycle('odd', 'even', :name => grid.name)
+          cycle_class = cycle('odd', 'even', name: grid.name)
         end
 
         Wice::WgHash.add_or_append_class_value!(row_attributes, cycle_class)
@@ -468,8 +467,8 @@ module Wice
 
       link_for_export      = rendering.link_for_export(controller, 'csv', options[:extra_request_parameters])
 
-      parameter_name_for_query_loading = {grid.name => {:q => ''}}.to_query
-      parameter_name_for_focus = {grid.name => {:foc => ''}}.to_query
+      parameter_name_for_query_loading = {grid.name => {q: ''}}.to_query
+      parameter_name_for_focus = {grid.name => {foc: ''}}.to_query
 
       processor_initializer_arguments = [base_link_for_filter, base_link_for_show_all_records,
         link_for_export, parameter_name_for_query_loading, parameter_name_for_focus, Rails.env]
@@ -523,15 +522,15 @@ module Wice
       else
 
         content_tag(:div, '',
-          :title => NlMessage['hide_filter_tooltip'],
-          :style => styles[0],
-          :class => 'clickable  wg-hide-filter'
+          title: NlMessage['hide_filter_tooltip'],
+          style: styles[0],
+          class: 'clickable  wg-hide-filter'
         ) +
 
         content_tag(:div, '',
-          :title => NlMessage['show_filter_tooltip'],
-          :style => styles[1],
-          :class => 'clickable  wg-show-filter'
+          title: NlMessage['show_filter_tooltip'],
+          style: styles[1],
+          class: 'clickable  wg-show-filter'
         )
 
       end
@@ -542,9 +541,9 @@ module Wice
         ''
       else
         content_tag(:div, '',
-          :title => NlMessage['filter_tooltip'],
-          :id => grid.name + '_submit_grid_icon',
-          :class => 'submit clickable'
+          title: NlMessage['filter_tooltip'],
+          id:    grid.name + '_submit_grid_icon',
+          class: 'submit clickable'
         )
       end.html_safe + ' ' +
       if options[:hide_reset_button]
@@ -552,9 +551,9 @@ module Wice
       else
 
         content_tag(:div, '',
-          :title => NlMessage['reset_filter_tooltip'],
-          :id => grid.name + '_reset_grid_icon',
-          :class => 'reset clickable'
+          title: NlMessage['reset_filter_tooltip'],
+          id:    grid.name + '_reset_grid_icon',
+          class: 'reset clickable'
         )
       end.html_safe
     end
@@ -576,7 +575,7 @@ module Wice
 
       content_tag :span,
         grid.output_buffer.filter_for(filter_key),
-        :class => "wg-detached-filter #{grid.name}_detached_filter",
+        class: "wg-detached-filter #{grid.name}_detached_filter",
         'data-grid-name' => grid.name
     end
 
@@ -633,9 +632,9 @@ module Wice
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? message : nil
 
       html = content_tag(:a, NlMessage['show_all_records_label'],
-        :href  => "#",
-        :title => NlMessage['show_all_records_tooltip'],
-        :class => 'wg-show-all-link',
+        href:  "#",
+        title: NlMessage['show_all_records_tooltip'],
+        class: 'wg-show-all-link',
         'data-grid-state'     => parameters.to_json,
         'data-confim-message' => confirmation
       )
@@ -648,9 +647,9 @@ module Wice
       parameters = parameters.reject{|k, v| k == pagination_override_parameter_name}
 
       content_tag(:a, NlMessage['switch_back_to_paginated_mode_label'],
-        :href  =>"#",
-        :title => NlMessage['switch_back_to_paginated_mode_tooltip'],
-        :class => 'wg-back-to-pagination-link',
+        href:   "#",
+        title:  NlMessage['switch_back_to_paginated_mode_tooltip'],
+        class:  'wg-back-to-pagination-link',
         'data-grid-state' => parameters.to_json
       )
     end

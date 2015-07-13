@@ -1,1 +1,1 @@
-<li <%if page.current?%>class="active"<%end%>><%= link_to page, url, {:remote => remote, :rel => page.next? ? 'next' : page.prev? ? 'prev' : nil} %></li>
+<li <%if page.current?%>class="active"<%end%>><%= link_to page, url, {remote: remote, rel: page.next? ? 'next' : page.prev? ? 'prev' : nil} %></li>

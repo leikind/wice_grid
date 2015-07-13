@@ -1,4 +1,3 @@
-# encoding: UTF-8
 module Wice #:nodoc:
   module Columns #:nodoc:
     COLUMN_PROCESSOR_INDEX = ActiveSupport::OrderedHash[ #:nodoc:

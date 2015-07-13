@@ -1,4 +1,3 @@
-# encoding: UTF-8
 module Wice
 
   class GridOutputBuffer < String #:nodoc:
