@@ -1,9 +1,9 @@
-3.4.10
+# 3.4.10
 
 bug fixes
 better support for :group
 
-3.4.9
+# 3.4.9
 
 better support for Asset Pipeline
 
@@ -11,13 +11,13 @@ bugfixes
 
 dropped support for Ruby 1.8
 
-3.4.8
+# 3.4.8
 
 a friendlier exception message when a constant is missing in wice_grid_config.rb
 
 bugfixes
 
-3.4.6
+# 3.4.6
 
 Better support for Turbolinks
 
@@ -25,21 +25,21 @@ Better support for ActiveRelation #references
 
 variable Wice::Defaults::PAGE_METHOD_NAME
 
-3.4.5
+# 3.4.5
 
 Support for ActiveRelation #references
 
 bugfixes
 
-3.4.4
+# 3.4.4
 
 bugfixes
 
-3.4.3
+# 3.4.3
 
 bugfixes
 
-3.4.2
+# 3.4.2
 
 External columns processors
 
@@ -47,15 +47,15 @@ Operators '<','>','<=','>=','=' in the integer column
 
 Bugfixes
 
-3.4.1
+# 3.4.1
 
 Support for Bootstrap 3
 
-3.4.0
+# 3.4.0
 
 Support for Rails 4
 
-3.3.0
+# 3.3.0
 
 The with_paginated_resultset callback receives an ActiveRelation object, not a lambda
 
@@ -76,7 +76,7 @@ Bug fixed: extra_request_parameters not propagating to the pagination panel
 
 Documentation improvements
 
-3.2.2
+# 3.2.2
 
 improvement of the javascript calendar control: if the FROM field is set to a value after TO, TO is set to the value of FROM.
 Vice versa: if the TO field is set to a value before FROM, FROM is set to the value of TO
@@ -93,7 +93,7 @@ helpers filter_and_order_state_as_hash(grid) and filter_state_as_hash(grid)
 
 the with_paginated_resultset callback receives an ActiveRelation object, not a lambda
 
-3.2.1
+# 3.2.1
 
 action_column can now also take a block. If the block returns a falsy value, no checkbox will be rendered.
 
@@ -105,7 +105,7 @@ The default filter for numeric columns has been replaced by a simple one field f
 New column parameter :filter_type allows to load custom alternative filters.
 The old numeric range filter can still be used by specifying filter_type: :range. See lib/columns/column_processor_index.rb for the list of available filters.
 
-3.2.0
+# 3.2.0
 
 Fixes:
 https://github.com/leikind/wice_grid/issues/83
@@ -122,24 +122,24 @@ New column parameter :filter_type allows to load custom alternative filters. The
 See lib/columns/column_processor_index.rb</tt> for the list of available filters.
 
 
-3.0.4
+# 3.0.4
 
 bugfixes
 
-3.0.3
+# 3.0.3
 
 bugxixes
 
-3.0.2
+# 3.0.2
 
 bugxixes
 
-3.0.1
+# 3.0.1
 
-Fixed the "Cannot modify SafeBuffer in place" problem and thus Rails 3.0.8 and 3.0.9
+Fixed the "Cannot modify SafeBuffer in place" problem and thus Rails # 3.0.8 and # 3.0.9
 Support for ActiveRecord::Relation
 
-3.0.0
+# 3.0.0
 
 Rails 3 support
 
@@ -175,7 +175,7 @@ the selected records.
 using merge_conditions to merge conditions :)
 
 WiceGrid is now compatible with the new Rails XSS behavior which
-will be the default in Rails 3.0 and can be used in Rails 2.3.5
+will be the default in Rails # 3.0 and can be used in Rails 2.3.5
 using the rails_xss plugin.
 Read http://github.com/nzkoz/rails_xss for more
 

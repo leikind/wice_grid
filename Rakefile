@@ -1,15 +1,15 @@
-require "bundler/gem_tasks"
+require 'bundler/gem_tasks'
 require 'rdoc/task'
+require 'yard'
+require 'yard/rake/yardoc_task'
 
-task default: :rdoc
+task default: :doc
 
 desc 'Generate documentation for the wice_grid plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'WiceGrid'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README.md')
-  rdoc.rdoc_files.include('SAVED_QUERIES_HOWTO.rdoc')
-  rdoc.rdoc_files.include('CHANGELOG')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+YARD::Rake::YardocTask.new(:doc) do |t|
+  OTHER_PATHS = %w()
+
+  t.files   = ['lib/**/*.rb', OTHER_PATHS]
+  t.options = %w(--main=README.md --file CHANGELOG.md,SAVED_QUERIES_HOWTO.md,MIT-LICENSE)
+  t.stats_options = ['--list-undoc']
 end

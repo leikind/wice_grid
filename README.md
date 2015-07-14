@@ -1,4 +1,5 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
+[![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 # WiceGrid
 
@@ -1342,4 +1343,10 @@ Icons used by the plugin are courtesy of Mark James, the creator of [the SILK ic
 ## Bug reports
 
 The author of the plugins welcomes any contribution.
-Please follow [these guidelines]{https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question} when submitting a bug report.
+Please follow [these guidelines](https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question) when submitting a bug report.
+
+## Changelog
+{file:CHANGELOG.md}
+
+## License
+{file:MIT-LICENSE}
