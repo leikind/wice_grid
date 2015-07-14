@@ -11,6 +11,10 @@
     }
   }
 
+  thead th select {
+    display: inline-block;
+  }
+
   a.date-label {text-decoration: none;}
   a.date-label:hover {text-decoration: line-through;}
 
