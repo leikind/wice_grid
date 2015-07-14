@@ -3,14 +3,12 @@
 # WiceGrid
 
 - [Intro](#intro)
+  - [Author](#author)
   - [Examples](#examples)
   - [Requirements and Rails versions](#requirements_and_rails_versions)
 - [Installation](#installation)
 - [Basics](#basics)
 
-Author::  "Yuri Leikind" <yuri.leikind at gmail dot com>
-Sources:: https://github.com/leikind/wice_grid/
-Examples online:: http://wicegrid.herokuapp.com
 
 ## Intro
 
@@ -45,6 +43,9 @@ WiceGrid views do not contain forms so you can include it in your own forms.
 WiceGrid is known to work with MySQL and Postgres.
 
 
+### Author
+* Yuri Leikind, yuri.leikind at gmail dot com
+
 ### Examples
 
 This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
@@ -53,21 +54,21 @@ http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind
 
 ### Requirements and Rails versions
 
-For rails 2 use version 0.6 in {the master branch}[https://github.com/leikind/wice_grid/tree/master].
+For rails 2 use version 0.6 in [the master branch](https://github.com/leikind/wice_grid/tree/master).
 That branch is hardly supported.
 
-The main supported branch is +rails3+. Latest Rails 3.2.x and Rails 4.x.x are supported in this branch.
+The main supported branch is `rails3`. Latest Rails 3.2.x and Rails 4.x.x are supported in this branch.
 
 If you need to use the plugin in with Rails 3.0.x and 3.1.x versions, please use WiceGrid version 3.0.4.
 
 WiceGrid relies on jQuery.
 
 If you need a JS Datepicker, WiceGrid supports jQuery Datepicker or
-{Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails], so you might need one of
+[Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails), so you might need one of
 those. See section Installation for details on how to use datepickers.
 
-WARNING: Since 3.2.pre2 WiceGrid is not compatible with +will_paginate+ because internally it uses
-+kaminari+ for pagination, and +kaminari+ is not compatible with +will_paginate+!
+WARNING: Since 3.2.pre2 WiceGrid is not compatible with `will_paginate` because internally it uses
+`kaminari` for pagination, and `kaminari` is not compatible with `will_paginate`!
 
 
 ## Installation
@@ -76,7 +77,7 @@ Add the following to your Gemfile:
 ```
 gem "wice_grid", '3.5.0'
 ```
-and run the +bundle+ command.
+and run the `bundle` command.
 
 Run the generator:
 ```
@@ -95,9 +96,9 @@ Require WiceGrid javascript in your js index file:
 ```
 Make sure jQuery is loaded. If the application uses Date and DateTime filters, you have to install
 jQuery Datepicker by yourself. You can also use
-{Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails].
+[Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails).
 
-Here is an example of +application.js+ if jquery.ui.datepicker is used:
+Here is an example of `application.js` if jquery.ui.datepicker is used:
 ```
 //= require jquery
 //= require jquery_ujs
@@ -106,7 +107,7 @@ Here is an example of +application.js+ if jquery.ui.datepicker is used:
 //= require jquery.ui.datepicker
 //= require_tree .
 ```
-Here is +application.js+ if {Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails] is used:
+Here is `application.js` if [Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails) is used:
 ```  
 //= require jquery
 //= require jquery_ujs
@@ -158,11 +159,11 @@ View:
   end
 end -%>
 ```
-Code <tt>g.column do |task| ... end</tt>
+Code `g.column do |task| ... end`
 defines everything related to a column in the resulting view table including column names, sorting,
 filtering, the content of the column cells, etc. The return value of the block is the table cell content.
 
-Column names are defined with parameter +:name+:
+Column names are defined with parameter `:name`:
 ```
 <%= grid(@tasks_grid) do |g|
 
@@ -188,7 +189,7 @@ Column names are defined with parameter +:name+:
 end -%>
 ```
 To add filtering and ordering, declare to which column in the underlying database table(s) the view
-column corresponds using parameter +:attribute+:
+column corresponds using parameter `:attribute`:
 ```
 <%= grid(@tasks_grid) do |g|
 
@@ -213,13 +214,13 @@ column corresponds using parameter +:attribute+:
   end
 end -%>
 ```
-This will  add sorting links and filters for columns +Username+ and +Active+. The plugin automatically
+This will  add sorting links and filters for columns `Username` and `Active`. The plugin automatically
 creates filters according to the type of the database column. In the above example a text field will be
-created for column Title (title is a string), for column +Archived+ a dropdown filter will be created
+created for column Title (title is a string), for column `Archived` a dropdown filter will be created
 with options 'Yes', 'No', and '--', and for the integer ID two short text fields are added which can
 contain the numeric range (more than, less than).
 
-It is important to remember that +:attribute+ is the name of the database column, not a model attribute.
+It is important to remember that `:attribute` is the name of the database column, not a model attribute.
 Of course, all database columns have corresponding model attributes, but not all model attributes map to
 columns in the same table with the same name.
 
@@ -254,19 +255,19 @@ omitted:
 end -%>
 ```
 
-In this case +name+ will be used as the method name to send to the ActiveRecord instance.
+In this case `name` will be used as the method name to send to the ActiveRecord instance.
 
-If only ordering is needed, and no filter, we can turn off filters using +:filter+ :
+If only ordering is needed, and no filter, we can turn off filters using `:filter` :
 ```
 g.column name: 'ID', attribute: 'id', filter: false
 ```
-If no ordering links are needed, use <tt>ordering: false</tt>:
+If no ordering links are needed, use `ordering: false`:
 ```
 g.column name: 'Added', attribute: 'created_at', ordering: false
 ```
 It is important to understand that it is up to the developer to make sure that the value returned by a
 column block (the content of a cell) corresponds to the underlying database column specified by
-+:attribute+ (and +:model+ discussed below).
+`:attribute` (and `:model` discussed below).
 
 
 ## Rendering filter panel
@@ -274,12 +275,12 @@ column block (the content of a cell) corresponds to the underlying database colu
 The filter panel can be shown and hidden clicking the icon with binoculars.
 
 The way the filter panel is shown after the page is loaded is controlled via parameter
-+:show_filters+ of the +grid+ helper.
+`:show_filters` of the `grid` helper.
 Possible values are:
 
-* +:when_filtered+ - the filter is shown when the current table is the result of filtering
-* +:always+ - always show the filter
-* +:no+ - never show the filter
+* `:when_filtered` - the filter is shown when the current table is the result of filtering
+* `:always` - always show the filter
+* `:no` - never show the filter
 
 Example:
 ```
@@ -291,7 +292,7 @@ Example:
 Filter related icons (filter icon, reset icon, show/hide icon) are placed in the header of the last
 column if it doesn't have any filter or a column name, otherwise an additional table column is added.
 To always place the icons in the additional column, set
-<tt>Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS</tt> to +false+ in the configuration file.
+`Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS` to `false` in the configuration file.
 
 
 ## Initial Ordering
@@ -308,14 +309,14 @@ and the order direction:
 
 ## Records Per Page
 
-The number of rows per page is set with +:per_page+:
+The number of rows per page is set with `:per_page`:
 ```
   @tasks_grid = initialize_grid(Task, per_page: 40)
 ```
 
 ## Conditions
 
-The +initialize_grid+ method supports a +:conditions+ parameter which is passed on to the underlying
+The `initialize_grid` method supports a `:conditions` parameter which is passed on to the underlying
 ActiveRecord, so it can be in any format processable by ActiveRecord:
 ```
   @tasks_grid = initialize_grid(Task,
@@ -349,7 +350,7 @@ Alternatively, instead of a Class object as the first parameter, you can use  Ac
 
 Please note that though all queries inside of WiceGrid are run without the default scope, if you use an
 ActiveRecord::Relation instance to initialize grid, it will already include the default scope. Thus you
-might consider using +unscoped+:
+might consider using `unscoped`:
 ```
   @tasks_grid = initialize_grid(
     Task.unscoped.where(archived: false, projects: {active: true}).joins(:project)
@@ -358,7 +359,7 @@ might consider using +unscoped+:
 
 ## Queries with join tables
 
-WiceGrid also supports ActiveRecord's +:joins+ and +:include+.
+WiceGrid also supports ActiveRecord's `:joins` and `:include`.
 ```
   @products_grid = initialize_grid(Product,
     include:  :category,
@@ -368,7 +369,7 @@ WiceGrid also supports ActiveRecord's +:joins+ and +:include+.
 ```
 
 Note that if we want to order initially by a column from a joined table we have to specify the table and
-the column name with the sql dot notation, that is, +products.name+.
+the column name with the sql dot notation, that is, `products.name`.
 
 To show columns of joined tables in the view table, the ActiveRecord model class name has to be specified,
 that corresponds to the joined table:
@@ -385,13 +386,13 @@ that corresponds to the joined table:
 ```
 
 Please note that the blockless definition of the column only works with columns from the main table and it
-won't work with columns with <tt>:model</tt>
+won't work with columns with `:model`
 
 ## Joined associations referring to the same table
 
 In case there are two joined associations both referring to the same table, ActiveRecord constructs a query
 where the second join provides an alias for the joined table. To enable WiceGrid to order and filter by
-columns belonging to different associations but originating from the same table, set <tt>:table_alias</tt>
+columns belonging to different associations but originating from the same table, set `:table_alias`
 to this alias:
 
 Model:
@@ -426,7 +427,7 @@ View:
 ## More than one grid on a page
 
 It is possible to use more that one grid on a page, each with its own state. To do so, you must specify the
-name of the grid in +initialize_grid+ using parameter <tt>:name</tt>.
+name of the grid in `initialize_grid` using parameter `:name`.
 
 The name serves as the base name for HTTP parameters, DOM IDs, etc, so it is important that all grids on a
 page have different names. The default name is 'grid'.
@@ -440,11 +441,11 @@ The name can only contain alphanumeric characters.
 ## Custom Ordering
 
 It is possible to change the way results are ordered injecting a chunk of SQL code, for example, use
-<tt>ORDER BY INET_ATON(ip_address)</tt> instead of <tt>ORDER BY ip_address</tt>.
+`ORDER BY INET_ATON(ip_address)` instead of `ORDER BY ip_address`.
 
-To do so, provide parameter <tt>:custom_order</tt> in the initialization of the grid with a hash where
+To do so, provide parameter `:custom_order` in the initialization of the grid with a hash where
 keys are fully qualified names of database columns, and values the required chunks of SQL to use in the
-<tt>ORDER BY</tt> clause.
+`ORDER BY` clause.
 
 For example:
 ```
@@ -472,7 +473,7 @@ Values can also be Proc objects. The parameter supplied to such a Proc object is
 
 ## Filters
 
-Each column filter type is supported by a <tt>column processor</tt>. Each <tt>column processor</tt> is
+Each column filter type is supported by a `column processor`. Each `column processor` is
 responsible for
 
 * generating HTML and supporting Javascript for the filter, input fields, dropdowns, javascript calendars, etc
@@ -482,11 +483,11 @@ By default column filters depend on the type of the underlying database column.
 
 You can override these defaults in two ways:
 
-* defining a custom filter with <tt>:custom_filter</tt>. Read more about it section "Custom dropdown filters".
-* overriding the <tt>column processor</tt> type with <tt>:filter_type</tt>.
+* defining a custom filter with `:custom_filter`. Read more about it section "Custom dropdown filters".
+* overriding the `column processor` type with `:filter_type`.
 
 Which Column Processor is instantiated for which data types is defined in file
-<tt>lib/wice/columns/column_processor_index.rb</tt>:
+`lib/wice/columns/column_processor_index.rb`:
 
 ```
   module Wice
@@ -509,9 +510,9 @@ Which Column Processor is instantiated for which data types is defined in file
   end
 ```
 
-A good example for using <tt>:filter_type</tt> to change th default is numeric columns. By default
-<tt>'column_integer'</tt> is instantiated for <tt>integer</tt> columns, and it renders one input field.
-But it is also possible to use another Column Processor called <tt>'column_range'</tt> which renders two
+A good example for using `:filter_type` to change th default is numeric columns. By default
+`'column_integer'` is instantiated for `integer` columns, and it renders one input field.
+But it is also possible to use another Column Processor called `'column_range'` which renders two
 input fields and searches for values in the given the range instead of searching for values which equal
 the given search term.
 
@@ -519,12 +520,12 @@ It also possible to define and use your own column processors outside of the plu
 Read more about this in section "Defining your own external filter processors".
 
 
-##= Custom dropdown filters
+### Custom dropdown filters
 
 It is possible to construct custom dropdown filters. A custom dropdown filter is essentially a dropdown
 list.
 
-Depending on the value of <tt>column</tt> parameter<tt>:custom_filter</tt> different modes are available:
+Depending on the value of `column` parameter`:custom_filter` different modes are available:
 
 
 #### Array of two-element arrays or a hash
@@ -550,8 +551,8 @@ the value of the select option and as its label:
 
 #### :auto
 
-<tt>:auto</tt> - a powerful option which populates the dropdown list with all unique values of the column
-specified by <tt>:attribute</tt> and <tt>:model</tt>, if present.
+`:auto` - a powerful option which populates the dropdown list with all unique values of the column
+specified by `:attribute` and `:model`, if present.
 ```
   g.column name: 'Status', attribute: 'status', custom_filter: :auto
 ```
@@ -572,7 +573,7 @@ For example, if there is a column:
     task.project.name if task.project
   end
 ```
-adding <tt>:custom_filter</tt> like this:
+adding `:custom_filter` like this:
 ```
   g.column name: 'Project Name', attribute: 'name', model: 'Project',
            custom_filter: Project.find(:all).map{|pr| [pr.name, pr.name]} do |task|
@@ -580,11 +581,11 @@ adding <tt>:custom_filter</tt> like this:
   end
 ```
 is bad style and can fail, because the resulting condition will compare the name of the project,
-<tt>projects.name</tt> to a string, and in some databases it is possible that different records
+`projects.name` to a string, and in some databases it is possible that different records
 (projects in our example) have the same name.
 
 To use filter with foreign keys, it is advised to change the declaration of the column from
-<tt>projects.name</tt>, to <tt>tasks.project_id</tt>, and build the dropdown with foreign keys as values:
+`projects.name`, to `tasks.project_id`, and build the dropdown with foreign keys as values:
 
 ```
   g.column name: 'Project Name', attribute: 'tasks.project_id',
@@ -593,7 +594,7 @@ To use filter with foreign keys, it is advised to change the declaration of the 
   end
 ```
 However, this will break the ordering of the column - the column will be ordered by the integer foreign
-key. To fix this, we can override the ordering using <tt>:custom_order</tt>:
+key. To fix this, we can override the ordering using `:custom_order`:
 ```
   @tasks_grid = initialize_grid(Task,
     include: :project,
@@ -606,28 +607,28 @@ key. To fix this, we can override the ordering using <tt>:custom_order</tt>:
 #### Any other symbol (method name) or an array of symbols (method names)
 
 
-For one symbol (different from <tt>:auto</tt>) the dropdown list is populated by all unique values returned
+For one symbol (different from `:auto`) the dropdown list is populated by all unique values returned
 by the method with this name sent to <em>all</em> ActiveRecord objects throughout all pages.
 
 The conditions set up by the user are ignored, that is, the records used are all those found on all pages
 without any filters active.
 
 For an array of symbols, the first method name is sent to the ActiveRecord object if it responds to this
-method, the second method name is sent to the returned value unless it is +nil+, and so on. In other
+method, the second method name is sent to the returned value unless it is `nil`, and so on. In other
 words, a single symbol mode is the same as an array of symbols where the array contains just one element.
-
+```
   g.column name: 'Version', attribute: 'expected_version_id', custom_filter: [:expected_version, :to_option] do |task|
     task.expected_version.name if task.expected_version
   end
+```
 
-
-There are two important differences from <tt>:auto</tt>:
+There are two important differences from `:auto`:
 
 1. The  method does not have to be a field in the result set, it is just some  value computed in the method after the database call and ActiveRecord instantiation.
-2. Filtering by any option of such a custom filter will bring a non-empty list, unlike with <tt>:auto</tt>.
+2. Filtering by any option of such a custom filter will bring a non-empty list, unlike with `:auto`.
 
 
-This mode has one major drawback - this mode requires an additional query without +offset+ and +limit+
+This mode has one major drawback - this mode requires an additional query without `offset` and `limit`
 clauses to instantiate _all_ ActiveRecord objects, and performance-wise it brings all the advantages of
 pagination to nothing. Thus, memory- and performance-wise this can be really bad for some queries and
 tables and should be used with care.
@@ -665,9 +666,9 @@ label, and the key - for the value:
 
 #### Special treatment of values 'null' and 'not null'
 
-Values +null+ and +not null+ in a generated custom filter are treated specially, as  SQL +null+ statement
-and not as strings. Value +null+ is transformed into SQL condition +IS NULL+, and +not null+ into
-<tt>IS NOT NULL</tt>.
+Values `null` and `not null` in a generated custom filter are treated specially, as  SQL `null` statement
+and not as strings. Value `null` is transformed into SQL condition `IS NULL`, and `not null` into
+`IS NOT NULL`.
 
 Thus, if in a filter defined by
 ```
@@ -681,7 +682,7 @@ values '1', '2' and 'No' are selected (in a multi-select mode),  this will resul
 #### Multiple selection
 
 By default it is possible for any dropdown list to switch between single and multiple selection modes.
-To only allow single selection use <tt>:allow_multiple_selection</tt>:
+To only allow single selection use `:allow_multiple_selection`:
 
 ```
   g.column name: 'Expected in version', attribute: 'expected_version_id',
@@ -694,23 +695,23 @@ To only allow single selection use <tt>:allow_multiple_selection</tt>:
 
 Before version 3.2.1 the filter used for numeric columns was a range filter with two limits. Beginning
 with version  3.2.1 the default is a direct comparison filter with one input field. The old range filter
-can still be loaded using parameter <tt>:filter_type</tt> with value <tt>:range</tt>:
-
+can still be loaded using parameter `:filter_type` with value `:range`:
+```
   g.column filter_type: :range do |task|
     ...
   end
-
+```
 
 ### Date and DateTime Filters
 
 WiceGrid provides four ways of selecting dates and times. The default style is set in
-<tt>config/initializers/wice_grid_config.rb</tt> using the HELPER_STYLE constant. The available options are
+`config/initializers/wice_grid_config.rb` using the HELPER_STYLE constant. The available options are
 
-* <tt>:calendar</tt> (jQuery UI datepicker),
-* <tt>:bootstrap</tt> {Bootstrap datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails],
-* <tt>:standard</tt>.
+* `:calendar` (jQuery UI datepicker),
+* `:bootstrap` [Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails),
+* `:standard`.
 
-The style can also be individually configured via the <tt>helper_style</tt> option on a Date/DateTime
+The style can also be individually configured via the `helper_style` option on a Date/DateTime
 filter column configuration:
 ```
   g.column name: 'Due Date', attribute: 'due_date', helper_style: :calendar do |task|
@@ -727,7 +728,7 @@ filter column configuration:
 ```
 
 
-#### jQuery UI DatePicker <tt>(HELPER_STYLE = :calendar)</tt>
+#### jQuery UI DatePicker `(HELPER_STYLE = :calendar)`
 
 By default WiceGrid uses jQuery UI datepicker[http://jqueryui.com/demos/datepicker/] for Date and DateTime
 filters. Because this is part of the standard jQuery UI codebase, it is not bundled together with the
@@ -737,27 +738,27 @@ localization files if the application is multilingual.
 jQuery UI datepicker does not have any time related controls, and when dealing with DateTime filters, the
 time value is ignored.
 
-Constants +DATE_FORMAT+ and +DATETIME_FORMAT+ in the configuration file define the format of dates the
+Constants `DATE_FORMAT` and `DATETIME_FORMAT` in the configuration file define the format of dates the
 user will see, as well as the format of the string sent in a HTTP parameter. If you change the formats,
-make sure that lamdbas defined in +DATETIME_PARSER+ and +DATE_PARSER+ return valid DateTime and Date
+make sure that lamdbas defined in `DATETIME_PARSER` and `DATE_PARSER` return valid DateTime and Date
 objects.
 
-jQuery +datepicker+ uses a different format flavor, therefore there is an additional constant
-+DATE_FORMAT_JQUERY+. While +DATE_FORMAT_JQUERY+ is fed to +datepicker+, +DATE_FORMAT+ is still used
-for presenting initial date values in filters, so make sure that +DATE_FORMAT_JQUERY+ and +DATE_FORMAT+
+jQuery `datepicker` uses a different format flavor, therefore there is an additional constant
+`DATE_FORMAT_JQUERY`. While `DATE_FORMAT_JQUERY` is fed to `datepicker`, `DATE_FORMAT` is still used
+for presenting initial date values in filters, so make sure that `DATE_FORMAT_JQUERY` and `DATE_FORMAT`
 result in an identical date representation.
 
-Constant +DATEPICKER_YEAR_RANGE+ defines the range of years in the Datepicker year dropdown. Alternatively,
+Constant `DATEPICKER_YEAR_RANGE` defines the range of years in the Datepicker year dropdown. Alternatively,
 you can always change this range dynamically with the following javascript:
 
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
 
 
-#### jQuery UI DatePicker <tt>(HELPER_STYLE = :bootstrap)</tt>
+#### jQuery UI DatePicker `(HELPER_STYLE = :bootstrap)`
 
-WiceGrid also supports {Bootstrap Datepicker}[https://github.com/Nerian/bootstrap-datepicker-rails].
+WiceGrid also supports [Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails).
 
-#### Rails standard input fields <tt>(HELPER_STYLE = :standard)</tt>
+#### Rails standard input fields `(HELPER_STYLE = :standard)`
 
 Another option is standard Rails helpers for date fields, these are separate select fields for years,
 months and days (also for hour and minute if it is a datetime field).
@@ -768,9 +769,9 @@ Filters can also be detached from the grid table and placed anywhere on page.
 
 This is a 3-step process.
 
-First, define the grid with helper +define_grid+ instead of +grid+. Everything should be done the same way
-as with +grid+, but every column which will have an external filter, add
-<tt>detach_with_id: :some_filter_name+</tt> in the column definition. The value of +:detach_with_id+ is an
+First, define the grid with helper `define_grid` instead of `grid`. Everything should be done the same way
+as with `grid`, but every column which will have an external filter, add
+`detach_with_id: :some_filter_name`` in the column definition. The value of `:detach_with_id` is an
 arbitrary string or a symbol value which will be used later to identify the filter.
 ```
   <%= define_grid(@tasks_grid, show_filters: :always) do |g|
@@ -790,7 +791,7 @@ arbitrary string or a symbol value which will be used later to identify the filt
   end -%>
 ```
 
-Then, use <tt>grid_filter(grid, :some_filter_name)</tt> to render filters:
+Then, use `grid_filter(grid, :some_filter_name)` to render filters:
 ```
   <% # rendering filter with key :title_filter %>
   <%= grid_filter @tasks_grid, :title_filter  %>
@@ -805,15 +806,15 @@ Then, use <tt>grid_filter(grid, :some_filter_name)</tt> to render filters:
   <%= grid(@tasks_grid) %>
 ```
 
-Finally, use <tt>render_grid(@grid)</tt> to actually output the grid table.
+Finally, use `render_grid(@grid)` to actually output the grid table.
 
 
-Using custom submit and reset buttons together with <tt>hide_submit_button: true</tt> and
-<tt>hide_reset_button: true</tt> allows to completely get rid of the default filter row and the default
+Using custom submit and reset buttons together with `hide_submit_button: true` and
+`hide_reset_button: true` allows to completely get rid of the default filter row and the default
 icons (see section 'Submit/Reset Buttons').
 
 
-If a column was declared with <tt>:detach_with_id</tt>, but never output with +grid_filter+, filtering
+If a column was declared with `:detach_with_id`, but never output with `grid_filter`, filtering
 the  grid in development mode will result in an warning javascript message and the missing filter will be
 ignored. There is no such message in production.
 
@@ -823,8 +824,8 @@ ignored. There is no such message in production.
 
 It possible to define and use your own column processors outside of the plugin, in you application.
 
-The first step is to edit <tt>Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS</tt> in
-<tt>wice_grid_config.rb</tt>:
+The first step is to edit `Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS` in
+`wice_grid_config.rb`:
 ```
 
   Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS = {
@@ -836,7 +837,7 @@ The first element in the two-item array is the name of a class responsible for r
 the filter view. The second element  is the name of a class responsible for processing
 filter parameters.
 
-For examples of these two classes look at the existing column processors in <tt>lib/wice/columns/</tt>
+For examples of these two classes look at the existing column processors in `lib/wice/columns/`
 
 The structure of these two classes is as follows:
 ```
@@ -864,7 +865,7 @@ The structure of these two classes is as follows:
   end
 ```  
 
-To use an external column processor use <tt>:filter_type</tt> in a column definition:
+To use an external column processor use `:filter_type` in a column definition:
 ```
   column name: 'name', attribute: 'attribute', filter_type: :my_own_filter do |rec|
     ...
@@ -873,21 +874,19 @@ To use an external column processor use <tt>:filter_type</tt> in a column defini
 
 ## Defaults
 
-Default values like  can be  changed in <tt>config/initializers/wice_grid_config.rb</tt>.
+Default values like  can be  changed in `config/initializers/wice_grid_config.rb`.
 
 ## Submit/Reset buttons
 Instead of using default Submit and Reset icons you can use external HTML elements to trigger
 these actions. Add a button or any other clickable HTML element with class
-+wg-external-submit-button+ or +wg-external-reset-button+, and attribute +data-grid-name+
+`wg-external-submit-button` or `wg-external-reset-button`, and attribute `data-grid-name`
 whose value is the name of the grid:
-
+```
       <button class="wg-external-submit-button" data-grid-name="grid">Submit</button>
       <button class="wg-external-reset-button" data-grid-name="grid">Reset</button>
-
-To hide the default icons use <tt>hide_submit_button: true</tt> and
-<tt>hide_reset_button: true</tt> in the +grid+ helper.
-
-
+```
+To hide the default icons use `hide_submit_button: true` and
+`hide_reset_button: true` in the `grid` helper.
 
 
 ## Auto-reloading filters
@@ -895,7 +894,7 @@ To hide the default icons use <tt>hide_submit_button: true</tt> and
 It is possible to configure a grid to reload itself once a filter has been changed. It works with all
 filter types including the JS calendar, the only exception is the standard Rails date/datetime filters.
 
-Use option <tt>:auto_reload</tt> in the column definiton:
+Use option `:auto_reload` in the column definiton:
 ```
 
   <%= grid(@tasks_grid, show_filters: :always, hide_submit_button: true) do |g|
@@ -919,28 +918,28 @@ Use option <tt>:auto_reload</tt> in the column definiton:
   end -%>
 ```
 
-To make this  behavior default change constant +AUTO_RELOAD+ in the configuration file.
+To make this  behavior default change constant `AUTO_RELOAD` in the configuration file.
 
 ## Styling the grid
 
 
-##= Adding classes and styles
+### Adding classes and styles
 
-The +grid+ helper accepts parameter <tt>:html</tt> which is a hash of HTML attributes for the table tag.
+The `grid` helper accepts parameter `:html` which is a hash of HTML attributes for the table tag.
 
-Another +grid+ parameter is <tt>header_tr_html</tt> which is a hash of HTML attributes to
-be added to the first +tr+ tag (or two first +tr+'s if the filter row is present).
+Another `grid` parameter is `header_tr_html` which is a hash of HTML attributes to
+be added to the first `tr` tag (or two first `tr`'s if the filter row is present).
 
-<tt>:html</tt> is a parameter for the +column+ method setting HTML attributes of +td+ tags for a certain column.
+`:html` is a parameter for the `column` method setting HTML attributes of `td` tags for a certain column.
 
-##= Adding classes and styles dynamically
+### Adding classes and styles dynamically
 
-WiceGrid offers ways to dynamically add classes and styles to +TR+ and +TD+ based on the current ActiveRecord instance.
+WiceGrid offers ways to dynamically add classes and styles to `TR` and `TD` based on the current ActiveRecord instance.
 
 
-For <tt><TD></tt>, let the +column+ return an array where the first item is the usual
+For `<TD>`, let the `column` return an array where the first item is the usual
 string output whole the second is a hash of HTML attributes to be added for the
-<tt><td></tt> tag of the current cell:
+`<td>` tag of the current cell:
 ```
   g.column  do |portal_application|
     css_class = portal_application.public? ? 'public' : 'private'
@@ -948,8 +947,8 @@ string output whole the second is a hash of HTML attributes to be added for the
   end
 ```
 
-For adding classes/styles to <tt><TR></tt> use special clause  +row_attributes+ ,
-similar to +column+, only returning a hash:
+For adding classes/styles to `<TR>` use special clause  `row_attributes` ,
+similar to `column`, only returning a hash:
 ```
     <%= grid(@versions_grid) do |g|
       g.row_attributes do |version|
@@ -962,7 +961,7 @@ similar to +column+, only returning a hash:
       g.column{|version| ... }
     end  -%>
 ```
-Naturally, there can be only one +row_attributes+ definition for a WiceGrid instance.
+Naturally, there can be only one `row_attributes` definition for a WiceGrid instance.
 
 Various classes do not overwrite each other, instead, they are concatenated.
 
@@ -970,7 +969,7 @@ Various classes do not overwrite each other, instead, they are concatenated.
 ## Adding rows to the grid
 
 It is possible to add your own handcrafted HTML after and/or before each grid row.
-This works similar to +row_attributes+, by adding blocks +after_row+, +before_row+,  and +last_row+:
+This works similar to `row_attributes`, by adding blocks `after_row`, `before_row`,  and `last_row`:
 ```
   <%= grid(@tasks_grid) do |g|
     g.before_row do |task, number_of_columns|
@@ -993,11 +992,11 @@ This works similar to +row_attributes+, by adding blocks +after_row+, +before_ro
     .......
   end %>
 ```
-It is up for the developer to return the correct HTML code, or return +nil+ if no row is needed for this record.
-Naturally, there is only one +before_row+  definition and one +after_row+ definition for a WiceGrid instance.
+It is up for the developer to return the correct HTML code, or return `nil` if no row is needed for this record.
+Naturally, there is only one `before_row`  definition and one `after_row` definition for a WiceGrid instance.
 
-The second variable injected into to <tt>before_row</tt> and <tt>after_row</tt> block, and the first parameter injected
-into the <tt>last_row</tt> is the number of columns in the current grid.
+The second variable injected into to `before_row` and `after_row` block, and the first parameter injected
+into the `last_row` is the number of columns in the current grid.
 
 ## Rendering a grid without records
 
@@ -1017,7 +1016,7 @@ records is empty, this will still render the grid and it will be possible to res
       end
      end  -%>
 ```
-There are two alternative ways to do the same, submitting a string to +blank_slate+:
+There are two alternative ways to do the same, submitting a string to `blank_slate`:
 ```
   g.blank_slate "some text to be rendered"
 ```
@@ -1029,7 +1028,7 @@ Or a partial:
 ## Action Column
 
 It is possible to add a column with checkboxes for each record. This is useful for actions with multiple records,
-for example, deleting selected records. Please note that +action_column+ only creates the checkboxes and the
+for example, deleting selected records. Please note that `action_column` only creates the checkboxes and the
 'Select All' and 'Deselect All' buttons, and the form itself as well as processing the parameters should be
 taken care of by the application code.
 ```
@@ -1043,12 +1042,12 @@ taken care of by the application code.
 
   end -%>
 ```
-By default the name of the HTTP parameter follows pattern <tt>"#{grid_name}[#{param_name}][]"</tt>, thus
-<tt>params[grid_name][param_name]</tt> will contain an array of object IDs.
+By default the name of the HTTP parameter follows pattern `"#{grid_name}[#{param_name}][]"`, thus
+`params[grid_name][param_name]` will contain an array of object IDs.
 
 
-You can hide a certain action checkbox if you add the usual block to +g.action_column+, just like with the
-+g.column+ definition. If the block returns +nil+ or +false+ no checkbox will be rendered.
+You can hide a certain action checkbox if you add the usual block to `g.action_column`, just like with the
+`g.column` definition. If the block returns `nil` or `false` no checkbox will be rendered.
 ```
   <%= grid(@tasks_grid, show_filters: :always) do |g|
 
@@ -1075,9 +1074,9 @@ on the page, and not a grid filter.
 
 For example, on a page showing tasks, change between 'Show active tasks' to 'Show archived tasks' using a dropdown box.
 WiceGrid allows to keep the status of the grid with all the filtering and sorting using helper
-+dump_filter_parameters_as_hidden_fields+ which takes a grid object and dumps
+`dump_filter_parameters_as_hidden_fields` which takes a grid object and dumps
 all current sorting and filtering parameters as hidden fields. Just include
-<tt>dump_filter_parameters_as_hidden_fields(@grid)</tt> inside your form, and the newly rendered grid will keep ordering and filtering.
+`dump_filter_parameters_as_hidden_fields(@grid)` inside your form, and the newly rendered grid will keep ordering and filtering.
 
 ```
   <% form_tag('', method: :get) do %>
@@ -1093,10 +1092,10 @@ all current sorting and filtering parameters as hidden fields. Just include
 
 It is possible to switch to the All Records mode clicking on link "show all" in the bottom right corner.
 This functionality should be used with care. To turn this mode off for all grid instances,
-change constant +ALLOW_SHOWING_ALL_RECORDS+ in <tt>config/initializers/wice_grid_config.rb</tt> to
-+false+. To do so for a specific grid, use initializer parameter <tt>:allow_showing_all_records</tt>.
+change constant `ALLOW_SHOWING_ALL_RECORDS` in `config/initializers/wice_grid_config.rb` to
+`false`. To do so for a specific grid, use initializer parameter `:allow_showing_all_records`.
 
-Configuration constant +START_SHOWING_WARNING_FROM+ sets the threshold number of all records after
+Configuration constant `START_SHOWING_WARNING_FROM` sets the threshold number of all records after
 which clicking on the link results in a javascript confirmation dialog.
 
 
@@ -1105,7 +1104,7 @@ which clicking on the link results in a javascript confirmation dialog.
 It is possible to export the data displayed on a grid to a CSV file. The dumped data is the current resultset
 with all the current filters and sorting applied, only without the pagination constraint (i.e. all pages).
 
-To enable CSV export add parameters +enable_export_to_csv+ and +csv_file_name+ to the initialization of the grid:
+To enable CSV export add parameters `enable_export_to_csv` and `csv_file_name` to the initialization of the grid:
 ```
   @projects_grid = initialize_grid(Project,
     include:              [:customer, :supplier],
@@ -1114,7 +1113,7 @@ To enable CSV export add parameters +enable_export_to_csv+ and +csv_file_name+ t
     csv_file_name:        'projects'
   )
 ```
-+csv_file_name+ is the name of the downloaded file. This parameter is optional, if it is missing, the name of
+`csv_file_name` is the name of the downloaded file. This parameter is optional, if it is missing, the name of
 the grid is used instead. The export icon will appear at the bottom right corner of the grid.
 
 Next, each grid view helper should be placed in a partial of its own, requiring it from the master
@@ -1124,26 +1123,26 @@ By convention the name of such a partial follows the following pattern:
 
   _GRID_NAME_grid.html.erb
 
-In other words, a grid named +tasks+ is expected to be found in a template called
-<tt>_tasks_grid.html.erb</tt> (remember that the default name of grids is '+grid+'.)
+In other words, a grid named `tasks` is expected to be found in a template called
+`_tasks_grid.html.erb` (remember that the default name of grids is '`grid`'.)
 
-Next, method +export_grid_if_requested+ should be added to the end of each action
+Next, method `export_grid_if_requested` should be added to the end of each action
 containing grids with enabled CSV export.
 
-+export_grid_if_requested+ intercepts CSV export requests and evaluates the partial with the required grid helper.
+`export_grid_if_requested` intercepts CSV export requests and evaluates the partial with the required grid helper.
 
 The naming convention for grid partials can be easily overridden by supplying a hash parameter
-to +export_grid_if_requested+ where each key is the name of a grid, and the value is the name of
-the template (like it is specified for +render+, i.e. without '_' and extensions):
+to `export_grid_if_requested` where each key is the name of a grid, and the value is the name of
+the template (like it is specified for `render`, i.e. without '_' and extensions):
 
 
     export_grid_if_requested('g1' => 'tasks_grid', 'g2' => 'projects_grid')
 
-If the request is not a CSV export request, +export_grid_if_requested+ does nothing and returns
-+false+, if it is a CSV export request, the method returns +true+.
+If the request is not a CSV export request, `export_grid_if_requested` does nothing and returns
+`false`, if it is a CSV export request, the method returns `true`.
 
 
-If the action has no explicit +render+ call, it's OK to just place +export_grid_if_requested+
+If the action has no explicit `render` call, it's OK to just place `export_grid_if_requested`
 as the last line of the action:
 ```
   def index
@@ -1164,7 +1163,7 @@ as the last line of the action:
   end
 ```
 
-Otherwise, to avoid double rendering, use the return value of the method to conditionally call your +render+ :
+Otherwise, to avoid double rendering, use the return value of the method to conditionally call your `render` :
 ```
 
   def index
@@ -1188,14 +1187,14 @@ It's also possible to supply a block which will be called if no CSV export is re
 ```
 
 If a column has to be excluded from the CSV export,
-set +column+ parameter +in_csv+ to +false+:
+set `column` parameter `in_csv` to `false`:
 ```
   g.column in_csv: false do |task|
     link_to('Edit', edit_task_path(task))
   end
 ```
 If a column must appear both in HTML and CSV, but with different output, duplicate the column and use
-parameters +in_csv+ and +in_html+ to include one of them to  html output only, the other to CSV only:
+parameters `in_csv` and `in_html` to include one of them to  html output only, the other to CSV only:
 
 ```
   # html version
@@ -1215,12 +1214,12 @@ The default field separator in generated CSV is a comma, but it's possible to ov
     csv_file_name:         'products'
   )
 ```
-If you need an external CSV export button , add class +wg-external-csv-export-button+
-to any clickable element on page and set its attribute +data-grid-name+ to the name of the grid:
+If you need an external CSV export button , add class `wg-external-csv-export-button`
+to any clickable element on page and set its attribute `data-grid-name` to the name of the grid:
 ```
       <button class="wg-external-csv-export-button" data-grid-name="grid">Export To CSV</button>
 ```
-If you need to disable the default export icon in the grid, add <tt>hide_csv_button: true</tt> to the +grid+ helper.
+If you need to disable the default export icon in the grid, add `hide_csv_button: true` to the `grid` helper.
 
 
 ## Access to Records From Outside The Grid
@@ -1228,9 +1227,9 @@ If you need to disable the default export icon in the grid, add <tt>hide_csv_but
 There are two ways you can access the records outside the grid - using methods of the WiceGrid
 object and using callbacks.
 
-##= Accessing Records Via The WiceGrid Object
+### Accessing Records Via The WiceGrid Object
 
-Method +current_page_records+ returns exactly the same list of objects displayed on page:
+Method `current_page_records` returns exactly the same list of objects displayed on page:
 ```
   <%= grid(@tasks_grid) do |g|
     ...
@@ -1241,7 +1240,7 @@ Method +current_page_records+ returns exactly the same list of objects displayed
     <%= @tasks_grid.current_page_records.map(&:id).to_sentence %>
   </p>
 ```
-Method +all_pages_records+ returns a list of objects browsable through all pages with the current filters:
+Method `all_pages_records` returns a list of objects browsable through all pages with the current filters:
 ```
   <%= grid(@tasks_grid) do |g|
     ...
@@ -1259,9 +1258,9 @@ Because of the current implementation of WiceGrid these helpers work only after 
 of the grid in the view.
 This is due to the lazy nature of WiceGrid - the actual call to the database is made during
 the execution of
-the +grid+ helper, because to build the correct query columns declarations are required.
+the `grid` helper, because to build the correct query columns declarations are required.
 
-##= Accessing Records Via Callbacks
+### Accessing Records Via Callbacks
 
 It is possible to set up callbacks which are executed from within the plugin just after the call to the database.
 The callbacks are called before rendering the grid cells, so the results of this processing can be used in the grid.
@@ -1301,10 +1300,10 @@ Via a separate block:
 ```
 There are two callbacks:
 
-* <tt>:with_paginated_resultset</tt> - used to process records of the current page
-* <tt>:with_resultset</tt> - used to process all records browsable through all pages with the current filters
+* `:with_paginated_resultset` - used to process records of the current page
+* `:with_resultset` - used to process all records browsable through all pages with the current filters
 
-While the <tt>:with_paginated_resultset</tt> callback just receives the list of records, <tt>:with_resultset</tt>
+While the `:with_paginated_resultset` callback just receives the list of records, `:with_resultset`
 receives an ActiveRelation object which can be used to obtain the list of all records:
 
 ```
@@ -1337,9 +1336,9 @@ only under certain circumstances:
 
 ## Icons
 
-Icons used by the plugin are courtesy of Mark James, the creator of {the SILK icon set}[http://www.famfamfam.com/lab/icons/silk/].
+Icons used by the plugin are courtesy of Mark James, the creator of [the SILK icon set](http://www.famfamfam.com/lab/icons/silk/).
 
 ## Bug reports
 
 The author of the plugins welcomes any contribution.
-Please follow {these guidelines}[https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question] when submitting a bug report.
+Please follow [these guidelines]{https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question} when submitting a bug report.
