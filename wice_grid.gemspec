@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.date          = "2015-08-14"
 
-  s.add_dependency "kaminari",     ["~> 0.16"]
-  s.add_dependency "coffee-rails", ["~> 4.0"]
-
+  s.add_dependency "kaminari",          ["~> 0.16"]
+  s.add_dependency "coffee-rails",      ["~> 4.0"]
+  s.add_dependency "font-awesome-sass", ["~> 4.3"]
 end
