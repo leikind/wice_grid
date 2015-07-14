@@ -1,6 +1,6 @@
 = WiceGrid
 
-Version:: 3.5.0pre1
+Version:: 3.5.0
 Author::  Yuri Leikind
 Sources:: https://github.com/leikind/wice_grid/
 Examples online:: http://wicegrid.herokuapp.com
@@ -72,7 +72,7 @@ WARNING: Since 3.2.pre2 WiceGrid is not compatible with +will_paginate+ because 
 
 Add the following to your Gemfile:
 
-  gem "wice_grid", '3.5.0pre1'
+  gem "wice_grid", '3.5.0'
 
 and run the +bundle+ command.
 
