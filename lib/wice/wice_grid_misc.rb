@@ -27,8 +27,8 @@ module Wice
     end
 
     def get_string_matching_operators(model)   #:nodoc:
-      if defined?(Wice::Defaults::STRING_MATCHING_OPERATORS) && Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATORS).is_a?(Hash) &&
-          str_matching_operator = Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATORS)[model.connection.class.to_s]
+      if defined?(Wice::Defaults::STRING_MATCHING_OPERATORS) && (ops = Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATORS).is_a?(Hash)) &&
+                                                                str_matching_operator = ops[model.connection.class.to_s]
         str_matching_operator
       else
         Wice::ConfigurationProvider.value_for(:STRING_MATCHING_OPERATOR)
