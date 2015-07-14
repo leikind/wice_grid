@@ -163,12 +163,13 @@ setupJqueryUiDatepicker = ->
 
     datepickerContainer = datepickerHiddenField.parent()
 
-    datepickerContainer.prepend("<i class=\"fa fa-calendar ui-datepicker-trigger\" title=\"#{labelText}\" >")
+    $(removeLink).before(" <i class=\"fa fa-calendar ui-datepicker-trigger\" title=\"#{labelText}\" ></i> ")
 
     newlyAdded = $('.fa-calendar', datepickerContainer)
 
     newlyAdded.click ->
-      datepickerHiddenField.datepicker( "show" )
+
+      datepickerHiddenField.datepicker("show")
 
 
 # hiding and showing the row with filters
