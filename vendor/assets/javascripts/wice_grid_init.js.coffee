@@ -127,14 +127,12 @@ setupJqueryUiDatepicker = ->
 
     yearRange = datepickerHiddenField.data('date-year-range')
 
+    labelText = datepickerHiddenField.data('button-text')
+
     # datepicker constructor
     datepickerHiddenField.datepicker
       firstDay:        1
-      showOn:          "button"
       dateFormat:      dateFormat
-      buttonImage:     datepickerHiddenField.data('button-image')
-      buttonImageOnly: true
-      buttonText:      datepickerHiddenField.data('button-text')
       changeMonth:     true
       changeYear:      true
       yearRange:       yearRange
@@ -163,6 +161,14 @@ setupJqueryUiDatepicker = ->
         if eventToTriggerOnChange
           datepickerHiddenField.trigger(eventToTriggerOnChange)
 
+    datepickerContainer = datepickerHiddenField.parent()
+
+    datepickerContainer.prepend("<i class=\"fa fa-calendar ui-datepicker-trigger\" title=\"#{labelText}\" >")
+
+    newlyAdded = $('.fa-calendar', datepickerContainer)
+
+    newlyAdded.click ->
+      datepickerHiddenField.datepicker( "show" )
 
 
 # hiding and showing the row with filters

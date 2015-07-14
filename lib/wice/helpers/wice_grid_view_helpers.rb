@@ -303,16 +303,37 @@ module Wice
 
           direction = 'asc'
           link_style = nil
+          arrow_class = nil
+
           if grid.ordered_by?(column)
             column.add_css_class('sorted')
             Wice::WgHash.add_or_append_class_value!(opts, 'sorted')
             link_style = grid.order_direction
-            direction = 'desc' if grid.order_direction == 'asc'
+
+            case grid.order_direction
+            when 'asc'
+              direction = 'desc'
+              arrow_class = 'down'
+            when 'desc'
+              direction = 'asc'
+              arrow_class = 'up'
+            end
           end
 
           col_link = link_to(
-            column_name,
-            rendering.column_link(column, direction, params, options[:extra_request_parameters]),
+            (column_name +
+              if arrow_class
+                ' ' + content_tag(:i, '', class: "fa fa-arrow-#{arrow_class}")
+              else
+                ''
+              end).html_safe,
+
+            rendering.column_link(
+              column,
+              direction,
+              params,
+              options[:extra_request_parameters]
+            ),
             class: link_style)
 
           grid.output_buffer << content_tag(:th, col_link, opts)
@@ -521,13 +542,13 @@ module Wice
         hide_icon = show_icon = ''
       else
 
-        content_tag(:div, '',
+        content_tag(:div, content_tag(:i, '', class: 'fa fa-eye-slash'),
           title: NlMessage['hide_filter_tooltip'],
           style: styles[0],
           class: 'clickable  wg-hide-filter'
         ) +
 
-        content_tag(:div, '',
+        content_tag(:div, content_tag(:i, '', class: 'fa fa-eye'),
           title: NlMessage['show_filter_tooltip'],
           style: styles[1],
           class: 'clickable  wg-show-filter'
@@ -540,7 +561,7 @@ module Wice
       if options[:hide_submit_button]
         ''
       else
-        content_tag(:div, '',
+        content_tag(:div, content_tag(:i, '', class: 'fa fa-filter'),
           title: NlMessage['filter_tooltip'],
           id:    grid.name + '_submit_grid_icon',
           class: 'submit clickable'
@@ -550,7 +571,7 @@ module Wice
         ''
       else
 
-        content_tag(:div, '',
+        content_tag(:div, content_tag(:i, '', class: 'fa fa-table'),
           title: NlMessage['reset_filter_tooltip'],
           id:    grid.name + '_reset_grid_icon',
           class: 'reset clickable'

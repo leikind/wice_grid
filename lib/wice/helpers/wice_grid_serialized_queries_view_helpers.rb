@@ -72,7 +72,7 @@ module Wice
         link_opts[:class] += ' current' if saved_query == sq
         "<li>"+
         link_to(
-          content_tag(:div, '', :class => 'delete-icon'),
+          content_tag(:i, '', class: "fa fa-trash-o delete-icon"),
           delete_serialized_query_path(
             grid_name: grid_name,
             id:        sq.id,

@@ -90,7 +90,8 @@ module Wice
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      content_tag(:div, '',
+      content_tag(:div,
+        content_tag(:i, '', class: 'fa fa-file-excel-o'),
         title: NlMessage['csv_export_tooltip'],
         class: 'clickable export-to-csv-button'
       )
