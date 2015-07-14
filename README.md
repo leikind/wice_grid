@@ -750,9 +750,9 @@ result in an identical date representation.
 
 Constant `DATEPICKER_YEAR_RANGE` defines the range of years in the Datepicker year dropdown. Alternatively,
 you can always change this range dynamically with the following javascript:
-
+```
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
-
+```
 
 #### jQuery UI DatePicker `(HELPER_STYLE = :bootstrap)`
 
@@ -1120,8 +1120,9 @@ Next, each grid view helper should be placed in a partial of its own, requiring 
 template for the usual flow. There must be no HTML or ERB code in this partial except for the grid helper.
 
 By convention the name of such a partial follows the following pattern:
-
+```
   _GRID_NAME_grid.html.erb
+```
 
 In other words, a grid named `tasks` is expected to be found in a template called
 `_tasks_grid.html.erb` (remember that the default name of grids is '`grid`'.)
@@ -1135,9 +1136,9 @@ The naming convention for grid partials can be easily overridden by supplying a 
 to `export_grid_if_requested` where each key is the name of a grid, and the value is the name of
 the template (like it is specified for `render`, i.e. without '_' and extensions):
 
-
+```
     export_grid_if_requested('g1' => 'tasks_grid', 'g2' => 'projects_grid')
-
+```
 If the request is not a CSV export request, `export_grid_if_requested` does nothing and returns
 `false`, if it is a CSV export request, the method returns `true`.
 
@@ -1172,7 +1173,7 @@ Otherwise, to avoid double rendering, use the return value of the method to cond
 
     export_grid_if_requested || render(action: 'my_template')
   end
-
+```
 
 It's also possible to supply a block which will be called if no CSV export is requested:
 ```
@@ -1195,7 +1196,6 @@ set `column` parameter `in_csv` to `false`:
 ```
 If a column must appear both in HTML and CSV, but with different output, duplicate the column and use
 parameters `in_csv` and `in_html` to include one of them to  html output only, the other to CSV only:
-
 ```
   # html version
   g.column name: 'Title', attribute: 'title', in_csv: false do |task|
@@ -1206,6 +1206,7 @@ parameters `in_csv` and `in_html` to include one of them to  html output only, t
     task.title
   end
 ```
+
 The default field separator in generated CSV is a comma, but it's possible to override it:
 ```
   @products_grid = initialize_grid(Product,
