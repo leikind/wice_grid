@@ -1,14 +1,16 @@
+[![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
+
 # WiceGrid
 
 - [Intro](#intro)
   - [Examples](#examples)
+  - [Requirements and Rails versions](#requirements_and_rails_versions)
+- [Installation](#installation)
+- [Basics](#basics)
 
-
-Version:: 3.5.0
-Author::  Yuri Leikind
+Author::  "Yuri Leikind" <yuri.leikind at gmail dot com>
 Sources:: https://github.com/leikind/wice_grid/
 Examples online:: http://wicegrid.herokuapp.com
-Email::   "Yuri Leikind" <yuri.leikind at gmail dot com>
 
 ## Intro
 
@@ -43,15 +45,13 @@ WiceGrid views do not contain forms so you can include it in your own forms.
 WiceGrid is known to work with MySQL and Postgres.
 
 
-
 ### Examples
 
 This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
 http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
 
 
-
-## Requirements and Rails versions
+### Requirements and Rails versions
 
 For rails 2 use version 0.6 in {the master branch}[https://github.com/leikind/wice_grid/tree/master].
 That branch is hardly supported.
@@ -74,13 +74,13 @@ WARNING: Since 3.2.pre2 WiceGrid is not compatible with +will_paginate+ because 
 
 Add the following to your Gemfile:
 ```
-  gem "wice_grid", '3.5.0'
+gem "wice_grid", '3.5.0'
 ```
 and run the +bundle+ command.
 
 Run the generator:
 ```
-   rails g wice_grid:install
+rails g wice_grid:install
 ```
 
 This adds the config files:
@@ -91,7 +91,7 @@ This adds the config files:
 
 Require WiceGrid javascript in your js index file:
 ```
-  //= require wice_grid
+//= require wice_grid
 ```
 Make sure jQuery is loaded. If the application uses Date and DateTime filters, you have to install
 jQuery Datepicker by yourself. You can also use
@@ -127,36 +127,36 @@ The simplest example of a WiceGrid for one simple DB table called ApplicationAcc
 
 Controller:
 ```
-  @tasks_grid = initialize_grid(Task)
+@tasks_grid = initialize_grid(Task)
 ```
 It is also possible to use an  ActiveRecord::Relation instance as the first argument:
 ```
-  @tasks_grid = initialize_grid(Task.where(active: true))
+@tasks_grid = initialize_grid(Task.where(active: true))
 ```
 View:
 ```
-  <%= grid(@tasks_grid) do |g|
+<%= grid(@tasks_grid) do |g|
 
-    g.column do |task|
-      task.id
-    end
+  g.column do |task|
+    task.id
+  end
 
-    g.column  do |task|
-      task.title
-    end
+  g.column  do |task|
+    task.title
+  end
 
-    g.column do |task|
-      task.description
-    end
+  g.column do |task|
+    task.description
+  end
 
-    g.column do |task|
-      task.archived? ? 'Yes' : 'No'
-    end
+  g.column do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
 
-    g.column do |task|
-      link_to('Edit', edit_task_path(task))
-    end
-  end -%>
+  g.column do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>
 ```
 Code <tt>g.column do |task| ... end</tt>
 defines everything related to a column in the resulting view table including column names, sorting,
@@ -164,54 +164,54 @@ filtering, the content of the column cells, etc. The return value of the block i
 
 Column names are defined with parameter +:name+:
 ```
-  <%= grid(@tasks_grid) do |g|
+<%= grid(@tasks_grid) do |g|
 
-    g.column name: 'ID' do |task|
-      task.id
-    end
+  g.column name: 'ID' do |task|
+    task.id
+  end
 
-    g.column name: 'Title'  do |task|
-      task.title
-    end
+  g.column name: 'Title'  do |task|
+    task.title
+  end
 
-    g.column name: 'Description' do |task|
-      task.description
-    end
+  g.column name: 'Description' do |task|
+    task.description
+  end
 
-    g.column name: 'Archived' do |task|
-      task.archived? ? 'Yes' : 'No'
-    end
+  g.column name: 'Archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
 
-    g.column do |task|
-      link_to('Edit', edit_task_path(task))
-    end
-  end -%>
+  g.column do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>
 ```
 To add filtering and ordering, declare to which column in the underlying database table(s) the view
 column corresponds using parameter +:attribute+:
 ```
-  <%= grid(@tasks_grid) do |g|
+<%= grid(@tasks_grid) do |g|
 
-    g.column name: 'ID', attribute: 'id' do |task|
-      task.id
-    end
+  g.column name: 'ID', attribute: 'id' do |task|
+    task.id
+  end
 
-    g.column name: 'Title', attribute: 'title'  do |task|
-      task.title
-    end
+  g.column name: 'Title', attribute: 'title'  do |task|
+    task.title
+  end
 
-    g.column  name: 'Description', attribute: 'description' do |task|
-      task.description
-    end
+  g.column  name: 'Description', attribute: 'description' do |task|
+    task.description
+  end
 
-    g.column name: 'Archived', attribute: 'archived' do |task|
-      task.archived? ? 'Yes' : 'No'
-    end
+  g.column name: 'Archived', attribute: 'archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
 
-    g.column do |task|
-      link_to('Edit', edit_task_path(task))
-    end
-  end -%>
+  g.column do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>
 ```
 This will  add sorting links and filters for columns +Username+ and +Active+. The plugin automatically
 creates filters according to the type of the database column. In the above example a text field will be
@@ -229,40 +229,40 @@ Read the section about custom dropdown filters for more advanced filters.
 
 For columns like
 ```
-  g.column name: 'Title', attribute: 'title'  do |task|
-    task.title
-  end
+g.column name: 'Title', attribute: 'title'  do |task|
+  task.title
+end
 ```
 where the block contains just a call to the same attribute declared by :attribute, the block can be
 omitted:
 ```
-  <%= grid(@tasks_grid) do |g|
+<%= grid(@tasks_grid) do |g|
 
-    g.column name: 'ID', attribute: 'id'
+  g.column name: 'ID', attribute: 'id'
 
-    g.column name: 'Title', attribute: 'title'
+  g.column name: 'Title', attribute: 'title'
 
-    g.column name: 'Description', attribute: 'description'
+  g.column name: 'Description', attribute: 'description'
 
-    g.column name: 'Archived', attribute: 'archived' do |task|
-      task.archived? ? 'Yes' : 'No'
-    end
+  g.column name: 'Archived', attribute: 'archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
 
-    g.column  do |task|
-      link_to('Edit', edit_task_path(task))
-    end
-  end -%>
+  g.column  do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>
 ```
 
 In this case +name+ will be used as the method name to send to the ActiveRecord instance.
 
 If only ordering is needed, and no filter, we can turn off filters using +:filter+ :
 ```
-  g.column name: 'ID', attribute: 'id', filter: false
+g.column name: 'ID', attribute: 'id', filter: false
 ```
 If no ordering links are needed, use <tt>ordering: false</tt>:
 ```
-  g.column name: 'Added', attribute: 'created_at', ordering: false
+g.column name: 'Added', attribute: 'created_at', ordering: false
 ```
 It is important to understand that it is up to the developer to make sure that the value returned by a
 column block (the content of a cell) corresponds to the underlying database column specified by
@@ -818,7 +818,7 @@ the  grid in development mode will result in an warning javascript message and t
 ignored. There is no such message in production.
 
 
-##= Defining your own external filter processors
+### Defining your own external filter processors
 
 
 It possible to define and use your own column processors outside of the plugin, in you application.
