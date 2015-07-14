@@ -31,12 +31,14 @@ module Wice
             expand_icon_style, collapse_icon_style = nil, 'display: none'
             expand_icon_style, collapse_icon_style = collapse_icon_style, expand_icon_style if select_options[:multiple]
 
-            select_toggle = content_tag(:span, '',
+            select_toggle = content_tag(:span,
+              content_tag(:i, '', class: 'fa fa-plus'),
               title: NlMessage['expand'],
               class: 'expand-multi-select-icon clickable',
               style: expand_icon_style
             ) +
-            content_tag(:span, '',
+            content_tag(:span,
+              content_tag(:i, '', class: 'fa fa-minus'),
               title: NlMessage['collapse'],
               class: 'collapse-multi-select-icon clickable',
               style: collapse_icon_style
