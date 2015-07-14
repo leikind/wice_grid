@@ -6,8 +6,7 @@ New features:
   an option to use a standard HTML checkbox. This is now the default.
 * Support for Bootstrap Datepicker. A suggested way to use Bootstrap Datepicker in a Rails app
   is https://github.com/Nerian/bootstrap-datepicker-rails. Configuration variable HELPER_STYLE
-  sets the default flavor of date pickers.
-
+  sets the default flavor of date pickers. Can also be set per grid with helper_style: :bootstrap
   * :calendar  jQuery UI datepicker
   * :bootstrap Bootstrap datepicker
   * :standard
@@ -16,7 +15,7 @@ New features:
 * various fixes
 * Configuration variable ALLOW_SHOWING_ALL_QUERIES renamed to ALLOW_SHOWING_ALL_RECORDS
 
-Can also be set per grid with helper_style: :bootstrap
+
 
 3.4.14
 
