@@ -1,4 +1,5 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
+[![Build](https://travis-ci.org/ryanfox1985/wice_grid.svg)](https://travis-ci.org/ryanfox1985/wice_grid)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 * Yuri Leikind, yuri.leikind at gmail dot com
@@ -1361,4 +1362,3 @@ only under certain circumstances:
 
 The author of the plugins welcomes any contribution.
 Please follow [these guidelines](https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question) when submitting a bug report.
-
