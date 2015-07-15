@@ -63,7 +63,7 @@ nevertheless, all other page parameters are respected and preserved. WiceGrid wo
 
 WiceGrid views do not contain forms so you can include it in your own forms.
 
-WiceGrid is known to work with MySQL and Postgres.
+WiceGrid is known to work with MySQL, Postgres, and Oracle.
 
 
 ## Requirements and Rails versions
