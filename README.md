@@ -9,6 +9,23 @@
   - [Requirements and Rails versions](#requirements_and_rails_versions)
 - [Installation](#installation)
 - [Basics](#basics)
+  - [Rendering filter panel](#rendering_filter_panel)
+  - [Initial Ordering](#initial_ordering)
+  - [Records Per Page](#records_per_page)
+  - [Conditions](#conditions)
+  - [Queries with join tables](#queries_with_join_tables)
+  - [Joined associations referring to the same table](#joined_associations_referring_to_the_same_table)
+  - [More than one grid on a page](#more_than_one_grid_on_a_page)
+  - [Custom Ordering](#custom_ordering)
+- [Filters](#filters)
+  - [Custom dropdown filters](#custom_dropdown_filters)
+  - [Numeric Filters](#numeric_filters)
+  - [Date and DateTime Filters](#date_and_dateTime_filters)
+- [Detached Filters](#detached_filters)
+- [Defaults](#defaults)
+- [Bug reports](#bug_reports)
+- [Changelog](#changelog)
+- [License](#license)
 
 
 ## Intro
@@ -280,7 +297,7 @@ column block (the content of a cell) corresponds to the underlying database colu
 `:attribute` (and `:model` discussed below).
 
 
-## Rendering filter panel
+### Rendering filter panel
 
 The filter panel can be shown and hidden clicking the icon with binoculars.
 
@@ -305,7 +322,7 @@ To always place the icons in the additional column, set
 `Wice::Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS` to `false` in the configuration file.
 
 
-## Initial Ordering
+### Initial ordering
 
 Initializing the grid we can also define the column by which the record will be ordered <em>on the first
 rendering of the grid</em>, when the user has not set their ordering setting by clicking the column label,
@@ -317,14 +334,14 @@ and the order direction:
   )
 ```
 
-## Records Per Page
+### Records per page
 
 The number of rows per page is set with `:per_page`:
 ```
   @tasks_grid = initialize_grid(Task, per_page: 40)
 ```
 
-## Conditions
+### Conditions
 
 The `initialize_grid` method supports a `:conditions` parameter which is passed on to the underlying
 ActiveRecord, so it can be in any format processable by ActiveRecord:
@@ -367,7 +384,7 @@ might consider using `unscoped`:
   )
 ```
 
-## Queries with join tables
+### Queries with join tables
 
 WiceGrid also supports ActiveRecord's `:joins` and `:include`.
 ```
@@ -398,7 +415,7 @@ that corresponds to the joined table:
 Please note that the blockless definition of the column only works with columns from the main table and it
 won't work with columns with `:model`
 
-## Joined associations referring to the same table
+### Joined associations referring to the same table
 
 In case there are two joined associations both referring to the same table, ActiveRecord constructs a query
 where the second join provides an alias for the joined table. To enable WiceGrid to order and filter by
@@ -434,7 +451,7 @@ View:
   end -%>
 ```
 
-## More than one grid on a page
+### More than one grid on a page
 
 It is possible to use more that one grid on a page, each with its own state. To do so, you must specify the
 name of the grid in `initialize_grid` using parameter `:name`.
@@ -448,7 +465,7 @@ The name can only contain alphanumeric characters.
   @tasks_grid    = initialize_grid(Task,    name: 'g2')
 ```
 
-## Custom Ordering
+### Custom Ordering
 
 It is possible to change the way results are ordered injecting a chunk of SQL code, for example, use
 `ORDER BY INET_ATON(ip_address)` instead of `ORDER BY ip_address`.
