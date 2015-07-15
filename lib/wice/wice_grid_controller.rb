@@ -1,12 +1,11 @@
+# encoding: utf-8
 module Wice
   module Controller
-
     def self.included(base) #:nodoc:
       base.extend(ClassMethods)
     end
 
     module ClassMethods
-
       # Used to add query processing action methods into a controller.
       # Read section "Saving Queries How-To" in README for more details.
       def save_wice_grid_queries
@@ -63,7 +62,6 @@ module Wice
     # can be changed in <tt>lib/wice_grid_config.rb</tt>, this is convenient if you want to set a project wide setting
     # without having to repeat it for every grid instance.
 
-
     def initialize_grid(klass, opts = {})
       wg = WiceGrid.new(klass, self, opts)
       self.wice_grid_instances = [] if self.wice_grid_instances.nil?
@@ -112,7 +110,7 @@ module Wice
         template_name ||= grid.name + '_grid'
         temp_filename = render_to_string(partial: template_name)
         temp_filename = temp_filename.strip
-        filename = (grid.csv_file_name || grid.name ) + '.csv'
+        filename = (grid.csv_file_name || grid.name) + '.csv'
         grid.csv_tempfile.close
         send_file_rails2 temp_filename, filename: filename, type: 'text/csv; charset=utf-8'
         grid.csv_tempfile = nil
@@ -144,29 +142,28 @@ module Wice
       options.merge!(opts)
 
       [:attribute, :value].each do |key|
-        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
+        fail ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
       end
 
       attr_name = if options[:model]
         unless options[:model].nil?
           options[:model] = options[:model].constantize if options[:model].is_a? String
-          raise Wice::WiceGridArgumentError.new("Option :model can be either a class or a string instance") unless options[:model].is_a? Class
+          fail Wice::WiceGridArgumentError.new('Option :model can be either a class or a string instance') unless options[:model].is_a? Class
         end
         options[:model].table_name + '.' + options[:attribute]
       else
         options[:attribute]
       end
 
-      {"#{options[:grid_name]}[f][#{attr_name}][]" => options[:value]}
+      { "#{options[:grid_name]}[f][#{attr_name}][]" => options[:value] }
     end
 
     private
 
-
     def send_file_rails2(path, options = {}) #:nodoc:
-      raise "Cannot read file #{path}" unless File.file?(path) and File.readable?(path)
+      fail "Cannot read file #{path}" unless File.file?(path) && File.readable?(path)
 
-      options[:length]   ||= File.size(path)
+      options[:length] ||= File.size(path)
       options[:filename] ||= File.basename(path) unless options[:url_based_filename]
       send_file_headers_rails2! options
 
@@ -175,7 +172,6 @@ module Wice
       logger.info "Sending file #{path}" unless logger.nil?
       File.open(path, 'rb') { |file| render status: options[:status], text: file.read }
     end
-
 
     DEFAULT_SEND_FILE_OPTIONS_RAILS2 = { #:nodoc:
       type:         'application/octet-stream'.freeze,
@@ -186,10 +182,9 @@ module Wice
     }.freeze
 
     def send_file_headers_rails2!(options) #:nodoc:
-
       options.update(DEFAULT_SEND_FILE_OPTIONS_RAILS2.merge(options))
       [:length, :type, :disposition].each do |arg|
-        raise ArgumentError, ":#{arg} option required" if options[arg].nil?
+        fail ArgumentError, ":#{arg} option required" if options[arg].nil?
       end
 
       disposition = options[:disposition].dup || 'attachment'
@@ -214,6 +209,5 @@ module Wice
       # is called for handling the download is run, so let's workaround that
       headers['Cache-Control'] = 'private' if headers['Cache-Control'] == 'no-cache'
     end
-
   end
 end

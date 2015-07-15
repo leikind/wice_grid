@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'rubygems'
 require 'bundler'
 require 'bundler/gem_tasks'
@@ -16,7 +17,7 @@ RSpec::Core::RakeTask.new(:spec)
 require 'rubocop/rake_task'
 desc 'Run RuboCop on the lib directory'
 RuboCop::RakeTask.new(:rubocop) do |task|
-  task.patterns = ['lib/**/*.rb']  
+  task.patterns = ['lib/**/*.rb']
   # don't abort rake on failure
   task.fail_on_error = false
 end

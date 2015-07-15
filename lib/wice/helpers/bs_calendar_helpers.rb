@@ -1,6 +1,6 @@
+# encoding: utf-8
 module Wice #:nodoc:
   module BsCalendarHelpers #:nodoc:
-
     class CalendarData
       attr_accessor :name,
                     :date_string,
@@ -14,15 +14,13 @@ module Wice #:nodoc:
     end
 
     def date_calendar_bs(calendar_data)  #:nodoc:
-
       text_field_tag_options = {
           :id                   => calendar_data.dom_id,
           'data-provide'        => 'datepicker',
           'data-date-language'  => I18n.locale,
           'data-date-autoclose' => true,
-          'data-date-format'    => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_BOOTSTRAP),
+          'data-date-format'    => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_BOOTSTRAP)
       }
-
 
       text_field_tag_options['class'] = 'form-control input-sm'
 
@@ -48,11 +46,9 @@ module Wice #:nodoc:
     end
 
     def prepare_data_for_bscalendar(options)  #:nodoc:
-
       date_format = Wice::ConfigurationProvider.value_for(:DATE_FORMAT)
 
       CalendarData.new.tap do |calendar_data|
-
         calendar_data.name                      = options[:name]
         calendar_data.date_string               = options[:initial_date].nil? ? '' : options[:initial_date].strftime(date_format)
         calendar_data.dom_id                    = options[:name].gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
@@ -62,6 +58,5 @@ module Wice #:nodoc:
         calendar_data.fire_event                = options[:fire_event]
       end
     end
-
   end
 end

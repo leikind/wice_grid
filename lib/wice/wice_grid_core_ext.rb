@@ -1,13 +1,13 @@
+# encoding: utf-8
 module Wice
   module WgHash #:nodoc:
     class << self #:nodoc:
-
       # if there's a hash of hashes, the original structure and the
       # returned structure should not contain any shared deep hashes
       def deep_clone(hash)  #:nodoc:
         cloned = hash.clone
         cloned.keys.each do |k|
-          if cloned[k].kind_of?(Hash)
+          if cloned[k].is_a?(Hash)
             cloned[k] = Wice::WgHash.deep_clone cloned[k]
           end
         end
@@ -18,12 +18,12 @@ module Wice
       # it will be added, if there is, the css class name will be appended to the existing
       # class name(s)
       def add_or_append_class_value!(hash, klass_value, prepend = false) #:nodoc:
-        if hash.has_key?('class')
+        if hash.key?('class')
           hash[:class] = hash['class']
           hash.delete('class')
         end
 
-        hash[:class] = if hash.has_key?(:class)
+        hash[:class] = if hash.key?(:class)
           if prepend
             "#{klass_value} #{hash[:class]}"
           else
@@ -41,9 +41,8 @@ module Wice
       # In some it is important that if the value is empty, no option
       # is submitted at all. Thus, there's a check for an empty value
       def make_hash(key, value) #:nodoc:
-        value.blank? ? {} : {key => value}
+        value.blank? ? {} : { key => value }
       end
-
 
       # A deep merge of two hashes.
       # That is, if both hashes have the same key and the values are hashes, these two hashes should also be merged.
@@ -81,38 +80,32 @@ module Wice
 
       def recursively_gather_finite_non_hash_values_with_key_path(hash, res, stack = []) #:nodoc:
         hash.each do |key, value|
-          if value.kind_of?(Hash)
+          if value.is_a?(Hash)
             recursively_gather_finite_non_hash_values_with_key_path(value, res, stack + [key])
           else
             res << [stack + [key], value]
           end
         end
       end
-
     end
   end
 
-
   module WgEnumerable #:nodoc:
-
     # Used to check the validity of :custom_filter parameter of column
     def self.all_items_are_of_class(enumerable, klass)  #:nodoc:
       return false if enumerable.empty?
-      enumerable.inject(true){|memo, o| (o.is_a? klass) && memo}
+      enumerable.inject(true) { |memo, o| (o.is_a? klass) && memo }
     end
-
   end
 
   module WgArray #:nodoc:
     # Only used by Hash#parameter_names_and_values
     # Transforms ['foo', 'bar', 'baz'] to 'foo[bar][baz]'
     def self.to_parameter_name(array) #:nodoc:
-      array[0].to_s + (array[1..-1] || []).collect{|k| '[' + k.to_s + ']'}.join('')
+      array[0].to_s + (array[1..-1] || []).collect { |k| '[' + k.to_s + ']' }.join('')
     end
   end
-
 end
-
 
 # tag_options is a Rails views private method that takes a hash op options for
 # an HTM hash and produces a string ready to be added to the tag.
@@ -125,9 +118,7 @@ module ActionView #:nodoc:
   end
 end
 
-
 module WGObjectExtensions #:nodoc:
-
   # takes a list of messages, sends message 1 to self, then message 2 is sent to the result of the first message, ans so on
   # returns nil as soon as the current receiver does not respond to such a message
   def deep_send(*messages)  #:nodoc:
@@ -140,11 +131,10 @@ module WGObjectExtensions #:nodoc:
       end
       # return obj if obj.nil?
     end
-    return obj
+    obj
   end
 end
 
 class Object #:nodoc:
   include WGObjectExtensions
 end
-

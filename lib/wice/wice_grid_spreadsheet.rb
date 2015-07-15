@@ -1,8 +1,8 @@
+# encoding: utf-8
 require 'csv'
 
 module Wice
   class Spreadsheet  #:nodoc:
-
     attr_reader :tempfile
 
     def initialize(name, field_separator)  #:nodoc:
@@ -13,6 +13,5 @@ module Wice
     def << (row)  #:nodoc:
       @csv << row
     end
-
   end
 end

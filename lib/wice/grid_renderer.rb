@@ -1,6 +1,6 @@
+# encoding: utf-8
 module Wice
   class GridRenderer
-
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::CaptureHelper
     include ActionView::Helpers::TextHelper
@@ -16,9 +16,9 @@ module Wice
     attr_reader :grid
     attr_reader :kaption
 
-    @@order_parameter_name = "order"
-    @@order_direction_parameter_name = "order_direction"
-    @@page_parameter_name = "page"
+    @@order_parameter_name = 'order'
+    @@order_direction_parameter_name = 'order_direction'
+    @@page_parameter_name = 'page'
 
     def initialize(grid, view)  #:nodoc:
       @grid = grid
@@ -37,7 +37,6 @@ module Wice
       @view.controller
     end
 
-
     def add_column(vc)  #:nodoc:
       @columns_table[vc.fully_qualified_attribute_name] = vc if vc.attribute
       @columns << vc
@@ -52,7 +51,7 @@ module Wice
     end
 
     def each_column_label(filter = nil)  #:nodoc:
-      filter_columns(filter).each{|col| yield col.name}
+      filter_columns(filter).each { |col| yield col.name }
     end
 
     def column_labels(filter = nil)  #:nodoc:
@@ -60,12 +59,12 @@ module Wice
     end
 
     def each_column(filter = nil)  #:nodoc:
-      filter_columns(filter).each{|col| yield col}
+      filter_columns(filter).each { |col| yield col }
     end
 
     def each_column_aware_of_one_last_one(filter = nil)  #:nodoc:
       cols = filter_columns(filter)
-      cols[0..-2].each{|col| yield col, false}
+      cols[0..-2].each { |col| yield col, false }
       yield cols.last, true
     end
 
@@ -74,16 +73,15 @@ module Wice
     end
 
     def select_for(filter)  #:nodoc:
-      filter_columns(filter).select{|col| yield col}
+      filter_columns(filter).select { |col| yield col }
     end
 
     def find_one_for(filter)  #:nodoc:
-      filter_columns(filter).find{|col| yield col}
+      filter_columns(filter).find { |col| yield col }
     end
 
-
     def each_column_with_attribute  #:nodoc:
-      @columns.select(&:attribute).each{|col| yield col}
+      @columns.select(&:attribute).each { |col| yield col }
     end
 
     alias_method :each, :each_column
@@ -91,16 +89,16 @@ module Wice
 
     def csv_export_icon #:nodoc:
       content_tag(:div,
-        content_tag(:i, '', class: 'fa fa-file-excel-o'),
-        title: NlMessage['csv_export_tooltip'],
-        class: 'clickable export-to-csv-button'
+                  content_tag(:i, '', class: 'fa fa-file-excel-o'),
+                  title: NlMessage['csv_export_tooltip'],
+                  class: 'clickable export-to-csv-button'
       )
     end
 
     def pagination_panel(number_of_columns, hide_csv_button)  #:nodoc:
       panel = yield
 
-      render_csv_button = @grid.export_to_csv_enabled && ! hide_csv_button
+      render_csv_button = @grid.export_to_csv_enabled && !hide_csv_button
 
       if panel.nil?
         if render_csv_button
@@ -119,7 +117,7 @@ module Wice
 
     # Takes one argument and adds the  <caption></caption> tag to the table with the argument value as
     # the contents of <caption>.
-    def caption kaption
+    def caption(kaption)
       @kaption = kaption
     end
 
@@ -141,9 +139,8 @@ module Wice
     # +g.column+ definition. If the block returns +nil+ or +false+ no checkbox will be rendered.
 
     def action_column(opts = {}, &block)
-
       if @action_column_present
-        raise Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
+        fail Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
       end
 
       options = {
@@ -151,7 +148,7 @@ module Wice
         html:                {},
         select_all_buttons:  true,
         object_property:     :id,
-        html_check_box:      true,
+        html_check_box:      true
       }
 
       opts.assert_valid_keys(options.keys)
@@ -310,15 +307,15 @@ module Wice
 
       unless options[:model].nil?
         options[:model] = options[:model].constantize if options[:model].is_a? String
-        raise WiceGridArgumentError.new("Option :model can be either a class or a string instance") unless options[:model].is_a? Class
+        fail WiceGridArgumentError.new('Option :model can be either a class or a string instance') unless options[:model].is_a? Class
       end
 
       if options[:attribute].nil? && options[:model]
-        raise WiceGridArgumentError.new("Option :model is only used together with :attribute")
+        fail WiceGridArgumentError.new('Option :model is only used together with :attribute')
       end
 
       if options[:attribute] && options[:attribute].index('.')
-        raise WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
+        fail WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
       end
 
       if options[:class]
@@ -328,18 +325,18 @@ module Wice
       end
 
       if block.nil?
-        if ! options[:attribute].blank?
-          block = lambda{|obj| obj.send(options[:attribute])}
+        if !options[:attribute].blank?
+          block = ->(obj) { obj.send(options[:attribute]) }
         else
-          raise WiceGridArgumentError.new(
-            "Missing column block without attribute defined. You can only omit the block if attribute is present.")
+          fail WiceGridArgumentError.new(
+            'Missing column block without attribute defined. You can only omit the block if attribute is present.')
         end
       end
 
       klass = Columns::ViewColumn
       if options[:attribute] &&
-          col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
-            options[:custom_filter],  options[:table_alias], options[:filter_type])
+         col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
+                                                        options[:custom_filter],  options[:table_alias], options[:filter_type])
 
         db_column, table_name, main_table = col_type_and_table_name
         col_type = db_column.type
@@ -347,10 +344,10 @@ module Wice
         if options[:custom_filter]
 
           custom_filter = if options[:custom_filter] == :auto
-            lambda{ @grid.distinct_values_for_column(db_column) } # Thank God Ruby has higher order functions!!!
+            -> { @grid.distinct_values_for_column(db_column) } # Thank God Ruby has higher order functions!!!
 
           elsif options[:custom_filter].class == Symbol
-            lambda{ @grid.distinct_values_for_column_in_resultset([options[:custom_filter]])}
+            -> { @grid.distinct_values_for_column_in_resultset([options[:custom_filter]]) }
 
           elsif options[:custom_filter].class == Hash
             options[:custom_filter].keys
@@ -361,19 +358,19 @@ module Wice
             if options[:custom_filter].empty?
               []
             elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], Symbol)
-              lambda{ @grid.distinct_values_for_column_in_resultset(options[:custom_filter]) }
+              -> { @grid.distinct_values_for_column_in_resultset(options[:custom_filter]) }
 
             elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], String) || WgEnumerable.all_items_are_of_class(options[:custom_filter], Numeric)
-              options[:custom_filter].map{|i| [i,i]}
+              options[:custom_filter].map { |i| [i, i] }
 
             elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], Array)
               options[:custom_filter]
             else
-              raise WiceGridArgumentError.new(
-                ':custom_filter can equal :auto, an array of string and/or numbers (direct values for the dropdown), ' +
-                'a homogeneous array of symbols (a sequence of methods to send to AR objects in the result set to ' +
-                'retrieve unique values for the dropdown), a Symbol (a shortcut for a one member array of symbols), ' +
-                'a hash where keys are labels and values are values for the dropdown option, or an array of two-item arrays, ' +
+              fail WiceGridArgumentError.new(
+                ':custom_filter can equal :auto, an array of string and/or numbers (direct values for the dropdown), ' \
+                'a homogeneous array of symbols (a sequence of methods to send to AR objects in the result set to ' \
+                'retrieve unique values for the dropdown), a Symbol (a shortcut for a one member array of symbols), ' \
+                'a hash where keys are labels and values are values for the dropdown option, or an array of two-item arrays, ' \
                 'each of which contains the label (first element) and the value (second element) for a dropdown option'
                 )
             end
@@ -392,8 +389,8 @@ module Wice
 
       vc.negation = options[:negation] if vc.respond_to? :negation=
 
-      vc.filter_all_label = options[:filter_all_label] if vc.kind_of?(Columns.get_view_column_processor(:custom))
-      if vc.kind_of?(Columns.get_view_column_processor(:boolean))
+      vc.filter_all_label = options[:filter_all_label] if vc.is_a?(Columns.get_view_column_processor(:custom))
+      if vc.is_a?(Columns.get_view_column_processor(:boolean))
         vc.boolean_filter_true_label = options[:boolean_filter_true_label]
         vc.boolean_filter_false_label = options[:boolean_filter_false_label]
       end
@@ -438,22 +435,21 @@ module Wice
     # *   <tt>g.blank_slate "some text to be rendered"</tt>
     # *   <tt>g.blank_slate partial: "partial_name"</tt>
     def blank_slate(opts = nil, &block)
-      if (opts.is_a?(Hash) && opts.has_key?(:partial) && block.nil?) || (opts.is_a?(String) && block.nil?)
+      if (opts.is_a?(Hash) && opts.key?(:partial) && block.nil?) || (opts.is_a?(String) && block.nil?)
         @blank_slate_handler = opts
       elsif opts.nil? && block
         @blank_slate_handler = block
       else
-        raise WiceGridArgumentError.new("blank_slate accepts only a string, a block, or template: 'path_to_template' ")
+        fail WiceGridArgumentError.new("blank_slate accepts only a string, a block, or template: 'path_to_template' ")
       end
     end
-
 
     def get_row_attributes(ar_object) #:nodoc:
       if @row_attributes_handler
         row_attributes = @row_attributes_handler.call(ar_object)
         row_attributes = {} if row_attributes.blank?
         unless row_attributes.is_a?(Hash)
-          raise WiceGridArgumentError.new("row_attributes block must return a hash containing HTML attributes. The returned value is #{row_attributes.inspect}")
+          fail WiceGridArgumentError.new("row_attributes block must return a hash containing HTML attributes. The returned value is #{row_attributes.inspect}")
         end
         row_attributes
       else
@@ -461,13 +457,12 @@ module Wice
       end
     end
 
-
     def no_filter_needed?   #:nodoc:
-      not @columns.inject(false){|a,b| a || b.filter_shown? }
+      !@columns.inject(false) { |a, b| a || b.filter_shown? }
     end
 
     def no_filter_needed_in_main_table?   #:nodoc:
-      not @columns.inject(false){|a,b| a || b.filter_shown_in_main_table? }
+      !@columns.inject(false) { |a, b| a || b.filter_shown_in_main_table? }
     end
 
     def base_link_for_filter(controller, extra_parameters = {})   #:nodoc:
@@ -501,19 +496,17 @@ module Wice
       controller.url_for(new_params)
     end
 
-
     def column_link(column, direction, params, extra_parameters = {})   #:nodoc:
-
-      column_attribute_name = if column.attribute.index('.') or column.main_table
+      column_attribute_name = if column.attribute.index('.') || column.main_table
         column.attribute
       else
         column.table_alias_or_table_name + '.' + column.attribute
       end
 
-      query_params = {@grid.name => {
+      query_params = { @grid.name => {
         @@order_parameter_name           => column_attribute_name,
         @@order_direction_parameter_name => direction
-      }}
+      } }
 
       cleaned_params =  Wice::WgHash.deep_clone params
       cleaned_params.merge!(extra_parameters)
@@ -521,15 +514,12 @@ module Wice
       cleaned_params.delete(:controller)
       cleaned_params.delete(:action)
 
-
       query_params = Wice::WgHash.rec_merge(cleaned_params, query_params)
 
       '?' + query_params.to_query
     end
 
-
     protected
-
 
     def filter_columns(method_name = nil) #:nodoc:
       method_name ? @columns.select(&method_name) : @columns
@@ -542,8 +532,7 @@ module Wice
       # /foo?grid=some_value --> /foo?grid=some_value
 
       empty_hash_rx = Regexp.new "([&?])#{Regexp.escape @grid.name}=([&?]|$)" # c.f., issue #140
-      url.gsub(empty_hash_rx, '\1').gsub /\?+$/, ''
+      url.gsub(empty_hash_rx, '\1').gsub(/\?+$/, '')
     end
-
   end
 end

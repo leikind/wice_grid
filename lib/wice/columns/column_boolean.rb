@@ -1,7 +1,6 @@
+# encoding: utf-8
 module Wice
-
   module Columns #:nodoc:
-
     class ViewColumnBoolean < ViewColumnCustomDropdown #:nodoc:
       include ActionView::Helpers::FormOptionsHelper
 
@@ -19,10 +18,9 @@ module Wice
       end
     end
 
-
     class ConditionsGeneratorColumnBoolean < ConditionsGeneratorColumn  #:nodoc:
       def  generate_conditions(table_alias, opts)   #:nodoc:
-        unless (opts.kind_of?(Array) && opts.size == 1)
+        unless opts.is_a?(Array) && opts.size == 1
           Wice.log "invalid parameters for the grid boolean filter - must be an one item array: #{opts.inspect}"
           return false
         end
@@ -31,12 +29,8 @@ module Wice
           [" (#{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} = ? or #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} is null) ", false]
         elsif opts == 't'
           [" #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} = ?", true]
-        else
-          nil
-        end
+                end
       end
     end
-
   end
-
 end

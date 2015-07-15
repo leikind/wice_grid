@@ -1,25 +1,20 @@
+# encoding: utf-8
 module Wice
-
   module Columns #:nodoc:
-
     class ViewColumnDate < ViewColumnDatetime #:nodoc:
-
       def chunk_names
         %w(year month day)
       end
 
       def render_standard_filter_internal(params) #:nodoc:
         '<div class="date-filter">' +
-        select_date(params[:fr], {include_blank: true, prefix: @name1, id: @dom_id}) + '<br/>' +
-        select_date(params[:to], {include_blank: true, prefix: @name2, id: @dom_id2}) +
-        '</div>'
+          select_date(params[:fr], include_blank: true, prefix: @name1, id: @dom_id) + '<br/>' +
+          select_date(params[:to], include_blank: true, prefix: @name2, id: @dom_id2) +
+          '</div>'
       end
-
     end
 
-
     class ConditionsGeneratorColumnDate < ConditionsGeneratorColumn  #:nodoc:
-
       def generate_conditions(table_alias, opts)   #:nodoc:
         conditions = [[]]
         if opts[:fr]
@@ -38,7 +33,5 @@ module Wice
         conditions
       end
     end
-
   end
-
 end
