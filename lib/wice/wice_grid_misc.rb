@@ -56,11 +56,30 @@ module Wice
     module ClassMethods #:nodoc:
 
       def _sanitize_sql_hash_for_conditions(attrs, default_table_name = self.table_name)
-        attrs = expand_hash_conditions_for_aggregates(attrs)
+        case connection.visitor.method(:accept).arity
+        when 1
+          _sanitize_sql_hash_for_conditions_before_42(attrs, default_table_name)
+        when 2
+          _sanitize_sql_hash_for_conditions42(attrs, default_table_name)
+        else
+          raise "Unsupported Rails version"
+        end
+      end
 
+      def _sanitize_sql_hash_for_conditions_before_42(attrs, default_table_name)
+        attrs = expand_hash_conditions_for_aggregates(attrs)
         table = Arel::Table.new(table_name, arel_engine).alias(default_table_name)
         ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map { |b|
           connection.visitor.accept b
+        }.join(' AND ')
+      end
+
+      def _sanitize_sql_hash_for_conditions42(attrs, default_table_name)
+        attrs = ActiveRecord::PredicateBuilder.resolve_column_aliases self, attrs
+        attrs = expand_hash_conditions_for_aggregates(attrs)
+        table = Arel::Table.new(table_name, arel_engine).alias(default_table_name)
+        ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map { |b|
+          connection.visitor.compile b
         }.join(' AND ')
       end
 
