@@ -46,8 +46,8 @@ It is also possible to initialize a grid with an initial saved query providing t
 itself to parameter `saved_query`:
 ```
   @products_grid = initialize_grid(Product,
-    :name => 'prod_grid',
-    :saved_query =>  SavedQuery.find_by_id_and_grid_name(12, 'prod_grid') )
+    name:        'prod_grid',
+    saved_query: SavedQuery.find_by_id_and_grid_name(12, 'prod_grid') )
 ```
 
 ## Adding Application Specific Logic to Saving/Restoring Queries
@@ -61,14 +61,14 @@ After renaming the model to SavedQuery it looks like this:
   class SavedQuery < ActiveRecord::Base  #:nodoc:
     serialize :query
 
-    validates_uniqueness_of :name, :scope => :grid_name, :on => :create,
-      :message => 'A query with this name already exists'
+    validates_uniqueness_of :name, scope: :grid_name, on: :create,
+      message: 'A query with this name already exists'
 
-    validates_presence_of :name, :message => 'Please submit the name of the custom query'
+    validates_presence_of :name, message: 'Please submit the name of the custom query'
 
     def self.list(name, controller)
-      conditions = {:grid_name => name}
-      self.find(:all, :conditions => conditions)
+      conditions = {grid_name: name}
+      self.find(:all, conditions: conditions)
     end
   end
 ```
@@ -80,19 +80,19 @@ store queries for each user, we could add +user_id+ to the table and modify the 
   class SavedQuery < ActiveRecord::Base
     serialize :query
 
-    validates_uniqueness_of :name, :scope => :grid_name, :on => :create,
-      :message => 'A query with this name already exists'
+    validates_uniqueness_of :name, scope: :grid_name, on: :create,
+      message: 'A query with this name already exists'
 
-    validates_presence_of :name, :message => 'Please submit the name of the custom query'
+    validates_presence_of :name, message: 'Please submit the name of the custom query'
 
     belongs_to :identity # !
 
     def self.list(name, controller)
-      conditions = {:grid_name => name}
+      conditions = {grid_name: name}
       if controller.current_user # !
         conditions[:user_id] = controller.current_user.id # provided that method current_user is defined in ApplicationController and returns the currrent user.
       end
-      self.find(:all, :conditions => conditions)
+      self.find(:all, conditions: conditions)
     end
   end
 ```
@@ -101,7 +101,7 @@ The following step is to make sure that a new query is saved with the correct +u
 `saved_queries_panel(@grid_object)` to the following:
 
 ```
-   <%= saved_queries_panel(@identities_grid, :extra_parameters => {:user_id => @current_user.id}) %>
+   <%= saved_queries_panel(@identities_grid, extra_parameters: {user_id: @current_user.id}) %>
 ```
 For every key in has :extra_parameters there must exist a field in the model - this hash will be used as a parameter to
 `attributes=` method of the query object.

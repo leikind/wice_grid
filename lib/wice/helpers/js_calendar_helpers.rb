@@ -20,7 +20,6 @@ module Wice #:nodoc:
         :id                 => calendar_data.dom_id,
         'data-locale'       => I18n.locale,
         'data-date-format'  => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_JQUERY),
-        'data-button-image' => Wice::ConfigurationProvider.value_for(:CALENDAR_ICON),
         'data-button-text'  => calendar_data.title
       }
 
@@ -56,7 +55,11 @@ module Wice #:nodoc:
           'data-dom-id' => calendar_data.dom_id
         )
 
-      "<span id=\"#{calendar_data.datepicker_placeholder_id}\">#{date_picker}</span>"
+      content_tag(:span,
+        date_picker,
+        id:    calendar_data.datepicker_placeholder_id,
+        class: 'jq-datepicker-container'
+      )
     end
 
     def prepare_data_for_calendar(options)  #:nodoc:

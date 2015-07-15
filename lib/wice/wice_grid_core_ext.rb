@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 module Wice
   module WgHash #:nodoc:
     class << self #:nodoc:

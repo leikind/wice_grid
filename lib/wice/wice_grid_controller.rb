@@ -1,4 +1,3 @@
-# encoding: UTF-8
 module Wice
   module Controller
 
@@ -89,7 +88,7 @@ module Wice
     # This convention can be easily overridden by supplying a hash parameter to +export_grid_if_requested+ where each key is the name of
     # a grid, and the value is the name of the template (like it is specified for +render+, i.e. without '_' and extensions):
     #
-    #   export_grid_if_requested(grid: => 'orders', 'grid2' => 'invoices')
+    #   export_grid_if_requested('grid' => 'orders', 'grid2' => 'invoices')
     #
     # If the request is not a CSV export request, the method does nothing and returns +false+, if it is a CSV export request,
     # the method returns +true+.
@@ -137,10 +136,10 @@ module Wice
     # * <tt>:value</tt> - the value of the column filter.
     def wice_grid_custom_filter_params(opts = {})
       options = {
-        :grid_name => 'grid',
-        :attribute => nil,
-        :model => nil,
-        :value => nil
+        grid_name: 'grid',
+        attribute: nil,
+        model:     nil,
+        value:     nil
       }
       options.merge!(opts)
 

@@ -1,4 +1,41 @@
-# 3.4.10
+# 3.5.0
+
+New features:
+
+* In addition to two icons "SET ALL" and "UNSET ALL" in the action column, there is now
+  an option to use a standard HTML checkbox. This is now the default.
+* Support for Bootstrap Datepicker. A suggested way to use Bootstrap Datepicker in a Rails app
+  is https://github.com/Nerian/bootstrap-datepicker-rails. Configuration variable HELPER_STYLE
+  sets the default flavor of date pickers. Can also be set per grid with helper_style: :bootstrap
+  * :calendar  jQuery UI datepicker
+  * :bootstrap Bootstrap datepicker
+  * :standard
+* Italian locale
+* Spanish locale
+* various fixes
+* Configuration variable ALLOW_SHOWING_ALL_QUERIES renamed to ALLOW_SHOWING_ALL_RECORDS
+
+
+
+# 3.4.14
+
+Wice::Defaults::HIDE_ALL_LINK_FROM is nil by default
+
+# 3.4.13
+
+New configuration variable Wice::Defaults::HIDE_ALL_LINK_FROM! When set and the total
+number of row exceeds its value, the "SHOW ALL" link disappears.
+
+# 3.4.12
+
+fixes
+
+# 3.4.11
+
+started adding HTML5 datepicker
+changed how relations are detected so that it can work with relation proxies (aka octopus)
+
+# 3.4.10
 
 bug fixes
 better support for :group

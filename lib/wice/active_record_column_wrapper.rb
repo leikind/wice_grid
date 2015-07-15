@@ -1,4 +1,3 @@
-# encoding: UTF-8
 module Wice
 
   # to be mixed in into ActiveRecord::ConnectionAdapters::Column

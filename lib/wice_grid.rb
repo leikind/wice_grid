@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'wice/wice_grid_misc.rb'
 require 'wice/wice_grid_core_ext.rb'
 require 'wice/grid_renderer.rb'
@@ -595,9 +593,7 @@ module Wice
     # end
 
     def resultset_without_paging_with_user_filters  #:nodoc:
-      @klass.unscoped do
-        active_relation_for_resultset_without_paging_with_user_filters.to_a
-      end
+      active_relation_for_resultset_without_paging_with_user_filters.to_a
     end
 
     def active_relation_for_resultset_without_paging_with_user_filters  #:nodoc:

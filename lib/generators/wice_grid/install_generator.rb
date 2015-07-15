@@ -11,9 +11,6 @@ module WiceGrid #:nodoc:
         template 'wice_grid_config.rb', 'config/initializers/wice_grid_config.rb'
 
         copy_file 'wice_grid.yml',  'config/locales/wice_grid.yml'
-
-        copy_file 'wice_grid.scss',  'app/assets/stylesheets/wice_grid.scss'
-
       end
     end
   end

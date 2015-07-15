@@ -1,0 +1,84 @@
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+.wg-detached-filter, .wice-grid{
+
+  .text-filter-container {
+    input{
+      width:auto;
+      margin-right: 10px;
+      display: inline;
+    }
+  }
+
+  thead th select {
+    display: inline-block;
+  }
+
+  a.date-label {text-decoration: none;}
+  a.date-label:hover {text-decoration: line-through;}
+
+  .clickable{
+    cursor: pointer;
+    margin-bottom: 2px;
+    margin-right: 2px;
+  }
+
+  .ui-datepicker-trigger, .wg-detached-filter .ui-datepicker-trigger{
+    cursor: pointer;
+  }
+
+  .custom-dropdown-container {
+
+    .expand-multi-select-icon, .collapse-multi-select-icon{
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-left: 5px;
+      vertical-align: top;
+    }
+  }
+}
+
+.wice-grid{
+
+  .desc,  .asc{
+    padding-right: 18px;
+    text-decoration:none;
+  }
+
+  .clickable.select-all, .clickable.deselect-all{
+    float:left;
+  }
+
+  /* in case of twitter bootstrap :) */
+  thead th select{
+    width: auto;
+  }
+
+  .pagination{
+    margin: 0px;
+    float: left;
+  }
+
+  tr.wg-filter-row  input[type=text] {
+    width: 100px;
+  }
+
+  .pagination_status {
+    font-weight: bold;
+    float: right;
+  }
+}
+
+.wice-grid-query-panel{
+  li {list-style-type: none; }
+
+  ul {margin-left: 0 }
+}
+
+input.wice-grid-save-query-field{
+  width: auto;
+  display: inline-block;
+  margin-right: 10px;
+}

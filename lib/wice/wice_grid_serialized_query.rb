@@ -1,4 +1,3 @@
-# encoding: UTF-8
 class WiceGridSerializedQuery < ActiveRecord::Base  #:nodoc:
   serialize :query
 
