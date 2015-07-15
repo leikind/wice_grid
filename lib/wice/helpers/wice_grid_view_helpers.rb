@@ -243,7 +243,7 @@ module Wice
 
       grid.output_buffer << %!<div class="wice-grid-container table-responsive" data-grid-name="#{grid.name}" id="#{grid.name}"><div id="#{grid.name}_title">!
       grid.output_buffer << content_tag(:h3, grid.saved_query.name) if grid.saved_query
-      grid.output_buffer << "</div><table #{tag_options(table_html_attrs, true)}>"
+      grid.output_buffer << "</div><table #{public_tag_options(table_html_attrs, true)}>"
       grid.output_buffer << "<caption>#{rendering.kaption}</caption>" if rendering.kaption
       grid.output_buffer << "<thead>"
 
@@ -274,7 +274,7 @@ module Wice
       title_row_attrs = header_tr_html.clone
       Wice::WgHash.add_or_append_class_value!(title_row_attrs, 'wice-grid-title-row', true)
 
-      grid.output_buffer << %!<tr #{tag_options(title_row_attrs, true)}>!
+      grid.output_buffer << %!<tr #{public_tag_options(title_row_attrs, true)}>!
 
       filter_row_id = grid.name + '_filter_row'
 
@@ -372,7 +372,7 @@ module Wice
           Wice::WgHash.add_or_append_class_value!(filter_row_attrs, 'wg-filter-row', true)
           filter_row_attrs['id'] = filter_row_id
 
-          grid.output_buffer << %!<tr #{tag_options(filter_row_attrs, true)} !
+          grid.output_buffer << %!<tr #{public_tag_options(filter_row_attrs, true)} !
           grid.output_buffer << 'style="display:none"' unless filter_shown
           grid.output_buffer << '>'
 
@@ -468,7 +468,7 @@ module Wice
         Wice::WgHash.add_or_append_class_value!(row_attributes, cycle_class)
 
         grid.output_buffer << before_row_output if before_row_output
-        grid.output_buffer << "<tr #{tag_options(row_attributes)}>#{row_content}"
+        grid.output_buffer << "<tr #{public_tag_options(row_attributes)}>#{row_content}"
         grid.output_buffer << content_tag(:td, '') unless no_rightmost_column
         grid.output_buffer << '</tr>'
         grid.output_buffer << after_row_output if after_row_output

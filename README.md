@@ -1,5 +1,5 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
-[![Build](https://travis-ci.org/ryanfox1985/wice_grid.svg)](https://travis-ci.org/ryanfox1985/wice_grid)
+[![Build](https://travis-ci.org/leikind/wice_grid.svg)](https://travis-ci.org/leikind/wice_grid)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 * Yuri Leikind, yuri.leikind at gmail dot com

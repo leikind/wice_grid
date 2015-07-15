@@ -120,7 +120,9 @@ end
 module ActionView #:nodoc:
   module Helpers #:nodoc:
     module TagHelper #:nodoc:
-      public :tag_options
+      def public_tag_options(options, escape=true)
+        tag_options(options, escape)
+      end
     end
   end
 end
