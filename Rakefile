@@ -13,18 +13,16 @@ require 'rspec/core'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 
-desc 'Run RSpec with code coverage'
-task :coverage do
-  ENV['COVERAGE'] = 'true'
-  Rake::Task['spec'].execute
+require 'rubocop/rake_task'
+desc 'Run RuboCop on the lib directory'
+RuboCop::RakeTask.new(:rubocop) do |task|
+  task.patterns = ['lib/**/*.rb']  
+  # don't abort rake on failure
+  task.fail_on_error = false
 end
 
 require 'yard'
 require 'yard/rake/yardoc_task'
-
-task default: [:spec, :rdoc]
-
-require 'yard'
 desc 'Generate documentation for the wice_grid plugin.'
 YARD::Rake::YardocTask.new(:rdoc) do |t|
   OTHER_PATHS = %w()
@@ -33,3 +31,11 @@ YARD::Rake::YardocTask.new(:rdoc) do |t|
   t.options = %w(--main=README.md --file TODO.md,CHANGELOG.md,SAVED_QUERIES_HOWTO.md,MIT-LICENSE)
   t.stats_options = ['--list-undoc']
 end
+
+desc 'Run RSpec with code coverage'
+task :coverage do
+  ENV['COVERAGE'] = 'true'
+  Rake::Task['spec'].execute
+end
+
+task default: [:rubocop, :spec, :rdoc]
