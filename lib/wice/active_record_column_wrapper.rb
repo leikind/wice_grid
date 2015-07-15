@@ -1,11 +1,9 @@
+# encoding: utf-8
 module Wice
-
   # to be mixed in into ActiveRecord::ConnectionAdapters::Column
   module WiceGridExtentionToActiveRecordColumn #:nodoc:
     attr_accessor :model
   end
-
-
 
   class ActiveRecordColumnWrapper #:nodoc:
     def initialize(column, all_filter_params, main_table, table_alias, custom_filter_active, filter_type) #:nodoc:
@@ -14,7 +12,6 @@ module Wice
       @all_filter_params, @main_table, @table_alias, @custom_filter_active =
         all_filter_params, main_table, table_alias, custom_filter_active
     end
-
 
     def wg_initialize_request_parameters  #:nodoc:
       @request_params = nil
@@ -60,7 +57,7 @@ module Wice
         end
       end
 
-      return wg_generate_conditions, current_parameter_name
+      [wg_generate_conditions, current_parameter_name]
     end
 
     def wg_generate_conditions  #:nodoc:
@@ -92,13 +89,8 @@ module Wice
       @column.model
     end
 
-
     def alias_or_table_name(table_alias) #:nodoc:
       table_alias || @column.model.table_name
     end
-
-
   end
-
-
 end

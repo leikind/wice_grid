@@ -1,7 +1,5 @@
 # 3.5.0
 
-New features:
-
 * In addition to two icons "SET ALL" and "UNSET ALL" in the action column, there is now
   an option to use a standard HTML checkbox. This is now the default.
 * Support for Bootstrap Datepicker. A suggested way to use Bootstrap Datepicker in a Rails app

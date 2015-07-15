@@ -1,9 +1,9 @@
+# encoding: utf-8
 module Wice
   class TableColumnMatrix < Hash #:nodoc:
-
     attr_reader :generated_conditions
 
-    def initialize()  #:nodoc:
+    def initialize  #:nodoc:
       super
       @generated_conditions = []
       @by_table_names = HashWithIndifferentAccess.new
@@ -14,19 +14,19 @@ module Wice
     end
 
     def conditions
-      @generated_conditions.collect{|_, cond| cond}
+      @generated_conditions.collect { |_, cond| cond }
     end
 
     alias_method :get, :[]
 
     attr_reader :default_model_class
     def default_model_class=(model)  #:nodoc:
-      init_columns_of_table(model) unless has_key?(model)
+      init_columns_of_table(model) unless key?(model)
       @default_model_class = model
     end
 
     def [](model)  #:nodoc:
-      init_columns_of_table(model) unless has_key?(model)
+      init_columns_of_table(model) unless key?(model)
       get(model)
     end
 
@@ -35,16 +35,15 @@ module Wice
     end
 
     def get_column_in_default_model_class_by_column_name(column_name)  #:nodoc:
-      raise WiceGridException.new("Cannot search for a column in a default model as the default model is not set") if @default_model_class.nil?
+      fail WiceGridException.new('Cannot search for a column in a default model as the default model is not set') if @default_model_class.nil?
       self[@default_model_class][column_name]
     end
 
     def init_columns_of_table(model) #:nodoc:
       self[model] = HashWithIndifferentAccess.new(model.columns.index_by(&:name))
       @by_table_names[model.table_name] = self[model]
-      self[model].each_value{|c| c.model = model}
+      self[model].each_value { |c| c.model = model }
     end
-    alias_method :<< , :init_columns_of_table
-
+    alias_method :<<, :init_columns_of_table
   end
 end
