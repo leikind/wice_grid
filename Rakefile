@@ -1,10 +1,30 @@
+require 'rubygems'
+require 'bundler'
 require 'bundler/gem_tasks'
-require 'rdoc/task'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts 'Run `bundle install` to install missing gems'
+  exit e.status_code
+end
+require 'rake'
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
+
+desc 'Run RSpec with code coverage'
+task :coverage do
+  ENV['COVERAGE'] = 'true'
+  Rake::Task['spec'].execute
+end
+
 require 'yard'
 require 'yard/rake/yardoc_task'
 
-task default: :rdoc
+task default: [:spec, :rdoc]
 
+require 'yard'
 desc 'Generate documentation for the wice_grid plugin.'
 YARD::Rake::YardocTask.new(:rdoc) do |t|
   OTHER_PATHS = %w()
