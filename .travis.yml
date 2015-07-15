@@ -2,9 +2,9 @@ sudo: false
 cache: bundler
 language: ruby
 rvm:
-  - 1.9.3
   - 2.0.0
   - 2.1
+  - 2.1.6
   - 2.2
   - ruby-head
   - jruby-19mode
@@ -15,6 +15,7 @@ matrix:
     - rvm: jruby-19mode
     - rvm: rbx-2
     - rvm: 2.2
+    - rvm: 1.9.3
   fast_finish: true
 before_install: gem update --remote bundler
 install:

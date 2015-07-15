@@ -1,6 +1,8 @@
 # encoding: utf-8
 module Wice #:nodoc:
   module Columns #:nodoc:
+    require 'active_support'
+
     COLUMN_PROCESSOR_INDEX = ActiveSupport::OrderedHash[ #:nodoc:
       :action, 'column_action', # Special processor for action column, columns with checkboxes
       :text, 'column_string',
