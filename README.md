@@ -102,7 +102,7 @@ Run the generator:
 rails g wice_grid:install
 ```
 
-This adds the config files:
+This adds the following files:
 * config/initializers/wice_grid_config.rb
 * config/locales/wice_grid.yml
 * app/assets/stylesheets/wice_grid.scss
