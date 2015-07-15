@@ -1,12 +1,17 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
+* Yuri Leikind, yuri.leikind at gmail dot com
+* Version 3.6.0dev
+* This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
+http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
+
+
+
 # WiceGrid
 
 - [Intro](#intro)
-  - [Author](#author)
-  - [Examples](#examples)
-  - [Requirements and Rails versions](#requirements_and_rails_versions)
+- [Requirements and Rails versions](#requirements_and_rails_versions)
 - [Installation](#installation)
 - [Basics](#basics)
   - [Rendering filter panel](#rendering_filter_panel)
@@ -61,16 +66,7 @@ WiceGrid views do not contain forms so you can include it in your own forms.
 WiceGrid is known to work with MySQL and Postgres.
 
 
-### Author
-* Yuri Leikind, yuri.leikind at gmail dot com
-
-### Examples
-
-This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
-http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
-
-
-### Requirements and Rails versions
+## Requirements and Rails versions
 
 For rails 2 use version 0.6 in [the master branch](https://github.com/leikind/wice_grid/tree/master).
 That branch is hardly supported.
@@ -1366,8 +1362,3 @@ only under certain circumstances:
 The author of the plugins welcomes any contribution.
 Please follow [these guidelines](https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question) when submitting a bug report.
 
-## Changelog
-See the file {file:CHANGELOG.md}.
-
-## License
-See the file {file:MIT-LICENSE}.
