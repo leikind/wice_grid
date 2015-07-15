@@ -25,12 +25,10 @@ http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind
 - [Filters](#filters)
   - [Custom dropdown filters](#custom-dropdown-filters)
   - [Numeric Filters](#numeric-filters)
-  - [Date and DateTime Filters](#date-and-dateTime-filters)
-- [Detached Filters](#detached-filters)
+  - [Date and DateTime Filters](#date-and-datetime-filters)
+  - [Detached Filters](#detached-filters)
 - [Defaults](#defaults)
 - [Bug reports](#bug-reports)
-- [Changelog](#changelog)
-- [License](#license)
 
 
 ## Intro
@@ -786,7 +784,7 @@ WiceGrid also supports [Bootstrap Datepicker](https://github.com/Nerian/bootstra
 Another option is standard Rails helpers for date fields, these are separate select fields for years,
 months and days (also for hour and minute if it is a datetime field).
 
-## Detached Filters
+### Detached Filters
 
 Filters can also be detached from the grid table and placed anywhere on page.
 
