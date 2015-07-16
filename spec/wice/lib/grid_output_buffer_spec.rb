@@ -37,8 +37,9 @@ module Wice
 
     it 'should filter_for return empty string' do
       grid = GridOutputBuffer.new
+      grid.return_empty_strings_for_nonexistent_filters = true
 
-      expect(grid.filter_for('key', true)).to eq('')
+      expect(grid.filter_for('key')).to eq('')
     end
   end
 end
