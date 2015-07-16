@@ -154,9 +154,7 @@ module Wice
         rendering.blank_slate_handler
       end
 
-      if rendering.find_one_for(:in_html) { |column| column.detach_with_id }
-        grid.output_buffer.return_empty_strings_for_nonexistent_filters = true
-      end
+      rendering.find_one_for(:in_html, true) { |column| column.detach_with_id }
     end
 
     def call_block(block, ar, extra_argument = nil)  #:nodoc:

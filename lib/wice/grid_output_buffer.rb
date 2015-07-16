@@ -1,8 +1,6 @@
 # encoding: utf-8
 module Wice
   class GridOutputBuffer < String #:nodoc:
-    attr_accessor :return_empty_strings_for_nonexistent_filters
-
     def initialize(*attrs)
       super(*attrs)
       @filters = HashWithIndifferentAccess.new
@@ -17,17 +15,19 @@ module Wice
       @filters[detach_with_id] = filter_code
     end
 
-    def filter_for(detach_with_id)
+    def filter_for(detach_with_id, return_empty_strings_for_nonexistent_filters = false)
       unless @filters.key? detach_with_id
-        if @return_empty_strings_for_nonexistent_filters
+        if return_empty_strings_for_nonexistent_filters
           return ''
         else
           fail WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!")
         end
       end
-      if @filters[detach_with_id] == false
+
+      unless @filters[detach_with_id]
         fail WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page")
       end
+
       res = @filters[detach_with_id]
       @filters[detach_with_id] = false
       res

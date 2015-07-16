@@ -34,5 +34,11 @@ module Wice
 
       expect { grid.filter_for('key') }.to raise_error
     end
+
+    it 'should filter_for return empty string' do
+      grid = GridOutputBuffer.new
+
+      expect(grid.filter_for('key', true)).to eq('')
+    end
   end
 end
