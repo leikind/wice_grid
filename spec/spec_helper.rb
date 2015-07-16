@@ -33,6 +33,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start
 
 begin
+  require 'support/active_record'
   require 'action_controller'
   require 'action_view'
 rescue LoadError
