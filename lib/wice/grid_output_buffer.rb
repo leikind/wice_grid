@@ -25,9 +25,11 @@ module Wice
           fail WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!")
         end
       end
-      if @filters[detach_with_id] == false
+
+      unless @filters[detach_with_id]
         fail WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page")
       end
+
       res = @filters[detach_with_id]
       @filters[detach_with_id] = false
       res
