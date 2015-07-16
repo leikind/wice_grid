@@ -33,6 +33,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
 SimpleCov.start
 
 begin
+  require 'support/active_record'
   require 'action_controller'
   require 'action_view'
 rescue LoadError
@@ -41,6 +42,8 @@ end
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + "/../lib"))
 require 'wice_grid'
 
+ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
+ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
