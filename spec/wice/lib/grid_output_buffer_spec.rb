@@ -20,5 +20,19 @@ module Wice
 
       expect(grid.filter_for('key')).to eq(FILTER_COMMON_CODE)
     end
+
+    it 'should filter_for 2 times' do
+      grid = GridOutputBuffer.new
+      grid.add_filter('key', FILTER_COMMON_CODE)
+
+      expect(grid.filter_for('key')).to eq(FILTER_COMMON_CODE)
+      expect { grid.filter_for('key') }.to raise_error
+    end
+
+    it 'should filter_for without filters' do
+      grid = GridOutputBuffer.new
+
+      expect { grid.filter_for('key') }.to raise_error
+    end
   end
 end
