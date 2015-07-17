@@ -1364,5 +1364,5 @@ only under certain circumstances:
 
 ## Bug reports
 
-The author of the plugins welcomes any contribution.
+The author of the plugin welcomes any contribution.
 Please follow [these guidelines](https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question) when submitting a bug report.
