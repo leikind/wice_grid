@@ -150,13 +150,13 @@ from the plugin into `app/assets/stylesheets`, rename it to avoid loading name c
 
 ## Basics
 
-The simplest example of a WiceGrid for one simple DB table called ApplicationAccount is the following:
+The simplest example of a WiceGrid for one simple DB table is the following:
 
 Controller:
 ```ruby
 @tasks_grid = initialize_grid(Task)
 ```
-It is also possible to use an  ActiveRecord::Relation instance as the first argument:
+It is also possible to use an  `ActiveRecord::Relation` instance as the first argument:
 ```ruby
 @tasks_grid = initialize_grid(Task.where(active: true))
 ```
