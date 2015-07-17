@@ -35,7 +35,10 @@ module Wice
     end
 
     def get_column_in_default_model_class_by_column_name(column_name)  #:nodoc:
-      fail WiceGridException.new('Cannot search for a column in a default model as the default model is not set') if @default_model_class.nil?
+      if @default_model_class.nil?
+        fail WiceGridException.new("Cannot search for this column(#{column_name}) in a default model(#{@default_model_class}) as the default model is not set")
+      end
+
       self[@default_model_class][column_name]
     end
 
@@ -44,6 +47,7 @@ module Wice
       @by_table_names[model.table_name] = self[model]
       self[model].each_value { |c| c.model = model }
     end
+
     alias_method :<<, :init_columns_of_table
   end
 end
