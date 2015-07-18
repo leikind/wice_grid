@@ -125,7 +125,7 @@ Here is an example of `application.js` if jquery.ui.datepicker is used:
 //= require_tree .
 ```
 Here is `application.js` if [Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails) is used:
-```  
+```
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
@@ -293,7 +293,7 @@ g.column name: 'Added', attribute: 'created_at', ordering: false
 ```
 It is important to understand that it is up to the developer to make sure that the value returned by a
 column block (the content of a cell) corresponds to the underlying database column specified by
-`:attribute` (and `:model` discussed below).
+`:attribute` (and `:assoc` discussed below).
 
 
 ### Rendering filter panel
@@ -405,14 +405,14 @@ that corresponds to the joined table:
       link_to(product.name, product_path(product))
     end
 
-    g.column name: 'Category', attribute: 'name', model: Category do |product| # joined table
+    g.column name: 'Category', attribute: 'name', assoc: :category do |product| # joined table
       product.category.name
     end
   %>
 ```
 
 Please note that the blockless definition of the column only works with columns from the main table and it
-won't work with columns with `:model`
+won't work with columns with `:assoc`
 
 ### Joined associations referring to the same table
 
@@ -439,11 +439,11 @@ View:
 
     g.column name: 'Project Name', attribute: 'name'
 
-    g.column name: 'Customer company', model: 'Company', attribute: 'name' do |task|
+    g.column name: 'Customer company', assoc: :customer, attribute: 'name' do |task|
       task.customer.name if task.customer
     end
 
-    g.column name: 'Supplier company', model: 'Company', attribute: 'name', table_alias: 'suppliers_projects' do |task|
+    g.column name: 'Supplier company', assoc: :supplier, attribute: 'name', table_alias: 'suppliers_projects' do |task|
       task.supplier.name if task.supplier
     end
 
@@ -578,7 +578,7 @@ the value of the select option and as its label:
 #### :auto
 
 `:auto` - a powerful option which populates the dropdown list with all unique values of the column
-specified by `:attribute` and `:model`, if present.
+specified by `:attribute` and `:assoc`, if present.
 ```ruby
   g.column name: 'Status', attribute: 'status', custom_filter: :auto
 ```
@@ -595,13 +595,13 @@ column.
 
 For example, if there is a column:
 ```ruby
-  g.column name: 'Project Name', attribute: 'name', model: 'Project' do |task|
+  g.column name: 'Project Name', attribute: 'name', assoc: :project do |task|
     task.project.name if task.project
   end
 ```
 adding `:custom_filter` like this:
 ```ruby
-  g.column name: 'Project Name', attribute: 'name', model: 'Project',
+  g.column name: 'Project Name', attribute: 'name', assoc: :project,
            custom_filter: Project.find(:all).map{|pr| [pr.name, pr.name]} do |task|
     task.project.name if task.project
   end
@@ -889,7 +889,7 @@ The structure of these two classes is as follows:
     end
 
   end
-```  
+```
 
 To use an external column processor use `:filter_type` in a column definition:
 ```ruby

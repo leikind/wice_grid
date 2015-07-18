@@ -180,7 +180,7 @@ module Wice
     # * <tt>:class</tt> - a shortcut for <tt>html: {class: 'css_class'}</tt>
     # * <tt>:attribute</tt> - name of a database column (which normally correspond to a model attribute with the
     #   same name). By default the field is assumed to belong to the default table (see documentation for the
-    #   +initialize_grid+ method). Parameter <tt>:model</tt> allows to specify another table. Presence of
+    #   +initialize_grid+ method). Parameter <tt>:assoc</tt> (association) allows to specify another joined table. Presence of
     #   this parameter
     #   * adds sorting capabilities by this field
     #   * automatically creates a filter based on the type of the field unless parameter <tt>:filter</tt> is set to false.
@@ -200,7 +200,7 @@ module Wice
     #   list of available filters.
     # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
-    # * <tt>:model</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
+    # * <tt>:assoc</tt> - Name of the model association. <tt>:attribute</tt> belongs to the table joined via this association.
     # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord
     #   constructs a query where the second join provides an alias for the joined table. Setting <tt>:table_alias</tt>
     #   to this alias will enable WiceGrid to order and filter by columns belonging to different associatiations  but
@@ -296,7 +296,6 @@ module Wice
         html:                        {},
         in_csv:                      true,
         in_html:                     true,
-        # model:                       nil,
         name:                        '',
         negation:                    Defaults::NEGATION_IN_STRING_FILTERS,
         ordering:                    true,
@@ -320,7 +319,7 @@ module Wice
       end
 
       if options[:attribute].nil? && options[:model]
-        fail WiceGridArgumentError.new('Option :model is only used together with :attribute')
+        fail WiceGridArgumentError.new('Option :assoc is only used together with :attribute')
       end
 
       if options[:attribute] && options[:attribute].index('.')

@@ -1,3 +1,13 @@
+# 3.6.0
+
+* No jpg/png icons, the plugin uses Font Awesome
+* CSS is not copied to the app. It is included by @import "wice_grid" in your application.scss.
+* No more
+    column model: 'ModelClass' do
+  Instead
+    column assoc: :association_name do
+
+
 # 3.5.0
 
 * In addition to two icons "SET ALL" and "UNSET ALL" in the action column, there is now
