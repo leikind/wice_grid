@@ -8,9 +8,21 @@ module Wice
   class ActiveRecordColumnWrapper #:nodoc:
     def initialize(column, all_filter_params, main_table, table_alias, custom_filter_active, filter_type) #:nodoc:
       @column = column
-      @filter_type = filter_type
-      @all_filter_params, @main_table, @table_alias, @custom_filter_active =
-        all_filter_params, main_table, table_alias, custom_filter_active
+
+      # nil | Symbol
+      @filter_type          = filter_type
+
+      # Hash { String => String | Array[String]}
+      @all_filter_params    = all_filter_params
+
+      # nil | Boolean
+      @main_table           = main_table
+
+      # nil | String
+      @table_alias          = table_alias
+
+      # nil | Array[String] | Array[Array[...]] | Array[Symbol]
+      @custom_filter_active = custom_filter_active
     end
 
     def wg_initialize_request_parameters  #:nodoc:

@@ -281,33 +281,42 @@ module Wice
     def column(opts = {}, &block)
       options = {
         allow_multiple_selection:    Defaults::ALLOW_MULTIPLE_SELECTION,
-        ordering:                    true,
+        assoc:                       nil,
         attribute:                   nil,
         auto_reload:                 Defaults::AUTO_RELOAD,
         boolean_filter_false_label:  NlMessage['boolean_filter_false_label'],
         boolean_filter_true_label:   NlMessage['boolean_filter_true_label'],
         class:                       nil,
-        name:                        '',
         custom_filter:               nil,
         detach_with_id:              nil,
+        filter:                      true,
         filter_all_label:            Defaults::CUSTOM_FILTER_ALL_LABEL,
+        filter_type:                 nil,
         helper_style:                Defaults::HELPER_STYLE,
+        html:                        {},
         in_csv:                      true,
         in_html:                     true,
-        model:                       nil,
+        # model:                       nil,
+        name:                        '',
         negation:                    Defaults::NEGATION_IN_STRING_FILTERS,
-        filter:                      true,
-        filter_type:                 nil,
-        table_alias:                 nil,
-        html:                        {}
+        ordering:                    true,
+        table_alias:                 nil
       }
 
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
 
-      unless options[:model].nil?
-        options[:model] = options[:model].constantize if options[:model].is_a? String
-        fail WiceGridArgumentError.new('Option :model can be either a class or a string instance') unless options[:model].is_a? Class
+      unless options[:assoc].nil?
+
+        unless options[:assoc].is_a?(Symbol) ||
+              (options[:assoc].is_a?(Array) && ! options[:assoc].empty? && options[:assoc].all?{ |assoc| assoc.is_a?(Symbol)} )
+
+          fail WiceGridArgumentError.new('Option :assoc can only be a symbol or an array of symbols')
+        end
+
+        assocs = options[:assoc].is_a?(Symbol) ? [options[:assoc]] : options[:assoc]
+
+        options[:model] = get_model_from_associations(@grid.klass, assocs)
       end
 
       if options[:attribute].nil? && options[:model]
@@ -338,6 +347,7 @@ module Wice
          col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
                                                         options[:custom_filter],  options[:table_alias], options[:filter_type])
 
+        # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]
         db_column, table_name, main_table = col_type_and_table_name
         col_type = db_column.type
 
@@ -395,6 +405,22 @@ module Wice
         vc.boolean_filter_false_label = options[:boolean_filter_false_label]
       end
       add_column(vc)
+    end
+
+    def get_model_from_associations(model, assocs)
+      if assocs.empty?
+        model
+      else
+        head = assocs[0]
+        tail = assocs[1..-1]
+
+        if reflection = model.reflect_on_association(head)
+          next_model = reflection.klass
+          get_model_from_associations(next_model, tail)
+        else
+          fail WiceGridArgumentError.new("Association #{head} not found in #{model}")
+        end
+      end
     end
 
     # Optional method inside the +grid+ block, to which every ActiveRecord instance is injected, just like +column+.
