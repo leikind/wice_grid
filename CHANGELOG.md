@@ -6,6 +6,31 @@
     column model: 'ModelClass' do
   Instead
     column assoc: :association_name do
+  or
+    column assoc: [:association_x, association_in_association_x_model, ...]  do
+
+* Blockless columns now work for joined tables, too:
+
+  Instead of
+
+    g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+      task.priority.name if task.priority
+    end
+
+  you can write
+
+    g.column name:  'Priority', attribute: 'name',  assoc: :priority
+
+  Instead of
+
+    g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+      task.project.customer.name if task.project && task.project.customer
+    end
+
+  you can write
+
+    g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+
 
 
 # 3.5.0

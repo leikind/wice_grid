@@ -305,6 +305,8 @@ module Wice
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
 
+      assocs = nil
+
       unless options[:assoc].nil?
 
         unless options[:assoc].is_a?(Symbol) ||
@@ -334,7 +336,12 @@ module Wice
 
       if block.nil?
         if !options[:attribute].blank?
-          block = ->(obj) { obj.send(options[:attribute]) }
+          if assocs.nil?
+            block = ->(obj) { obj.send(options[:attribute]) }
+          else
+            messages = assocs + [ options[:attribute] ]
+            block = ->(obj) { obj.deep_send(*messages) }
+          end
         else
           fail WiceGridArgumentError.new(
             'Missing column block without attribute defined. You can only omit the block if attribute is present.')
