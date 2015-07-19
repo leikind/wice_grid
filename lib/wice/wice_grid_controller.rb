@@ -27,6 +27,8 @@ module Wice
     # The second parameters is a hash of parameters:
     # * <tt>:joins</tt> - ActiveRecord <tt>:joins</tt> option.
     # * <tt>:include</tt> - ActiveRecord <tt>:include</tt> option.
+    #   The value of `:include` can be an array of association names `include:  [:category, :users, :status]`,
+    #   If you need to join tables to joined tables, use hashes: `include:  [:category, {users: :group}, :status]`
     # * <tt>:conditions</tt> - ActiveRecord <tt>:conditions</tt> option.
     # * <tt>:per_page</tt> - Number of rows per one page. The default is 10.
     # * <tt>:page</tt> - The page to show when rendering the grid for the first time. The default is one, naturally.

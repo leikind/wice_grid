@@ -385,7 +385,8 @@ might consider using `unscoped`:
 
 ### Queries with join tables
 
-WiceGrid also supports ActiveRecord's `:joins` and `:include`.
+To join other tables, use `:include`:
+
 ```ruby
   @products_grid = initialize_grid(Product,
     include:  :category,
@@ -394,11 +395,25 @@ WiceGrid also supports ActiveRecord's `:joins` and `:include`.
   )
 ```
 
+The value of `:include` can be an array of association names:
+
+```ruby
+  include:  [:category, :users, :status]
+```
+
+If you need to join tables to joined tables, use hashes:
+
+
+```ruby
+  include:  [:category, {users: :group}, :status]
+```
+
+
 Note that if we want to order initially by a column from a joined table we have to specify the table and
 the column name with the sql dot notation, that is, `products.name`.
 
-To show columns of joined tables in the view table, the ActiveRecord model class name has to be specified,
-that corresponds to the joined table:
+To show columns of joined tables in the view table, specify the corresponding association with `:assoc`:
+
 ```erb
   <%= grid(@products_grid) do |g|
     g.column name: 'Product Name', attribute: 'name' do |product|  # primary table
@@ -411,8 +426,34 @@ that corresponds to the joined table:
   %>
 ```
 
-Please note that the blockless definition of the column only works with columns from the main table and it
-won't work with columns with `:assoc`
+Please note that the blockless definition of the column can also be used with joined tables:
+
+```
+  g.column name: 'Category', attribute: 'name', assoc: :category
+
+```
+
+If an association is mentioned in the column definition, it can be omitted from `:include` in `initialize_grid`.
+Thus, the above example can be rewritten without `:category` in `:include`:
+
+
+```ruby
+  @products_grid = initialize_grid(Product,
+    order:    'products.name',
+    per_page: 20
+  )
+```
+
+```erb
+  <%= grid(@products_grid) do |g|
+    g.column name: 'Product Name', attribute: 'name' do |product|  # primary table
+      link_to(product.name, product_path(product))
+    end
+
+    g.column name: 'Category', attribute: 'name', assoc: :category
+
+  %>
+```
 
 ### Joined associations referring to the same table
 
@@ -430,7 +471,7 @@ Model:
 ```
 Controller:
 ```ruby
-    @projects_grid = initialize_grid(Project, include: [:customer, :supplier])
+    @projects_grid = initialize_grid(Project)
 ```
 
 View:
@@ -439,13 +480,9 @@ View:
 
     g.column name: 'Project Name', attribute: 'name'
 
-    g.column name: 'Customer company', assoc: :customer, attribute: 'name' do |task|
-      task.customer.name if task.customer
-    end
+    g.column name: 'Customer company', assoc: :customer, attribute: 'name'
 
-    g.column name: 'Supplier company', assoc: :supplier, attribute: 'name', table_alias: 'suppliers_projects' do |task|
-      task.supplier.name if task.supplier
-    end
+    g.column name: 'Supplier company', assoc: :supplier, attribute: 'name', table_alias: 'suppliers_projects'
 
   end -%>
 ```
