@@ -207,7 +207,18 @@ module Wice
       end
     end
 
-    def declare_column(column_name, model, custom_filter_active, table_alias, filter_type)  #:nodoc:
+    # declare_column(String, ActiveRecord, CustomFilterSpec, nil | string, nil | Boolean)
+    def declare_column(
+                 column_name: nil,
+                       model: nil,
+        custom_filter_active: nil,
+                 table_alias: nil,
+                 filter_type: nil,
+                      assocs: [])  #:nodoc:
+
+
+      @options[:include] = Wice.build_includes(@options[:include], assocs)
+
       if model # this is an included table
         column = @table_column_matrix.get_column_by_model_class_and_column_name(model, column_name)
         fail WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model.table_name}'!") if column.nil?

@@ -3,6 +3,118 @@ module Wice
   class << self
     @@model_validated = false
 
+    def assoc_list_to_hash(assocs)
+      head = assocs[0]
+      tail = assocs[1..-1]
+
+      if tail.blank?
+        head
+      elsif tail.size == 1
+        {head => tail[0]}
+      else
+        {head => assoc_list_to_hash(tail)}
+      end
+    end
+
+    def build_includes(existing_includes, new_assocs) #:nodoc:
+      new_includes = if new_assocs.blank?
+        existing_includes
+      else
+        existing_includes = if existing_includes.is_a?(Symbol)
+          [existing_includes]
+        elsif existing_includes.nil?
+          []
+        else
+          existing_includes
+        end
+
+        assocs_as_hash = assoc_list_to_hash(new_assocs)
+        build_includes_int(existing_includes, assocs_as_hash)
+      end
+
+      if new_includes.is_a?(Array) && new_includes.size == 1
+        new_includes[0]
+      else
+        new_includes
+      end
+    end
+
+    def build_includes_int(includes, assocs) #:nodoc:
+      if includes.is_a?(Array)
+        build_includes_includes_is_array(includes, assocs)
+      elsif includes.is_a?(Hash)
+        build_includes_includes_is_hash(includes, assocs)
+      end
+    end
+
+    # TODO: refactor
+    def build_includes_includes_is_hash(includes, assocs) #:nodoc:
+
+      includes_key   = includes.keys[0]
+      includes_value = includes.values[0]
+
+      if assocs.is_a?(Hash)
+        assocs_key   = assocs.keys[0]
+        assocs_value = assocs.values[0]
+
+        if includes_value.is_a?(Symbol) && includes_value == assocs_key
+          {includes_key => assocs}
+        elsif includes_value.is_a?(Hash)
+          if includes_value.keys[0] == assocs_key
+            if includes_value.values[0] == assocs_value
+              {includes_key => assocs}
+            else
+              {includes_key => [includes_value.values[0], assocs_value]}
+            end
+          end
+        end
+      elsif includes_value == assocs
+        {includes_key => assocs}
+      else
+        includes
+      end
+    end
+
+    def build_includes_includes_is_array(includes, assocs) #:nodoc:
+
+      hash_keys = includes
+        .each_with_index
+        .to_a
+        .select{ |e, idx| e.is_a?(Hash)}
+        .map{ |hash, idx| [ hash.keys[0], idx ] }
+        .to_h
+
+      key_to_search, finished = if assocs.is_a?(Hash)
+        [assocs.keys[0], false]
+      else
+        [assocs, true]
+      end
+
+      if idx = includes.index(key_to_search)
+        if finished #  [:a, :b, :c]  vs  :a
+          includes
+        else        #  [:a, :b, :c]  vs  {:a => x}
+          includes[idx] = assocs
+          includes
+        end
+
+      elsif hash_keys.key?(key_to_search)
+        if finished # [{a: :x}, :b, :c, :d, :e] vs :a
+          includes
+        else
+          hash_idx = hash_keys[key_to_search]
+          assocs_value = assocs[key_to_search]
+          includes[hash_idx] = build_includes_int(includes[hash_idx], assocs_value)
+          includes
+        end
+
+      else  # [:a, :b, :c]  vs  :x
+            # [:a, :b, :c]  vs  {:x => y}
+        includes + [assocs]
+      end
+
+    end
+
     # checks whether the class is a valid storage for saved queries
     def validate_query_model(query_store_model)  #:nodoc:
       unless query_store_model.respond_to?(:list)

@@ -88,10 +88,11 @@ module Wice
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      content_tag(:div,
-                  content_tag(:i, '', class: 'fa fa-file-excel-o'),
-                  title: NlMessage['csv_export_tooltip'],
-                  class: 'clickable export-to-csv-button'
+      content_tag(
+        :div,
+        content_tag(:i, '', class: 'fa fa-file-excel-o'),
+        title: NlMessage['csv_export_tooltip'],
+        class: 'clickable export-to-csv-button'
       )
     end
 
@@ -350,8 +351,14 @@ module Wice
 
       klass = Columns::ViewColumn
       if options[:attribute] &&
-         col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
-                                                        options[:custom_filter],  options[:table_alias], options[:filter_type])
+         col_type_and_table_name = @grid.declare_column(
+          column_name:          options[:attribute],
+          model:                options[:model],
+          custom_filter_active: options[:custom_filter],
+          table_alias:          options[:table_alias],
+          filter_type:          options[:filter_type],
+          assocs:               assocs
+        )
 
         # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]
         db_column, table_name, main_table = col_type_and_table_name
