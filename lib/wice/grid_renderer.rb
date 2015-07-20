@@ -297,6 +297,7 @@ module Wice
         html:                        {},
         in_csv:                      true,
         in_html:                     true,
+        model:                       nil, # will throw an exception with instructions
         name:                        '',
         negation:                    Defaults::NEGATION_IN_STRING_FILTERS,
         ordering:                    true,
@@ -327,6 +328,10 @@ module Wice
 
       if options[:attribute] && options[:attribute].index('.')
         fail WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
+      end
+
+      if options[:model]
+        fail WiceGridArgumentError.new("Instead of specifying a model of a joined table please use assoc: :name_of_association")
       end
 
       if options[:class]
