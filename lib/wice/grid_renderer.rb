@@ -257,9 +257,6 @@ module Wice
     #   to false will prohibit the column from inclusion into the export.
     # * <tt>:in_html</tt> - When CSV export is enabled and it is needed to use a column for CSV export only and ignore it
     #   in HTML, set this parameter to false.
-    # * <tt>:helper_style</tt> - Changes the flavor of Date and DateTime filters. The values are:
-    #   * <tt>:standard</tt> - the default Rails Date/DateTime helper
-    #   * <tt>:calendar</tt> - a Javascript popup calendar control
     # * <tt>:negation</tt> - turn on/off the negation checkbox in string filters
     # * <tt>:auto_reload</tt> - a boolean value specifying if a change in a filter triggers reloading of the grid. Works with all
     #   filter types including the JS calendar, the only exception is the standard Rails date/datetime filters.
@@ -293,7 +290,6 @@ module Wice
         filter:                      true,
         filter_all_label:            Defaults::CUSTOM_FILTER_ALL_LABEL,
         filter_type:                 nil,
-        helper_style:                Defaults::HELPER_STYLE,
         html:                        {},
         in_csv:                      true,
         in_html:                     true,
@@ -409,6 +405,18 @@ module Wice
         elsif options[:filter_type]
           klass = Columns.get_view_column_processor(options[:filter_type])
         else
+
+          col_type = case col_type
+          when :date
+            Wice::Defaults::DEFAULT_FILTER_FOR_DATE
+          when :datetime
+            Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME
+          when :timestamp
+            Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME
+          else
+            col_type
+          end
+
           klass = Columns.get_view_column_processor(col_type)
         end # custom_filter
 

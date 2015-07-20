@@ -109,14 +109,17 @@ if defined?(Wice::Defaults)
   Wice::Defaults::QUERY_STORE_MODEL = 'WiceGridSerializedQuery'
 
   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-  #            Here go settings related to the calendar helpers               #
+  #            Here go settings related to the date/datetime filters          #
 
-  # The default style of the date and datetime helper
-  # * <tt>:calendar</tt> - JS calendar
-  # * <tt>:html5</tt> - HTML5 date input field
-  # * <tt>:standard</tt> - standard Rails date and datetime helpers
-  # * <tt>:bootstrap</tt> - Bootstrap datepicker helper
-  Wice::Defaults::HELPER_STYLE = :calendar
+  # Default column filters
+  # Possible values:
+  # * <tt>:jquery_datepicker</tt> - Jquery datepicker (works for datetime, too)
+  # * <tt>:bootstrap_datepicker</tt> - Bootstrap datepicker (works for datetime, too)
+  # * <tt>:rails_date_helper</tt> - standard Rails date helper
+  # * <tt>:rails_datetime_helper</tt> - standard Rails datetime helper
+
+  Wice::Defaults::DEFAULT_FILTER_FOR_DATE     = :jquery_datepicker
+  Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME = :jquery_datepicker
 
   # Format of the datetime displayed.
   # If you change the format, make sure to check if +DATETIME_PARSER+ can still parse this string.

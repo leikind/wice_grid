@@ -1,16 +1,27 @@
 # 3.6.0
 
 
+* There is no more :helper_style in column definitions and no more Wice::Defaults:HELPER_STYLE.
+  Instead there is a number of filter types:
+
+    * rails_datetime_helper
+    * rails_date_helper
+    * jquery_datepicker
+    * bootstrap_datepicker
+
+  and new configuration values Wice::Defaults:DEFAULT_FILTER_FOR_DATE and Wice::Defaults:DEFAULT_FILTER_FOR_DATETIME
+
+
 * No more
 
        column model: 'ModelClass' do
-    
+
   Instead:
-  
+
        column assoc: :association_name do
-    
+
   or
-  
+
        column assoc: [:association_x, association_in_association_x_model, ...]  do
 
   If associations have been mentioned in :assoc, it is not necessary to list them in :include!

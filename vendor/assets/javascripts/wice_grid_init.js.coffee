@@ -75,8 +75,7 @@ setupBootstrapDatepicker = ->
   # check for bootstrap datepicker
   unless $.fn.datepicker
     alert """Seems like you do not have Bootstrap datepicker gem (https://github.com/Nerian/bootstrap-datepicker-rails)
-      installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in
-      wice_grid_config.rb in order to use standard Rails date helpers
+      installed. Either install it pick another filter with :filter_type.
     """
     return
 
@@ -100,8 +99,7 @@ setupJqueryUiDatepicker = ->
   # check jquery ui datepickeer
   unless $.datepicker
     alert """Seems like you do not have jQuery datepicker (http://jqueryui.com/demos/datepicker/)
-        installed. Either install it or set Wice::Defaults::HELPER_STYLE to :standard in
-        wice_grid_config.rb in order to use standard Rails date helpers
+        installed. Either install it pick another filter with :filter_type.
       """
   # setting up the locale for datepicker
   if locale = $('.date-filter.wg-jquery-datepicker input[type=hidden]').data('locale')

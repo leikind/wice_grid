@@ -81,7 +81,18 @@ module Wice
         return custom_processor.generate_conditions(@table_alias, @request_params)
       end
 
-      column_type = @filter_type || @column.type.to_s
+      column_type = @filter_type || @column.type.to_s.intern
+
+      column_type = case column_type
+      when :date
+        Wice::Defaults::DEFAULT_FILTER_FOR_DATE
+      when :datetime
+        Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME
+      when :timestamp
+        Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME
+      else
+        column_type
+      end
 
       processor_class = ::Wice::Columns.get_conditions_generator_column_processor(column_type)
 
