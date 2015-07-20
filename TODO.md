@@ -3,7 +3,7 @@
     model: 'ModelClassName'
   use
     assoc: :comments
-* Use ActiveRelation merge instead of manually merging hashes and arrays
+* [done] Use ActiveRelation merge instead of manually merging hashes and arrays
 * Switching between datepickers should be done via :filter_type, not via :helper_style.
   Get rid of :helper_style and Wice::Defaults::HELPER_STYLE
 * More unified and flexible approach to datepickers

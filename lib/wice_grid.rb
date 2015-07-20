@@ -29,7 +29,6 @@ module Wice
 
       ActiveSupport.on_load :active_record do
         ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
-        ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
       end
 
       ActiveSupport.on_load :action_view do
@@ -271,7 +270,13 @@ module Wice
       #   @status.delete(:f)
       # end
 
-      @ar_options[:conditions] = klass.send(:merge_conditions, @status[:conditions], * @table_column_matrix.conditions)
+      initial_conditions_active_relation = @klass.where(@status[:conditions])
+
+      @ar_options[:conditions] =
+        @table_column_matrix.conditions.reduce(initial_conditions_active_relation) do |active_relation_accu, cond|
+          conditions_active_relation = @klass.where(cond)
+          active_relation_accu.merge(conditions_active_relation)
+        end
 
       # conditions processed
 
@@ -316,7 +321,7 @@ module Wice
                      .joins(@ar_options[:joins])
                      .order(@ar_options[:order])
                      .group(@ar_options[:group])
-                     .where(@ar_options[:conditions])
+                     .merge(@ar_options[:conditions])
           relation = add_references relation
 
           relation
@@ -329,7 +334,7 @@ module Wice
                      .joins(@ar_options[:joins])
                      .order(@ar_options[:order])
                      .group(@ar_options[:group])
-                     .where(@ar_options[:conditions])
+                     .merge(@ar_options[:conditions])
 
           relation = add_references relation
 
@@ -427,12 +432,13 @@ module Wice
     end
 
     def do_count
-      @relation.count(
-        conditions: @ar_options[:conditions],
-        joins:      @ar_options[:joins],
-        include:    @ar_options[:include],
-        group:      @ar_options[:group]
-      )
+      @relation
+        .all
+        .merge(@ar_options[:conditions]).count(
+          joins:      @ar_options[:joins],
+          include:    @ar_options[:include],
+          group:      @ar_options[:group]
+        )
     end
 
     alias_method :size, :count
@@ -590,10 +596,10 @@ module Wice
       relation = nil
       @klass.unscoped do
         relation = @relation
-                   .where(@ar_options[:conditions])
                    .joins(@ar_options[:joins])
                    .includes(@ar_options[:include])
                    .order(@ar_options[:order])
+                   .merge(@ar_options[:conditions])
 
         relation = add_references relation
       end

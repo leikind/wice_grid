@@ -158,55 +158,6 @@ module Wice
     end
   end
 
-  module MergeConditions #:nodoc:
-    def self.included(base) #:nodoc:
-      base.extend(ClassMethods)
-    end
-
-    module ClassMethods #:nodoc:
-      def _sanitize_sql_hash_for_conditions(attrs, default_table_name = self.table_name)
-        case connection.visitor.method(:accept).arity
-        when 1
-          _sanitize_sql_hash_for_conditions_before_42(attrs, default_table_name)
-        when 2
-          _sanitize_sql_hash_for_conditions42(attrs, default_table_name)
-        else
-          fail 'Unsupported Rails version'
-        end
-      end
-
-      def _sanitize_sql_hash_for_conditions_before_42(attrs, default_table_name)
-        attrs = expand_hash_conditions_for_aggregates(attrs)
-        table = Arel::Table.new(table_name, arel_engine).alias(default_table_name)
-        ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map do |b|
-          connection.visitor.accept b
-        end.join(' AND ')
-      end
-
-      def _sanitize_sql_hash_for_conditions42(attrs, default_table_name)
-        attrs = ActiveRecord::PredicateBuilder.resolve_column_aliases self, attrs
-        attrs = expand_hash_conditions_for_aggregates(attrs)
-        table = Arel::Table.new(table_name, arel_engine).alias(default_table_name)
-        ActiveRecord::PredicateBuilder.build_from_hash(self, attrs, table).map do |b|
-          connection.visitor.compile b
-        end.join(' AND ')
-      end
-
-      def merge_conditions(*conditions) #:nodoc:
-        segments = []
-
-        conditions.each do |condition|
-          unless condition.blank?
-            sql = condition.is_a?(Hash) ? _sanitize_sql_hash_for_conditions(condition) : sanitize_sql_array(condition)
-            segments << sql unless sql.blank?
-          end
-        end
-
-        "(#{segments.join(') AND (')})" unless segments.empty?
-      end
-    end
-  end
-
   module NlMessage #:nodoc:
     class << self
       def [](key) #:nodoc:
