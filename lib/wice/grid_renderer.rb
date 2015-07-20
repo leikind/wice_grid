@@ -309,6 +309,10 @@ module Wice
 
       assocs = nil
 
+      if options[:model]
+        fail WiceGridArgumentError.new("Instead of specifying a model of a joined table please use assoc: :name_of_association")
+      end
+
       unless options[:assoc].nil?
 
         unless options[:assoc].is_a?(Symbol) ||
@@ -330,9 +334,6 @@ module Wice
         fail WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
       end
 
-      if options[:model]
-        fail WiceGridArgumentError.new("Instead of specifying a model of a joined table please use assoc: :name_of_association")
-      end
 
       if options[:class]
         options[:html] ||= {}
