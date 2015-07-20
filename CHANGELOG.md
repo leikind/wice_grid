@@ -1,13 +1,19 @@
 # 3.6.0
 
-* No jpg/png icons, the plugin uses Font Awesome
-* CSS is not copied to the app. It is included by @import "wice_grid" in your application.scss.
+
 * No more
     column model: 'ModelClass' do
-  Instead
+  Instead:
     column assoc: :association_name do
   or
     column assoc: [:association_x, association_in_association_x_model, ...]  do
+
+  If associations have been mentioned in :assoc, it is not necessary to list them in :include!
+
+  Blockless column definitions now work for columns from joined tables!
+
+* No jpg/png icons, the plugin uses Font Awesome
+* CSS is not copied to the app. It is included by @import "wice_grid" in your application.scss.
 
 * Blockless columns now work for joined tables, too:
 
