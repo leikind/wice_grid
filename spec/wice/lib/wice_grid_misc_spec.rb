@@ -145,6 +145,10 @@ module Wice
       expect(out).to eq(:b)
     end
 
+    it 'validate_query_model' do
+      expect(Wice.get_query_store_model).to eq(WiceGridSerializedQuery)
+    end
+
   end
 
 end
