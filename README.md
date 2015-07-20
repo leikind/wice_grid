@@ -555,19 +555,21 @@ Which Column Processor is instantiated for which data types is defined in file
 ```ruby
   module Wice
     module Columns
-      COLUMN_PROCESSOR_INDEX = ActiveSupport::OrderedHash[
-        :action   , 'column_action', # Special processor for action column, columns with checkboxes
-        :text     , 'column_string',
-        :string   , 'column_string',
-        :timestamp, 'column_datetime',
-        :datetime , 'column_datetime',
-        :date     , 'column_date',
-        :integer  , 'column_integer',
-        :range    , 'column_range',
-        :float    , 'column_float',
-        :decimal  , 'column_float',
-        :custom   , 'column_custom_dropdown',  # Special processor for custom filter columns
-        :boolean  , 'column_boolean'
+      COLUMN_PROCESSOR_INDEX = ActiveSupport::OrderedHash[ #:nodoc:
+        :action,                 'column_action',                # Special processor for action column, columns with checkboxes
+        :text,                   'column_string',
+        :string,                 'column_string',
+        :rails_datetime_helper,  'column_rails_datetime_helper', # standard Rails datepicker helper
+        :rails_date_helper,      'column_rails_date_helper',     # standard Rails date helper
+        :jquery_datepicker,      'column_jquery_datepicker',
+        :bootstrap_datepicker,   'column_bootstrap_datepicker',
+        :html5_datepicker,       'column_html5_datepicker',      # not ready
+        :integer,                'column_integer',
+        :range,                  'column_range',
+        :float,                  'column_float',
+        :decimal,                'column_float',
+        :custom,                 'column_custom_dropdown',       # Special processor for custom filter columns
+        :boolean,                'column_boolean'
       ]
     end
   end
@@ -767,28 +769,24 @@ can still be loaded using parameter `:filter_type` with value `:range`:
 
 ### Date and DateTime Filters
 
-WiceGrid provides four ways of selecting dates and times. The default style is set in
-`config/initializers/wice_grid_config.rb` using the HELPER_STYLE constant. The available options are
+WiceGrid provides four filters for selecting dates and time:
 
-* `:calendar` (jQuery UI datepicker),
-* `:bootstrap` [Bootstrap datepicker](https://github.com/Nerian/bootstrap-datepicker-rails),
-* `:standard`.
+  * ```:jquery_datepicker``` - Jquery datepicker (works for datetime, too)
+  * ```:bootstrap_datepicker``` - Bootstrap datepicker (works for datetime, too)
+  * ```:rails_date_helper``` - standard Rails date helper
+  * ```:rails_datetime_helper``` - standard Rails datetime helper
 
-The style can also be individually configured via the `helper_style` option on a Date/DateTime
-filter column configuration:
-```ruby
-  g.column name: 'Due Date', attribute: 'due_date', helper_style: :calendar do |task|
-    task.due_date.to_s(:short) if task.due_date
-  end
+Specify a date/datetime filter just like you specify any other filter:
 
-  g.column name: 'Created', attribute: 'created_at', helper_style: :bootstrap do |task|
-    task.created_at.to_s(:short)
-  end
-
-  g.column name: 'Updated', attribute: 'updated_at', helper_style: :standard do |task|
-    task.created_at.to_s(:short)
+```
+  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
+    task.updated_at.to_s(:db)
   end
 ```
+
+Default filters are defined in configuration constants Wice::Defaults::DEFAULT_FILTER_FOR_DATE and
+Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME.
+
 
 
 #### jQuery UI DatePicker `(HELPER_STYLE = :calendar)`
@@ -813,6 +811,7 @@ result in an identical date representation.
 
 Constant `DATEPICKER_YEAR_RANGE` defines the range of years in the Datepicker year dropdown. Alternatively,
 you can always change this range dynamically with the following javascript:
+
 ```js
   $( ".hasDatepicker" ).datepicker( "option", "yearRange", "2000:2042" );
 ```
