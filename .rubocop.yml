@@ -517,5 +517,17 @@ Style/CaseEquality:
   Enabled: false
 
 
+# Offense count: 1
+# Cop supports --auto-correct.
+Style/NumericLiterals:
+  MinDigits: 15
+
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'spec/fixtures/**/*'
+
+Style/Encoding:
+  Enabled: true
 
 

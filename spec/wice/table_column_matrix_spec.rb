@@ -33,7 +33,7 @@ module Wice
 
     it 'should get column not initialized' do
       table = TableColumnMatrix.new
-      expect {table.get_column_in_default_model_class_by_column_name(:name) }.to raise_error
+      expect { table.get_column_in_default_model_class_by_column_name(:name) }.to raise_error
     end
   end
 end
