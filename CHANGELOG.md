@@ -2,11 +2,16 @@
 
 
 * No more
-    column model: 'ModelClass' do
+
+       column model: 'ModelClass' do
+    
   Instead:
-    column assoc: :association_name do
+  
+       column assoc: :association_name do
+    
   or
-    column assoc: [:association_x, association_in_association_x_model, ...]  do
+  
+       column assoc: [:association_x, association_in_association_x_model, ...]  do
 
   If associations have been mentioned in :assoc, it is not necessary to list them in :include!
 
