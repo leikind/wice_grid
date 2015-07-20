@@ -35,6 +35,8 @@ begin
   require 'action_controller'
   require 'action_view'
   require 'csv'
+
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
 rescue LoadError
   puts 'LoadError'
 end
