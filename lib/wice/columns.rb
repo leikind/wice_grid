@@ -244,9 +244,10 @@ module Wice #:nodoc:
     end
 
     class ConditionsGeneratorColumn   #:nodoc:
-      def initialize(column_wrapper)   #:nodoc:
+      def initialize(column_wrapper, column_type = nil)   #:nodoc:
         # Wice::ActiveRecordColumnWrapper
         @column_wrapper = column_wrapper
+        @column_type = column_type
       end
 
       def generate_conditions(_table_alias, _opts) #:nodoc:

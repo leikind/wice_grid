@@ -19,6 +19,8 @@ require 'wice/columns.rb'
 require 'wice/columns/common_date_datetime_mixin.rb'
 require 'wice/columns/common_standard_helper_date_datetime_mixin.rb'
 require 'wice/columns/common_js_date_datetime_mixin.rb'
+require 'wice/columns/common_js_date_datetime_conditions_generator_mixin.rb'
+require 'wice/columns/common_rails_date_datetime_conditions_generator_mixin.rb'
 require 'kaminari.rb'
 
 ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)

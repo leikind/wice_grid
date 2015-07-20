@@ -40,6 +40,7 @@ module Wice
       # a datetime (with custom_filter it can be anything else, and not
       # the datetime hash {fr: ..., to: ...})
       if @request_params
+
         if (@column.type == :datetime || @column.type == :timestamp) && @request_params.is_a?(Hash)
           [:fr, :to].each do |sym|
             if @request_params[sym]
@@ -57,6 +58,7 @@ module Wice
         # a date (with custom_filter it can be anything else, and not
         # the date hash {fr: ..., to: ...})
         if @column.type == :date && @request_params.is_a?(Hash)
+
           [:fr, :to].each do |sym|
             if @request_params[sym]
               if @request_params[sym].is_a?(String)
@@ -66,6 +68,7 @@ module Wice
               end
             end
           end
+
         end
       end
 
@@ -83,7 +86,7 @@ module Wice
 
       column_type = @filter_type || @column.type.to_s.intern
 
-      column_type = case column_type
+      filter_type = case column_type
       when :date
         Wice::Defaults::DEFAULT_FILTER_FOR_DATE
       when :datetime
@@ -94,10 +97,10 @@ module Wice
         column_type
       end
 
-      processor_class = ::Wice::Columns.get_conditions_generator_column_processor(column_type)
+      processor_class = ::Wice::Columns.get_conditions_generator_column_processor(filter_type)
 
       if processor_class
-        return processor_class.new(self).generate_conditions(@table_alias, @request_params)
+        return processor_class.new(self, column_type).generate_conditions(@table_alias, @request_params)
       else
         Wice.log("No processor for database type #{column_type}!!!")
         nil

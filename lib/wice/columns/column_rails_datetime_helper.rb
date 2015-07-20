@@ -32,23 +32,9 @@ module Wice
     end
 
     class ConditionsGeneratorColumnRailsDatetimeHelper < ConditionsGeneratorColumn  #:nodoc:
-      def generate_conditions(table_alias, opts)   #:nodoc:
-        conditions = [[]]
-        if opts[:fr]
-          conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} >= ? "
-          conditions << opts[:fr]
-        end
 
-        if opts[:to]
-          conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} <= ? "
-          conditions << (opts[:to])
-        end
+      include Wice::Columns::CommonJsDateDatetimeConditionsGeneratorMixin
 
-        return false if conditions.size == 1
-
-        conditions[0] = conditions[0].join(' and ')
-        conditions
-      end
     end
   end
 end
