@@ -29,7 +29,6 @@ module Wice
 
       ActiveSupport.on_load :active_record do
         ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
-        ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
       end
 
       ActiveSupport.on_load :action_view do
@@ -207,7 +206,18 @@ module Wice
       end
     end
 
-    def declare_column(column_name, model, custom_filter_active, table_alias, filter_type)  #:nodoc:
+    # declare_column(String, ActiveRecord, CustomFilterSpec, nil | string, nil | Boolean)
+    def declare_column(
+                 column_name: nil,
+                       model: nil,
+        custom_filter_active: nil,
+                 table_alias: nil,
+                 filter_type: nil,
+                      assocs: [])  #:nodoc:
+
+
+      @options[:include] = Wice.build_includes(@options[:include], assocs)
+
       if model # this is an included table
         column = @table_column_matrix.get_column_by_model_class_and_column_name(model, column_name)
         fail WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model.table_name}'!") if column.nil?
@@ -233,6 +243,8 @@ module Wice
         end
 
         @table_column_matrix.add_condition(column, conditions)
+
+        # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]
         [column, table_name, main_table]
       end
     end
@@ -258,7 +270,13 @@ module Wice
       #   @status.delete(:f)
       # end
 
-      @ar_options[:conditions] = klass.send(:merge_conditions, @status[:conditions], * @table_column_matrix.conditions)
+      initial_conditions_active_relation = @klass.where(@status[:conditions])
+
+      @ar_options[:conditions] =
+        @table_column_matrix.conditions.reduce(initial_conditions_active_relation) do |active_relation_accu, cond|
+          conditions_active_relation = @klass.where(cond)
+          active_relation_accu.merge(conditions_active_relation)
+        end
 
       # conditions processed
 
@@ -303,7 +321,7 @@ module Wice
                      .joins(@ar_options[:joins])
                      .order(@ar_options[:order])
                      .group(@ar_options[:group])
-                     .where(@ar_options[:conditions])
+                     .merge(@ar_options[:conditions])
           relation = add_references relation
 
           relation
@@ -316,7 +334,7 @@ module Wice
                      .joins(@ar_options[:joins])
                      .order(@ar_options[:order])
                      .group(@ar_options[:group])
-                     .where(@ar_options[:conditions])
+                     .merge(@ar_options[:conditions])
 
           relation = add_references relation
 
@@ -414,12 +432,13 @@ module Wice
     end
 
     def do_count
-      @relation.count(
-        conditions: @ar_options[:conditions],
-        joins:      @ar_options[:joins],
-        include:    @ar_options[:include],
-        group:      @ar_options[:group]
-      )
+      @relation
+        .all
+        .merge(@ar_options[:conditions]).count(
+          joins:      @ar_options[:joins],
+          include:    @ar_options[:include],
+          group:      @ar_options[:group]
+        )
     end
 
     alias_method :size, :count
@@ -577,10 +596,10 @@ module Wice
       relation = nil
       @klass.unscoped do
         relation = @relation
-                   .where(@ar_options[:conditions])
                    .joins(@ar_options[:joins])
                    .includes(@ar_options[:include])
                    .order(@ar_options[:order])
+                   .merge(@ar_options[:conditions])
 
         relation = add_references relation
       end

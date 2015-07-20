@@ -88,10 +88,11 @@ module Wice
     include Enumerable
 
     def csv_export_icon #:nodoc:
-      content_tag(:div,
-                  content_tag(:i, '', class: 'fa fa-file-excel-o'),
-                  title: NlMessage['csv_export_tooltip'],
-                  class: 'clickable export-to-csv-button'
+      content_tag(
+        :div,
+        content_tag(:i, '', class: 'fa fa-file-excel-o'),
+        title: NlMessage['csv_export_tooltip'],
+        class: 'clickable export-to-csv-button'
       )
     end
 
@@ -180,7 +181,7 @@ module Wice
     # * <tt>:class</tt> - a shortcut for <tt>html: {class: 'css_class'}</tt>
     # * <tt>:attribute</tt> - name of a database column (which normally correspond to a model attribute with the
     #   same name). By default the field is assumed to belong to the default table (see documentation for the
-    #   +initialize_grid+ method). Parameter <tt>:model</tt> allows to specify another table. Presence of
+    #   +initialize_grid+ method). Parameter <tt>:assoc</tt> (association) allows to specify another joined table. Presence of
     #   this parameter
     #   * adds sorting capabilities by this field
     #   * automatically creates a filter based on the type of the field unless parameter <tt>:filter</tt> is set to false.
@@ -200,7 +201,7 @@ module Wice
     #   list of available filters.
     # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
-    # * <tt>:model</tt> - Name of the model class to which <tt>:attribute</tt> belongs to if this is not the main table.
+    # * <tt>:assoc</tt> - Name of the model association. <tt>:attribute</tt> belongs to the table joined via this association.
     # * <tt>:table_alias</tt> - In case there are two joined assocations both referring to the same table, ActiveRecord
     #   constructs a query where the second join provides an alias for the joined table. Setting <tt>:table_alias</tt>
     #   to this alias will enable WiceGrid to order and filter by columns belonging to different associatiations  but
@@ -281,42 +282,58 @@ module Wice
     def column(opts = {}, &block)
       options = {
         allow_multiple_selection:    Defaults::ALLOW_MULTIPLE_SELECTION,
-        ordering:                    true,
+        assoc:                       nil,
         attribute:                   nil,
         auto_reload:                 Defaults::AUTO_RELOAD,
         boolean_filter_false_label:  NlMessage['boolean_filter_false_label'],
         boolean_filter_true_label:   NlMessage['boolean_filter_true_label'],
         class:                       nil,
-        name:                        '',
         custom_filter:               nil,
         detach_with_id:              nil,
+        filter:                      true,
         filter_all_label:            Defaults::CUSTOM_FILTER_ALL_LABEL,
+        filter_type:                 nil,
         helper_style:                Defaults::HELPER_STYLE,
+        html:                        {},
         in_csv:                      true,
         in_html:                     true,
-        model:                       nil,
+        model:                       nil, # will throw an exception with instructions
+        name:                        '',
         negation:                    Defaults::NEGATION_IN_STRING_FILTERS,
-        filter:                      true,
-        filter_type:                 nil,
-        table_alias:                 nil,
-        html:                        {}
+        ordering:                    true,
+        table_alias:                 nil
       }
 
       opts.assert_valid_keys(options.keys)
       options.merge!(opts)
 
-      unless options[:model].nil?
-        options[:model] = options[:model].constantize if options[:model].is_a? String
-        fail WiceGridArgumentError.new('Option :model can be either a class or a string instance') unless options[:model].is_a? Class
+      assocs = nil
+
+      if options[:model]
+        fail WiceGridArgumentError.new("Instead of specifying a model of a joined table please use assoc: :name_of_association")
+      end
+
+      unless options[:assoc].nil?
+
+        unless options[:assoc].is_a?(Symbol) ||
+              (options[:assoc].is_a?(Array) && ! options[:assoc].empty? && options[:assoc].all?{ |assoc| assoc.is_a?(Symbol)} )
+
+          fail WiceGridArgumentError.new('Option :assoc can only be a symbol or an array of symbols')
+        end
+
+        assocs = options[:assoc].is_a?(Symbol) ? [options[:assoc]] : options[:assoc]
+
+        options[:model] = get_model_from_associations(@grid.klass, assocs)
       end
 
       if options[:attribute].nil? && options[:model]
-        fail WiceGridArgumentError.new('Option :model is only used together with :attribute')
+        fail WiceGridArgumentError.new('Option :assoc is only used together with :attribute')
       end
 
       if options[:attribute] && options[:attribute].index('.')
         fail WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
       end
+
 
       if options[:class]
         options[:html] ||= {}
@@ -326,7 +343,12 @@ module Wice
 
       if block.nil?
         if !options[:attribute].blank?
-          block = ->(obj) { obj.send(options[:attribute]) }
+          if assocs.nil?
+            block = ->(obj) { obj.send(options[:attribute]) }
+          else
+            messages = assocs + [ options[:attribute] ]
+            block = ->(obj) { obj.deep_send(*messages) }
+          end
         else
           fail WiceGridArgumentError.new(
             'Missing column block without attribute defined. You can only omit the block if attribute is present.')
@@ -335,9 +357,16 @@ module Wice
 
       klass = Columns::ViewColumn
       if options[:attribute] &&
-         col_type_and_table_name = @grid.declare_column(options[:attribute], options[:model],
-                                                        options[:custom_filter],  options[:table_alias], options[:filter_type])
+         col_type_and_table_name = @grid.declare_column(
+          column_name:          options[:attribute],
+          model:                options[:model],
+          custom_filter_active: options[:custom_filter],
+          table_alias:          options[:table_alias],
+          filter_type:          options[:filter_type],
+          assocs:               assocs
+        )
 
+        # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]
         db_column, table_name, main_table = col_type_and_table_name
         col_type = db_column.type
 
@@ -395,6 +424,22 @@ module Wice
         vc.boolean_filter_false_label = options[:boolean_filter_false_label]
       end
       add_column(vc)
+    end
+
+    def get_model_from_associations(model, assocs)
+      if assocs.empty?
+        model
+      else
+        head = assocs[0]
+        tail = assocs[1..-1]
+
+        if reflection = model.reflect_on_association(head)
+          next_model = reflection.klass
+          get_model_from_associations(next_model, tail)
+        else
+          fail WiceGridArgumentError.new("Association #{head} not found in #{model}")
+        end
+      end
     end
 
     # Optional method inside the +grid+ block, to which every ActiveRecord instance is injected, just like +column+.

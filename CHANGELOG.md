@@ -1,3 +1,44 @@
+# 3.6.0
+
+
+* No more
+    column model: 'ModelClass' do
+  Instead:
+    column assoc: :association_name do
+  or
+    column assoc: [:association_x, association_in_association_x_model, ...]  do
+
+  If associations have been mentioned in :assoc, it is not necessary to list them in :include!
+
+  Blockless column definitions now work for columns from joined tables!
+
+* No jpg/png icons, the plugin uses Font Awesome
+* CSS is not copied to the app. It is included by @import "wice_grid" in your application.scss.
+
+* Blockless columns now work for joined tables, too:
+
+  Instead of
+
+    g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+      task.priority.name if task.priority
+    end
+
+  you can write
+
+    g.column name:  'Priority', attribute: 'name',  assoc: :priority
+
+  Instead of
+
+    g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+      task.project.customer.name if task.project && task.project.customer
+    end
+
+  you can write
+
+    g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+
+
+
 # 3.5.0
 
 * In addition to two icons "SET ALL" and "UNSET ALL" in the action column, there is now

@@ -49,7 +49,7 @@ module Wice
         [op, num]
       end
 
-      def  generate_conditions(table_alias, opts)   #:nodoc:
+      def generate_conditions(table_alias, opts)   #:nodoc:
         unless opts.is_a? Hash
           Wice.log 'invalid parameters for the grid integer filter - must be a hash'
           return false

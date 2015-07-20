@@ -43,7 +43,6 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'wice_grid'
 
 ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
-ActiveRecord::Base.send(:include, ::Wice::MergeConditions)
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
