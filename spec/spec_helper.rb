@@ -35,12 +35,15 @@ begin
   require 'action_controller'
   require 'action_view'
   require 'csv'
+
+  ActiveRecord::Base.logger = Logger.new(STDOUT)
 rescue LoadError
   puts 'LoadError'
 end
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'wice_grid'
+require 'support/wice_grid_test_config'
 
 ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
 

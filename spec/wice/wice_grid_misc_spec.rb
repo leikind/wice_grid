@@ -145,6 +145,18 @@ module Wice
       expect(out).to eq(:b)
     end
 
+    it 'validate_query_model' do
+      expect(Wice.get_query_store_model).to eq(WiceGridSerializedQuery)
+    end
+
+    it 'get_string_matching_operators' do
+      expect(Wice.get_string_matching_operators(Dummy)).to eq('LIKE')
+    end
+
+    it 'log' do
+      Wice.log('message')
+    end
+
   end
 
 end
