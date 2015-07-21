@@ -9,7 +9,7 @@ module Wice
 
     it 'should add_row' do
       spread = Spreadsheet.new('hello', ';')
-      spread << ["hello", "world!"]
+      spread << %w(hello world!)
     end
   end
 end
