@@ -115,7 +115,7 @@ will fit nicely. Generally it is advised to modify WiceGrid css to match the app
 
 == Basics
 
-The simplest example of a WiceGrid for one simple DB table called ApplicationAccount is the following:
+The simplest example of a WiceGrid for one simple DB table called Task is the following:
 
 Controller:
 
