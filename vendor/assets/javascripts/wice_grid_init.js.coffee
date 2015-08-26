@@ -331,3 +331,4 @@ setupExternalSubmitReset =  ->
           false
 
 window['getGridProcessorForElement'] = getGridProcessorForElement
+window['initWiceGrid'] = initWiceGrid
