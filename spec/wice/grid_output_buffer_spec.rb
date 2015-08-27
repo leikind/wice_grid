@@ -1,45 +1,41 @@
 # encoding: utf-8
-module Wice
-  describe GridOutputBuffer do
-    FILTER_COMMON_CODE = 'here filter code'
 
-    it 'should to_s' do
-      grid = GridOutputBuffer.new
+describe Wice::GridOutputBuffer do
+  FILTER_COMMON_CODE = 'here filter code'
 
-      expect(grid.to_s.class).to eq(ActiveSupport::SafeBuffer)
-    end
 
-    it 'should add_filter' do
-      grid = GridOutputBuffer.new
-      expect(grid.add_filter('key', FILTER_COMMON_CODE)).to eq(FILTER_COMMON_CODE)
-    end
+  let(:buffer){Wice::GridOutputBuffer.new}
 
-    it 'should filter_for' do
-      grid = GridOutputBuffer.new
-      grid.add_filter('key', FILTER_COMMON_CODE)
+  it 'should to_s' do
+    expect(buffer.to_s.class).to eq(ActiveSupport::SafeBuffer)
+  end
 
-      expect(grid.filter_for('key')).to eq(FILTER_COMMON_CODE)
-    end
+  it 'should add_filter' do
 
-    it 'should filter_for 2 times' do
-      grid = GridOutputBuffer.new
-      grid.add_filter('key', FILTER_COMMON_CODE)
+    expect(buffer.add_filter('key', FILTER_COMMON_CODE)).to eq(FILTER_COMMON_CODE)
+  end
 
-      expect(grid.filter_for('key')).to eq(FILTER_COMMON_CODE)
-      expect { grid.filter_for('key') }.to raise_error
-    end
+  it 'should filter_for' do
 
-    it 'should filter_for without filters' do
-      grid = GridOutputBuffer.new
+    buffer.add_filter('key', FILTER_COMMON_CODE)
+    expect(buffer.filter_for('key')).to eq(FILTER_COMMON_CODE)
+  end
 
-      expect { grid.filter_for('key') }.to raise_error
-    end
+  it 'should filter_for 2 times' do
+    buffer.add_filter('key', FILTER_COMMON_CODE)
 
-    it 'should filter_for return empty string' do
-      grid = GridOutputBuffer.new
-      grid.return_empty_strings_for_nonexistent_filters = true
+    expect(buffer.filter_for('key')).to eq(FILTER_COMMON_CODE)
+    expect { buffer.filter_for('key') }.to raise_error
+  end
 
-      expect(grid.filter_for('key')).to eq('')
-    end
+  it 'should filter_for without filters' do
+
+    expect { buffer.filter_for('key') }.to raise_error
+  end
+
+  it 'should filter_for return empty string' do
+    buffer.return_empty_strings_for_nonexistent_filters = true
+
+    expect(buffer.filter_for('key')).to eq('')
   end
 end

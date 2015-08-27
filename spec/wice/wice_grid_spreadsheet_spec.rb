@@ -1,15 +1,14 @@
 # encoding: utf-8
-module Wice
-  describe Spreadsheet do
-    it 'should initialize' do
-      spread = Spreadsheet.new('hello', ';')
 
-      expect(spread.class).to eq(Wice::Spreadsheet)
-    end
+describe Wice::Spreadsheet do
+  let(:spreadsheet){Wice::Spreadsheet.new('hello', ';')}
 
-    it 'should add_row' do
-      spread = Spreadsheet.new('hello', ';')
-      spread << %w(hello world!)
-    end
+  it 'should initialize' do
+
+    expect(spreadsheet.class).to eq(Wice::Spreadsheet)
+  end
+
+  it 'should add_row' do
+    spreadsheet << %w(hello world!)
   end
 end

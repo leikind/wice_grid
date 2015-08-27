@@ -1,8 +1,11 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
 [![Build](https://travis-ci.org/leikind/wice_grid.svg)](https://travis-ci.org/leikind/wice_grid)
-[![Coverage Status](https://coveralls.io/repos/leikind/wice_grid/badge.svg?branch=development&service=github)](https://coveralls.io/github/leikind/wice_grid?branch=development)
 [![Inline docs](http://inch-ci.org/github/leikind/wice_grid.svg?branch=development)](http://inch-ci.org/github/leikind/wice_grid)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
+
+<!-- let's disable for a while ;-)
+[![Coverage Status](https://coveralls.io/repos/leikind/wice_grid/badge.svg?branch=development&service=github)](https://coveralls.io/github/leikind/wice_grid?branch=development)
+-->
 
 * Yuri Leikind, yuri.leikind at gmail dot com
 * Version 3.6.0dev
