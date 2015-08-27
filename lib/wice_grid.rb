@@ -120,7 +120,8 @@ module Wice
           saved_query:                nil,
           total_entries:              nil,
           with_paginated_resultset:   nil,
-          with_resultset:             nil
+          with_resultset:             nil,
+          use_default_scope:          Defaults::USE_DEFAULT_SCOPE
         }
       rescue NameError
         raise NameError.new('A constant is missing in wice_grid_config.rb: ' + $ERROR_INFO.message +
@@ -324,7 +325,7 @@ module Wice
     # TO DO: what to do with other @ar_options values?
     def read  #:nodoc:
       form_ar_options
-      @klass.unscoped do
+      use_default_or_unscoped do
         @resultset = if self.output_csv? || all_record_mode?
           relation = @relation
                      .includes(@ar_options[:include])
@@ -572,7 +573,8 @@ module Wice
 
     def resultset_without_paging_without_user_filters  #:nodoc:
       form_ar_options
-      @klass.unscoped do
+
+      use_default_or_unscoped do
         relation = @relation.joins(@ar_options[:joins])
                    .includes(@ar_options[:include])
                    .group(@ar_options[:group])
@@ -604,7 +606,8 @@ module Wice
     def active_relation_for_resultset_without_paging_with_user_filters  #:nodoc:
       form_ar_options
       relation = nil
-      @klass.unscoped do
+
+      use_default_or_unscoped do
         relation = @relation
                    .joins(@ar_options[:joins])
                    .includes(@ar_options[:include])
@@ -622,6 +625,17 @@ module Wice
       Wice.log("Query with id #{query_id} for grid '#{self.name}' not found!!!") if query.nil?
       query
     end
+
+    def use_default_or_unscoped
+      if @options[:use_default_scope] == true
+        yield
+      else
+        @klass.unscoped do
+          yield
+        end
+      end
+    end
+
   end
 
   # routines called from WiceGridExtentionToActiveRecordColumn (ActiveRecord::ConnectionAdapters::Column) or ConditionsGeneratorColumn classes

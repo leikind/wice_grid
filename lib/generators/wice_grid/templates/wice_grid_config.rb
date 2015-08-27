@@ -174,4 +174,8 @@ if defined?(Wice::Defaults)
 
   # The name of the page method (should correspond to Kaminari.config.page_method_name)
   Wice::Defaults::PAGE_METHOD_NAME = :page
+  
+  # by default Wice-Grid always use unscoped,set to true to force use of default_scope by default instead
+  Wice::Defaults::USE_DEFAULT_SCOPE = false
+
 end
