@@ -47,6 +47,8 @@ require 'support/wice_grid_test_config'
 
 ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
 
+::Wice.on_action_view_load
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest

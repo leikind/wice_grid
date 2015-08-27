@@ -26,6 +26,23 @@ require 'kaminari.rb'
 ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
+
+  def self.on_action_view_load
+    ::ActionView::Base.class_eval { include Wice::GridViewHelper }
+    [ActionView::Helpers::AssetTagHelper,
+     ActionView::Helpers::TagHelper,
+     ActionView::Helpers::JavaScriptHelper,
+     ActionView::Helpers::FormTagHelper].each do |m|
+      JsCalendarHelpers.send(:include, m)
+    end
+
+    Columns.load_column_processors
+    require 'wice/wice_grid_serialized_query.rb'
+
+    # It is here only because of this: https://github.com/amatsuda/kaminari/pull/267
+    require 'wice/kaminari_monkey_patching.rb'
+  end
+
   class WiceGridEngine < ::Rails::Engine #:nodoc:
     initializer 'wice_grid_railtie.configure_rails_initialization' do |_app|
       ActiveSupport.on_load :action_controller do
@@ -37,19 +54,7 @@ module Wice
       end
 
       ActiveSupport.on_load :action_view do
-        ::ActionView::Base.class_eval { include Wice::GridViewHelper }
-        [ActionView::Helpers::AssetTagHelper,
-         ActionView::Helpers::TagHelper,
-         ActionView::Helpers::JavaScriptHelper,
-         ActionView::Helpers::FormTagHelper].each do |m|
-          JsCalendarHelpers.send(:include, m)
-        end
-
-        Columns.load_column_processors
-        require 'wice/wice_grid_serialized_query.rb'
-
-        # It is here only until this pull request is pulled: https://github.com/amatsuda/kaminari/pull/267
-        require 'wice/kaminari_monkey_patching.rb'
+        ::Wice.on_action_view_load
       end
     end
 
