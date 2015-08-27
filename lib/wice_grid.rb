@@ -105,23 +105,23 @@ module Wice
         @options = {
           conditions:                 nil,
           csv_file_name:              nil,
-          csv_field_separator:        Defaults::CSV_FIELD_SEPARATOR,
+          csv_field_separator:        ConfigurationProvider.value_for(:CSV_FIELD_SEPARATOR),
           custom_order:               {},
-          enable_export_to_csv:       Defaults::ENABLE_EXPORT_TO_CSV,
+          enable_export_to_csv:       ConfigurationProvider.value_for(:ENABLE_EXPORT_TO_CSV),
           group:                      nil,
           include:                    nil,
           joins:                      nil,
-          name:                       Defaults::GRID_NAME,
+          name:                       ConfigurationProvider.value_for(:GRID_NAME),
           order:                      nil,
-          order_direction:            Defaults::ORDER_DIRECTION,
+          order_direction:            ConfigurationProvider.value_for(:ORDER_DIRECTION),
           page:                       1,
-          page_method_name:           Defaults::PAGE_METHOD_NAME,
-          per_page:                   Defaults::PER_PAGE,
+          page_method_name:           ConfigurationProvider.value_for(:PAGE_METHOD_NAME),
+          per_page:                   ConfigurationProvider.value_for(:PER_PAGE),
           saved_query:                nil,
           total_entries:              nil,
           with_paginated_resultset:   nil,
           with_resultset:             nil,
-          use_default_scope:          Defaults::USE_DEFAULT_SCOPE
+          use_default_scope:          ConfigurationProvider.value_for(:USE_DEFAULT_SCOPE)
         }
       rescue NameError
         raise NameError.new('A constant is missing in wice_grid_config.rb: ' + $ERROR_INFO.message +
@@ -626,13 +626,11 @@ module Wice
       query
     end
 
-    def use_default_or_unscoped
-      if @options[:use_default_scope] == true
+    def use_default_or_unscoped #:nodoc:
+      if @options[:use_default_scope]
         yield
       else
-        @klass.unscoped do
-          yield
-        end
+        @klass.unscoped { yield }
       end
     end
 

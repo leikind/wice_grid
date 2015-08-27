@@ -88,11 +88,11 @@ module Wice
 
       filter_type = case column_type
       when :date
-        Wice::Defaults::DEFAULT_FILTER_FOR_DATE
+        ConfigurationProvider.value_for(:DEFAULT_FILTER_FOR_DATE)
       when :datetime
-        Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME
+        ConfigurationProvider.value_for(:DEFAULT_FILTER_FOR_DATETIME)
       when :timestamp
-        Wice::Defaults::DEFAULT_FILTER_FOR_DATETIME
+        ConfigurationProvider.value_for(:DEFAULT_FILTER_FOR_DATETIME)
       else
         column_type
       end

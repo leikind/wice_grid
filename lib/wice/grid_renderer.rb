@@ -278,24 +278,24 @@ module Wice
 
     def column(opts = {}, &block)
       options = {
-        allow_multiple_selection:    Defaults::ALLOW_MULTIPLE_SELECTION,
+        allow_multiple_selection:    ConfigurationProvider.value_for(:ALLOW_MULTIPLE_SELECTION),
         assoc:                       nil,
         attribute:                   nil,
-        auto_reload:                 Defaults::AUTO_RELOAD,
+        auto_reload:                 ConfigurationProvider.value_for(:AUTO_RELOAD),
         boolean_filter_false_label:  NlMessage['boolean_filter_false_label'],
         boolean_filter_true_label:   NlMessage['boolean_filter_true_label'],
         class:                       nil,
         custom_filter:               nil,
         detach_with_id:              nil,
         filter:                      true,
-        filter_all_label:            Defaults::CUSTOM_FILTER_ALL_LABEL,
+        filter_all_label:            ConfigurationProvider.value_for(:CUSTOM_FILTER_ALL_LABEL),
         filter_type:                 nil,
         html:                        {},
         in_csv:                      true,
         in_html:                     true,
         model:                       nil, # will throw an exception with instructions
         name:                        '',
-        negation:                    Defaults::NEGATION_IN_STRING_FILTERS,
+        negation:                    ConfigurationProvider.value_for(:NEGATION_IN_STRING_FILTERS),
         ordering:                    true,
         table_alias:                 nil
       }
