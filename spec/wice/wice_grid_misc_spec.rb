@@ -5,7 +5,7 @@ module Wice
     it 'many elements in assocs' do
       assocs = [:foo1, :foo2, :foo3, :foo4, :foo5]
       out = Wice.assoc_list_to_hash(assocs)
-      expect(out).to eq({foo1:{foo2:{foo3:{foo4: :foo5}}}})
+      expect(out).to eq(foo1: {foo2: {foo3: {foo4: :foo5}}})
     end
 
     it 'one element in assocs' do
@@ -17,7 +17,7 @@ module Wice
     it 'two elements in assocs' do
       assocs = [:foo1, :foo2]
       out = Wice.assoc_list_to_hash(assocs)
-      expect(out).to eq({foo1: :foo2})
+      expect(out).to eq(foo1: :foo2)
     end
   end
 
@@ -81,11 +81,11 @@ module Wice
     end
 
     it 'symbols with a hash + the same hash' do
-      includes = [{a: :x}]
+      includes = [a: :x]
 
       out = Wice.build_includes(includes, [:a, :x])
 
-      expect(out).to eq({a: :x})
+      expect(out).to eq(a: :x)
     end
 
     it 'symbols with a hash + a deeper hash' do
@@ -93,15 +93,15 @@ module Wice
 
       out = Wice.build_includes(includes, [:a, :x, :y])
 
-      expect(out).to eq({a: {x: :y}})
+      expect(out).to eq(a: {x: :y})
     end
 
     it 'a deeper hash + a deeper hash' do
-      includes = [{a: {x: :y}}]
+      includes = [a: {x: :y}]
 
       out = Wice.build_includes(includes, [:a, :x, :z])
 
-      expect(out).to eq({:a=>[:y, :z]})
+      expect(out).to eq(a: [:y, :z])
     end
 
 
@@ -110,7 +110,7 @@ module Wice
 
       out = Wice.build_includes(includes, [:a, :x, :y])
 
-      expect(out).to eq({a: {x: :y}})
+      expect(out).to eq(a: {x: :y})
     end
 
     it '1 symbol + hash ' do
@@ -118,7 +118,7 @@ module Wice
 
       out = Wice.build_includes(includes, [:a, :x])
 
-      expect(out).to eq([:b, {:a=>:x}])
+      expect(out).to eq([:b, {a: :x}])
     end
 
     it 'nil + hash ' do
@@ -126,7 +126,7 @@ module Wice
 
       out = Wice.build_includes(includes, [:a, :x])
 
-      expect(out).to eq({:a=>:x})
+      expect(out).to eq(a: :x)
     end
 
     it '1 symbol + nothing' do

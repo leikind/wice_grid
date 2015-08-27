@@ -306,13 +306,13 @@ module Wice
       assocs = nil
 
       if options[:model]
-        fail WiceGridArgumentError.new("Instead of specifying a model of a joined table please use assoc: :name_of_association")
+        fail WiceGridArgumentError.new('Instead of specifying a model of a joined table please use assoc: :name_of_association')
       end
 
       unless options[:assoc].nil?
 
         unless options[:assoc].is_a?(Symbol) ||
-              (options[:assoc].is_a?(Array) && ! options[:assoc].empty? && options[:assoc].all?{ |assoc| assoc.is_a?(Symbol)} )
+              (options[:assoc].is_a?(Array) && ! options[:assoc].empty? && options[:assoc].all?{ |assoc| assoc.is_a?(Symbol)})
 
           fail WiceGridArgumentError.new('Option :assoc can only be a symbol or an array of symbols')
         end
@@ -353,7 +353,7 @@ module Wice
 
       klass = Columns::ViewColumn
       if options[:attribute] &&
-         col_type_and_table_name = @grid.declare_column(
+        col_type_and_table_name = @grid.declare_column(
           column_name:          options[:attribute],
           model:                options[:model],
           custom_filter_active: options[:custom_filter],

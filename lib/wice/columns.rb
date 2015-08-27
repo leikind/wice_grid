@@ -251,7 +251,7 @@ module Wice #:nodoc:
       end
 
       def generate_conditions(_table_alias, _opts) #:nodoc:
-        fail("implement me")
+        fail('implement me')
       end
 
     end
