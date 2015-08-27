@@ -163,7 +163,7 @@ module Wice
       extra_argument ? block.call(ar, extra_argument) : block.call(ar)
     end
 
-    def get_row_content(rendering, ar, sorting_dependant_row_cycling)
+    def get_row_content(rendering, ar, sorting_dependant_row_cycling) #:nodoc:
       cell_value_of_the_ordered_column = nil
       row_content = ''
       rendering.each_column(:in_html) do |column|

@@ -434,7 +434,7 @@ module Wice
       add_column(vc)
     end
 
-    def get_model_from_associations(model, assocs)
+    def get_model_from_associations(model, assocs) # :nodoc:
       if assocs.empty?
         model
       else

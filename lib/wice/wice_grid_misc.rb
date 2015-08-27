@@ -3,7 +3,7 @@ module Wice
   class << self
     @@model_validated = false
 
-    def assoc_list_to_hash(assocs)
+    def assoc_list_to_hash(assocs) #:nodoc:
       head = assocs[0]
       tail = assocs[1..-1]
 

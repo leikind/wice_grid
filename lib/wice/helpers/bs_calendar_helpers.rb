@@ -1,7 +1,8 @@
 # encoding: utf-8
 module Wice #:nodoc:
   module BsCalendarHelpers #:nodoc:
-    class CalendarData
+    class CalendarData #:nodoc:
+
       attr_accessor :name,
                     :date_string,
                     :dom_id,
@@ -10,7 +11,7 @@ module Wice #:nodoc:
                     :fire_event,
                     :close_calendar_event_name,
                     :the_other_datepicker_id_to,
-                    :the_other_datepicker_id_from
+                    :the_other_datepicker_id_from #:nodoc:
     end
 
     def date_calendar_bs(calendar_data)  #:nodoc:

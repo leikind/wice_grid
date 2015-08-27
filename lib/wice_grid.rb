@@ -27,7 +27,7 @@ ActionController::Base.send(:helper_method, :wice_grid_custom_filter_params)
 
 module Wice
 
-  def self.on_action_view_load
+  def self.on_action_view_load #:nodoc:
     ::ActionView::Base.class_eval { include Wice::GridViewHelper }
     [ActionView::Helpers::AssetTagHelper,
      ActionView::Helpers::TagHelper,
@@ -313,7 +313,7 @@ module Wice
       end
     end
 
-    def add_references(relation)
+    def add_references(relation) #:nodoc:
       if @ar_options[:include] && relation.respond_to?(:references)
         # refs = [@ar_options[:include]] unless @ar_options[:include].is_a?(Array)
         relation =  relation.references(* @ar_options[:include])
@@ -441,7 +441,7 @@ module Wice
       do_count
     end
 
-    def do_count
+    def do_count #:nodoc:
       @relation
         .all
         .merge(@ar_options[:conditions]).count(

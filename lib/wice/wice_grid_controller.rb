@@ -1,6 +1,6 @@
 # encoding: utf-8
 module Wice
-  module Controller
+  module Controller #:nodoc:
     def self.included(base) #:nodoc:
       base.extend(ClassMethods)
     end
