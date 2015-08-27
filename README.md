@@ -1,9 +1,7 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
 [![Build](https://travis-ci.org/leikind/wice_grid.svg)](https://travis-ci.org/leikind/wice_grid)
 [![Coverage Status](https://coveralls.io/repos/leikind/wice_grid/badge.svg?branch=development&service=github)](https://coveralls.io/github/leikind/wice_grid?branch=development)
-[![Code Climate](https://codeclimate.com/github/leikind/wice_grid/badges/gpa.svg)](https://codeclimate.com/github/leikind/wice_grid)
 [![Inline docs](http://inch-ci.org/github/leikind/wice_grid.svg?branch=development)](http://inch-ci.org/github/leikind/wice_grid)
-[![Security](https://hakiri.io/github/leikind/wice_grid/development.svg)](https://hakiri.io/github/leikind/wice_grid/development)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 * Yuri Leikind, yuri.leikind at gmail dot com
