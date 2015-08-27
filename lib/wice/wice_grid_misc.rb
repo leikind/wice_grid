@@ -77,12 +77,16 @@ module Wice
 
     def build_includes_includes_is_array(includes, assocs) #:nodoc:
 
-      hash_keys = includes
-                  .each_with_index
-                  .to_a
-                  .select{ |e, _idx| e.is_a?(Hash)}
-                  .map{ |hash, idx| [ hash.keys[0], idx ] }
-                  .to_h
+      hash_keys = Hash[
+        *(
+          includes
+          .each_with_index
+          .to_a
+          .select{ |e, _idx| e.is_a?(Hash)}
+          .map{ |hash, idx| [ hash.keys[0], idx ] }
+          .flatten
+        )
+      ]
 
       key_to_search, finished = if assocs.is_a?(Hash)
         [assocs.keys[0], false]
