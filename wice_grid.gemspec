@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.license       = 'MIT'
   s.require_paths = ['lib']
-  s.date          = '2015-08-14'
+  s.date          = '2015-08-28'
 
   s.add_dependency 'activerecord',      ['> 3.2']
   s.add_dependency 'kaminari',          ['~> 0.16']
