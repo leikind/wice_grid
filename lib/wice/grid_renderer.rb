@@ -1,5 +1,8 @@
 # encoding: utf-8
 module Wice
+
+  # Instance of `GridRenderer` is injected into the top level block of the `grid` helper.
+  # `g.column`, `g.action_column` are all examples of methods of `GridRenderer`
   class GridRenderer
     include ActionView::Helpers::TagHelper
     include ActionView::Helpers::CaptureHelper
@@ -482,6 +485,7 @@ module Wice
     def last_row(&block)
       @last_row_handler = block
     end
+
     # The output of the block submitted to +blank_slate+ is rendered instead of the whole grid if no filters are active
     # and there are no records to render.
     # In addition to the block style two other variants are accepted:
