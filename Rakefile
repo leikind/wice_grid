@@ -26,21 +26,33 @@ RuboCop::RakeTask.new(:rubocop) do |task|
   task.fail_on_error = false
 end
 
+desc 'Run RSpec with code coverage'
+task :coverage do
+  ENV['COVERAGE'] = 'true'
+  Rake::Task['spec'].execute
+end
+
+
 require 'yard'
 require 'yard/rake/yardoc_task'
-desc 'Generate documentation for the wice_grid plugin.'
-YARD::Rake::YardocTask.new(:rdoc) do |t|
+desc 'Generate YARDOC documentation for the plugin'
+YARD::Rake::YardocTask.new(:yardoc) do |t|
   OTHER_PATHS = %w()
-
   t.files   = ['lib/**/*.rb', OTHER_PATHS]
   t.options = %w(--main=README.md --file TODO.md,CHANGELOG.md,SAVED_QUERIES_HOWTO.md,MIT-LICENSE)
   t.stats_options = ['--list-undoc']
 end
 
-desc 'Run RSpec with code coverage'
-task :coverage do
-  ENV['COVERAGE'] = 'true'
-  Rake::Task['spec'].execute
+gem 'rdoc'
+require 'rdoc/task'
+Rake::RDocTask.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'WiceGrid'
+  rdoc.options << '--line-numbers' << '--inline-source'
+  rdoc.rdoc_files.include('README.md')
+  rdoc.rdoc_files.include('SAVED_QUERIES_HOWTO.md')
+  rdoc.rdoc_files.include('CHANGELOG.md')
+  rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
 task default: [:rubocop, :spec, :rdoc]

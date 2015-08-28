@@ -29,4 +29,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency('rubocop', '~> 0.33')
   s.add_development_dependency('coveralls', '~> 0.8.2')
   s.add_development_dependency('sqlite3', '~> 1.3')
+  s.add_development_dependency('rdoc', '~> 4.2.0')
 end
