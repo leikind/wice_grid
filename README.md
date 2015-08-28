@@ -94,6 +94,7 @@ WARNING: Since 3.2.pre2 WiceGrid is not compatible with `will_paginate` because 
 Add the following to your Gemfile:
 
 ```
+gem 'font-awesome-sass', '~> 4.3.0'
 gem "wice_grid", '3.6.0.pre2'
 ```
 
