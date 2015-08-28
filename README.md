@@ -8,7 +8,7 @@
 -->
 
 * Yuri Leikind, yuri.leikind at gmail dot com
-* Version 3.6.0.pre1
+* Version 3.6.0.pre2
 * This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
 http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
 
@@ -94,7 +94,7 @@ WARNING: Since 3.2.pre2 WiceGrid is not compatible with `will_paginate` because 
 Add the following to your Gemfile:
 
 ```
-gem "wice_grid", '3.6.0.pre1'
+gem "wice_grid", '3.6.0.pre2'
 ```
 
 and run the `bundle` command.
