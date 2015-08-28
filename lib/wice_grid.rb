@@ -63,6 +63,8 @@ module Wice
     end
   end
 
+
+  # Main class responsible for keeping the state of the grid, building an ActiveRelation, and running queries
   class WiceGrid
     attr_reader :klass, :name, :resultset, :custom_order, :query_store_model #:nodoc:
     attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :csv_field_separator, :saved_query #:nodoc:

@@ -7,7 +7,7 @@ module Wice
       include Wice::Columns::CommonDateDatetimeMixin
       include Wice::Columns::CommonStandardDateDatetimeMixin
 
-      def chunk_names
+      def chunk_names #:nodoc:
         %w(year month day)
       end
 

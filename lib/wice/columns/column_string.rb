@@ -2,7 +2,12 @@
 module Wice
   module Columns #:nodoc:
     class ViewColumnString < ViewColumn #:nodoc:
-      attr_accessor :negation, :auto_reloading_input_with_negation_checkbox
+
+      # whether the filter contains a negation checkbox
+      attr_accessor :negation
+
+      # whether the filter contains a negation checkbox and autoreloading is necessary
+      attr_accessor :auto_reloading_input_with_negation_checkbox
 
       def render_filter_internal(params) #:nodoc:
         @contains_a_text_input = true

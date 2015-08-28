@@ -1,0 +1,3 @@
+files:
+  excluded:
+    - lib/generators/wice_grid/add_migration_for_serialized_queries_generator.rb

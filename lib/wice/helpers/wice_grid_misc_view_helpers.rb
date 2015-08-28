@@ -1,5 +1,7 @@
 # encoding: utf-8
 module Wice
+
+  # Various grid related helpers
   module GridViewHelper
     # This method dumps all HTTP parameters related to filtering and ordering of a certain grid as hidden form fields.
     # This might be required if you want to keep the state of a grid while reloading the page using other forms.
@@ -39,6 +41,7 @@ module Wice
       }
     end
 
+    # display the state of the grid
     def dump_state(grid)  #:nodoc:
       debug(grid.get_state_as_parameter_value_pairs)
     end

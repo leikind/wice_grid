@@ -2,6 +2,7 @@
 module Wice
   # to be mixed in into ActiveRecord::ConnectionAdapters::Column
   module WiceGridExtentionToActiveRecordColumn #:nodoc:
+    # reference to the ActiveRecord model class
     attr_accessor :model
   end
 

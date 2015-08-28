@@ -5,7 +5,7 @@ module Wice
       base.extend(ClassMethods)
     end
 
-    module ClassMethods
+    module ClassMethods #:nodoc:
       # Used to add query processing action methods into a controller.
       # Read section "Saving Queries How-To" in README for more details.
       def save_wice_grid_queries

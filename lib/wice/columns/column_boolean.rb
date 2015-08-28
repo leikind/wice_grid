@@ -4,7 +4,11 @@ module Wice
     class ViewColumnBoolean < ViewColumnCustomDropdown #:nodoc:
       include ActionView::Helpers::FormOptionsHelper
 
-      attr_accessor :boolean_filter_true_label, :boolean_filter_false_label
+      # Text for the true value
+      attr_accessor :boolean_filter_true_label
+
+      # Text for the false value
+      attr_accessor :boolean_filter_false_label
 
       def render_filter_internal(params) #:nodoc:
         @custom_filter = {

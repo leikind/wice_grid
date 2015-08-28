@@ -4,7 +4,10 @@ module Wice
     class ViewColumnCustomDropdown < ViewColumn #:nodoc:
       include ActionView::Helpers::FormOptionsHelper
 
+      # text in the filter dropdown for an empty <option><option>
       attr_accessor :filter_all_label
+
+      # contains an array of option label + option value pairs for the select, or a Proc object which returns this array
       attr_accessor :custom_filter
 
       def render_filter_internal(params) #:nodoc:
@@ -30,18 +33,20 @@ module Wice
             expand_icon_style, collapse_icon_style = nil, 'display: none'
             expand_icon_style, collapse_icon_style = collapse_icon_style, expand_icon_style if select_options[:multiple]
 
-            select_toggle = content_tag(:span,
-                                        content_tag(:i, '', class: 'fa fa-plus'),
-                                        title: NlMessage['expand'],
-                                        class: 'expand-multi-select-icon clickable',
-                                        style: expand_icon_style
+            select_toggle = content_tag(
+              :span,
+              content_tag(:i, '', class: 'fa fa-plus'),
+              title: NlMessage['expand'],
+              class: 'expand-multi-select-icon clickable',
+              style: expand_icon_style
             ) +
-                            content_tag(:span,
-                                        content_tag(:i, '', class: 'fa fa-minus'),
-                                        title: NlMessage['collapse'],
-                                        class: 'collapse-multi-select-icon clickable',
-                                        style: collapse_icon_style
-                            )
+            content_tag(
+              :span,
+              content_tag(:i, '', class: 'fa fa-minus'),
+              title: NlMessage['collapse'],
+              class: 'collapse-multi-select-icon clickable',
+              style: collapse_icon_style
+            )
           else
             select_options[:multiple] = false
             select_toggle = ''

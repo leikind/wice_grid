@@ -104,8 +104,25 @@ module Wice #:nodoc:
 
       attr_accessor(*FIELDS)
 
-      attr_accessor :cell_rendering_block, :grid,  :table_name, :main_table, :model, :custom_filter
+      # a Proc object which would return contents of one cell
+      attr_accessor :cell_rendering_block
 
+      # reference to the WiceGrid instance
+      attr_accessor :grid
+
+      # name of the table
+      attr_accessor :table_name
+
+      # name of the main table (first argument to initialize_grid)
+      attr_accessor :main_table
+
+      # attr_accessor :model
+
+      # specification for a custom filter: an array of option label + option value pairs for the select, or a Proc object which returns this array.
+      # Or nil if it is not a custom filter
+      attr_accessor :custom_filter
+
+      # A boolean flag: whether a column has a text input or not
       attr_reader :contains_a_text_input
 
       def initialize(block, options, grid_obj, tname, mtable, cfilter, view)  #:nodoc:
@@ -121,7 +138,7 @@ module Wice #:nodoc:
         end
       end
 
-      def add_css_class(klass_value)
+      def add_css_class(klass_value) #:nodoc:
         self.html ||= {}
         if html[:class].nil?
           html[:class] = klass_value

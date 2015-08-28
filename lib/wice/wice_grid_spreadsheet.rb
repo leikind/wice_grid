@@ -3,6 +3,8 @@ require 'csv'
 
 module Wice
   class Spreadsheet  #:nodoc:
+
+    #:nodoc:
     attr_reader :tempfile
 
     def initialize(name, field_separator)  #:nodoc:

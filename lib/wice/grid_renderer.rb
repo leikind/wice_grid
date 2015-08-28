@@ -10,26 +10,40 @@ module Wice
     include ActionView::Helpers::AssetTagHelper
     include ActionView::Helpers::JavaScriptHelper
 
-    attr_reader :page_parameter_name
+    # a Proc object for the after_row block
     attr_reader :after_row_handler
+
+    # a Proc object for the before_row block
     attr_reader :before_row_handler
+
+    # a Proc object for the replace_row block
     attr_reader :replace_row_handler
+
+    # Configuration or a Proc object for the blank_slate block
     attr_reader :blank_slate_handler
+
+    # a Proc object which returns contents of the last row
     attr_reader :last_row_handler
+
+    # reference to the WiceGrid instance
     attr_reader :grid
+
+    # Contents of <caption></caption>
     attr_reader :kaption
 
-    @@order_parameter_name = 'order'
-    @@order_direction_parameter_name = 'order_direction'
-    @@page_parameter_name = 'page'
+    # HTTP parameter for the order field
+    ORDER_PARAMETER_NAME           = 'order'
+
+    # HTTP parameter for the order direction (asc/desc)
+    ORDER_DIRECTION_PARAMETER_NAME = 'order_direction'
 
     def initialize(grid, view)  #:nodoc:
-      @grid = grid
-      @grid.renderer = self
-      @columns = []
-      @columns_table = {}
+      @grid                  = grid
+      @grid.renderer         = self
+      @columns               = []
+      @columns_table         = {}
       @action_column_present = false
-      @view = view
+      @view                  = view
     end
 
     def config  #:nodoc:
@@ -119,8 +133,8 @@ module Wice
       end
     end
 
-    # Takes one argument and adds the  <caption></caption> tag to the table with the argument value as
-    # the contents of <caption>.
+    # Takes one argument and adds the  <caption></caption> tag to the table with the
+    # argument value as the contents of <caption>.
     def caption(kaption)
       @kaption = kaption
     end
@@ -561,8 +575,8 @@ module Wice
       end
 
       query_params = { @grid.name => {
-        @@order_parameter_name           => column_attribute_name,
-        @@order_direction_parameter_name => direction
+        ORDER_PARAMETER_NAME           => column_attribute_name,
+        ORDER_DIRECTION_PARAMETER_NAME => direction
       } }
 
       cleaned_params =  Wice::WgHash.deep_clone params

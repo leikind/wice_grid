@@ -1,6 +1,8 @@
 # encoding: utf-8
 module Wice
   class << self
+
+    # a flag storing whether the saved query class is a valid storage for saved queries
     @@model_validated = false
 
     def assoc_list_to_hash(assocs) #:nodoc:

@@ -31,7 +31,7 @@ module Wice
     end
 
     class ConditionsGeneratorColumnInteger < ConditionsGeneratorColumn  #:nodoc:
-      def get_op_and_value(val)
+      def get_op_and_value(val) #:nodoc:
         num = nil
         op  = nil
 

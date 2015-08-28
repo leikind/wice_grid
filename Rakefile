@@ -32,6 +32,7 @@ task :coverage do
   Rake::Task['spec'].execute
 end
 
+# Experimenting with documentation system we will keep both Yardoc and Rdoc for some time, plus Inch
 
 require 'yard'
 require 'yard/rake/yardoc_task'
@@ -55,4 +56,4 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-task default: [:rubocop, :spec, :rdoc]
+task default: [:rubocop, :spec, :yardoc]

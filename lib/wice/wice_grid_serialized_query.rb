@@ -6,6 +6,7 @@ class WiceGridSerializedQuery < ActiveRecord::Base  #:nodoc:
 
   validates_presence_of :name, message: 'Please submit the name of the custom query'
 
+  # returns a list of all serialized queries
   def self.list(name, _controller)
     conditions = { grid_name: name }
     self.where(conditions).to_a

@@ -1,7 +1,11 @@
 # encoding: utf-8
 module Wice #:nodoc:
   module JsCalendarHelpers #:nodoc:
+
+    # A struct containing all data for rendering a calendar
     class CalendarData
+
+      # :nodoc:
       attr_accessor :name,
                     :date_string,
                     :dom_id,
@@ -44,18 +48,20 @@ module Wice #:nodoc:
 
       date_picker = hidden_field_tag(calendar_data.name, calendar_data.date_string, hidden_field_tag_options) + ' ' +
 
-                    link_to(calendar_data.date_string,
-                            '#',
-                            :id => calendar_data.date_span_id,
-                            :class => 'date-label',
-                            :title => ::Wice::NlMessage['date_string_tooltip'],
-                            'data-dom-id' => calendar_data.dom_id
-                    )
+      link_to(
+        calendar_data.date_string,
+        '#',
+        :id           => calendar_data.date_span_id,
+        :class        => 'date-label',
+        :title        => ::Wice::NlMessage['date_string_tooltip'],
+        'data-dom-id' => calendar_data.dom_id
+      )
 
-      content_tag(:span,
-                  date_picker,
-                  id:    calendar_data.datepicker_placeholder_id,
-                  class: 'jq-datepicker-container'
+      content_tag(
+        :span,
+        date_picker,
+        id:    calendar_data.datepicker_placeholder_id,
+        class: 'jq-datepicker-container'
       )
     end
 

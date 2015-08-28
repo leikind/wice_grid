@@ -1,8 +1,11 @@
 # encoding: utf-8
 module Wice #:nodoc:
   module BsCalendarHelpers #:nodoc:
+
+    # A struct containing all data for rendering a calendar
     class CalendarData #:nodoc:
 
+      # :nodoc:
       attr_accessor :name,
                     :date_string,
                     :dom_id,
@@ -11,7 +14,7 @@ module Wice #:nodoc:
                     :fire_event,
                     :close_calendar_event_name,
                     :the_other_datepicker_id_to,
-                    :the_other_datepicker_id_from #:nodoc:
+                    :the_other_datepicker_id_from
     end
 
     def date_calendar_bs(calendar_data)  #:nodoc:

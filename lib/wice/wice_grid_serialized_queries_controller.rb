@@ -64,13 +64,13 @@ module Wice
       render_asyns_result
     end
 
-    def extra
+    def extra #:nodoc:
       params[:extra]
     end
 
     protected
 
-    def render_asyns_result
+    def render_asyns_result #:nodoc:
       render json: {
         'error_messages'        => @error_messages,
         'notification_messages' => @notification_messages,
