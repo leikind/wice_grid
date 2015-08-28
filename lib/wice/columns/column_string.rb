@@ -79,10 +79,10 @@ module Wice
         string_matching_operator = ::Wice.get_string_matching_operators(@column_wrapper.model)
 
         comparator = if string_matching_operator == 'CI_LIKE'
-           " #{negation}  UPPER(#{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name}) LIKE  UPPER(?)"
-         else
-           " #{negation}  #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} #{string_matching_operator} ?"
-         end
+          " #{negation}  UPPER(#{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name}) LIKE  UPPER(?)"
+        else
+          " #{negation}  #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} #{string_matching_operator} ?"
+        end
 
         [ comparator, '%' + string_fragment + '%' ]
 

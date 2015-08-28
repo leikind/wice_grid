@@ -1,7 +1,7 @@
 # encoding: utf-8
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '3.6.0dev'
+  s.version       = '3.6.0.pre1'
   s.authors       = ['Yuri Leikind']
   s.email         = ['yuri.leikind@gmail.com']
   s.homepage      = 'https://github.com/leikind/wice_grid'

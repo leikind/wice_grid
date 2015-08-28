@@ -14,15 +14,15 @@
 
 * No more
 
-       column model: 'ModelClass' do
+        column model: 'ModelClass' do
 
   Instead:
 
-       column assoc: :association_name do
+        column assoc: :association_name do
 
   or
 
-       column assoc: [:association_x, association_in_association_x_model, ...]  do
+        column assoc: [:association_x, association_in_association_x_model, ...]  do
 
   If associations have been mentioned in :assoc, it is not necessary to list them in :include!
 
@@ -35,24 +35,34 @@
 
   Instead of
 
-    g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
-      task.priority.name if task.priority
-    end
+        g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+          task.priority.name if task.priority
+        end
 
   you can write
 
-    g.column name:  'Priority', attribute: 'name',  assoc: :priority
+        g.column name:  'Priority', attribute: 'name',  assoc: :priority
 
   Instead of
 
-    g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
-      task.project.customer.name if task.project && task.project.customer
-    end
+        g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+          task.project.customer.name if task.project && task.project.customer
+        end
 
   you can write
 
-    g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+        g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
 
+*  CI_LIKE feature from @nathanvda for string filters:
+
+   Setting a configuration value in Wice::Defaults::STRING_MATCHING_OPERATORS to CI_LIKE will result in
+   the following SQL:
+
+        UPPER(table.field) LIKE  UPPER(?)"
+
+*  New USE_DEFAULT_SCOPE configuration value from @nathanvda.
+   By default ActiveRecord calls are always executed inside Model.unscoped{}.
+   Setting USE_DEFAULT_SCOPE to true will use the default scope for all queries.
 
 
 # 3.5.0

@@ -49,7 +49,11 @@ if defined?(Wice::Defaults)
 
   # Defining one string matching operator globally for the whole application turns is not enough
   # when you connect to two databases one of which is MySQL and the other is Postgresql.
-  # If the key for an adapter is missing it will fall back to Wice::Defaults::STRING_MATCHING_OPERATOR
+  # If the key for an adapter is missing it will fall back to Wice::Defaults::STRING_MATCHING_OPERATOR.
+  #
+  # 'CI_LIKE' is a special value. Setting a value in STRING_MATCHING_OPERATORS to CI_LIKE will result in the following SQL:
+  #
+  #    UPPER(table.field) LIKE  UPPER(?)"
   Wice::Defaults::STRING_MATCHING_OPERATORS = {
     'ActiveRecord::ConnectionAdapters::MysqlAdapter'      => 'LIKE',
     'ActiveRecord::ConnectionAdapters::PostgreSQLAdapter' => 'ILIKE'
