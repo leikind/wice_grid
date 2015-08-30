@@ -24,7 +24,7 @@ require 'wice/columns/common_rails_date_datetime_conditions_generator_mixin.rb'
 require 'kaminari.rb'
 
 unless Kernel.const_defined?(:FontAwesome)
-  gem 'font-awesome-sass.rb'
+  gem 'font-awesome-sass'
   require 'font-awesome-sass.rb'
 end
 
