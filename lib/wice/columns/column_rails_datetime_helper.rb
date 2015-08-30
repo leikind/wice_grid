@@ -33,7 +33,7 @@ module Wice
 
     class ConditionsGeneratorColumnRailsDatetimeHelper < ConditionsGeneratorColumn  #:nodoc:
 
-      include Wice::Columns::CommonJsDateDatetimeConditionsGeneratorMixin
+      include Wice::Columns::CommonRailsDateDatetimeConditionsGeneratorMixin
 
     end
   end

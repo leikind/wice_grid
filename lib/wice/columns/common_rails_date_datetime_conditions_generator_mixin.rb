@@ -1,7 +1,7 @@
 # encoding: utf-8
 module Wice
   module Columns #:nodoc:
-    module CommonJsDateDatetimeConditionsGeneratorMixin #:nodoc:
+    module CommonRailsDateDatetimeConditionsGeneratorMixin #:nodoc:
 
       def generate_conditions(table_alias, opts)   #:nodoc:
         conditions = [[]]
