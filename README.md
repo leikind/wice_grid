@@ -8,7 +8,7 @@
 -->
 
 * Yuri Leikind, yuri.leikind at gmail dot com
-* Version 3.6.0.pre2
+* Version 3.6.0.pre3
 * This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
 http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
 
