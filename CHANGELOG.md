@@ -1,68 +1,119 @@
 # 3.6.0
 
+## New API For Joined Tables
 
-* There is no more :helper_style in column definitions and no more Wice::Defaults:HELPER_STYLE.
-  Instead there is a number of filter types:
+Before 3.6.0 `:model_class` was used in column definitions for columns from joined tables.
 
-    * rails_datetime_helper
-    * rails_date_helper
-    * jquery_datepicker
-    * bootstrap_datepicker
+In 3.6.0 the API has changed to use associations.
+If, say, a `Task` `belongs_to` a `Priority`, a column definition should specify this association using `:assoc`:
 
-  and new configuration values Wice::Defaults:DEFAULT_FILTER_FOR_DATE and Wice::Defaults:DEFAULT_FILTER_FOR_DATETIME
+```ruby
+g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+  task.priority.name if task.priority
+end
+```
+
+If, say, a `Task` `belongs_to` a `Project`, and a `Project` belongs to a `Customer`,
+`assoc:` should be a list of these associations:
+
+```ruby
+g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+  task.project.customer.name if task.project && task.project.customer
+end
+```
 
 
-* No more
+## Blockless Columns For Joined Tables
 
-        column model: 'ModelClass' do
+Blockless columns used to only work for the main model.
+Now they can be used for joined tables, too.
 
-  Instead:
+Instead of
 
-        column assoc: :association_name do
+```ruby
+g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+  task.priority.name if task.priority
+end
+```
 
-  or
+you can write
 
-        column assoc: [:association_x, association_in_association_x_model, ...]  do
+```ruby
+g.column name:  'Priority', attribute: 'name',  assoc: :priority
+```
 
-  If associations have been mentioned in :assoc, it is not necessary to list them in :include!
+Instead of
 
-  Blockless column definitions now work for columns from joined tables!
+```ruby
+g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+  task.project.customer.name if task.project && task.project.customer
+end
+```
 
-* No jpg/png icons, the plugin uses Font Awesome
-* CSS is not copied to the app. It is included by @import "wice_grid" in your application.scss.
+you can write
 
-* Blockless columns now work for joined tables, too:
+```ruby
+  g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+```
 
-  Instead of
 
-        g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
-          task.priority.name if task.priority
-        end
+## New Way To Choose Datepickers
 
-  you can write
+Before 3.6.0 to choose a datepicker type we used `:helper_style` in column definitions and `Wice::Defaults:HELPER_STYLE` in the configuration_file.
 
-        g.column name:  'Priority', attribute: 'name',  assoc: :priority
+In 3.6.0 `:helper_style` and `Wice::Defaults:HELPER_STYLE` are gone.
 
-  Instead of
+Now each datepicker is simply a separate filter type, and to pick a datepicker we can use `:filter_type`, just like other filter types are chosen.
 
-        g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
-          task.project.customer.name if task.project && task.project.customer
-        end
+Filter types for dates and datetimes are
 
-  you can write
+* `:rails_datetime_helper`
+* `:rails_date_helper`
+* `:jquery_datepicker`
+* `:bootstrap_datepicker`
 
-        g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+Example:
 
-*  CI_LIKE feature from @nathanvda for string filters:
+```ruby
+g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
+  task.updated_at.to_s(:db)
+end
+```
 
-   Setting a configuration value in Wice::Defaults::STRING_MATCHING_OPERATORS to CI_LIKE will result in
-   the following SQL:
+Default filter types for date and datetime columns are set by `Wice::Defaults:DEFAULT_FILTER_FOR_DATE` and `Wice::Defaults:DEFAULT_FILTER_FOR_DATETIME`.
 
-        UPPER(table.field) LIKE  UPPER(?)"
 
-*  New USE_DEFAULT_SCOPE configuration value from @nathanvda.
-   By default ActiveRecord calls are always executed inside Model.unscoped{}.
-   Setting USE_DEFAULT_SCOPE to true will use the default scope for all queries.
+## Icons
+
+There are no more icons inside of the gem. Instead, [Font Awesome](https://github.com/FortAwesome/font-awesome-sass) is used.
+
+## CSS
+
+CSS is no longer copied to the applications asset directory. Instead the user is supposed to add
+
+```sass
+@import "wice_grid";
+@import "font-awesome-sprockets";
+@import "font-awesome";
+```
+
+to `application.scss`.
+
+
+## CI_LIKE
+
+Setting a configuration value in Wice::Defaults::STRING_MATCHING_OPERATORS to CI_LIKE will result in the following SQL generated for string filters:
+
+```sql
+UPPER(table.field) LIKE UPPER(?)"
+```
+
+
+## USE_DEFAULT_SCOPE
+
+New `USE_DEFAULT_SCOPE` configuration value from @nathanvda.
+By default ActiveRecord calls are always executed inside `Model.unscoped{}`.
+Setting `USE_DEFAULT_SCOPE` to `true` will use the default scope for all queries.
 
 
 # 3.5.0
