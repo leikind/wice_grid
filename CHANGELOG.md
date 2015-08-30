@@ -99,6 +99,12 @@ CSS is no longer copied to the applications asset directory. Instead the user is
 
 to `application.scss`.
 
+`font-awesome-sass` is not a dependency of WiceGrid in case you decide to style WiceGrid icons differently,
+so you need to add it explicitly to your Gemfile:
+
+gem 'font-awesome-sass',  '~> 4.3'
+
+
 
 ## CI_LIKE
 
