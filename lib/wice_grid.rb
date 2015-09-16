@@ -543,7 +543,9 @@ module Wice
       end
 
       if custom_order.blank?
-        if ActiveRecord::ConnectionAdapters.const_defined?(:SQLite3Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+        sqlite = ActiveRecord::ConnectionAdapters.const_defined?(:SQLite3Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
+        postgres = ActiveRecord::ConnectionAdapters.const_defined?(:PostgreSQLAdapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
+        if sqlite || postgres
           fully_qualified_column_name.strip.split('.').map { |chunk| ActiveRecord::Base.connection.quote_table_name(chunk) }.join('.')
         else
           ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name.strip)
