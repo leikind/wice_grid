@@ -1,0 +1,47 @@
+es:
+  date:
+    order:
+      - :day
+      - :month
+      - :year
+  wice_grid:
+    show_filter_tooltip: Mostrar filtro
+    hide_filter_tooltip: Ocultar filtro
+    csv_export_tooltip: Exportar a CSV
+    filter_tooltip: Filtro
+    reset_filter_tooltip: Reset
+    boolean_filter_true_label: "Si"
+    boolean_filter_false_label: "No"
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Desde
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Hasta
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Excluir
+    # link to switch to show all records
+    show_all_records_label: mostrar todos
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Mostrar todos los registros
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: ¿Estás seguro que quieres mostrar todos los registros?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: volver a la vista paginada
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Cambiar atrás a la vista con páginas
+    # Title of the date string.
+    date_string_tooltip: Click en borrar
+    saved_query_panel_title: Consultas salvadas
+    save_query_button_label: Salvar el estado de los filtros
+    saved_query_deletion_confirmation: ¿Estás seguro?
+    saved_query_deletion_link_title: Borrar consulta
+    saved_query_link_title: Cargar consulta
+    validates_uniqueness_error: Una consulta con este nombre ya existe
+    validates_presence_error: Por favor tramita el nombre la consulta modificada
+    query_deleted_message: Salvada la consulta borrado.
+    query_saved_message: Consulta salvada.
+    select_all: Selecciona todo
+    deselect_all: Borra la selección
+    expand: Expandir
+    collapse: Contraer

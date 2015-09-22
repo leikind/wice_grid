@@ -1,0 +1,45 @@
+nl:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Filter tonen
+    hide_filter_tooltip: Filter verbergen
+    csv_export_tooltip: Als CSV exporteren
+    filter_tooltip: Filter
+    reset_filter_tooltip: Terugstellen
+    boolean_filter_true_label: ja
+    boolean_filter_false_label: neen
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Vanaf
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Tot
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Uitsluiten
+    # link to switch to show all records
+    show_all_records_label: Alle rijen tonen
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Alle rijen tonen
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Bent u zeker dat u alle rijen wilt tonen?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Terug naar pagina's
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Terug naar pagina's
+    # Title of the date string.
+    date_string_tooltip: Klik om te verwijderen
+    saved_query_panel_title: Opgeslagen query's
+    save_query_button_label: Query opslaan
+    saved_query_deletion_confirmation: Bent u zeker?
+    saved_query_deletion_link_title: Query verwijderen
+    saved_query_link_title: Query laden
+    validates_uniqueness_error: Deze query bestaat reeds
+    validates_presence_error: Gelieve de naam van de query in te vullen
+    query_deleted_message: Opgeslagen query verwijderd.
+    query_saved_message: Query opgeslagen
+    select_all: Selecteer alle rijen
+    deselect_all: Deselecteer alle rijen

@@ -8,7 +8,7 @@
 -->
 
 * Yuri Leikind, yuri.leikind at gmail dot com
-* Version 3.6.0.pre3; [What's New In 3.6.0](https://github.com/leikind/wice_grid/wiki/What's-New-In-3.6.0) 
+* Version 3.6.0.pre3; [What's New In 3.6.0](https://github.com/leikind/wice_grid/wiki/What's-New-In-3.6.0)
 * This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
 http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
 
@@ -106,9 +106,8 @@ Run the generator:
 rails g wice_grid:install
 ```
 
-This adds the following files:
+This adds the following file:
 * config/initializers/wice_grid_config.rb
-* config/locales/wice_grid.yml
 
 
 Require WiceGrid javascript in your js index file:

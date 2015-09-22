@@ -1,0 +1,47 @@
+en:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Show filter
+    hide_filter_tooltip: Hide filter
+    csv_export_tooltip: Export to CSV
+    filter_tooltip: Filter
+    reset_filter_tooltip: Reset
+    boolean_filter_true_label: "yes"
+    boolean_filter_false_label: "no"
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: From
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: To
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Exclude
+    # link to switch to show all records
+    show_all_records_label: show all
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Show all records
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Are you sure you want to display all records?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: back to paginated view
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Switch back to the view with pages
+    # Title of the date string.
+    date_string_tooltip: Click to delete
+    saved_query_panel_title: Saved Queries
+    save_query_button_label: Save the state of filters
+    saved_query_deletion_confirmation: Are you sure?
+    saved_query_deletion_link_title: Delete query
+    saved_query_link_title: Load query
+    validates_uniqueness_error: A query with this name already exists
+    validates_presence_error: Please submit the name of the custom query
+    query_deleted_message: Saved query deleted.
+    query_saved_message: Query saved.
+    select_all: Select all
+    deselect_all: Remove selection
+    expand: Expand
+    collapse: Collapse
