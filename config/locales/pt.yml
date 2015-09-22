@@ -1,0 +1,45 @@
+pt:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Mostrar o filtro
+    hide_filter_tooltip: Esconder o filtro
+    csv_export_tooltip: Exportar em CSV
+    filter_tooltip: Filtrar
+    reset_filter_tooltip: Reinicializar
+    boolean_filter_true_label: sim
+    boolean_filter_false_label: não
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: De
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: a
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Excluir
+    # link to switch to show all records
+    show_all_records_label: Ver todos
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Ver todos os registos
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Tem a certeza de querer visualizar todos os registos?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Retorno à vista paginada
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Retorno à vista por página
+    # Title of the date string.
+    date_string_tooltip: Cliquar para apagar
+    saved_query_panel_title: Queries gravadas
+    save_query_button_label: Gravar o estado dos filtros
+    saved_query_deletion_confirmation: Tem a certeza?
+    saved_query_deletion_link_title: Apagar a query
+    saved_query_link_title: Caregar a query
+    validates_uniqueness_error: Já existe uma query com o mesmo nome
+    validates_presence_error: Queira indicar o nome da query que deseja gravar
+    query_deleted_message: A query foi apagada.
+    query_saved_message: A query foi gravada.
+    select_all: Selecionar todos
+    deselect_all: Remover seleção

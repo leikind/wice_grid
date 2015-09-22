@@ -1,0 +1,47 @@
+de:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Filter einblenden
+    hide_filter_tooltip: Filter ausblenden
+    csv_export_tooltip: CSV Export
+    filter_tooltip: Filter
+    reset_filter_tooltip: Reset
+    boolean_filter_true_label: "Ja"
+    boolean_filter_false_label: "Nein"
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Von
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Bis
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Ausschließen
+    # link to switch to show all records
+    show_all_records_label: Alle anzeigen
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Alle anzeigen
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Wollen Sie wirkliche alle Einträge anzeigen?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Zurück zur seitenbasierten Ansicht
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Zurück zur seitenbasierten Ansicht
+    # Title of the date string.
+    date_string_tooltip: Löschen
+    saved_query_panel_title: Gespeicherte Abfragen
+    save_query_button_label: Filter speichern
+    saved_query_deletion_confirmation: Sind Sie sicher?
+    saved_query_deletion_link_title: Abfrage löschen
+    saved_query_link_title: Abfrage laden
+    validates_uniqueness_error: Eine Abfrage mit dieser Bezeichnung existiert bereits!
+    validates_presence_error: Bitte vergeben Sie einen Namen!
+    query_deleted_message: Abfrage gelöscht.
+    query_saved_message: Abfrage gespeichert.
+    select_all: Alle auswählen
+    deselect_all: Auswahl aufheben
+    expand: Ausklappen
+    collapse: Einklappen

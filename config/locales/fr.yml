@@ -1,0 +1,45 @@
+fr:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Afficher le filtre
+    hide_filter_tooltip: Cacher le filtrer
+    csv_export_tooltip: Exporter en CSV
+    filter_tooltip: Filtrer
+    reset_filter_tooltip: Effacer
+    boolean_filter_true_label: oui
+    boolean_filter_false_label: non
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: De
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: à
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Exclure
+    # link to switch to show all records
+    show_all_records_label: Voir tous
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Voir tous les enregistrements
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Etes-vous certain de vouloir afficher tous les enregistrements?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Retour à la vue paginée
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Retour à la vue par pages
+    # Title of the date string.
+    date_string_tooltip: Cliquez pour effacer
+    saved_query_panel_title: Requêtes sauvées
+    save_query_button_label: Sauver l'état des filtres
+    saved_query_deletion_confirmation: Etes vous sûr?
+    saved_query_deletion_link_title: Effacer la requête
+    saved_query_link_title: Charger la requête
+    validates_uniqueness_error: Un requête existante porte déjà ce nom
+    validates_presence_error: Veuillez indiquer le nom de la requête que vous souhaitez sauver
+    query_deleted_message: La requête a été effacée.
+    query_saved_message: La requête a été sauvée.
+    select_all: Sélectionner tout
+    deselect_all: Désélectionner tout

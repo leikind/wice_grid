@@ -1,0 +1,46 @@
+is:
+  date:
+    order:
+      - :year
+      - :month
+      - :day
+  wice_grid:
+    show_filter_tooltip: Sýna síumöguleika
+    hide_filter_tooltip: Fela síumoguleika
+    csv_export_tooltip: Flytja út CSV
+    filter_tooltip: Sía
+    reset_filter_tooltip: Hreinsa
+    boolean_filter_true_label: Já
+    boolean_filter_false_label: Nei
+    previous_label: «
+    next_label: »
+    # Title of the icon clicking on which will show the calendar to set the FROM date.
+    date_selector_tooltip_from: Frá
+    # Title of the icon clicking on which will show the calendar to set the TO date.
+    date_selector_tooltip_to: Til
+    # The title of the checkox to turn on negation
+    negation_checkbox_title: Undanskilja
+    # link to switch to show all records
+    show_all_records_label: Sýna allt
+    # tooltip for the link to switch to show all records
+    show_all_records_tooltip: Sýna öll gögn
+    # Warning message shown when the user wants to switch to all-records mode
+    all_queries_warning: Ertu viss um að þú viljir láta sýna öll gögn?
+    # link to paginated view
+    switch_back_to_paginated_mode_label: Aftur til síðuhorfs
+    # tooltip for the link to paginated view
+    switch_back_to_paginated_mode_tooltip: Aftur til síðuhorfs
+    # Title of the date string.
+    date_string_tooltip: Smella á til að eyða
+    saved_query_panel_title: Vistaðar leitarskipanir
+    save_query_button_label: Vista síuval
+    saved_query_deletion_confirmation: Ertu viss?
+    saved_query_deletion_link_title:  Eyða leitarskipun
+    saved_query_link_title: Hlaða leitarskipun
+    validates_uniqueness_error: Leitarskipun með þessu nafni er þegar til
+    validates_presence_error: Vinsamlegast gefið heiti fyrir leitarskipun
+    query_deleted_message: Vistaðri leitarskipun hefur verið eytt
+    query_saved_message: leitaskipun hefur verið vistuð
+    # To do: translate
+    select_all: Select all
+    deselect_all: Remove selection
