@@ -122,7 +122,6 @@ module Wice
           page_method_name:           ConfigurationProvider.value_for(:PAGE_METHOD_NAME),
           per_page:                   ConfigurationProvider.value_for(:PER_PAGE),
           saved_query:                nil,
-          total_entries:              nil,
           with_paginated_resultset:   nil,
           with_resultset:             nil,
           use_default_scope:          ConfigurationProvider.value_for(:USE_DEFAULT_SCOPE)
