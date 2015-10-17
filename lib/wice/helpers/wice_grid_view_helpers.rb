@@ -97,7 +97,8 @@ module Wice
         show_filters:                   Defaults::SHOW_FILTER,
         sorting_dependant_row_cycling:  false,
         html:                           {},
-        upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL
+        upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL,
+        append_actions:                 Defaults::APPEND_ACTIONS
       }
 
       opts.assert_valid_keys(options.keys)
@@ -110,6 +111,25 @@ module Wice
       rendering = GridRenderer.new(grid, self)
 
       block.call(rendering) # calling block containing column() calls
+
+      if options[:append_actions].any?
+        options[:append_actions].each do |action|
+          rendering.column do |object|
+            action_text = "<span>#{action}</span>".html_safe
+            case action
+              when :show
+                link_to action_text, object, class: Defaults::APPEND_ACTIONS_SHOW_CLASS
+              when :edit
+                link_to action_text, [action, object], class: Defaults::APPEND_ACTIONS_EDIT_CLASS
+              when :delete
+                link_to action_text, object, method: :delete,
+                        data: {confirm: NlMessage['saved_query_deletion_confirmation'] },
+                        class: Defaults::APPEND_ACTIONS_DELETE_CLASS
+              else
+            end
+          end
+        end
+      end
 
       reuse_last_column_for_filter_buttons =
         Defaults::REUSE_LAST_COLUMN_FOR_FILTER_ICONS && rendering.last_column_for_html.capable_of_hosting_filter_related_icons?
