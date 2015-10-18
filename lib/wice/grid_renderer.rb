@@ -590,6 +590,30 @@ module Wice
       '?' + query_params.to_query
     end
 
+    def append_actions(controller, actions)
+      actions.each do |action|
+        column do |object|
+          action_text = "<span>#{action}</span>".html_safe
+          case action
+            when :show
+              controller.link_to action_text,
+                      object,
+                      class: Defaults.append_action_class(action)
+            when :delete
+              controller.link_to action_text,
+                      object,
+                      method: :delete,
+                      data: {confirm: NlMessage['saved_query_deletion_confirmation'] },
+                      class: Defaults.append_action_class(action)
+            else
+              controller.link_to action_text,
+                      [action, object],
+                      class: Defaults.append_action_class(action)
+          end
+        end
+      end
+    end
+
     protected
 
     def filter_columns(method_name = nil) #:nodoc:

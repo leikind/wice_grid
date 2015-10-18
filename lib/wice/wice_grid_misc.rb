@@ -190,6 +190,13 @@ module Wice
   end
 
   module Defaults  #:nodoc:
+    def self.append_actions
+      defined?(Wice::Defaults::APPEND_ACTIONS) ? Wice::Defaults::APPEND_ACTIONS : []
+    end
+
+    def self.append_action_class(action)
+      defined?(Wice::Defaults::APPEND_ACTIONS_CLASS) ? Wice::Defaults::APPEND_ACTIONS_CLASS % action : ''
+    end
   end
 
   module ExceptionsMixin  #:nodoc:
