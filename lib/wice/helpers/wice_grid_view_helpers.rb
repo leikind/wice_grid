@@ -98,7 +98,7 @@ module Wice
         sorting_dependant_row_cycling:  false,
         html:                           {},
         upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL,
-        append_actions:                 Defaults::APPEND_ACTIONS
+        append_actions:                 defined?(Defaults::APPEND_ACTIONS) ? Defaults::APPEND_ACTIONS : []
       }
 
       opts.assert_valid_keys(options.keys)
@@ -118,13 +118,19 @@ module Wice
             action_text = "<span>#{action}</span>".html_safe
             case action
               when :show
-                link_to action_text, object, class: Defaults::APPEND_ACTIONS_SHOW_CLASS
+                link_to action_text,
+                        object,
+                        class: defined?(Defaults::APPEND_ACTIONS_SHOW_CLASS) ? Defaults::APPEND_ACTIONS_SHOW_CLASS : ''
               when :edit
-                link_to action_text, [action, object], class: Defaults::APPEND_ACTIONS_EDIT_CLASS
+                link_to action_text,
+                        [action, object],
+                        class: defined?(Defaults::APPEND_ACTIONS_EDIT_CLASS) ? Defaults::APPEND_ACTIONS_EDIT_CLASS : ''
               when :delete
-                link_to action_text, object, method: :delete,
+                link_to action_text,
+                        object,
+                        method: :delete,
                         data: {confirm: NlMessage['saved_query_deletion_confirmation'] },
-                        class: Defaults::APPEND_ACTIONS_DELETE_CLASS
+                        class: defined?(Defaults::APPEND_ACTIONS_DELETE_CLASS) ? Defaults::APPEND_ACTIONS_DELETE_CLASS : ''
               else
             end
           end
