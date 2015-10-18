@@ -42,9 +42,7 @@ if defined?(Wice::Defaults)
 
   # Default model actions
   Wice::Defaults::APPEND_ACTIONS = [:show, :edit, :delete]
-  Wice::Defaults::APPEND_ACTIONS_SHOW_CLASS = 'btn btn-info btn-block btn-show'
-  Wice::Defaults::APPEND_ACTIONS_EDIT_CLASS = 'btn btn-warning btn-block btn-edit'
-  Wice::Defaults::APPEND_ACTIONS_DELETE_CLASS = 'btn btn-danger btn-block btn-delete'
+  Wice::Defaults::APPEND_ACTIONS_CLASS = 'btn btn-block btn-%s'
 
   # A boolean value specifying if a change in a filter triggers reloading of the grid.
   Wice::Defaults::AUTO_RELOAD = false
