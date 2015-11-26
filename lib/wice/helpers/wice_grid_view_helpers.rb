@@ -585,7 +585,7 @@ module Wice
     end
 
     def grid_csv(grid, rendering) #:nodoc:
-      spreadsheet = ::Wice::Spreadsheet.new(grid.name, grid.csv_field_separator)
+      spreadsheet = ::Wice::Spreadsheet.new(grid.name, grid.csv_field_separator, grid.csv_encoding)
 
       # columns
       spreadsheet << rendering.column_labels(:in_csv)

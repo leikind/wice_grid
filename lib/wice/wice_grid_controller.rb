@@ -114,7 +114,7 @@ module Wice
         temp_filename = temp_filename.strip
         filename = (grid.csv_file_name || grid.name) + '.csv'
         grid.csv_tempfile.close
-        send_file_rails2 temp_filename, filename: filename, type: 'text/csv; charset=utf-8'
+        send_file_rails2 temp_filename, filename: filename, type: "text/csv; charset=#{get_output_encoding grid.csv_encoding}"
         grid.csv_tempfile = nil
         true
       else
@@ -161,6 +161,14 @@ module Wice
     end
 
     private
+
+    def get_output_encoding(csv_encoding)
+      if csv_encoding.blank?
+        'utf-8'
+      else
+        csv_encoding.split(':').first
+      end
+    end
 
     def send_file_rails2(path, options = {}) #:nodoc:
       fail "Cannot read file #{path}" unless File.file?(path) && File.readable?(path)
