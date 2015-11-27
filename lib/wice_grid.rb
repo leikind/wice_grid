@@ -69,7 +69,7 @@ module Wice
   # Main class responsible for keeping the state of the grid, building an ActiveRelation, and running queries
   class WiceGrid
     attr_reader :klass, :name, :resultset, :custom_order, :query_store_model #:nodoc:
-    attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :csv_field_separator, :saved_query #:nodoc:
+    attr_reader :ar_options, :status, :export_to_csv_enabled, :csv_file_name, :csv_field_separator, :csv_encoding, :saved_query #:nodoc:
     attr_writer :renderer #:nodoc:
     attr_accessor :output_buffer, :view_helper_finished, :csv_tempfile #:nodoc:
 
@@ -110,6 +110,7 @@ module Wice
           conditions:                 nil,
           csv_file_name:              nil,
           csv_field_separator:        ConfigurationProvider.value_for(:CSV_FIELD_SEPARATOR),
+          csv_encoding:               ConfigurationProvider.value_for(:CSV_ENCODING),
           custom_order:               {},
           enable_export_to_csv:       ConfigurationProvider.value_for(:ENABLE_EXPORT_TO_CSV),
           group:                      nil,
@@ -138,6 +139,7 @@ module Wice
       @export_to_csv_enabled = @options[:enable_export_to_csv]
       @csv_file_name = @options[:csv_file_name]
       @csv_field_separator = @options[:csv_field_separator]
+      @csv_encoding = @options[:csv_encoding]
 
       case @name = @options[:name]
       when String

@@ -1267,7 +1267,7 @@ To enable CSV export add parameters `enable_export_to_csv` and `csv_file_name` t
 ```
 
 `csv_file_name` is the name of the downloaded file. This parameter is optional, if it is missing, the name of
-the grid is used instead. The export icon will appear at the bottom right corner of the grid.
+the grid is used instead. The export icon will appear at the bottom right corner of the grid. If the program you are importing the generated CSV into has problem processing UTF-8, you can change the character encoding using the `csv_encoding` option. P.e. setting `csv_encoding: 'CP1252:UTF-8'` will make older versions of Excel happy. The format used is `<output encoding>:<input encoding>`.
 
 Next, each grid view helper should be placed in a partial of its own, requiring it from the master
 template for the usual flow. There must be no HTML or ERB code in this partial except for the grid helper.
