@@ -52,7 +52,7 @@ module Wice
       @saved_query.name      = params[:query_name]
       @saved_query.query     = query_params
 
-      @saved_query.attributes = params[:extra] unless params[:extra].blank?
+      @saved_query.attributes = extra unless extra.nil?
 
       if @saved_query.save
         @grid_title_id = "#{@grid_name}_title"
@@ -65,7 +65,7 @@ module Wice
     end
 
     def extra #:nodoc:
-      params[:extra]
+      params[:extra].permit! unless params[:extra].nil?
     end
 
     protected
