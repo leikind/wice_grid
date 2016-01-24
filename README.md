@@ -7,6 +7,8 @@
 [![Coverage Status](https://coveralls.io/repos/leikind/wice_grid/badge.svg?branch=development&service=github)](https://coveralls.io/github/leikind/wice_grid?branch=development)
 -->
 
+THE PROJECT IS LOOKING FOR CONTRIBUTORS.
+
 * Yuri Leikind, yuri.leikind at gmail dot com
 * Version 3.6.0.pre3; [What's New In 3.6.0](https://github.com/leikind/wice_grid/wiki/What's-New-In-3.6.0)
 * This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
