@@ -38,11 +38,11 @@ module Wice
         # remove spaces
         val = val.gsub(' ', '')
 
-        first_digit_or_dot_index = val =~ /[0-9.]/
-        if first_digit_or_dot_index
-          op = val[0...first_digit_or_dot_index]
+        start_of_num = val =~ /[0-9.-]/ # first digit, dot or negative sign
+        if start_of_num
+          op = val[0...start_of_num]
           op = '=' if op == ''
-          num = Float(val[first_digit_or_dot_index..-1]) rescue nil
+          num = Float(val[start_of_num..-1]) rescue nil
 
           op = nil unless ['<', '>', '<=', '>=', '='].include?(op)
         end
