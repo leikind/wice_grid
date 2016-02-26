@@ -97,7 +97,8 @@ module Wice
         show_filters:                   Defaults::SHOW_FILTER,
         sorting_dependant_row_cycling:  false,
         html:                           {},
-        upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL
+        upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL,
+        pagination_theme:               Defaults::PAGINATION_THEME
       }
 
       opts.assert_valid_keys(options.keys)
@@ -263,7 +264,7 @@ module Wice
       if options[:upper_pagination_panel]
         grid.output_buffer << rendering.pagination_panel(number_of_columns, options[:hide_csv_button]) do
           pagination_panel_content_html =
-            pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
+            pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records], options[:pagination_theme])
           pagination_panel_content_html
         end
       end
@@ -407,7 +408,7 @@ module Wice
           pagination_panel_content_html
         else
           pagination_panel_content_html =
-            pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records])
+            pagination_panel_content(grid, options[:extra_request_parameters], options[:allow_showing_all_records], options[:pagination_theme])
           pagination_panel_content_html
         end
       end
@@ -610,7 +611,7 @@ module Wice
       grid.csv_tempfile = spreadsheet.tempfile
     end
 
-    def pagination_panel_content(grid, extra_request_parameters, allow_showing_all_records) #:nodoc:
+    def pagination_panel_content(grid, extra_request_parameters, allow_showing_all_records, pagination_theme) #:nodoc:
       extra_request_parameters = extra_request_parameters.clone
       if grid.saved_query
         extra_request_parameters["#{grid.name}[q]"] = grid.saved_query.id
@@ -619,7 +620,7 @@ module Wice
       html = pagination_info(grid, allow_showing_all_records)
 
       paginate(grid.resultset,
-               theme:         'wice_grid',
+               theme:         pagination_theme,
                param_name:    "#{grid.name}[page]",
                params:        extra_request_parameters,
                inner_window:  4,
