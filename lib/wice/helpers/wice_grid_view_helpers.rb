@@ -98,7 +98,7 @@ module Wice
         sorting_dependant_row_cycling:  false,
         html:                           {},
         upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL,
-        pagination_theme:               Defaults::PAGINATION_THEME
+        pagination_theme:               ConfigurationProvider.value_for(:PAGINATION_THEME)
       }
 
       opts.assert_valid_keys(options.keys)
