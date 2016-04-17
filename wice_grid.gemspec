@@ -1,7 +1,7 @@
 # encoding: utf-8
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '3.6.0.pre5'
+  s.version       = '3.6.0'
   s.authors       = ['Yuri Leikind']
   s.email         = ['yuri.leikind@gmail.com']
   s.homepage      = 'https://github.com/leikind/wice_grid'
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.license       = 'MIT'
   s.require_paths = ['lib']
-  s.date          = '2015-11-28'
+  s.date          = '2015-04-17'
 
   s.add_dependency 'activerecord',      ['> 3.2']
   s.add_dependency 'kaminari',          ['~> 0.16']
