@@ -104,9 +104,9 @@ module Wice
           conditions_ar
         else
           if ::Wice::GridTools.special_value(opts)
-            " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} is " + opts
+            " #{@column_wrapper.alias_or_table_name(table_alias)}.\"#{@column_wrapper.name}\" is " + opts
           else
-            [" #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} = ?", opts]
+            [" #{@column_wrapper.alias_or_table_name(table_alias)}.\"#{@column_wrapper.name}\" = ?", opts]
           end
         end
       end
