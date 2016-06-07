@@ -8,7 +8,7 @@ module Wice
     # The only parameter is a grid object returned by +initialize_grid+ in the controller.
     def dump_filter_parameters_as_hidden_fields(grid)
       unless grid.is_a? WiceGrid
-        fail WiceGridArgumentError.new('dump_filter_parameters_as_hidden_fields: the parameter must be a WiceGrid instance.')
+        raise WiceGridArgumentError.new('dump_filter_parameters_as_hidden_fields: the parameter must be a WiceGrid instance.')
       end
 
       grid.get_state_as_parameter_value_pairs(true).collect do|param_name, value|
@@ -50,7 +50,7 @@ module Wice
     # so I do not document this method to avoid contributing to this misunderstanding.
     def scaffolded_grid(grid_obj, opts = {}) #:nodoc:
       unless grid_obj.is_a? WiceGrid
-        fail WiceGridArgumentError.new('scaffolded_grid: the parameter must be a WiceGrid instance.')
+        raise WiceGridArgumentError.new('scaffolded_grid: the parameter must be a WiceGrid instance.')
       end
 
       # debug grid.klass.column_names

@@ -15,20 +15,20 @@ module Wice #:nodoc:
 
           Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS.each do |key, value|
             unless key.is_a?(Symbol)
-              fail common_error_prefix + 'A key of Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS should be a Symbol!'
+              raise common_error_prefix + 'A key of Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS should be a Symbol!'
             end
 
             if @@handled_type_view.key?(key)
-              fail common_error_prefix +
+              raise common_error_prefix +
                 "Column with key \"#{key}\" already exists in WiceGrid, overwriting existing columns is forbidden, please choose another key!"
             end
 
             if !value.is_a?(Array) || value.size != 2
-              fail common_error_prefix +
+              ail common_error_prefix +
                 'A value of Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS should be a a 2-element array!'
             end
 
-            view_processor, conditions_generator  = value.map(&:to_s).map do |klass|
+            view_processor, conditions_generator = value.map(&:to_s).map do |klass|
               begin
                 eval(klass)
               rescue NameError
@@ -37,12 +37,12 @@ module Wice #:nodoc:
             end
 
             unless view_processor.ancestors.include?(::Wice::Columns::ViewColumn)
-              fail common_error_prefix +
+              raise common_error_prefix +
                 "#{view_processor} should be inherited from Wice::Columns::ViewColumn!"
             end
 
             unless conditions_generator.ancestors.include?(::Wice::Columns::ConditionsGeneratorColumn)
-              fail common_error_prefix +
+              raise common_error_prefix +
                 "#{conditions_generator} should be inherited from Wice::Columns::ConditionsGeneratorColumn!"
             end
 
@@ -58,7 +58,7 @@ module Wice #:nodoc:
 
       def get_conditions_generator_column_processor(column_type) #:nodoc:
         column_type = column_type.intern if column_type.is_a? String
-        @@handled_type_conditions_generator[column_type] || fail("Could not find conditions generator processor for column_type #{column_type}")
+        @@handled_type_conditions_generator[column_type] || raise("Could not find conditions generator processor for column_type #{column_type}")
       end
 
       private
@@ -72,7 +72,7 @@ module Wice #:nodoc:
               processor_class_name = "#{prefix}_#{column_source_file}".classify
 
               unless Wice::Columns.const_defined?(processor_class_name.intern)
-                fail "#{column_source_file}.rb is expected to define #{processor_class_name}!"
+                raise "#{column_source_file}.rb is expected to define #{processor_class_name}!"
               end
               processor_class = eval("Wice::Columns::#{processor_class_name}")
 
@@ -267,7 +267,7 @@ module Wice #:nodoc:
       end
 
       def generate_conditions(_table_alias, _opts) #:nodoc:
-        fail('implement me')
+        raise('implement me')
       end
 
     end

@@ -7,7 +7,7 @@ module Wice
     # Read section "Adding Application Specific Logic to Saving/Restoring Queries" in README for more details.
     def saved_queries_panel(grid, opts = {})
       unless grid.is_a? WiceGrid
-        fail WiceGridArgumentError.new('saved_queries_panel: the parameter must be a WiceGrid instance.')
+        raise WiceGridArgumentError.new('saved_queries_panel: the parameter must be a WiceGrid instance.')
       end
 
       options = { extra_parameters: {}, confirm: 1 }
@@ -39,10 +39,10 @@ module Wice
         button_tag(
           NlMessage['save_query_button_label'],
           class: 'wice-grid-save-query-button btn btn-primary',
-          'data-grid-name'   => grid_name,
+          'data-grid-name'                     => grid_name,
           'data-base-path-to-query-controller' => base_path_to_query_controller,
-          'data-parameters'  => parameters.to_json,
-          'data-ids'         => ids.to_json
+          'data-parameters'                    => parameters.to_json,
+          'data-ids'                           => ids.to_json
         ) +
         '</div></div></div>'
         ).html_safe

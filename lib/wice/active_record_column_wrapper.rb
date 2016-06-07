@@ -30,7 +30,7 @@ module Wice
       return if @all_filter_params.nil?
 
       # if the parameter does not specify the table name we only allow columns in the default table to use these parameters
-      if @main_table && @request_params  = @all_filter_params[@column.name]
+      if @main_table && @request_params = @all_filter_params[@column.name]
         current_parameter_name = @column.name
       elsif @request_params = @all_filter_params[alias_or_table_name(@table_alias) + '.' + @column.name]
         current_parameter_name = alias_or_table_name(@table_alias) + '.' + @column.name

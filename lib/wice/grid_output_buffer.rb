@@ -19,7 +19,7 @@ module Wice
 
     # stores HTML code for a detached filter
     def add_filter(detach_with_id, filter_code)
-      fail WiceGridException.new("Detached ID #{detach_with_id} is already used!") if @filters.key? detach_with_id
+      raise WiceGridException.new("Detached ID #{detach_with_id} is already used!") if @filters.key? detach_with_id
       @filters[detach_with_id] = filter_code
     end
 
@@ -29,12 +29,12 @@ module Wice
         if @return_empty_strings_for_nonexistent_filters
           return ''
         else
-          fail WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!")
+          raise WiceGridException.new("No filter with Detached ID '#{detach_with_id}'!")
         end
       end
 
       unless @filters[detach_with_id]
-        fail WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page")
+        raise WiceGridException.new("Filter with Detached ID '#{detach_with_id}' has already been requested once! There cannot be two instances of the same filter on one page")
       end
 
       res = @filters[detach_with_id]

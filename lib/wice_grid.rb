@@ -85,13 +85,13 @@ module Wice
       end
 
       unless @klass.is_a?(Class) && @klass.ancestors.index(ActiveRecord::Base)
-        fail WiceGridArgumentError.new('ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base')
+        raise WiceGridArgumentError.new('ActiveRecord model class (second argument) must be a Class derived from ActiveRecord::Base')
       end
 
       # validate :with_resultset & :with_paginated_resultset
       [:with_resultset, :with_paginated_resultset].each do |callback_symbol|
         unless [NilClass, Symbol, Proc].index(opts[callback_symbol].class)
-          fail WiceGridArgumentError.new(":#{callback_symbol} must be either a Proc or Symbol object")
+          raise WiceGridArgumentError.new(":#{callback_symbol} must be either a Proc or Symbol object")
         end
       end
 
@@ -100,7 +100,7 @@ module Wice
       # validate :order_direction
       if opts[:order_direction] && ! (opts[:order_direction] == 'asc' || opts[:order_direction] == :asc || opts[:order_direction] == 'desc' ||
                                       opts[:order_direction] == :desc)
-        fail WiceGridArgumentError.new(":order_direction must be either 'asc' or 'desc'.")
+        raise WiceGridArgumentError.new(":order_direction must be either 'asc' or 'desc'.")
       end
 
       begin
@@ -145,9 +145,9 @@ module Wice
       when Symbol
         @name = @name.to_s
       else
-        fail WiceGridArgumentError.new('name of the grid should be a string or a symbol')
+        raise WiceGridArgumentError.new('name of the grid should be a string or a symbol')
       end
-      fail WiceGridArgumentError.new('name of the grid can only contain alphanumeruc characters') unless @name =~ /^[a-zA-Z\d_]*$/
+      raise WiceGridArgumentError.new('name of the grid can only contain alphanumeruc characters') unless @name =~ /^[a-zA-Z\d_]*$/
 
       @table_column_matrix = TableColumnMatrix.new
       @table_column_matrix.default_model_class = @klass
@@ -224,24 +224,24 @@ module Wice
     # declare_column(String, ActiveRecord, CustomFilterSpec, nil | string, nil | Boolean)
     def declare_column(
                  column_name: nil,
-                       model: nil,
-        custom_filter_active: nil,
+                 model: nil,
+                 custom_filter_active: nil,
                  table_alias: nil,
                  filter_type: nil,
-                      assocs: [])  #:nodoc:
+                 assocs: [])  #:nodoc:
 
 
       @options[:include] = Wice.build_includes(@options[:include], assocs)
 
       if model # this is an included table
         column = @table_column_matrix.get_column_by_model_class_and_column_name(model, column_name)
-        fail WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model.table_name}'!") if column.nil?
+        raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{model.table_name}'!") if column.nil?
         main_table = false
         table_name = model.table_name
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
         if column.nil?
-          fail WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " \
+          raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " \
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " \
             'the grid, and specify :model in column declaration.')
         end
@@ -321,7 +321,7 @@ module Wice
     def add_references(relation) #:nodoc:
       if @ar_options[:include] && relation.respond_to?(:references)
         # refs = [@ar_options[:include]] unless @ar_options[:include].is_a?(Array)
-        relation =  relation.references(* @ar_options[:include])
+        relation = relation.references(* @ar_options[:include])
       end
       relation
     end
@@ -507,13 +507,13 @@ module Wice
     # Returns the list of objects browsable through all pages with the current filters.
     # Should only be called after the +grid+ helper.
     def all_pages_records
-      fail WiceGridException.new('all_pages_records can only be called only after the grid view helper') unless self.view_helper_finished
+      raise WiceGridException.new('all_pages_records can only be called only after the grid view helper') unless self.view_helper_finished
       resultset_without_paging_with_user_filters
     end
 
     # Returns the list of objects displayed on current page. Should only be called after the +grid+ helper.
     def current_page_records
-      fail WiceGridException.new('current_page_records can only be called only after the grid view helper') unless self.view_helper_finished
+      raise WiceGridException.new('current_page_records can only be called only after the grid view helper') unless self.view_helper_finished
       @resultset
     end
 
@@ -556,7 +556,7 @@ module Wice
         elsif custom_order.is_a? Proc
           custom_order.call(fully_qualified_column_name)
         else
-          fail WiceGridArgumentError.new("invalid custom order #{custom_order.inspect}")
+          raise WiceGridArgumentError.new("invalid custom order #{custom_order.inspect}")
         end
       end
     end
@@ -652,7 +652,7 @@ module Wice
       # create a Time instance out of parameters
       def params_2_datetime(par)   #:nodoc:
         return nil if par.blank?
-        params =  [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect { |v| v.blank? ? nil : v.to_i }
+        params = [par[:year], par[:month], par[:day], par[:hour], par[:minute]].collect { |v| v.blank? ? nil : v.to_i }
         begin
           Time.local(*params)
         rescue ArgumentError, TypeError
@@ -663,7 +663,7 @@ module Wice
       # create a Date instance out of parameters
       def params_2_date(par)   #:nodoc:
         return nil if par.blank?
-        params =  [par[:year], par[:month], par[:day]].collect { |v| v.blank? ? nil : v.to_i }
+        params = [par[:year], par[:month], par[:day]].collect { |v| v.blank? ? nil : v.to_i }
         begin
           Date.civil(*params)
         rescue ArgumentError, TypeError

@@ -143,13 +143,13 @@ module Wice
       options.merge!(opts)
 
       [:attribute, :value].each do |key|
-        fail ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
+        raise ::Wice::WiceGridArgumentError.new("wice_grid_custom_filter_params: :#{key} is a mandatory argument") unless options[key]
       end
 
       attr_name = if options[:model]
         unless options[:model].nil?
           options[:model] = options[:model].constantize if options[:model].is_a? String
-          fail Wice::WiceGridArgumentError.new('Option :model can be either a class or a string instance') unless options[:model].is_a? Class
+          raise Wice::WiceGridArgumentError.new('Option :model can be either a class or a string instance') unless options[:model].is_a? Class
         end
         options[:model].table_name + '.' + options[:attribute]
       else
@@ -170,7 +170,7 @@ module Wice
     end
 
     def send_file_rails2(path, options = {}) #:nodoc:
-      fail "Cannot read file #{path}" unless File.file?(path) && File.readable?(path)
+      raise "Cannot read file #{path}" unless File.file?(path) && File.readable?(path)
 
       options[:length] ||= File.size(path)
       options[:filename] ||= File.basename(path) unless options[:url_based_filename]
@@ -193,7 +193,7 @@ module Wice
     def send_file_headers_rails2!(options) #:nodoc:
       options.update(DEFAULT_SEND_FILE_OPTIONS_RAILS2.merge(options))
       [:length, :type, :disposition].each do |arg|
-        fail ArgumentError, ":#{arg} option required" if options[arg].nil?
+        raise ArgumentError, ":#{arg} option required" if options[arg].nil?
       end
 
       disposition = options[:disposition].dup || 'attachment'
