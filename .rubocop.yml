@@ -19,11 +19,16 @@ Style/SpaceAroundBlockParameters:
 
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-Style/TrailingComma:
-  Enabled: true
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: no_comma
 
 # Cop supports --auto-correct.
-Style/SingleSpaceBeforeFirstArg:
+# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: no_comma
+
+# Cop supports --auto-correct.
+Style/SpaceBeforeFirstArg:
   Enabled: true
 
 # Cop supports --auto-correct.
