@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
   module GridViewHelper
     # View helper to render the list of saved queries and the form to create a new query.

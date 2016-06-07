@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Wice::TableColumnMatrix do
   let(:general_conditions){ 'conditions' }
 

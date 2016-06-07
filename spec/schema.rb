@@ -1,4 +1,3 @@
-# encoding: utf-8
 ActiveRecord::Schema.define(version: 20150713103513) do
   create_table 'dummies', force: :cascade do |t|
     t.string 'name'

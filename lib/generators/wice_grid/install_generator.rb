@@ -1,4 +1,3 @@
-# encoding: utf-8
 module WiceGrid #:nodoc:
   module Generators #:nodoc:
     class InstallGenerator < Rails::Generators::Base #:nodoc:

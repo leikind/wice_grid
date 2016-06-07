@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
   module Controller #:nodoc:
     def self.included(base) #:nodoc:

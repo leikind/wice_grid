@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 context 'assoc_list_to_hash' do
   it 'many elements in assocs' do
     assocs = [:foo1, :foo2, :foo3, :foo4, :foo5]

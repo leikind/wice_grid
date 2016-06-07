@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'wice/wice_grid_misc.rb'
 require 'wice/wice_grid_core_ext.rb'
 require 'wice/grid_renderer.rb'
