@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
 
   # Instance of `GridRenderer` is injected into the top level block of the `grid` helper.

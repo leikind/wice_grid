@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice #:nodoc:
   module JsCalendarHelpers #:nodoc:
 

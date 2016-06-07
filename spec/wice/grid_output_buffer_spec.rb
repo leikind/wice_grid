@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Wice::GridOutputBuffer do
   FILTER_COMMON_CODE = 'here filter code'
 

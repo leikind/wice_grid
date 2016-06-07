@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
   module GridViewHelper
     # View helper for rendering the grid.

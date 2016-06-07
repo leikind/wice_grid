@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Ugly monkey-patching Kaminari (https://github.com/amatsuda/kaminari/pull/267)
 module Kaminari #:nodoc:
   module Helpers #:nodoc:

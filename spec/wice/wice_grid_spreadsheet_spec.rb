@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 describe Wice::Spreadsheet do
   let(:spreadsheet){Wice::Spreadsheet.new('hello', ';')}
 

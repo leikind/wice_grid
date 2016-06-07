@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
 
   # a matrix for all declared columns

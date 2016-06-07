@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
   # to be mixed in into ActiveRecord::ConnectionAdapters::Column
   module WiceGridExtentionToActiveRecordColumn #:nodoc:

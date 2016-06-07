@@ -1,4 +1,3 @@
-# encoding: utf-8
 if defined?(Wice::Defaults)
 
   # Default number of rows to show per page.
