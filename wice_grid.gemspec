@@ -1,4 +1,3 @@
-# encoding: utf-8
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
   s.version       = '3.6.0'

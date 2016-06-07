@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice #:nodoc:
   module Columns #:nodoc:
     mattr_reader :handled_type_view, :handled_type_conditions_generator

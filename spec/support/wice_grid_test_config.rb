@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # Default number of rows to show per page.
 Wice::Defaults::PER_PAGE = 20
 

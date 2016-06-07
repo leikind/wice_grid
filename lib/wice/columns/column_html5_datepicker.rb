@@ -1,4 +1,3 @@
-# encoding: utf-8
 module Wice
   module Columns #:nodoc:
     class ViewColumnHtml5Datepicker < ViewColumn #:nodoc:
