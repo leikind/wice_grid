@@ -16,15 +16,6 @@ require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec)
 
-require 'rubocop/rake_task'
-
-desc 'Run RuboCop on the lib directory'
-RuboCop::RakeTask.new(:rubocop) do |task|
-  task.patterns = ['lib/**/*.rb']
-  # don't abort rake on failure
-  task.fail_on_error = false
-end
-
 desc 'Run RSpec with code coverage'
 task :coverage do
   ENV['COVERAGE'] = 'true'
@@ -55,4 +46,4 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-task default: [:rubocop, :spec, :yardoc]
+task default: [:spec, :yardoc]
