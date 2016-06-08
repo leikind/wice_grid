@@ -56,8 +56,8 @@ module Wice #:nodoc:
         calendar_data.date_string               = options[:initial_date].nil? ? '' : options[:initial_date].strftime(date_format)
         calendar_data.dom_id                    = options[:name].gsub(/([\[\(])|(\]\[)/, '_').gsub(/[\]\)]/, '').gsub(/\./, '_').gsub(/_+/, '_')
         calendar_data.datepicker_placeholder_id = calendar_data.dom_id + '_date_placeholder'
-        calendar_data.date_div_id              = calendar_data.dom_id + '_date_view'
-        calendar_data.close_calendar_event_name =  "wg:calendarChanged_#{options[:grid_name]}"
+        calendar_data.date_div_id               = calendar_data.dom_id + '_date_view'
+        calendar_data.close_calendar_event_name = "wg:calendarChanged_#{options[:grid_name]}"
         calendar_data.fire_event                = options[:fire_event]
       end
     end

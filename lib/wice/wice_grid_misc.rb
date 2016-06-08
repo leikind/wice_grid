@@ -123,11 +123,11 @@ module Wice
     # checks whether the class is a valid storage for saved queries
     def validate_query_model(query_store_model)  #:nodoc:
       unless query_store_model.respond_to?(:list)
-        fail ::Wice::WiceGridArgumentError.new("Model for saving queries #{query_store_model.class.name} is invalid - there is no class method #list defined")
+        raise ::Wice::WiceGridArgumentError.new("Model for saving queries #{query_store_model.class.name} is invalid - there is no class method #list defined")
       end
       arit = query_store_model.method(:list).arity
       unless arit == 2
-        fail ::Wice::WiceGridArgumentError.new("Method list in the model for saving queries #{query_store_model.class.name} has wrong arity - it should be 2 instead of #{arit}")
+        raise ::Wice::WiceGridArgumentError.new("Method list in the model for saving queries #{query_store_model.class.name} has wrong arity - it should be 2 instead of #{arit}")
       end
       @@model_validated = true
     end
@@ -136,7 +136,7 @@ module Wice
     def get_query_store_model #:nodoc:
       query_store_model = Wice::ConfigurationProvider.value_for(:QUERY_STORE_MODEL)
       query_store_model = query_store_model.constantize if query_store_model.is_a? String
-      fail ::Wice::WiceGridArgumentError.new('Defaults::QUERY_STORE_MODEL must be an ActiveRecord class or a string which can be constantized to an ActiveRecord class') unless query_store_model.is_a? Class
+      raise ::Wice::WiceGridArgumentError.new('Defaults::QUERY_STORE_MODEL must be an ActiveRecord class or a string which can be constantized to an ActiveRecord class') unless query_store_model.is_a? Class
       validate_query_model(query_store_model) unless @@model_validated
       query_store_model
     end
@@ -178,7 +178,7 @@ module Wice
           Wice::Defaults.const_get(key)
         else
           if strict
-            fail WiceGridMissingConfigurationConstantException.new("Could not find constant #{key} in the configuration file!" \
+            raise WiceGridMissingConfigurationConstantException.new("Could not find constant #{key} in the configuration file!" \
                 ' It is possible that the version of WiceGrid you are using is newer than the installed configuration file in config/initializers. ' \
                 "Constant Wice::Defaults::#{key} is missing  and you need to add it manually to wice_grid_config.rb or run the generator task=:\n" \
                 '   rails g wice_grid:install')

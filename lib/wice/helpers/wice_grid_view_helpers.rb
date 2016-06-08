@@ -68,7 +68,7 @@ module Wice
     # Pease read documentation about the +column+ method to achieve the enlightenment.
 
     def grid(grid, opts = {}, &block)
-      fail WiceGridArgumentError.new('Missing block for the grid helper.' \
+      raise WiceGridArgumentError.new('Missing block for the grid helper.' \
         ' For detached filters use first define_grid with the same API as grid, ' \
         'then grid_filter to add filters, and then render_grid to actually show the grid') if block.nil?
       define_grid(grid, opts, &block)
@@ -82,7 +82,7 @@ module Wice
     def define_grid(grid, opts = {}, &block)
       # strip the method from HTML stuff
       unless grid.class == WiceGrid
-        fail WiceGridArgumentError.new('The first argument for the grid helper must be an instance of the WiceGrid class')
+        raise WiceGridArgumentError.new('The first argument for the grid helper must be an instance of the WiceGrid class')
       end
 
       options = {
@@ -139,7 +139,7 @@ module Wice
       elsif grid.csv_tempfile
         grid.csv_tempfile.path
       else
-        fail WiceGridException.new("Attempt to use 'render_grid' without 'define_grid' before.")
+        raise WiceGridException.new("Attempt to use 'render_grid' without 'define_grid' before.")
       end
     end
 
@@ -154,9 +154,11 @@ module Wice
         rendering.blank_slate_handler
       end
 
+      # rubocop:disable Style/SymbolProc
       if rendering.find_one_for(:in_html) { |column| column.detach_with_id }
         grid.output_buffer.return_empty_strings_for_nonexistent_filters = true
       end
+      # rubocop:enable Style/SymbolProc
     end
 
     def call_block(block, ar, extra_argument = nil)  #:nodoc:
@@ -182,14 +184,14 @@ module Wice
         if column_block_output.is_a?(Array)
 
           unless column_block_output.size == 2
-            fail WiceGridArgumentError.new('When WiceGrid column block returns an array it is expected to contain 2 elements only - ' \
+            raise WiceGridArgumentError.new('When WiceGrid column block returns an array it is expected to contain 2 elements only - ' \
               'the first is the contents of the table cell and the second is a hash containing HTML attributes for the <td> tag.')
           end
 
           column_block_output, additional_opts = column_block_output
 
           unless additional_opts.is_a?(Hash)
-            fail WiceGridArgumentError.new('When WiceGrid column block returns an array its second element is expected to be a ' \
+            raise WiceGridArgumentError.new('When WiceGrid column block returns an array its second element is expected to be a ' \
                                             "hash containing HTML attributes for the <td> tag. The returned value is #{additional_opts.inspect}. Read documentation.")
           end
 
@@ -468,7 +470,7 @@ module Wice
 
       base_link_for_filter, base_link_for_show_all_records = rendering.base_link_for_filter(controller, options[:extra_request_parameters])
 
-      link_for_export      = rendering.link_for_export(controller, 'csv', options[:extra_request_parameters])
+      link_for_export = rendering.link_for_export(controller, 'csv', options[:extra_request_parameters])
 
       parameter_name_for_query_loading = { grid.name => { q: '' } }.to_query
       parameter_name_for_focus = { grid.name => { foc: '' } }.to_query
@@ -568,13 +570,13 @@ module Wice
     # * +filter_key+ an identifier of the filter specified in the column declaration by parameter +:detach_with_id+
     def grid_filter(grid, filter_key)
       unless grid.is_a? WiceGrid
-        fail WiceGridArgumentError.new('grid_filter: the parameter must be a WiceGrid instance.')
+        raise WiceGridArgumentError.new('grid_filter: the parameter must be a WiceGrid instance.')
       end
       if grid.output_buffer.nil?
-        fail WiceGridArgumentError.new("grid_filter: You have attempted to run 'grid_filter' before 'grid'. Read about detached filters in the documentation.")
+        raise WiceGridArgumentError.new("grid_filter: You have attempted to run 'grid_filter' before 'grid'. Read about detached filters in the documentation.")
       end
       if grid.output_buffer == true
-        fail WiceGridArgumentError.new('grid_filter: You have defined no detached filters, or you try use detached filters with' \
+        raise WiceGridArgumentError.new('grid_filter: You have defined no detached filters, or you try use detached filters with' \
           ':show_filters => :no (set :show_filters to :always in this case). Read about detached filters in the documentation.')
       end
 

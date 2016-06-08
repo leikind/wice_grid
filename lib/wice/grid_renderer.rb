@@ -157,7 +157,7 @@ module Wice
 
     def action_column(opts = {}, &block)
       if @action_column_present
-        fail Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
+        raise Wice::WiceGridException.new('There can be only one action column in a WiceGrid')
       end
 
       options = {
@@ -322,7 +322,7 @@ module Wice
       assocs = nil
 
       if options[:model]
-        fail WiceGridArgumentError.new('Instead of specifying a model of a joined table please use assoc: :name_of_association')
+        raise WiceGridArgumentError.new('Instead of specifying a model of a joined table please use assoc: :name_of_association')
       end
 
       unless options[:assoc].nil?
@@ -330,7 +330,7 @@ module Wice
         unless options[:assoc].is_a?(Symbol) ||
               (options[:assoc].is_a?(Array) && ! options[:assoc].empty? && options[:assoc].all?{ |assoc| assoc.is_a?(Symbol)})
 
-          fail WiceGridArgumentError.new('Option :assoc can only be a symbol or an array of symbols')
+          raise WiceGridArgumentError.new('Option :assoc can only be a symbol or an array of symbols')
         end
 
         assocs = options[:assoc].is_a?(Symbol) ? [options[:assoc]] : options[:assoc]
@@ -339,11 +339,11 @@ module Wice
       end
 
       if options[:attribute].nil? && options[:model]
-        fail WiceGridArgumentError.new('Option :assoc is only used together with :attribute')
+        raise WiceGridArgumentError.new('Option :assoc is only used together with :attribute')
       end
 
       if options[:attribute] && options[:attribute].index('.')
-        fail WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
+        raise WiceGridArgumentError.new("Invalid attribute name #{options[:attribute]}. An attribute name must not contain a table name!")
       end
 
 
@@ -362,7 +362,7 @@ module Wice
             block = ->(obj) { obj.deep_send(*messages) }
           end
         else
-          fail WiceGridArgumentError.new(
+          raise WiceGridArgumentError.new(
             'Missing column block without attribute defined. You can only omit the block if attribute is present.')
         end
       end
@@ -407,7 +407,7 @@ module Wice
             elsif Wice::WgEnumerable.all_items_are_of_class(options[:custom_filter], Array)
               options[:custom_filter]
             else
-              fail WiceGridArgumentError.new(
+              raise WiceGridArgumentError.new(
                 ':custom_filter can equal :auto, an array of string and/or numbers (direct values for the dropdown), ' \
                 'a homogeneous array of symbols (a sequence of methods to send to AR objects in the result set to ' \
                 'retrieve unique values for the dropdown), a Symbol (a shortcut for a one member array of symbols), ' \
@@ -461,7 +461,7 @@ module Wice
           next_model = reflection.klass
           get_model_from_associations(next_model, tail)
         else
-          fail WiceGridArgumentError.new("Association #{head} not found in #{model}")
+          raise WiceGridArgumentError.new("Association #{head} not found in #{model}")
         end
       end
     end
@@ -510,7 +510,7 @@ module Wice
       elsif opts.nil? && block
         @blank_slate_handler = block
       else
-        fail WiceGridArgumentError.new("blank_slate accepts only a string, a block, or template: 'path_to_template' ")
+        raise WiceGridArgumentError.new("blank_slate accepts only a string, a block, or template: 'path_to_template' ")
       end
     end
 
@@ -519,7 +519,7 @@ module Wice
         row_attributes = @row_attributes_handler.call(ar_object)
         row_attributes = {} if row_attributes.blank?
         unless row_attributes.is_a?(Hash)
-          fail WiceGridArgumentError.new("row_attributes block must return a hash containing HTML attributes. The returned value is #{row_attributes.inspect}")
+          raise WiceGridArgumentError.new("row_attributes block must return a hash containing HTML attributes. The returned value is #{row_attributes.inspect}")
         end
         row_attributes
       else
@@ -578,7 +578,7 @@ module Wice
         ORDER_DIRECTION_PARAMETER_NAME => direction
       } }
 
-      cleaned_params =  Wice::WgHash.deep_clone params
+      cleaned_params = Wice::WgHash.deep_clone params
       cleaned_params.merge!(extra_parameters)
 
       cleaned_params.delete(:controller)
