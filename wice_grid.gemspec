@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '3.6.0'
-  s.authors       = ['Yuri Leikind']
+  s.version       = '3.6.2'
+  s.authors       = ['Yuri Leikind and contributors']
   s.email         = ['yuri.leikind@gmail.com']
   s.homepage      = 'https://github.com/leikind/wice_grid'
   s.summary       = 'A Rails grid plugin to quickly create grids with sorting, pagination, and filters.'
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.license       = 'MIT'
   s.require_paths = ['lib']
-  s.date          = '2015-04-17'
+  s.date          = '2016-06-15'
 
   s.add_dependency 'activerecord',      ['> 3.2']
   s.add_dependency 'kaminari',          ['~> 0.16']
