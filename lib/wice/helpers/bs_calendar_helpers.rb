@@ -17,12 +17,20 @@ module Wice #:nodoc:
     end
 
     def date_calendar_bs(calendar_data)  #:nodoc:
+      placeholder =
+        if calendar_data.the_other_datepicker_id_to
+          I18n.t("wice_grid.date_selector_tooltip_from")
+        else
+          I18n.t("wice_grid.date_selector_tooltip_to")
+        end
+
       text_field_tag_options = {
           :id                   => calendar_data.dom_id,
           'data-provide'        => 'datepicker',
           'data-date-language'  => I18n.locale,
           'data-date-autoclose' => true,
-          'data-date-format'    => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_BOOTSTRAP)
+          'data-date-format'    => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_BOOTSTRAP),
+          'placeholder'         => placeholder
       }
 
       text_field_tag_options['class'] = 'form-control input-sm'
