@@ -205,13 +205,24 @@ setupSubmitReset = (wiceGridContainer, gridProcessor) ->
       event.preventDefault()
       gridProcessor.process()
 
+SetEnd = (txt) ->
+  if txt.createTextRange
+    #IE
+    FieldRange = txt.createTextRange()
+    FieldRange.moveStart 'character', txt.value.length
+    FieldRange.collapse()
+    FieldRange.select()
+  else
+    #Firefox and Opera
+    txt.focus()
+    length = txt.value.length
+    txt.setSelectionRange length, length
+  return
 
 focusElementIfNeeded = (focusId) ->
   elements = $('#' + focusId)
   if elToFocus = elements[0]
-    elToFocus.value = elToFocus.value
-    elToFocus.focus()
-
+    SetEnd elToFocus
 
 # autoreload for internal filters
 setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->

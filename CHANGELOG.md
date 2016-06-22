@@ -1,3 +1,14 @@
+# 3.6.3
+
+### Focused Filter Has Cursor/Caret at the End of Input
+
+The cursor/caret used to appear at the beginning of the focused autocomplete in FF and IE.
+This caused annoyances for users of those browsers who typed slowly since the page would
+reload and when they startd typing again the text would appear before their last entries.
+
+For example if someone was searching for 'john' but paused after 'joh', they would end up typing 'njoh', instead of 'john'. If they weren't paying attention,
+they might think there is no 'john', when they'd mistakenly searched for 'njoh'.
+
 # 3.6.0
 
 ## New API For Joined Tables
