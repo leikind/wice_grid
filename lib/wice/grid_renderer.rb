@@ -586,7 +586,7 @@ module Wice
 
       query_params = Wice::WgHash.rec_merge(cleaned_params, query_params)
 
-      '?' + query_params.to_query
+      '?' + query_params.to_h.to_query
     end
 
     protected
