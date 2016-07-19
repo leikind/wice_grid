@@ -98,8 +98,7 @@ module Wice
       # opts[:order_direction].downcase! if opts[:order_direction].is_a?(String)
 
       # validate :order_direction
-      if opts[:order_direction] && ! (opts[:order_direction] == 'asc' || opts[:order_direction] == :asc || opts[:order_direction] == 'desc' ||
-                                      opts[:order_direction] == :desc)
+      if opts[:order_direction] && ! (opts[:order_direction].to_s.casecmp('asc') == 0 || opts[:order_direction].to_s.casecmp('desc') == 0)
         raise WiceGridArgumentError.new(":order_direction must be either 'asc' or 'desc'.")
       end
 
