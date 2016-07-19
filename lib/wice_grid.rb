@@ -94,8 +94,8 @@ module Wice
           raise WiceGridArgumentError.new(":#{callback_symbol} must be either a Proc or Symbol object")
         end
       end
-
-      opts[:order_direction].downcase! if opts[:order_direction].is_a?(String)
+      # an order_direction in a query is not case-sensitive
+      # opts[:order_direction].downcase! if opts[:order_direction].is_a?(String)
 
       # validate :order_direction
       if opts[:order_direction] && ! (opts[:order_direction] == 'asc' || opts[:order_direction] == :asc || opts[:order_direction] == 'desc' ||
