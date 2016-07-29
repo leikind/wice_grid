@@ -667,7 +667,7 @@ module Wice
         first = 1
         last = collection.size
 
-        num_pages = 1
+        total_pages = 1
 
         class << collection
           def current_page
@@ -685,12 +685,12 @@ module Wice
         first = collection.offset_value + 1
         last  = collection.last_page? ? collection.total_count : collection.offset_value + collection.limit_value
 
-        num_pages = collection.total_pages
+        total_pages = collection.total_pages
       end
 
       parameters = grid.get_state_as_parameter_value_pairs
 
-      if num_pages < 2 && collection.length == 0
+      if total_pages < 2 && collection.length == 0
         '0'
       else
         parameters << ["#{grid.name}[pp]", collection_total_entries]
