@@ -586,7 +586,11 @@ module Wice
 
       query_params = Wice::WgHash.rec_merge(cleaned_params, query_params)
 
-      '?' + query_params.to_h.to_query
+      if rails.version.to_i >= 5
+        '?' + query_params.to_h.to_query
+      else
+        '?' + query_params.to_query
+      end
     end
 
     protected
