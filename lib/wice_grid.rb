@@ -449,11 +449,11 @@ module Wice
     def do_count #:nodoc:
       @relation
         .all
-        .merge(@ar_options[:conditions]).count(
-          joins:      @ar_options[:joins],
-          include:    @ar_options[:include],
-          group:      @ar_options[:group]
-        )
+        .joins(@ar_options[:joins])
+        .includes(@ar_options[:include])
+        .group(@ar_options[:group])
+        .where(@options[:conditions])
+        .count
     end
 
     alias_method :size, :count
