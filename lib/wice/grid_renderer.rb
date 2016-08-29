@@ -536,7 +536,7 @@ module Wice
     end
 
     def base_link_for_filter(controller, extra_parameters = {})   #:nodoc:
-      new_params = Wice::WgHash.deep_clone controller.params.to_h
+      new_params = Wice::WgHash.deep_clone controller.params.to_unsafe_h
       new_params.merge!(extra_parameters)
 
       if new_params[@grid.name]
@@ -556,7 +556,7 @@ module Wice
     end
 
     def link_for_export(controller, format, extra_parameters = {})   #:nodoc:
-      new_params = Wice::WgHash.deep_clone controller.params.to_h
+      new_params = Wice::WgHash.deep_clone controller.params.to_unsafe_h
       new_params.merge!(extra_parameters)
 
       new_params[@grid.name] = {} unless new_params[@grid.name]
@@ -578,7 +578,7 @@ module Wice
         ORDER_DIRECTION_PARAMETER_NAME => direction
       } }
 
-      cleaned_params = Wice::WgHash.deep_clone params.to_h
+      cleaned_params = Wice::WgHash.deep_clone params.to_unsafe_h
       cleaned_params.merge!(extra_parameters)
 
       cleaned_params.delete(:controller)
