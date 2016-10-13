@@ -512,7 +512,7 @@ module Wice
           %(     "Add line //= require wice_grid.js " + ) +
           %$     "to app/assets/javascripts/application.js")\n$ +
           %( } ) +
-          %$ }) $)
+          %$ } $)
       end
 
       grid.output_buffer
