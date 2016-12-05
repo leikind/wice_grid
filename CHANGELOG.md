@@ -9,6 +9,9 @@ reload and when they startd typing again the text would appear before their last
 For example if someone was searching for 'john' but paused after 'joh', they would end up typing 'njoh', instead of 'john'. If they weren't paying attention,
 they might think there is no 'john', when they'd mistakenly searched for 'njoh'.
 
+### Turbolinks 5 Support
+Handled by initializing WiceGrid on `turbolinks:render` as well as `page:load ready`
+
 # 3.6.0
 
 ## New API For Joined Tables
