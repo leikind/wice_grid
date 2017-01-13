@@ -41,18 +41,20 @@ module Wice
         end
         conditions = [[]]
         if opts[:fr]
-          if opts[:fr] =~ /\d/
+          fr_num = ConditionsGeneratorColumnInteger.get_value(opts[:fr])
+          if fr_num
             conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} >= ? "
-            conditions << opts[:fr]
+            conditions << fr_num
           else
             opts.delete(:fr)
           end
         end
 
         if opts[:to]
-          if opts[:to] =~ /\d/
+          to_num = ConditionsGeneratorColumnInteger.get_value(opts[:to])
+          if to_num
             conditions[0] << " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} <= ? "
-            conditions << opts[:to]
+            conditions << to_num
           else
             opts.delete(:to)
           end
