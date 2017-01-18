@@ -165,13 +165,12 @@ module Wice #:nodoc:
 
       def yield_declaration #:nodoc:
         declaration = yield_declaration_of_column_filter
-        if declaration
-          {
-            filterName:  self.name,
-            detached:    detachness,
-            declaration: declaration
-          }
-        end
+        return unless declaration
+        {
+          filterName:  self.name,
+          detached:    detachness,
+          declaration: declaration
+        }
       end
 
       def config  #:nodoc:
