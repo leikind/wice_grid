@@ -574,11 +574,7 @@ module Wice
     end
 
     def this_grid_params  #:nodoc:
-      if params.respond_to?(:to_unsafe_h)
-        params[name].to_unsafe_h
-      else
-        params[name]
-      end
+      params[name].try(:to_unsafe_h) || params[name]
     end
 
     def resultset_without_paging_without_user_filters  #:nodoc:
