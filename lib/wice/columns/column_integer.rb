@@ -32,8 +32,11 @@ module Wice
     class ConditionsGeneratorColumnInteger < ConditionsGeneratorColumn  #:nodoc:
       # Note: also used in ColumnRange, hence class method
       def self.get_value(val) #:nodoc:
-        separator = I18n.t('number.format.separator')
+        # Try to determine localized separator using I18n and replace it with default one
+        separator = I18n.t!('number.format.separator') rescue nil
         val = val.sub(separator, '.') if val.respond_to?(:sub) && separator
+
+        # Parse as float
         Float(val) rescue nil
       end
 
