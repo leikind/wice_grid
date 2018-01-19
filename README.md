@@ -1,3 +1,15 @@
+# Rails 5 Version of WiceGrid.
+
+* [Diff between the latest wice_grid (Edge) & this fork](https://github.com/patricklindsay/wice_grid/compare/leikind:rails3...master)
+* [Diff between last wice_grid published version (3.6.2) & this fork](https://github.com/leikind/wice_grid/compare/cd21a0ec93c4b55013ebddf8cbcc13df9acf20e9...patricklindsay:master)
+
+## What has changed since Edge
+* Removed old 'development', 'master' & 'modernization' branches
+* Renamed 'Rails3' branch to 'master' and made this default
+
+
+-------------------------------
+
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
 [![Build](https://travis-ci.org/leikind/wice_grid.svg)](https://travis-ci.org/leikind/wice_grid)
 [![Inline docs](http://inch-ci.org/github/leikind/wice_grid.svg?branch=rails3)](http://inch-ci.org/github/leikind/wice_grid/branch/rails3)
