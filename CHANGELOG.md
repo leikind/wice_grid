@@ -1,10 +1,13 @@
-# 3.6.3
+## 4.0.0 (18, Jan, 2018)
+
+### Rails 5.0 & 5.1 Support
+Added support for Rails 5.0 & 5.1. Anything below Rails 5 is no longer supported.
 
 ### Focused Filter Has Cursor/Caret at the End of Input
 
 The cursor/caret used to appear at the beginning of the focused autocomplete in FF and IE.
 This caused annoyances for users of those browsers who typed slowly since the page would
-reload and when they startd typing again the text would appear before their last entries.
+reload and when they started typing again the text would appear before their last entries.
 
 For example if someone was searching for 'john' but paused after 'joh', they would end up typing 'njoh', instead of 'john'. If they weren't paying attention,
 they might think there is no 'john', when they'd mistakenly searched for 'njoh'.
@@ -12,7 +15,7 @@ they might think there is no 'john', when they'd mistakenly searched for 'njoh'.
 ### Turbolinks 5 Support
 Handled by initializing WiceGrid on `turbolinks:render` as well as `page:load ready`
 
-# 3.6.0
+## 3.6.0
 
 ## New API For Joined Tables
 
