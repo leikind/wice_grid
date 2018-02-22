@@ -313,7 +313,8 @@ module Wice
         name:                        '',
         negation:                    ConfigurationProvider.value_for(:NEGATION_IN_STRING_FILTERS),
         ordering:                    true,
-        table_alias:                 nil
+        table_alias:                 nil,
+        custom_sort:                 nil,
       }
 
       opts.assert_valid_keys(options.keys)
@@ -375,7 +376,8 @@ module Wice
           custom_filter_active: options[:custom_filter],
           table_alias:          options[:table_alias],
           filter_type:          options[:filter_type],
-          assocs:               assocs
+          assocs:               assocs,
+          custom_sort:          options[:custom_sort],
         )
 
         # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]
@@ -567,7 +569,7 @@ module Wice
     end
 
     def column_link(column, direction, params, extra_parameters = {})   #:nodoc:
-      column_attribute_name = if column.attribute.index('.') || column.main_table
+      column_attribute_name = if column.attribute.index('.') || column.main_table || column.table_alias_or_table_name.nil?
         column.attribute
       else
         column.table_alias_or_table_name + '.' + column.attribute

@@ -228,7 +228,8 @@ module Wice
                  custom_filter_active: nil,
                  table_alias: nil,
                  filter_type: nil,
-                 assocs: [])  #:nodoc:
+                 assocs: [],
+                 custom_sort: nil)  #:nodoc:
 
 
       @options[:include] = Wice.build_includes(@options[:include], assocs)
@@ -240,7 +241,8 @@ module Wice
         table_name = model.table_name
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
-        if column.nil?
+        # Allow the column to not exist if we're doing a custom sort (calculated field)
+        if column.nil? && !custom_sort
           raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " \
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " \
             'the grid, and specify :model in column declaration.')
@@ -326,36 +328,43 @@ module Wice
       relation
     end
 
+    def apply_custom_sort(relation)
+      active_custom_sort = nil
+      @renderer.find_one_for(->(c) {c.attribute == @status[:order]}) {|r| active_custom_sort = r.custom_sort}
+      return relation if !active_custom_sort
+      relation = relation.sort_by(&active_custom_sort)
+      relation = relation.reverse if @status[:order_direction] == 'desc'
+      return relation
+    end
+
     # TO DO: what to do with other @ar_options values?
     def read  #:nodoc:
       form_ar_options
       use_default_or_unscoped do
-        @resultset = if self.output_csv? || all_record_mode?
-          relation = @relation
-                     .includes(@ar_options[:include])
-                     .joins(@ar_options[:joins])
-                     .order(@ar_options[:order])
-                     .group(@ar_options[:group])
-                     .merge(@ar_options[:conditions])
-          relation = add_references relation
+        relation = @relation
+                       .includes(@ar_options[:include])
+                       .joins(@ar_options[:joins])
+                       .group(@ar_options[:group])
+                       .merge(@ar_options[:conditions])
+        relation = add_references relation
+        relation = apply_custom_sort relation
 
-          relation
-        else
-          # p @ar_options
-          relation = @relation
-                     .send(@options[:page_method_name], @ar_options[:page])
-                     .per(@ar_options[:per_page])
-                     .includes(@ar_options[:include])
-                     .joins(@ar_options[:joins])
-                     .order(@ar_options[:order])
-                     .group(@ar_options[:group])
-                     .merge(@ar_options[:conditions])
+        # If relation is an Array, it got the sort from apply_custom_sort.
+        relation = relation.order(@ar_options[:order]) if !relation.is_a?(Array)
 
-          relation = add_references relation
-
-          relation
+        if !output_csv? && !all_record_mode?
+          if relation.is_a?(Array)
+            relation = Kaminari.paginate_array(relation, limit: @ar_options[:per_page], offset: @ar_options[:per_page].to_i * (@ar_options[:page].to_i - 1))
+          else
+            relation = relation
+                           .send(@options[:page_method_name], @ar_options[:page])
+                           .per(@ar_options[:per_page])
+          end
         end
+
+        @resultset = relation
       end
+
       invoke_resultset_callbacks
     end
 
@@ -386,7 +395,7 @@ module Wice
 
     def ordered_by?(column)  #:nodoc:
       return nil if @status[:order].blank?
-      if column.main_table && ! @status[:order].index('.')
+      if column.main_table && ! @status[:order].index('.') || column.table_alias_or_table_name.nil?
         @status[:order] == column.attribute
       else
         @status[:order] == column.table_alias_or_table_name + '.' + column.attribute

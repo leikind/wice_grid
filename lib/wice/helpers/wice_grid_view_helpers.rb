@@ -294,7 +294,7 @@ module Wice
 
         Wice::WgHash.add_or_append_class_value!(opts, column.css_class)
 
-        if column.attribute && column.ordering
+        if column.attribute && (column.ordering || column.custom_sort)
 
           column.add_css_class('active-filter') if grid.filtered_by?(column)
 

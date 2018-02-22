@@ -99,7 +99,7 @@ module Wice #:nodoc:
 
       # fields defined from the options parameter
       FIELDS = [:attribute, :name, :html, :filter, :model, :allow_multiple_selection,
-                :in_html, :in_csv, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload]
+                :in_html, :in_csv, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload, :custom_sort]
 
       attr_accessor(*FIELDS)
 
@@ -205,7 +205,7 @@ module Wice #:nodoc:
       end
 
       def fully_qualified_attribute_name #:nodoc:
-        table_alias_or_table_name + '.' + attribute
+        table_alias_or_table_name ? (table_alias_or_table_name + '.' + attribute) : nil
       end
 
       def filter_shown? #:nodoc:
