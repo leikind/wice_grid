@@ -84,7 +84,8 @@ class WiceGridProcessor
 
 
   exportToCsv : ->
-    @visit @linkForExport
+    # Do not use @visit here, since downloading files through Turbolinks doesn't work in version 5
+    window.location = @linkForExport
 
 
   register : (func)->
