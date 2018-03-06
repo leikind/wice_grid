@@ -362,6 +362,11 @@ module Wice
           end
         end
 
+        if all_record_mode? && relation.is_a?(Array)
+          # This still needs to be a Kaminari object as the paginator will read limit_value.
+          relation = Kaminari.paginate_array(relation, limit: relation.count)
+        end
+
         @resultset = relation
       end
 
