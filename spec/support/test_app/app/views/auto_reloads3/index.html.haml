@@ -1,0 +1,78 @@
+.well
+  %h2= current_page_title
+  %p
+    An example with 2 independant autoreloading grids on one page.
+
+= show_code
+
+= render   'grid', grid: @tasks_grid
+= render   'grid', grid: @tasks_grid2
+
+
+.row-fluid
+  .col-md-2
+    Title:
+  .col-md-4
+    = grid_filter @tasks_grid, :title
+
+  .col-md-2
+    Title:
+  .col-md-4
+    = grid_filter @tasks_grid2, :title
+
+
+
+.row-fluid
+  .col-md-2
+    Archived:
+  .col-md-4
+    = grid_filter @tasks_grid, :archived
+
+
+  .col-md-2
+    Archived:
+  .col-md-4
+    = grid_filter @tasks_grid2, :archived
+
+
+
+.row-fluid
+  .col-md-2
+    Status:
+  .col-md-4
+    = grid_filter @tasks_grid, :status_id
+
+  .col-md-2
+    Status:
+  .col-md-4
+    = grid_filter @tasks_grid2, :status_id
+
+
+
+.row-fluid
+  .col-md-2
+    Due date:
+  .col-md-4
+    = grid_filter @tasks_grid, :due_date
+
+  .col-md-2
+    Due date:
+  .col-md-4
+    = grid_filter @tasks_grid2, :due_date
+
+
+.row-fluid
+  .col-md-6
+    .external-buttons.grid1
+      %button.btn.btn-default.wg-external-reset-button{'data-grid-name' => 'grid'} Reset
+
+  .col-md-6
+    .external-buttons.grid2
+      %button.btn.btn-default.wg-external-reset-button{'data-grid-name' => 'grid2'} Reset
+
+
+.row-fluid
+  .col-md-6
+    = render_grid(@tasks_grid)
+  .col-md-6
+    = render_grid(@tasks_grid2)

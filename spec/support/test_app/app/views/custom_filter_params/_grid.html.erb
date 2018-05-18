@@ -1,0 +1,12 @@
+<%= grid(@projects_grid) do |g|
+
+  g.column name:  'Project Name', attribute: 'name'  do |project|
+    link_to(project.name,
+            tasks_path(
+              wice_grid_custom_filter_params(
+                grid_name: 'grid',
+                attribute: 'project_id',
+                value: project.id  )))
+  end
+
+end -%>

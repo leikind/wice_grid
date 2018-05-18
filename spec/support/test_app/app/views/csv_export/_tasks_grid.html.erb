@@ -1,0 +1,43 @@
+<%= grid(@tasks_grid, upper_pagination_panel: true) do |g|
+
+  g.column name:  'ID', attribute: 'id', filter: false
+
+  # html version
+  g.column name:  'Title', attribute: 'title', in_csv: false do |task|
+    link_to('Edit', edit_task_path(task.title))
+  end
+  # plain text version
+  g.column name:  'Title', in_html: false do |task|
+    task.title
+  end
+
+  g.column name:  'Priority', attribute: 'priority_id', custom_filter: Priority.to_dropdown do |task|
+    task.priority.name if task.priority
+  end
+
+  g.column name:  'Status', attribute: 'status_id', custom_filter: Status.to_dropdown do |task|
+    task.status.name if task.status
+  end
+
+  # html version
+  g.column name:  'Project Name', attribute: 'project_id', custom_filter: Project.to_dropdown,  in_csv: false do |task|
+    link_to_if(task.project, task.project.name, project_path(task.project) )
+  end
+  # plain text version
+  g.column name:  'Project Name', in_html: false do |task|
+    task.project.name if task.project
+  end
+
+  g.column  name:  'Archived', attribute: 'archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
+
+  g.column name:  'Added', attribute: 'created_at' do |task|
+    task.created_at.to_s(:short)
+  end
+
+  # is not included into csv
+  g.column  in_csv: false do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>

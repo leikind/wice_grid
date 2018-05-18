@@ -1,0 +1,27 @@
+mysql: &mysql
+  adapter: mysql2
+  username: root
+  password:
+  database: wice_grid_test
+
+postgres: &postgres
+  adapter: postgresql
+  username: postgres
+  password:
+  database: wice_grid_test
+  min_messages: ERROR
+
+defaults: &defaults
+  pool: 5
+  timeout: 5000
+  host: localhost
+  <<: *<%= ENV['DB'] || 'postgres' %>
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

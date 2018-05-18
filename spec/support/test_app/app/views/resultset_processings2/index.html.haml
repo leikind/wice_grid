@@ -1,0 +1,48 @@
+.well
+  %h2= current_page_title
+  %p
+    In addition to the
+    %a{href:  resultset_processings_path}
+      %code with_paginated_resultset
+      callback
+    there is callback
+    %code with_resultset
+    \.
+
+  %p
+    Just like
+    %code with_paginated_resultset
+    it can be defined as a block and as a symbol referring to a method in the controller.
+
+  %p
+    The difference is that the value submitted to the method or the callback is not a list of
+    all records but an ActiveRelation object which can be used to obtain all records.
+
+    In the example on this page the list of all records is only obtained when button
+    %code Show IDs of records throughout all pages
+    is clicked.
+
+  %p
+    Normally
+    %code with_resultset
+    is used
+    for some kind of background processing.
+    The results of callback are rendered on page only for the sake of the demonstration.
+
+= show_code
+
+= form_tag(resultset_processings2_index_path, method:  :get) do
+  = dump_filter_parameters_as_hidden_fields(@tasks_grid)
+  = hidden_field :process_selected_tasks, 1
+  %button#process.btn.btn-primary{type:  'submit'} Show IDs of records throughout all pages
+
+.example
+  = render   'grid'
+
+  -unless controller.selected_tasks.blank?
+    .row-fluid
+      .col-md-12
+        .well
+          = controller.selected_tasks.size
+          records on all pages:
+          = controller.selected_tasks.map(&:id).to_sentence

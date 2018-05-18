@@ -1,0 +1,13 @@
+.well
+  %h2= current_page_title
+  %p
+    The simplest grid is defined by the
+    %code grid
+    helper with column blocks inside  for each column.
+    The value of each column block is the contents of a cell.
+
+= show_code
+
+.row-fluid
+  .col-md-12
+    = render   'grid'

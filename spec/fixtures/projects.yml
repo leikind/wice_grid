@@ -1,0 +1,22 @@
+---
+project_00004:
+  id: 4
+  name: Ultimate Website
+  customer_id: 5
+  supplier_id: 7
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+project_00005:
+  id: 5
+  name: Super Game
+  customer_id: 5
+  supplier_id: 8
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+project_00006:
+  id: 6
+  name: Divine Firmware
+  customer_id: 6
+  supplier_id: 7
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
