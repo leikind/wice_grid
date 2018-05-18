@@ -12,8 +12,7 @@ require 'jquery-ui-rails'
 require 'jquery-ui-themes'
 require 'turbolinks'
 require 'sprockets'
-
-Bundler.require(:default, Rails.env)
+require_relative '../../../../lib/wice_grid'
 
 module Examples
   class TestApp < Rails::Application
