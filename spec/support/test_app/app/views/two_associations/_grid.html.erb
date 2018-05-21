@@ -1,0 +1,13 @@
+<%= grid(@projects_grid, show_filters: :always) do |g|
+
+  g.column name:  'ID', attribute: 'id', filter: false
+
+  g.column name:  'Project Name', attribute: 'name'
+
+  g.column name:  'Customer company', attribute: 'name', assoc: :customer
+
+  g.column name:  'Supplier company', attribute: 'name', assoc: :supplier, table_alias: 'suppliers_projects'
+
+end -%>
+
+

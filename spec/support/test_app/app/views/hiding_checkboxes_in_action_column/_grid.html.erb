@@ -1,0 +1,34 @@
+<%= grid(@tasks_grid) do |g|
+
+  g.action_column html_check_box: false do |task|
+    task.status.name != 'Assigned'
+  end
+
+
+  g.column name:  'ID', attribute: 'id', filter_type: :range
+
+  g.column name:  'Title', attribute: 'title', negation: true
+
+  g.column name:  'Archived', attribute: 'archived' do |rec|
+    rec.archived? ? 'Yes' : 'No'
+  end
+
+
+  g.column name:  'Status', attribute: 'status_id', custom_filter: Status.to_dropdown  do |task|
+    task.status.name if task.status
+  end
+
+  g.column name:  'Project Name', attribute: 'project_id', custom_filter: Project.to_dropdown do |task|
+    task.project.name if task.project
+  end
+
+  g.column name:  'Due Date', attribute: 'due_date' do |task|
+    task.due_date if task.due_date
+  end
+
+
+  g.column name:  'Added', attribute: 'created_at' do |task|
+    task.created_at.to_s(:db)
+  end
+
+end -%>

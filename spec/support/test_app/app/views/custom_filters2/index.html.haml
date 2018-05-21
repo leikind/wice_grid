@@ -1,0 +1,41 @@
+.well
+  %h2= current_page_title
+  %p
+    There are two approaches to custom filters with joined tables. The first thing that comes to mind is to define
+    a column of a joined table with
+    %code :attribute
+    and
+    %code :assoc
+    , and submit a list of all possible values of this column to
+    %code :custom_filter
+    , like it is done in the example below in the Priority column:
+  %p
+    %code g.column name:  'Priority', attribute: 'name', assoc: :priority, custom_filter: %w(Anecdotic High Low Normal Urgent) do |task|
+
+  %p
+    This works but such a filter produces a query with a
+    %code WHERE
+    clause comparing a varchar field with one of the string values submitted to
+    %code :custom_filter
+    \.
+    This is not guaranteed to be as efficient as comparing an indexed integer foreign key with an integer primary key, thus, this approach is highly advised against.
+  %p
+    To implement filtering by foreign keys, define the column with the foreign key in
+    %code :attribute
+    and submit a hash or a two element array containing the IDs and labels of the joined table to
+    %code :attribute
+    \.
+    This has a negative side effect on sorting - the column will now be sorted according to the numerical value of the foreign key.
+    It can be dealt with by overiding sorting by
+    %code :custom_order
+    in
+    %code initialize_grid
+    \:
+  %p
+    %code custom_order: {'tasks.status_id' => 'statuses.position', 'tasks.project_id' => 'projects.name'}
+
+= show_code
+
+.row-fluid
+  .col-md-12
+    = render   'grid'

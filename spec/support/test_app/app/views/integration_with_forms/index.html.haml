@@ -1,0 +1,18 @@
+.well
+  %h2= current_page_title
+  %p
+    In addition to including
+    %a{href:  action_column_index_path}a grid into a form
+    it is possible to dump the state of filters into another form as a set of hidden parameters with helper
+    %code dump_filter_parameters_as_hidden_fields(grid_object)
+    \.
+
+= show_code
+
+= form_tag(integration_with_forms_path, method:  :get) do
+  = dump_filter_parameters_as_hidden_fields(@tasks_grid)
+
+  %p= select_tag 'archived', options_for_select([['View active tasks', 0], ['View archived tasks', 1]], @archived ? 1 : 0), class: 'reload-on-change form-control'
+
+
+= render   'grid'

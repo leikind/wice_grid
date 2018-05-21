@@ -1,0 +1,23 @@
+.well
+  %h2= current_page_title
+  %p
+    Use
+    %code :order
+    and
+    %code :order_direction
+    in
+    %code  initialize_grid
+    to define by which column the grid should be ordered once it is loaded initially.
+
+  %p
+    Use
+    %code :conditions
+    in
+    %code  initialize_grid
+    to define the subset of records shown in the grid.
+
+= show_code
+
+.row-fluid
+  .col-md-12
+    = render   'grid'

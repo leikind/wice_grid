@@ -1,0 +1,23 @@
+<%= grid(@tasks_grid, show_filters: :always) do |g|
+
+  g.column name:  'ID', attribute: 'id', filter: false
+
+  g.column name:  'Title', attribute: 'title'
+
+  g.column name:  'Priority', attribute: 'name',  assoc: :priority
+
+  g.column name:  'Status', attribute: 'name', assoc: :status
+
+  g.column name:  'Project Name', attribute: 'name', assoc: :project
+
+  g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+
+
+  g.column name:  'Assigned To', attribute: 'name', assoc: :assigned_users do |task|
+    task.assigned_users.collect{|user| user.name}.to_sentence
+  end
+
+  g.column   do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>

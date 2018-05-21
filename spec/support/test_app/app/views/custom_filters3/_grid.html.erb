@@ -1,0 +1,18 @@
+<%= grid(@tasks_grid) do |g|
+
+  g.column name:  'ID', attribute: 'id', filter: false
+
+  g.column name:  'Title', attribute: 'title'
+
+  g.column name:  'Found in version', assoc: :relevant_version, attribute: 'name', custom_filter: :auto do |task|
+    task.relevant_version.name if task.relevant_version
+  end
+
+  g.column name:  'Expected in version', attribute: 'expected_version_id', custom_filter: [:expected_version, :to_option] do |task|
+    task.expected_version.name if task.expected_version
+  end
+
+  g.column   do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>

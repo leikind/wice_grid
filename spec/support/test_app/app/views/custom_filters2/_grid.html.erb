@@ -1,0 +1,30 @@
+<%= grid(@tasks_grid) do |g|
+
+  g.column name:  'ID', attribute: 'id', filter: false
+
+  g.column name:  'Title', attribute: 'title'
+
+  g.column name:  'Priority', attribute: 'name', assoc: :priority, custom_filter: %w(Anecdotic High Low Normal Urgent) do |task|
+    task.priority.name if task.priority
+  end
+
+  g.column name:  'Status', attribute: 'status_id',  custom_filter: Status.to_dropdown  do |task|
+    task.status.name if task.status
+  end
+
+  g.column name:  'Project Name', attribute: 'project_id', custom_filter: Project.to_dropdown do |task|
+    task.project.name if task.project
+  end
+
+  g.column  name:  'Archived', attribute: 'archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
+
+  g.column name:  'Added', attribute: 'created_at' do |task|
+    task.created_at.to_s(:short)
+  end
+
+  g.column   do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>

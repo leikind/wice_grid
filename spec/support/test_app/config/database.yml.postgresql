@@ -1,0 +1,18 @@
+defaults: &defaults
+  adapter: postgresql
+  encoding: utf8
+  pool: 5
+  username: postgres
+  password:
+
+development:
+  <<: *defaults
+  database: wice_grid_testbed_development
+
+test:
+  <<: *defaults
+  database: wice_grid_testbed_test
+
+production:
+  <<: *defaults
+  database: wice_grid_testbed_production

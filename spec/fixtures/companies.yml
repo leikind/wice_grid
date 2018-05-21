@@ -1,0 +1,21 @@
+---
+company_00005:
+  id: 5
+  name: MNU
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+company_00006:
+  id: 6
+  name: SkyNet
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+company_00007:
+  id: 7
+  name: Coders Unlimited
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+company_00008:
+  id: 8
+  name: Shift-Command-4 Limited
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z

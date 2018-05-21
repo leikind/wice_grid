@@ -1,0 +1,17 @@
+defaults: &defaults
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  pool: 5
+
+development:
+  <<: *defaults
+  database: wice_grid_testbed_development
+
+test:
+  <<: *defaults
+  database: wice_grid_testbed_test
+
+production:
+  <<: *defaults
+  database: wice_grid_testbed_production

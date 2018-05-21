@@ -1,0 +1,19 @@
+defaults: &defaults
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: root
+  password:
+  socket: /tmp/mysql.sock
+
+development:
+  <<: *defaults
+  database: wice_grid_testbed_development
+
+test:
+  <<: *defaults
+  database: wice_grid_testbed_test
+
+production:
+  <<: *defaults
+  database: wice_grid_testbed_production

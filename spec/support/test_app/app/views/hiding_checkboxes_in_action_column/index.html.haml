@@ -1,0 +1,32 @@
+.well
+  %h2= current_page_title
+  %p
+    You can hide a certain action checkbox if you add the usual block to
+    %code g.action_column
+    , just like with the
+    %code g.column
+    definition. If the block returns
+    %code nil
+    or
+    %code false
+    no checkbox will be rendered.
+
+= show_code
+
+= dump_filter_parameters_as_hidden_fields(@tasks_grid)
+= form_for '#', method:  :get do
+
+  - if @selected
+    .well
+      Selected tasks:
+      = @selected.to_sentence
+
+  .row-fluid
+    .col-md-12
+      %p
+        %button.btn.btn-default{'type' => 'submit'} Process tasks
+
+      = render   'grid'
+
+      %p
+        %button.btn.btn-default{'type' => 'submit'} Process tasks

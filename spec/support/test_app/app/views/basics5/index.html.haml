@@ -1,0 +1,12 @@
+.well
+  %h2= current_page_title
+  %p
+    To disable ordering columns use
+    %code allow_ordering:  false
+    \.
+
+= show_code
+
+.row-fluid
+  .col-md-12
+    = render   'grid'

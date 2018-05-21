@@ -1,0 +1,27 @@
+<%= grid(@tasks_grid) do |g|
+
+  g.column name:  'ID' do |task|
+    task.id
+  end
+
+  g.column name:  'Title'  do |task|
+    task.title
+  end
+
+  g.column  name:  'Description' do |task|
+    task.description
+  end
+
+  g.column  name:  'Archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
+
+  g.column name:  'Added' do |task|
+    task.created_at.to_s(:short)
+  end
+
+
+  g.column   do |task|
+    link_to('Edit', edit_task_path(task))
+  end
+end -%>
