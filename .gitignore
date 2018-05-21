@@ -5,7 +5,6 @@
 .idea
 .yardoc
 .rbenv-version
-Gemfile.lock
 InstalledFiles
 _yardoc
 coverage

@@ -19,14 +19,12 @@
 
 require 'rspec'
 require 'coveralls'
-require 'codeclimate-test-reporter'
 require 'simplecov'
 require 'byebug'
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
     Coveralls::SimpleCov::Formatter,
-    SimpleCov::Formatter::HTMLFormatter,
-    CodeClimate::TestReporter::Formatter
+    SimpleCov::Formatter::HTMLFormatter
 ]
 SimpleCov.start
 
