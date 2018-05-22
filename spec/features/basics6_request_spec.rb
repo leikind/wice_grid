@@ -16,7 +16,7 @@ describe 'basisc5 WiceGrid',  js: true do
     click_on 'show all'
 
     within 'div.wice-grid-container table.wice-grid tbody' do
-      page.should_not have_content('Yes')
+      page.should have_no_content('Yes')
     end
   end
 end

@@ -298,7 +298,7 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
     find(:css, '#grid_f_title_n').click
 
-    page.should_not have_content('sed impedit iste')
+    page.should have_no_content('sed impedit iste')
   end
 
   it 'should reload the title filter' do
