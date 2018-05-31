@@ -6,7 +6,7 @@ This fork has been made to support Rails 5+.
 ## Usage
 ```
 # Rails => 5
-gem 'wice_grid', git: 'https://github.com/patricklindsay/wice_grid.git', tag: 'v4.0.0'
+gem 'wice_grid', git: 'https://github.com/patricklindsay/wice_grid.git', tag: 'v4.0.1'
 
 # Rails < 5
 gem 'wice_grid', '3.6.2'
@@ -17,7 +17,7 @@ gem 'wice_grid', '3.6.2'
 * Renamed 'Rails3' branch to 'master' and made this default
 * [Diff between the latest wice_grid (Edge) & this fork](https://github.com/leikind/wice_grid/compare/leikind:rails3...patricklindsay:master)
 * [Diff between last wice_grid published version (3.6.2) & this fork](https://github.com/leikind/wice_grid/compare/cd21a0ec93c4b55013ebddf8cbcc13df9acf20e9...patricklindsay:master)
-* Checkout CHANGELOG.md for more information.
+* Checkout [CHANGELOG.md](https://github.com/patricklindsay/wice_grid/blob/master/CHANGELOG.md) for more information.
 
 -------------------------------
 

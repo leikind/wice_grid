@@ -1,10 +1,10 @@
-## 4.0.1 (xx xxx, 2018)
+## 4.0.1 (31 May, 2018)
 
-Fixed tagbuilder issue with Rails 5.0.x - [#1](https://github.com/patricklindsay/wice_grid/pull/1)
-Moved testbed into repo - [#12](https://github.com/patricklindsay/wice_grid/pull/12)
-Remove old release notes and empty /test directory
-Removed `Gemfile.lock` from `.gitignore`
-Removed `codeclimate-test-reporter` dev dependancy
+* Fixed tagbuilder issue with Rails 5.0.x - [#1](https://github.com/patricklindsay/wice_grid/pull/1)
+* Moved testbed into repo - [#12](https://github.com/patricklindsay/wice_grid/pull/12)
+* Remove old release notes and empty /test directory
+* Removed `Gemfile.lock` from `.gitignore`
+* Removed `codeclimate-test-reporter` dev dependancy
 
 ## 4.0.0 (18 Jan, 2018)
 
