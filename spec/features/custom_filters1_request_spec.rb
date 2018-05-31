@@ -53,31 +53,25 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
   it 'should filter by custom filter' do
     select 'Development', from: 'g1_f_status'
     find(:css, '#g1_submit_grid_icon').click
+    page.should have_selector('#g1 .pagination_status', text: '1-3 / 3')
 
     select 'Development', from: 'g2_f_status'
     find(:css, '#g2_submit_grid_icon').click
+    page.should have_selector('#g1 .pagination_status', text: '1-3 / 3')
+    page.should have_selector('#g2 .pagination_status', text: '1-3 / 3')
 
     select 'development', from: 'g3_f_status'
     find(:css, '#g3_submit_grid_icon').click
+    page.should have_selector('#g1 .pagination_status', text: '1-3 / 3')
+    page.should have_selector('#g2 .pagination_status', text: '1-3 / 3')
+    page.should have_selector('#g3 .pagination_status', text: '1-3 / 3')
 
     select 'development', from: 'g4_f_status'
     find(:css, '#g4_submit_grid_icon').click
-
-    within '#g1 .pagination_status' do
-      page.should have_content('1-3 / 3')
-    end
-
-    within '#g2 .pagination_status' do
-      page.should have_content('1-3 / 3')
-    end
-
-    within '#g3 .pagination_status' do
-      page.should have_content('1-3 / 3')
-    end
-
-    within '#g4 .pagination_status' do
-      page.should have_content('1-3 / 3')
-    end
+    page.should have_selector('#g1 .pagination_status', text: '1-3 / 3')
+    page.should have_selector('#g2 .pagination_status', text: '1-3 / 3')
+    page.should have_selector('#g3 .pagination_status', text: '1-3 / 3')
+    page.should have_selector('#g4 .pagination_status', text: '1-3 / 3')
   end
 
   it 'should filter by custom filter with multiselect' do
