@@ -19,3 +19,4 @@ tmp
 .byebug_history
 spec/support/test_app/log
 spec/support/test_app/tmp
+spec/support/test_app/db/*.sqlite3

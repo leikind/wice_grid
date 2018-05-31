@@ -1,17 +1,16 @@
 defaults: &defaults
-  adapter: postgresql
+  adapter: sqlite3
   encoding: unicode
-  host: localhost
   pool: 5
 
 development:
   <<: *defaults
-  database: wice_grid_testbed_development
+  database: db/development.sqlite3
 
 test:
   <<: *defaults
-  database: wice_grid_testbed_test
+  database: db/test.sqlite3
 
 production:
   <<: *defaults
-  database: wice_grid_testbed_production
+  database: db/production.sqlite3

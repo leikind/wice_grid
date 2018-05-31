@@ -32,7 +32,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('selenium-webdriver', '~> 2.51.0')
 
   # Required by the test app.
-  s.add_development_dependency('pg', '0.18.2')
   s.add_development_dependency('haml', '~> 5.0.4')
   s.add_development_dependency('coderay', '~> 1.1.0')
   s.add_development_dependency('jquery-rails', '~> 4.3.3')
