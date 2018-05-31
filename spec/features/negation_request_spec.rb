@@ -18,6 +18,6 @@ describe 'negation WiceGrid', type: :request, js: true do
 
     find(:css, '#grid_submit_grid_icon').click
 
-    page.should_not have_content('sed impedit iste')
+    page.should have_no_content('sed impedit iste')
   end
 end

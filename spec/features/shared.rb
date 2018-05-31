@@ -48,7 +48,7 @@ shared_examples 'basic task table specs' do
 
         page.should have_content('2')
         page.should have_content('3')
-        page.should_not have_content('4')
+        page.should have_no_content('4')
       end
     end
   end

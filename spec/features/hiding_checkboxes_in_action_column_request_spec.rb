@@ -40,7 +40,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
 
     first(:css, 'button.btn', text: 'Process tasks').click
 
-    page.should_not have_content('Selected tasks: 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 520, 521, 522, 523, 524, 525, and 526')
+    page.should have_no_content('Selected tasks: 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 520, 521, 522, 523, 524, 525, and 526')
   end
 
   it 'should keep the state of filter inside a form' do
@@ -253,7 +253,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
 
     first(:css, 'button.btn', text: 'Process tasks').click
 
-    page.should_not have_content('sed impedit iste')
+    page.should have_no_content('sed impedit iste')
   end
 
   it 'should reload the title filter' do
