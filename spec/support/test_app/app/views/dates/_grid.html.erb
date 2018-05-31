@@ -17,7 +17,7 @@
     task.created_at.to_s(:db)
   end
 
-  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
+  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper, filter_control_options: {start_year: 2011} do |task|
     task.updated_at.to_s(:db)
   end
 
