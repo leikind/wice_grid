@@ -3,3 +3,4 @@ init = ->
     this.form.submit()
 
 $(document).on 'page:load ready', init
+$(document).on 'turbolinks:render', init
