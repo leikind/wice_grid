@@ -1,6 +1,6 @@
 # encoding: utf-8
 class LocalizationController < ApplicationController
-  before_filter :init_locale
+  before_action :init_locale
 
   def init_locale
     if params[:lang]
