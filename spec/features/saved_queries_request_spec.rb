@@ -9,8 +9,9 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
   def delete_all_saved_queries(context)
     while delete_link = context.find(:css, '.wice-grid-delete-query')
       delete_link.click
+      expect(page).to have_selector('#grid_notification_messages', text: 'Saved query deleted.')
     end
-  rescue Capybara::ElementNotFound, Selenium::WebDriver::Error::StaleElementReferenceError
+  rescue Capybara::ElementNotFound
     true
   end
 
