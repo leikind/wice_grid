@@ -1,4 +1,5 @@
 $(document).on 'page:load ready', -> savedQueriesInit()
+$(document).on 'turbolinks:render', -> savedQueriesInit()
 
 
 savedQueriesInit = ->
