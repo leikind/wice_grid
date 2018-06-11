@@ -1,3 +1,7 @@
+## Unreleased
+
+* Add option `filter_control_options` to columns. Initial use is to pass in the options `start_year`, `end_year`, and `max_year_allowed` when using `rails_datetime_helper` - [#12](https://github.com/patricklindsay/wice_grid/pull/18)
+
 ## 4.0.1 (31 May, 2018)
 
 * Fixed tagbuilder issue with Rails 5.0.x - [#1](https://github.com/patricklindsay/wice_grid/pull/1)
