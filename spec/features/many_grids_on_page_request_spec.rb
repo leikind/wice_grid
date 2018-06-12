@@ -41,17 +41,13 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
       click_link '2'
     end
 
+    page.should have_selector('#g1 ul.pagination li.active', text: '2')
+
     within '#g2 ul.pagination' do
       click_link '3'
     end
 
-    within '#g1 ul.pagination li.active' do
-      page.should have_content('2')
-    end
-
-    within '#g2 ul.pagination li.active' do
-      page.should have_content('3')
-    end
+    page.should have_selector('#g2 ul.pagination li.active', text: '3')
   end
 
   it 'should show all records independantly for the two grids' do
