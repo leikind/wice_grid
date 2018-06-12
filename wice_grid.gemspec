@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('bootstrap-sass', '3.1.1.1')
   s.add_development_dependency('font-awesome-sass', '4.4.0')
   s.add_development_dependency('turbolinks', '~> 5.1.1')
+  s.add_development_dependency('therubyracer')
 
   s.add_development_dependency('bundler',   '~> 1.3')
   s.add_development_dependency('simplecov', '~> 0.7')
