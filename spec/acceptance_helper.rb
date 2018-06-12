@@ -31,8 +31,7 @@ RSpec.configure do |config|
 
   config.fixture_path = "spec/fixtures"
 
-  # WiceGrid does not modify the DB, so no need for transactions
-  config.use_transactional_fixtures = false
+  config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
