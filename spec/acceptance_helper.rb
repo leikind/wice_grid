@@ -44,5 +44,8 @@ RSpec.configure do |config|
   config.include Capybara::DSL
 end
 
+# Disable SQL logging
+ActiveRecord::Base.logger = nil
+
 require 'features/shared.rb'
 require 'features/shared_detached_filters.rb'
