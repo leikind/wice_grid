@@ -159,7 +159,7 @@ module Wice
     end
 
     def log(message) #:nodoc:
-      ActiveRecord::Base.logger.info('WiceGrid: ' + message)
+      ActiveRecord::Base.logger.info('WiceGrid: ' + message) if ActiveRecord::Base.logger
     end
   end
 
