@@ -12,10 +12,10 @@ describe "upper pagination panel WiceGrid", :type => :request do
   end
 
   it "upper pagination panel should be present" do
-    page.should have_selector('table.wice-grid thead tr td .pagination li.active')
+    expect(page).to have_selector('table.wice-grid thead tr td .pagination li.active')
 
     within 'table.wice-grid thead tr td .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 

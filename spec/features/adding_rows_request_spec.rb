@@ -12,10 +12,10 @@ describe 'adding rows WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     ['inventore architecto aut', 'veniam tempora', 'doloremque', 'qui animi', 'dolor et corporis'].each do |title|
-      page.should have_content(title)
-      page.should have_content("Panic! \"#{title}\"")
+      expect(page).to have_content(title)
+      expect(page).to have_content("Panic! \"#{title}\"")
     end
 
-    page.should have_content("Don't panic")
+    expect(page).to have_content("Don't panic")
   end
 end

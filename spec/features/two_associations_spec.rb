@@ -13,7 +13,7 @@ describe "two_associations WiceGrid", :type => :request, :js => true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
 
@@ -22,7 +22,7 @@ describe "two_associations WiceGrid", :type => :request, :js => true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-1 / 1')
+      expect(page).to have_content('1-1 / 1')
     end
 
     fill_in('grid_f_companies_name', :with => '')
@@ -30,7 +30,7 @@ describe "two_associations WiceGrid", :type => :request, :js => true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     fill_in('grid_f_companies_name', :with => 'foo')
@@ -38,7 +38,7 @@ describe "two_associations WiceGrid", :type => :request, :js => true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('0')
+      expect(page).to have_content('0')
     end
 
 

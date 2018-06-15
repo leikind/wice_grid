@@ -8,29 +8,29 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
 
   it 'should have all options' do
     within '#grid_f_priorities_name' do
-      page.should have_content('Anecdotic')
-      page.should have_content('High')
-      page.should have_content('Low')
-      page.should have_content('Normal')
-      page.should have_content('Urgent')
+      expect(page).to have_content('Anecdotic')
+      expect(page).to have_content('High')
+      expect(page).to have_content('Low')
+      expect(page).to have_content('Normal')
+      expect(page).to have_content('Urgent')
     end
 
     within '#grid_f_status_id' do
-      page.should have_content('Assigned')
-      page.should have_content('Cancelled')
-      page.should have_content('Closed')
-      page.should have_content('Duplicate')
-      page.should have_content('New')
-      page.should have_content('Postponed')
-      page.should have_content('Resolved')
-      page.should have_content('Started')
-      page.should have_content('Verified')
+      expect(page).to have_content('Assigned')
+      expect(page).to have_content('Cancelled')
+      expect(page).to have_content('Closed')
+      expect(page).to have_content('Duplicate')
+      expect(page).to have_content('New')
+      expect(page).to have_content('Postponed')
+      expect(page).to have_content('Resolved')
+      expect(page).to have_content('Started')
+      expect(page).to have_content('Verified')
     end
 
     within '#grid_f_project_id' do
-      page.should have_content('Divine Firmware')
-      page.should have_content('Super Game')
-      page.should have_content('Ultimate Website')
+      expect(page).to have_content('Divine Firmware')
+      expect(page).to have_content('Super Game')
+      expect(page).to have_content('Ultimate Website')
     end
   end
 
@@ -47,7 +47,7 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
   end
 end

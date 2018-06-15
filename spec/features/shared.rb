@@ -1,12 +1,12 @@
 # encoding: utf-8
 shared_examples 'basic task table specs' do
   it 'is present on the page' do
-    page.should have_selector('div.wice-grid-container table.wice-grid')
+    expect(page).to have_selector('div.wice-grid-container table.wice-grid')
   end
 
   it 'should have a show all link' do
     within 'div.wice-grid-container table.wice-grid' do
-      page.should have_selector('a.wg-show-all-link')
+      expect(page).to have_selector('a.wg-show-all-link')
     end
   end
 
@@ -16,11 +16,11 @@ shared_examples 'basic task table specs' do
     end
 
     within '.wice-grid li.active' do
-      page.should have_content('2')
+      expect(page).to have_content('2')
     end
 
     within '.pagination_status' do
-      page.should have_content('21-40 / 50')
+      expect(page).to have_content('21-40 / 50')
     end
 
     within 'ul.pagination' do
@@ -28,27 +28,27 @@ shared_examples 'basic task table specs' do
     end
 
     within '.wice-grid li.active' do
-      page.should have_content('3')
+      expect(page).to have_content('3')
     end
 
     within '.pagination_status' do
-      page.should have_content('41-50 / 50')
+      expect(page).to have_content('41-50 / 50')
     end
   end
 
   it 'should have a pagination status with page 1 as the current page' do
     within 'div.wice-grid-container table.wice-grid' do
-      page.should have_selector('div.pagination')
+      expect(page).to have_selector('div.pagination')
 
       within 'div.pagination' do
-        page.should have_selector('li.active')
+        expect(page).to have_selector('li.active')
         within 'li.active' do
-          page.should have_content('1')
+          expect(page).to have_content('1')
         end
 
-        page.should have_content('2')
-        page.should have_content('3')
-        page.should have_no_content('4')
+        expect(page).to have_content('2')
+        expect(page).to have_content('3')
+        expect(page).to have_no_content('4')
       end
     end
   end
@@ -59,17 +59,17 @@ shared_examples 'show all and back' do
     click_on 'show all'
 
     within 'div.wice-grid-container table.wice-grid' do
-      page.should have_selector('a.wg-back-to-pagination-link')
+      expect(page).to have_selector('a.wg-back-to-pagination-link')
     end
 
     within '.pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     click_on 'back to paginated view'
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -77,11 +77,11 @@ end
 shared_examples 'names of columns' do
   it 'should have names of columns' do
     within 'div.wice-grid-container table.wice-grid thead' do
-      page.should have_content('ID')
-      page.should have_content('Title')
-      page.should have_content('Description')
-      page.should have_content('Archived')
-      page.should have_content('Added')
+      expect(page).to have_content('ID')
+      expect(page).to have_content('Title')
+      expect(page).to have_content('Description')
+      expect(page).to have_content('Archived')
+      expect(page).to have_content('Added')
     end
   end
 end
@@ -94,11 +94,11 @@ shared_examples 'sorting ID' do
     sleep 1
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('ID')
+      expect(page).to have_content('ID')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('556')
+      expect(page).to have_content('556')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -107,11 +107,11 @@ shared_examples 'sorting ID' do
     sleep 1
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('ID')
+      expect(page).to have_content('ID')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('507')
+      expect(page).to have_content('507')
     end
 
     within 'ul.pagination' do
@@ -120,15 +120,15 @@ shared_examples 'sorting ID' do
     sleep 1
 
     within '.wice-grid li.active' do
-      page.should have_content('2')
+      expect(page).to have_content('2')
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('ID')
+      expect(page).to have_content('ID')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('527')
+      expect(page).to have_content('527')
     end
   end
 end
@@ -140,11 +140,11 @@ shared_examples 'sorting Title' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('ab')
+      expect(page).to have_content('ab')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -152,11 +152,11 @@ shared_examples 'sorting Title' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('voluptatum non')
+      expect(page).to have_content('voluptatum non')
     end
 
     within 'ul.pagination' do
@@ -166,15 +166,15 @@ shared_examples 'sorting Title' do
     sleep 1
 
     within '.wice-grid li.active' do
-      page.should have_content('2')
+      expect(page).to have_content('2')
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('quia dignissimos maiores')
+      expect(page).to have_content('quia dignissimos maiores')
     end
   end
 end
@@ -186,11 +186,11 @@ shared_examples 'sorting Description' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Description')
+      expect(page).to have_content('Description')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
+      expect(page).to have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -198,11 +198,11 @@ shared_examples 'sorting Description' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Description')
+      expect(page).to have_content('Description')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Voluptate occaecati quisquam in et qui nostrum eos minus.')
+      expect(page).to have_content('Voluptate occaecati quisquam in et qui nostrum eos minus.')
     end
 
     within 'ul.pagination' do
@@ -210,15 +210,15 @@ shared_examples 'sorting Description' do
     end
 
     within '.wice-grid li.active' do
-      page.should have_content('2')
+      expect(page).to have_content('2')
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Description')
+      expect(page).to have_content('Description')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Iure tenetur cum aut optio et quia similique debitis.')
+      expect(page).to have_content('Iure tenetur cum aut optio et quia similique debitis.')
     end
   end
 end
@@ -230,11 +230,11 @@ shared_examples 'sorting Archived' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Archived')
+      expect(page).to have_content('Archived')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('No')
+      expect(page).to have_content('No')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -242,11 +242,11 @@ shared_examples 'sorting Archived' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Archived')
+      expect(page).to have_content('Archived')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Yes')
+      expect(page).to have_content('Yes')
     end
 
     within 'ul.pagination' do
@@ -254,15 +254,15 @@ shared_examples 'sorting Archived' do
     end
 
     within '.wice-grid li.active' do
-      page.should have_content('2')
+      expect(page).to have_content('2')
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Archived')
+      expect(page).to have_content('Archived')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('No')
+      expect(page).to have_content('No')
     end
   end
 end
@@ -274,11 +274,11 @@ shared_examples 'sorting Due Date' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Due Date')
+      expect(page).to have_content('Due Date')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('2012-06-12')
+      expect(page).to have_content('2012-06-12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -286,11 +286,11 @@ shared_examples 'sorting Due Date' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Due Date')
+      expect(page).to have_content('Due Date')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('2013-03-30')
+      expect(page).to have_content('2013-03-30')
     end
 
     within 'ul.pagination' do
@@ -298,15 +298,15 @@ shared_examples 'sorting Due Date' do
     end
 
     within '.wice-grid li.active' do
-      page.should have_content('2')
+      expect(page).to have_content('2')
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Due Date')
+      expect(page).to have_content('Due Date')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('2012-12-13')
+      expect(page).to have_content('2012-12-13')
     end
   end
 end
@@ -316,7 +316,7 @@ shared_examples 'sorting ID in all records mode' do
     click_on 'show all'
 
     within '.pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -324,11 +324,11 @@ shared_examples 'sorting ID in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('ID')
+      expect(page).to have_content('ID')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('556')
+      expect(page).to have_content('556')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -336,11 +336,11 @@ shared_examples 'sorting ID in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('ID')
+      expect(page).to have_content('ID')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('507')
+      expect(page).to have_content('507')
     end
   end
 end
@@ -350,7 +350,7 @@ shared_examples 'sorting Title in all records mode' do
     click_on 'show all'
 
     within '.pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -358,11 +358,11 @@ shared_examples 'sorting Title in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('ab')
+      expect(page).to have_content('ab')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -370,11 +370,11 @@ shared_examples 'sorting Title in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('voluptatum non')
+      expect(page).to have_content('voluptatum non')
     end
   end
 end
@@ -386,7 +386,7 @@ shared_examples 'sorting Description in all records mode' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -394,11 +394,11 @@ shared_examples 'sorting Description in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Description')
+      expect(page).to have_content('Description')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
+      expect(page).to have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -406,11 +406,11 @@ shared_examples 'sorting Description in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Description')
+      expect(page).to have_content('Description')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Voluptate occaecati quisquam in et qui nostrum eos minus.')
+      expect(page).to have_content('Voluptate occaecati quisquam in et qui nostrum eos minus.')
     end
   end
 end
@@ -420,7 +420,7 @@ shared_examples 'sorting Archived in all records mode' do
     click_on 'show all'
 
     within '.pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -428,11 +428,11 @@ shared_examples 'sorting Archived in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Archived')
+      expect(page).to have_content('Archived')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('No')
+      expect(page).to have_content('No')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -440,11 +440,11 @@ shared_examples 'sorting Archived in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Archived')
+      expect(page).to have_content('Archived')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Yes')
+      expect(page).to have_content('Yes')
     end
   end
 end
@@ -454,7 +454,7 @@ shared_examples 'sorting Due Date in all records mode' do
     click_on 'show all'
 
     within '.pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -462,11 +462,11 @@ shared_examples 'sorting Due Date in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Due Date')
+      expect(page).to have_content('Due Date')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('2012-06-12')
+      expect(page).to have_content('2012-06-12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -474,11 +474,11 @@ shared_examples 'sorting Due Date in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Due Date')
+      expect(page).to have_content('Due Date')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('2013-03-30')
+      expect(page).to have_content('2013-03-30')
     end
   end
 end
@@ -521,11 +521,11 @@ shared_examples 'Due Date datepicker filtering' do
 
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 35')
+      expect(page).to have_content('1-20 / 35')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('2012-07-29')
+      expect(page).to have_content('2012-07-29')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -534,7 +534,7 @@ shared_examples 'Due Date datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 35')
+      expect(page).to have_content('1-20 / 35')
     end
 
     within 'ul.pagination' do
@@ -543,7 +543,7 @@ shared_examples 'Due Date datepicker filtering' do
     sleep 1
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('2012-07-02')
+      expect(page).to have_content('2012-07-02')
     end
 
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 6, 28)
@@ -554,7 +554,7 @@ shared_examples 'Due Date datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-1 / 1')
+      expect(page).to have_content('1-1 / 1')
     end
 
     find(:css, '#grid_f_due_date_fr_date_view').click
@@ -564,7 +564,7 @@ shared_examples 'Due Date datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-10 / 10')
+      expect(page).to have_content('1-10 / 10')
     end
 
     find(:css, '#grid_f_due_date_to_date_view').click
@@ -574,7 +574,7 @@ shared_examples 'Due Date datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -589,11 +589,11 @@ shared_examples 'Added datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 29')
+      expect(page).to have_content('1-20 / 29')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('2011-09-13 22:11:12')
+      expect(page).to have_content('2011-09-13 22:11:12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -602,7 +602,7 @@ shared_examples 'Added datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 29')
+      expect(page).to have_content('1-20 / 29')
     end
 
     within 'ul.pagination' do
@@ -611,7 +611,7 @@ shared_examples 'Added datepicker filtering' do
     sleep 2
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('2011-09-22 22:11:12')
+      expect(page).to have_content('2011-09-22 22:11:12')
       # page.should have_content('2011-08-14 22:11:12')
     end
 
@@ -619,7 +619,7 @@ shared_examples 'Added datepicker filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -642,11 +642,11 @@ shared_examples 'Due Date standard filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-16 / 16')
+      expect(page).to have_content('1-16 / 16')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('13 Aug 22:11')
+      expect(page).to have_content('13 Aug 22:11')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -654,12 +654,12 @@ shared_examples 'Due Date standard filtering' do
     end
 
     within '.pagination_status' do
-      page.should have_content('1-16 / 16')
+      expect(page).to have_content('1-16 / 16')
     end
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -682,11 +682,11 @@ shared_examples 'Created At standard filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-14 / 14')
+      expect(page).to have_content('1-14 / 14')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('2011-11-26 22:11:12')
+      expect(page).to have_content('2011-11-26 22:11:12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -695,14 +695,14 @@ shared_examples 'Created At standard filtering' do
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-14 / 14')
+      expect(page).to have_content('1-14 / 14')
     end
 
     find(:css, '#grid_reset_grid_icon').click
     sleep 1
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -714,43 +714,43 @@ shared_examples 'Description filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-12 / 12')
+      expect(page).to have_content('1-12 / 12')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('Velit atque sapiente aspernatur sint fuga.')
+      expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
     end
 
-    page.should have_content('Vero sit voluptate sed tempora et provident sequi nihil.')
+    expect(page).to have_content('Vero sit voluptate sed tempora et provident sequi nihil.')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Description'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-12 / 12')
+      expect(page).to have_content('1-12 / 12')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('Ad sunt vel maxime labore temporibus incidunt quidem.')
+      expect(page).to have_content('Ad sunt vel maxime labore temporibus incidunt quidem.')
     end
 
-    page.should have_content('Adipisci voluptate sed esse velit.')
+    expect(page).to have_content('Adipisci voluptate sed esse velit.')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-12 / 12')
+      expect(page).to have_content('1-12 / 12')
     end
 
-    page.should have_content('Adipisci voluptate sed esse velit.')
-    page.should have_content('Ad sunt vel maxime labore temporibus incidunt quidem.')
+    expect(page).to have_content('Adipisci voluptate sed esse velit.')
+    expect(page).to have_content('Ad sunt vel maxime labore temporibus incidunt quidem.')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -762,11 +762,11 @@ shared_examples 'ID filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-1 / 1')
+      expect(page).to have_content('1-1 / 1')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('550')
+      expect(page).to have_content('550')
     end
   end
 end
@@ -778,15 +778,15 @@ shared_examples 'ID filtering, range' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-7 / 7')
+      expect(page).to have_content('1-7 / 7')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('550')
+      expect(page).to have_content('550')
     end
 
     551.upto(556) do |i|
-      page.should have_content(i)
+      expect(page).to have_content(i)
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -794,15 +794,15 @@ shared_examples 'ID filtering, range' do
     end
 
     within '.pagination_status' do
-      page.should have_content('1-7 / 7')
+      expect(page).to have_content('1-7 / 7')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted.active-filter' do
-      page.should have_content('550')
+      expect(page).to have_content('550')
     end
 
     551.upto(556) do |i|
-      page.should have_content(i)
+      expect(page).to have_content(i)
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -810,11 +810,11 @@ shared_examples 'ID filtering, range' do
     end
 
     within '.pagination_status' do
-      page.should have_content('1-7 / 7')
+      expect(page).to have_content('1-7 / 7')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('556')
+      expect(page).to have_content('556')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -822,16 +822,16 @@ shared_examples 'ID filtering, range' do
     end
 
     within '.pagination_status' do
-      page.should have_content('1-7 / 7')
+      expect(page).to have_content('1-7 / 7')
     end
 
     550.upto(556) do |i|
-      page.should have_content(i)
+      expect(page).to have_content(i)
     end
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -844,41 +844,41 @@ shared_examples 'ID two limits filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('507')
+      expect(page).to have_content('507')
     end
 
-    page.should have_content('508')
-    page.should have_content('509')
+    expect(page).to have_content('508')
+    expect(page).to have_content('509')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted.active-filter' do
-      page.should have_content('507')
+      expect(page).to have_content('507')
     end
 
-    page.should have_content('508')
-    page.should have_content('509')
+    expect(page).to have_content('508')
+    expect(page).to have_content('509')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('509')
+      expect(page).to have_content('509')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -886,16 +886,16 @@ shared_examples 'ID two limits filtering' do
     end
 
     within '.pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
-    page.should have_content('507')
-    page.should have_content('508')
-    page.should have_content('509')
+    expect(page).to have_content('507')
+    expect(page).to have_content('508')
+    expect(page).to have_content('509')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -909,26 +909,26 @@ shared_examples 'Description and Title filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-11 / 11')
+      expect(page).to have_content('1-11 / 11')
     end
 
-    page.should have_content('Inventore iure eos labore ipsum.')
-    page.should have_content('Velit atque sapiente aspernatur sint fuga.')
+    expect(page).to have_content('Inventore iure eos labore ipsum.')
+    expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Description'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-11 / 11')
+      expect(page).to have_content('1-11 / 11')
     end
 
-    page.should have_content('Inventore iure eos labore ipsum.')
-    page.should have_content('Velit atque sapiente aspernatur sint fuga.')
+    expect(page).to have_content('Inventore iure eos labore ipsum.')
+    expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -939,22 +939,22 @@ shared_examples 'Archived filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     within first(:css, 'td.active-filter') do
-      page.should have_content('Yes')
+      expect(page).to have_content('Yes')
     end
 
     select 'no', from: 'grid_f_archived'
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 46')
+      expect(page).to have_content('1-20 / 46')
     end
 
     within first(:css, 'td.active-filter') do
-      page.should have_content('No')
+      expect(page).to have_content('No')
     end
 
     within 'ul.pagination' do
@@ -962,16 +962,16 @@ shared_examples 'Archived filtering' do
     end
 
     within '.pagination_status' do
-      page.should have_content('21-40 / 46')
+      expect(page).to have_content('21-40 / 46')
     end
 
     within(first(:css, 'td.active-filter')) do
-      page.should have_content('No')
+      expect(page).to have_content('No')
     end
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end
@@ -983,43 +983,43 @@ shared_examples 'Title filtering' do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('sed impedit iste')
+      expect(page).to have_content('sed impedit iste')
     end
 
-    page.should have_content('corporis expedita vel')
+    expect(page).to have_content('corporis expedita vel')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Title'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('corporis expedita vel')
+      expect(page).to have_content('corporis expedita vel')
     end
 
-    page.should have_content('sed impedit iste')
+    expect(page).to have_content('sed impedit iste')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
-    page.should have_content('corporis expedita vel')
-    page.should have_content('sed impedit iste')
+    expect(page).to have_content('corporis expedita vel')
+    expect(page).to have_content('sed impedit iste')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end

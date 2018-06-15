@@ -8,7 +8,7 @@ describe 'basisc5 WiceGrid',  js: true do
 
   it 'should ordered by Title' do
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
   end
 
@@ -16,7 +16,7 @@ describe 'basisc5 WiceGrid',  js: true do
     click_on 'show all'
 
     within 'div.wice-grid-container table.wice-grid tbody' do
-      page.should have_no_content('Yes')
+      expect(page).to have_no_content('Yes')
     end
   end
 end

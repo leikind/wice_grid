@@ -1,6 +1,6 @@
 require 'rails_helper'
 
 describe Priority do
-  it { should have_many(:tasks)}
+  it { is_expected.to have_many(:tasks)}
 
 end

@@ -1,5 +1,5 @@
 require 'rails_helper'
 
 describe Version do
-  it { should belong_to(:project)}
+  it { is_expected.to belong_to(:project)}
 end

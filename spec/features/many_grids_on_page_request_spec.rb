@@ -12,7 +12,7 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     end
 
     within 'div#g1.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('ab')
+      expect(page).to have_content('ab')
     end
 
     within 'div#g2.wice-grid-container table.wice-grid thead' do
@@ -20,19 +20,19 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     end
 
     within 'div#g1.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Title')
+      expect(page).to have_content('Title')
     end
 
     within 'div#g2.wice-grid-container table.wice-grid thead th.sorted a.asc' do
-      page.should have_content('Description')
+      expect(page).to have_content('Description')
     end
 
     within 'div#g1.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('ab')
+      expect(page).to have_content('ab')
     end
 
     within 'div#g2.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
+      expect(page).to have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
     end
   end
 
@@ -41,13 +41,13 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
       click_link '2'
     end
 
-    page.should have_selector('#g1 ul.pagination li.active', text: '2')
+    expect(page).to have_selector('#g1 ul.pagination li.active', text: '2')
 
     within '#g2 ul.pagination' do
       click_link '3'
     end
 
-    page.should have_selector('#g2 ul.pagination li.active', text: '3')
+    expect(page).to have_selector('#g2 ul.pagination li.active', text: '3')
   end
 
   it 'should show all records independantly for the two grids' do
@@ -56,15 +56,15 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     end
 
     within 'div#g1.wice-grid-container table.wice-grid' do
-      page.should have_selector('a.wg-back-to-pagination-link')
+      expect(page).to have_selector('a.wg-back-to-pagination-link')
     end
 
     within '#g1 .pagination_status' do
-      page.should have_content('1-50 / 50')
+      expect(page).to have_content('1-50 / 50')
     end
 
     within '#g2 .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 
@@ -74,11 +74,11 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     find(:css, '#g1_submit_grid_icon').click
 
     within '#g1 .pagination_status' do
-      page.should have_content('1-12 / 12')
+      expect(page).to have_content('1-12 / 12')
     end
 
     within 'div#g1.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('Velit atque sapiente aspernatur sint fuga.')
+      expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
     end
 
     fill_in('g2_f_description', with: 'voluptas')
@@ -86,19 +86,19 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     find(:css, '#g2_submit_grid_icon').click
 
     within '#g2 .pagination_status' do
-      page.should have_content('1-1 / 1')
+      expect(page).to have_content('1-1 / 1')
     end
 
     within 'div#g2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
+      expect(page).to have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
     end
 
     within '#g1 .pagination_status' do
-      page.should have_content('1-12 / 12')
+      expect(page).to have_content('1-12 / 12')
     end
 
     within 'div#g1.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('Velit atque sapiente aspernatur sint fuga.')
+      expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
     end
   end
 end

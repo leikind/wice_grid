@@ -42,7 +42,7 @@ describe 'dates WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     fill_in('grid_f_title', with: 'at')
@@ -50,7 +50,7 @@ describe 'dates WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-1 / 1')
+      expect(page).to have_content('1-1 / 1')
     end
   end
 end
