@@ -8,19 +8,19 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
 
   it 'should reload the page' do
     within '.pagination_status' do
-      page.should have_content('1-20 / 46')
+      expect(page).to have_content('1-20 / 46')
     end
 
     select 'View archived tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     select 'View active tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 46')
+      expect(page).to have_content('1-20 / 46')
     end
   end
 
@@ -31,19 +31,19 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
     find(:css, '#g_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
     select 'View archived tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('0')
+      expect(page).to have_content('0')
     end
 
     select 'View active tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
   end
 
@@ -53,19 +53,19 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
     find(:css, '#g_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     select 'View archived tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('0')
+      expect(page).to have_content('0')
     end
 
     select 'View active tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
   end
 
@@ -76,19 +76,19 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
     find(:css, '#g_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 44')
+      expect(page).to have_content('1-20 / 44')
     end
 
     select 'View archived tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     select 'View active tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-20 / 44')
+      expect(page).to have_content('1-20 / 44')
     end
   end
 
@@ -99,19 +99,19 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
     find(:css, '#g_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     select 'View archived tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('0')
+      expect(page).to have_content('0')
     end
 
     select 'View active tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
   end
 
@@ -123,19 +123,19 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
     find(:css, '#g_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-15 / 15')
+      expect(page).to have_content('1-15 / 15')
     end
 
     select 'View archived tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('0')
+      expect(page).to have_content('0')
     end
 
     select 'View active tasks', from: 'archived'
 
     within '.pagination_status' do
-      page.should have_content('1-15 / 15')
+      expect(page).to have_content('1-15 / 15')
     end
   end
 end

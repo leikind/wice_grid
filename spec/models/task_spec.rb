@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe Task do
-  it { should belong_to(:created_by)}
-  it { should belong_to(:project)}
-  it { should belong_to(:priority)}
-  it { should belong_to(:status)}
-  it { should belong_to(:relevant_version)}
-  it { should belong_to(:expected_version)}
+  it { is_expected.to belong_to(:created_by)}
+  it { is_expected.to belong_to(:project)}
+  it { is_expected.to belong_to(:priority)}
+  it { is_expected.to belong_to(:status)}
+  it { is_expected.to belong_to(:relevant_version)}
+  it { is_expected.to belong_to(:expected_version)}
 
-  it { should have_and_belong_to_many(:assigned_users)}
+  it { is_expected.to have_and_belong_to_many(:assigned_users)}
 end

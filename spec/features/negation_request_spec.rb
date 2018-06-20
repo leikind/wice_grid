@@ -12,12 +12,12 @@ describe 'negation WiceGrid', type: :request, js: true do
 
     find(:css, '#grid_submit_grid_icon').click
 
-    page.should have_content('sed impedit iste')
+    expect(page).to have_content('sed impedit iste')
 
     find(:css, '#grid_f_title_n').click
 
     find(:css, '#grid_submit_grid_icon').click
 
-    page.should have_no_content('sed impedit iste')
+    expect(page).to have_no_content('sed impedit iste')
   end
 end

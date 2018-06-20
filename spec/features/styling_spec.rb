@@ -7,9 +7,9 @@ describe "styling WiceGrid", :type => :request, :js => true do
   end
 
   it "should have custom css classes" do
-    page.should have_selector('.wice-grid-container table.wice-grid.my-grid')
+    expect(page).to have_selector('.wice-grid-container table.wice-grid.my-grid')
 
-    page.should have_selector('.wice-grid-container thead tr.wice-grid-title-row.my-header')
+    expect(page).to have_selector('.wice-grid-container thead tr.wice-grid-title-row.my-header')
   end
 
 end

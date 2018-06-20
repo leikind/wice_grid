@@ -9,19 +9,19 @@ describe 'localization WiceGrid', type: :request, js: true do
   it 'should switch to different languages' do
     click_on('en')
     sleep 1
-    page.should have_content('show all')
+    expect(page).to have_content('show all')
 
     click_on('nl')
     sleep 1
-    page.should have_content('Alle rijen tonen')
+    expect(page).to have_content('Alle rijen tonen')
 
     click_on('fr')
     sleep 1
-    page.should have_content('Voir tous')
+    expect(page).to have_content('Voir tous')
 
     click_on('is')
     sleep 1
-    page.should have_content('Sýna all')
+    expect(page).to have_content('Sýna all')
 
     click_on('en')
   end

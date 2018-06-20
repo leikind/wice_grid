@@ -12,7 +12,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     select 'no', from: 'grid2_f_archived'
@@ -20,11 +20,11 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     # stays the same
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-4 / 4')
+      expect(page).to have_content('1-4 / 4')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 46')
+      expect(page).to have_content('1-20 / 46')
     end
 
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 11, 1)
@@ -32,7 +32,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
     set_datepicker(self, 'grid2_f_due_date_fr_date_placeholder', 2013, 0, 1)
@@ -41,31 +41,31 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     # stays the same
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-3 / 3')
+      expect(page).to have_content('1-3 / 3')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-15 / 15')
+      expect(page).to have_content('1-15 / 15')
     end
 
     find(:css, '.external-buttons-grid1 .wg-external-reset-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-15 / 15')
+      expect(page).to have_content('1-15 / 15')
     end
 
     find(:css, '.external-buttons-grid2 .wg-external-reset-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     fill_in('grid_f_title', with: 'ed')
@@ -73,15 +73,15 @@ describe 'buttons WiceGrid', type: :request, js: true do
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('sed impedit iste')
+      expect(page).to have_content('sed impedit iste')
     end
 
     fill_in('grid2_f_title', with: 'qui')
@@ -89,19 +89,19 @@ describe 'buttons WiceGrid', type: :request, js: true do
     find(:css, '.external-buttons-grid2 .wg-external-submit-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-5 / 5')
+      expect(page).to have_content('1-5 / 5')
     end
 
     within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('sed impedit iste')
+      expect(page).to have_content('sed impedit iste')
     end
 
     within 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('sequi')
+      expect(page).to have_content('sequi')
     end
 
     fill_in('grid2_f_description', with: 'in')
@@ -109,19 +109,19 @@ describe 'buttons WiceGrid', type: :request, js: true do
     find(:css, '.external-buttons-grid2 .wg-external-submit-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
 
     within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      page.should have_content('sed impedit iste')
+      expect(page).to have_content('sed impedit iste')
     end
 
     within first(:css, 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter') do
-      page.should have_content('sequi')
+      expect(page).to have_content('sequi')
     end
   end
 end

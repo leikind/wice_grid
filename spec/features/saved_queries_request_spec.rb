@@ -18,11 +18,11 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
   it 'should filter by Added' do
     check_saved_query = lambda do
       within '.pagination_status' do
-        page.should have_content('1-20 / 29')
+        expect(page).to have_content('1-20 / 29')
       end
 
       within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-        page.should have_content('2011-08-13 22:11:12')
+        expect(page).to have_content('2011-08-13 22:11:12')
       end
     end
 
@@ -48,36 +48,36 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
     sleep 1
 
-    page.should have_content('Query saved.')
-    page.should have_content('test query 1')
+    expect(page).to have_content('Query saved.')
+    expect(page).to have_content('test query 1')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
-    page.should have_content('test query 1')
+    expect(page).to have_content('test query 1')
 
     find(:css, '.wice-grid-query-load-link[title="Load query test query 1"]').click
 
     check_saved_query.call
 
     within '.wice-grid-container' do
-      page.should have_content('test query 1')
+      expect(page).to have_content('test query 1')
     end
 
     delete_all_saved_queries self
-    page.should have_content('Saved query deleted.')
+    expect(page).to have_content('Saved query deleted.')
   end
 
   it 'should filter by Archived and Project Name' do
     check_saved_query = lambda do
       within '.pagination_status' do
-        page.should have_content('1-2 / 2')
+        expect(page).to have_content('1-2 / 2')
       end
 
       within first(:css, 'td.active-filter') do
-        page.should have_content('Ultimate Website')
+        expect(page).to have_content('Ultimate Website')
       end
     end
 
@@ -95,25 +95,25 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
     sleep 1
 
-    page.should have_content('Query saved.')
-    page.should have_content('test query 2')
+    expect(page).to have_content('Query saved.')
+    expect(page).to have_content('test query 2')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
-    page.should have_content('test query 2')
+    expect(page).to have_content('test query 2')
 
     find(:css, '.wice-grid-query-load-link[title="Load query test query 2"]').click
 
     check_saved_query.call
 
     within '.wice-grid-container' do
-      page.should have_content('test query 2')
+      expect(page).to have_content('test query 2')
     end
 
     delete_all_saved_queries self
-    page.should have_content('Saved query deleted.')
+    expect(page).to have_content('Saved query deleted.')
   end
 end

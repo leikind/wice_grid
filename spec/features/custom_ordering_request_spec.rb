@@ -8,7 +8,7 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
 
   it 'should be sorted by the length of the word' do
     within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('New')
+      expect(page).to have_content('New')
     end
 
     within 'div#grid.wice-grid-container table.wice-grid thead' do
@@ -16,13 +16,13 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
     end
 
     within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Duplicate')
+      expect(page).to have_content('Duplicate')
     end
   end
 
   it 'should be sorted by the position of the status' do
     within 'div#g2.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('New')
+      expect(page).to have_content('New')
     end
 
     within 'div#g2.wice-grid-container table.wice-grid thead' do
@@ -30,7 +30,7 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
     end
 
     within 'div#g2.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      page.should have_content('Verified')
+      expect(page).to have_content('Verified')
     end
   end
 end

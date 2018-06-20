@@ -79,11 +79,11 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2013, 0, 1)
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 35')
+      expect(page).to have_content('1-20 / 35')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     set_datepicker(self, 'grid2_f_due_date_fr_date_placeholder', 2012, 0, 1)
@@ -95,30 +95,30 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     sleep 1
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 35')
+      expect(page).to have_content('1-20 / 35')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 35')
+      expect(page).to have_content('1-20 / 35')
     end
 
     find(:css, '.grid1 .wg-external-reset-button').click
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 35')
+      expect(page).to have_content('1-20 / 35')
     end
 
     find(:css, '.grid2 .wg-external-reset-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
 
     within 'div#grid2.wice-grid-container .pagination_status' do
-      page.should have_content('1-20 / 50')
+      expect(page).to have_content('1-20 / 50')
     end
   end
 end

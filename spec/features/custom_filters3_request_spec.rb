@@ -8,22 +8,22 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
 
   it 'should have all options' do
     within '#grid_f_expected_version_id' do
-      page.should have_content('1.0')
-      page.should have_content('2.0')
-      page.should have_content('1.2')
+      expect(page).to have_content('1.0')
+      expect(page).to have_content('2.0')
+      expect(page).to have_content('1.2')
     end
 
     within '#grid_f_versions_name' do
-      page.should have_content('1.0')
-      page.should have_content('1.1')
-      page.should have_content('1.2')
-      page.should have_content('2.0')
-      page.should have_content('3.0')
-      page.should have_content('6.0')
-      page.should have_content('7.1')
-      page.should have_content('8.0')
-      page.should have_content('88.1')
-      page.should have_content('99.0')
+      expect(page).to have_content('1.0')
+      expect(page).to have_content('1.1')
+      expect(page).to have_content('1.2')
+      expect(page).to have_content('2.0')
+      expect(page).to have_content('3.0')
+      expect(page).to have_content('6.0')
+      expect(page).to have_content('7.1')
+      expect(page).to have_content('8.0')
+      expect(page).to have_content('88.1')
+      expect(page).to have_content('99.0')
     end
   end
 
@@ -36,7 +36,7 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-5 / 5')
+      expect(page).to have_content('1-5 / 5')
     end
 
     select '1.0', from: 'grid_f_expected_version_id'
@@ -44,7 +44,7 @@ describe 'custom_ordering WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     within '.pagination_status' do
-      page.should have_content('1-2 / 2')
+      expect(page).to have_content('1-2 / 2')
     end
   end
 end
