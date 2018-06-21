@@ -7,12 +7,8 @@ describe 'CSV export WiceGrid', type: :request, js: true do
   end
 
   it 'should export csv' do
-    # no idea how to test these
-
-    # find(:css, 'button.wg-external-csv-export-button').click
-
-    select 'Urgent', from: 'g1_f_priority_id'
-
-    # find(:css, 'button.div.clickable.export-to-csv-button').click
+    find(:css, 'button.wg-external-csv-export-button').click
+    sleep 1
+    expect(page.body).to include('ID;Title;Priority;Status;Project Name;')
   end
 end
