@@ -5,7 +5,6 @@ require 'capybara/rspec'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../support/test_app/config/environment', __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'faker'
 
 if ENV['BROWSER']

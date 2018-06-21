@@ -23,12 +23,12 @@ describe Wice::GridOutputBuffer do
     buffer.add_filter('key', FILTER_COMMON_CODE)
 
     expect(buffer.filter_for('key')).to eq(FILTER_COMMON_CODE)
-    expect { buffer.filter_for('key') }.to raise_error
+    expect { buffer.filter_for('key') }.to raise_error(Wice::WiceGridException)
   end
 
   it 'should filter_for without filters' do
 
-    expect { buffer.filter_for('key') }.to raise_error
+    expect { buffer.filter_for('key') }.to raise_error(Wice::WiceGridException)
   end
 
   it 'should filter_for return empty string' do

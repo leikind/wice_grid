@@ -28,7 +28,7 @@ Examples::TestApp.configure do
   # Expands the lines which load the assets
   config.assets.debug = true
 
-  config.serve_static_files = false
+  config.public_file_server.enabled = false
 
   config.eager_load = false
 end

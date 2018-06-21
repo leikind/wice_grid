@@ -22,10 +22,10 @@ require 'coveralls'
 require 'simplecov'
 require 'byebug'
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
     Coveralls::SimpleCov::Formatter,
     SimpleCov::Formatter::HTMLFormatter
-]
+])
 SimpleCov.start
 
 begin
@@ -41,7 +41,6 @@ end
 
 $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../lib'))
 require 'wice_grid'
-require 'support/wice_grid_test_config'
 
 ActiveRecord::ConnectionAdapters::Column.send(:include, ::Wice::WiceGridExtentionToActiveRecordColumn)
 
