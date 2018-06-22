@@ -113,7 +113,7 @@ module ActionView #:nodoc:
   module Helpers #:nodoc:
     module TagHelper #:nodoc:
       def public_tag_options(options, escape = true) #:nodoc:
-        if respond_to?(:tag_options)
+        if respond_to?(:tag_options, true)
           tag_options(options, escape)
         else
           tag_builder.tag_options(options, escape)

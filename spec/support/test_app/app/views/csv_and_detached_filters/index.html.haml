@@ -1,0 +1,58 @@
+.well
+  %h2= current_page_title
+  %p
+    CSV export works with
+    %code define_grid
+    and external filters, too.
+
+= show_code
+
+= render   'grid'
+
+
+.row
+  .col-md-2
+    ID:
+  .col-md-10
+    = grid_filter @tasks_grid, :id_filter
+
+.row
+  .col-md-2
+    Title:
+  .col-md-10
+    = grid_filter @tasks_grid, :title_filter
+
+.row
+  .col-md-2
+    Description:
+  .col-md-10
+    = grid_filter @tasks_grid, :description_filter
+
+.row
+  .col-md-2
+    Archived:
+  .col-md-10
+    = grid_filter @tasks_grid, :archived_filter
+
+
+.row
+  .col-md-2
+    Due date:
+  .col-md-10
+    = grid_filter @tasks_grid, :due_date
+
+
+.row
+  .col-md-12
+    %button.btn.btn-primary.wg-external-submit-button{'data-grid-name' => 'grid'} Submit
+    %button.btn.btn-default.wg-external-reset-button{'data-grid-name' => 'grid'} Reset
+    %button.btn.btn-primary.wg-external-csv-export-button{'data-grid-name' => 'grid'} Export To CSV
+
+%p
+
+.row
+  .col-md-12
+
+
+
+    = render_grid(@tasks_grid)

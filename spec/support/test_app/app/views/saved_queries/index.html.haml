@@ -1,0 +1,15 @@
+.well
+  %h2= current_page_title
+  %p
+    Read
+    %code SAVED_QUERIES_HOWTO.rdoc
+    for details.
+
+= show_code
+
+.row-fluid
+  .col-md-6
+
+    = saved_queries_panel(@tasks_grid, confirm:  false)
+
+= render   'grid'

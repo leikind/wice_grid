@@ -1,6 +1,0 @@
-1. +will_paginate+ is replaced by +kaminari+.
-2. The detached filter API has changed. No more magical invocation of the +grid+ helper two times.
-   First, +define_grid+ is used in the same way as +grid+, then +grid_filter+,
-   and then <tt>render_grid(@grid)</tt> to actually output the grid table .
-3. No more polluting core Ruby classes like Hash and Array with methods. All such methods
-   are now private to the plugin.

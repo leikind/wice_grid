@@ -11,9 +11,10 @@ module Wice
       end
 
       def do_render(params) #:nodoc:
+        datetime_options = filter_control_options ? filter_control_options.slice(:start_year, :end_year, :max_year_allowed) : {}
         '<div class="date-filter">' +
-          select_datetime(params[:fr], include_blank: true, prefix: @name1) + '<br/>' +
-          select_datetime(params[:to], include_blank: true, prefix: @name2) +
+          select_datetime(params[:fr], datetime_options.merge(include_blank: true, prefix: @name1)) + '<br/>' +
+          select_datetime(params[:to], datetime_options.merge(include_blank: true, prefix: @name2)) +
           '</div>'
       end
 

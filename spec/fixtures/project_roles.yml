@@ -1,0 +1,25 @@
+---
+project_role_00005:
+  id: 5
+  name: Manager
+  can_close_tasks: true
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+project_role_00006:
+  id: 6
+  name: Customer
+  can_close_tasks: true
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+project_role_00007:
+  id: 7
+  name: Developer
+  can_close_tasks: false
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z
+project_role_00008:
+  id: 8
+  name: QualityAssurance
+  can_close_tasks: false
+  created_at: 2012-02-26 22:11:12.000000000 Z
+  updated_at: 2012-02-26 22:11:12.000000000 Z

@@ -1,0 +1,35 @@
+<%= grid(@tasks_grid) do |g|
+
+  g.action_column html_check_box: false
+  # The default param_name is 'selected', the complete HTTP parameter will be "#{grid_name}[#{param_name}][]"
+
+  # Or:
+  # g.action_column param_name: :foo, html: {class: 'my_class'},
+  #                 select_all_buttons: false, object_property: :id
+
+
+  g.column name:  'ID', attribute: 'id', filter_type: :range
+
+  g.column name:  'Title', attribute: 'title', negation: true
+
+  g.column name:  'Archived', attribute: 'archived' do |rec|
+    rec.archived? ? 'Yes' : 'No'
+  end
+
+
+  g.column name:  'Status', attribute: 'status_id', custom_filter: Status.to_dropdown  do |task|
+    task.status.name if task.status
+  end
+
+  g.column name:  'Project Name', attribute: 'project_id', custom_filter: Project.to_dropdown do |task|
+    task.project.name if task.project
+  end
+
+  g.column name:  'Due Date', attribute: 'due_date'
+
+
+  g.column name:  'Added', attribute: 'created_at' do |task|
+    task.created_at.to_s(:db)
+  end
+
+end -%>

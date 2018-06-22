@@ -215,6 +215,9 @@ module Wice
     # * <tt>:filter_type</tt> - Using a column filter different from the default filter chosen automatically based on the
     #   data type or the <tt>:custom_filter</tt> argument. See <tt>lib/columns/column_processor_index.rb</tt> for the
     #   list of available filters.
+    # * <tt>:filter_control_options</tt> - Additional options to pass to the filter class to change the filter control
+    #   behaviour. Supported options are dependent on the filter used.
+    #   This is needed if sorting is required while  filters are not.
     # * <tt>:ordering</tt> - Enable/disable ordering links in the column titles. The default is +true+
     #   (i.e. if <tt>:attribute</tt> is defined, ordering is enabled)
     # * <tt>:assoc</tt> - Name of the model association. <tt>:attribute</tt> belongs to the table joined via this association.
@@ -305,6 +308,7 @@ module Wice
         detach_with_id:              nil,
         filter:                      true,
         filter_all_label:            ConfigurationProvider.value_for(:CUSTOM_FILTER_ALL_LABEL),
+        filter_control_options:      {},
         filter_type:                 nil,
         html:                        {},
         in_csv:                      true,

@@ -1,0 +1,20 @@
+.well
+  %h2= current_page_title
+  %p
+    WiceGrid integrated well with I18n.
+    Edit file
+    %code wice_grid.yml
+    to add or change languages.
+
+= show_code
+
+%ul.nav.nav-pills
+  - current = session[:lang].to_s
+  - ['en', 'nl', 'fr', 'is'].each do |lang|
+    - klass = current == lang ? 'active' : nil
+    %li{class: klass}
+      %a{href:url_for(lang: lang)}= lang
+
+= render   'grid'
+
+

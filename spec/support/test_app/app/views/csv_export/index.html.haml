@@ -1,0 +1,90 @@
+.well
+  %h2= current_page_title
+  %p
+    A grid can export itself in the form of a CSV file. The contents of the file corresponds to the selected subset of all records,
+    that is, the CSV export follows the state of filters and sorting.
+  %p
+    To enable CSV export for a grid please do the following:
+    %ol
+      %li Make sure that the grid helper is in its own partial and there are no other elements in that partial including whitespaces
+      %li
+        Enable CSV export by adding
+        %code enable_export_to_csv:  true
+        to
+        %code initialize_grid
+      %li
+        Set the name of the exported file using option
+        %code :csv_file_name
+        in
+        %code initialize_grid
+      %li
+        Change the CSV field separator by adding
+        %code csv_field_separator:  'your-separator'
+        to
+        %code initialize_grid
+        \.
+        The default field separator is the comma, and you can change the default by editing the value of
+        %code Wice::Defaults::CSV_FIELD_SEPARATOR
+        in the config file
+
+      %li
+        The action code should be finished by a call to
+        %code export_grid_if_requested
+        \:
+        :plain
+          <pre>
+          export_grid_if_requested('g1' => 'tasks_grid', 'g2' => 'projects_grid') do
+            # usual render or redirect code executed if the request is not a CSV export request
+          end
+          </pre>
+        The block is executed if the call is not a request for a CSV file, so place your usual
+        %code redirect_to
+        ,
+        %code render
+        inside the block, or just skip it if your action does not have an explicit render:
+        :plain
+          <pre>
+          export_grid_if_requested('g1' => 'tasks_grid', 'g2' => 'projects_grid')
+          </pre>
+
+        The keys of the hash submitted as an argument to
+        %code  export_grid_if_requested
+        are names of grids, and the values are names of partials where the grids are defined.
+
+      %li
+        If a column definition contains markup, first disable its export to CSV adding
+        %code in_csv: false
+        to the column definition, and then duplicate the column definition without the markup in the block while adding
+        %code in_html: false
+        to the column definition. Any filter related parameters like
+        %code :attribute
+        ,
+        %code :assoc
+        , or
+        %code :custom_filter
+        can be skipped in a CSV-only column.
+      %li
+        If you need an external CSV export button , add  class
+        %code wg-external-csv-export-button
+        to any clickable element on page
+        and set its attribute
+        %code data-grid-name
+        to the name of the grid. If you need to disable the default export icon in the grid, add
+        %code hide_csv_button: true
+        to the
+        %code grid
+        helper.
+
+= show_code
+
+%p
+  %button.btn.btn-primary.wg-external-csv-export-button{'data-grid-name' => 'g1'} Export To CSV
+
+
+.row-fluid
+  .col-md-12
+    =render  'projects_grid'
+
+.row-fluid
+  .col-md-12
+    =render  'tasks_grid'

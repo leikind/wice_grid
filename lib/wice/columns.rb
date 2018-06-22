@@ -99,7 +99,8 @@ module Wice #:nodoc:
 
       # fields defined from the options parameter
       FIELDS = [:attribute, :name, :html, :filter, :model, :allow_multiple_selection,
-                :in_html, :in_csv, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload, :custom_sort]
+                :in_html, :in_csv, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload,
+                :filter_control_options, :custom_sort]
 
       attr_accessor(*FIELDS)
 
@@ -123,6 +124,9 @@ module Wice #:nodoc:
 
       # A boolean flag: whether a column has a text input or not
       attr_reader :contains_a_text_input
+
+      # options for rendering filter controls. Supported options are specific to the type.
+      attr_accessor :filter_control_options
 
       def initialize(block, options, grid_obj, tname, mtable, cfilter, view)  #:nodoc:
         self.cell_rendering_block = block

@@ -1,0 +1,13 @@
+.well
+  %h2= current_page_title
+  %p
+    When two associations referring to the same model are joined, ActiveRecord
+    uses a table alias for one of these joins. To make it work with WiceGrid, find
+    the alias in the logs and specify it in a column definition with the help of
+
+    %code :table_alias
+    \.
+
+= show_code
+
+= render   'grid'

@@ -1,0 +1,12 @@
+<%= grid(@tasks_grid2) do |g|
+
+  g.column name:  'Title', attribute: 'title'
+
+  g.column  name:  'Description', attribute: 'description'
+
+  g.column  name:  'Archived', attribute: 'archived' do |task|
+    task.archived? ? 'Yes' : 'No'
+  end
+
+
+end -%>

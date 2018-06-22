@@ -1,0 +1,30 @@
+.well
+  %h2= current_page_title
+  %p
+    Just like
+    %code options_for_select
+    ,
+    %code :custom_filter
+    can take arguments in the form of a hash, an array of two element arrays, or just an array.
+  %p
+    %code custom_filter: :auto
+    will instruct WiceGrid to figure out the list of possible values by running a
+    %code SELECT DISTINCT `column` FROM `table`
+    query on the table.
+
+= show_code
+
+.row-fluid
+  .col-md-6
+    = render   'g1'
+
+  .col-md-6
+    = render   'g2'
+
+
+.row-fluid
+  .col-md-6
+    = render   'g3'
+
+  .col-md-6
+    = render   'g4'

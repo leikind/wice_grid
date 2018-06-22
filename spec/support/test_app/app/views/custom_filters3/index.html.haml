@@ -1,0 +1,16 @@
+.well
+  %h2= current_page_title
+  %p
+    An array of symbols submitted to
+    %code :custom_filter
+    has a special meaning. The first symbol is sent as a method name to EVERY ActiveRecord object.
+    If an object responds to this method, the second method name is sent to the returned value unless it is nil, and so on.
+    The dropdown is populated by the list unique values.
+    The conditions set up by the user are ignored, that is, the records used are all those found on all pages without any active filters.
+    Naturally this can be extremely inneffective and should be used with caution.
+
+= show_code
+
+.row-fluid
+  .col-md-12
+    = render   'grid'

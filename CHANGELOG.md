@@ -1,4 +1,17 @@
-## 4.0.0 (18, Jan, 2018)
+## Unreleased
+
+* Add option `filter_control_options` to columns. Initial use is to pass in the options `start_year`, `end_year`, and `max_year_allowed` when using `rails_datetime_helper` - [#12](https://github.com/patricklindsay/wice_grid/pull/18)
+* Fix deprecation (in Rails 5.0.x) and incorrect behaviour (in Rails 5.1.x) of CSV exports
+
+## 4.0.1 (31 May, 2018)
+
+* Fixed tagbuilder issue with Rails 5.0.x - [#1](https://github.com/patricklindsay/wice_grid/pull/1)
+* Moved testbed into repo - [#12](https://github.com/patricklindsay/wice_grid/pull/12)
+* Remove old release notes and empty /test directory
+* Removed `Gemfile.lock` from `.gitignore`
+* Removed `codeclimate-test-reporter` dev dependancy
+
+## 4.0.0 (18 Jan, 2018)
 
 ### Rails 5.0 & 5.1 Support
 Added support for Rails 5.0 & 5.1. Anything below Rails 5 is no longer supported.

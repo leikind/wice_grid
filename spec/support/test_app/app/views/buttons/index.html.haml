@@ -1,0 +1,30 @@
+.well
+  %h2= current_page_title
+  %p
+
+    To replace the default Submit and Reset icons of the grid, add class
+    %code wg-external-submit-button
+    to any clickable element on page and set its attribute
+    %code data-grid-name
+    to the name of the grid.
+    Do the same for the Reset button with class
+    %code wg-external-reset-button.
+
+  %p
+    %code grid
+    helper parameters
+    %code hide_submit_button: true
+    and
+    %code hide_reset_button: true
+    hide the default icons.
+
+= show_code
+
+.row-fluid
+  .col-md-12
+    .external-buttons
+      %button.btn.btn-primary.wg-external-submit-button{'data-grid-name' => 'grid'} Submit
+      %button.btn.btn-default.wg-external-reset-button{'data-grid-name' => 'grid'} Reset
+
+
+    = render   'grid'

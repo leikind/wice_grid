@@ -1,0 +1,11 @@
+<%= grid(@tasks_grid) do |g|
+
+  g.blank_slate  do
+    content_tag :div, "No records found", class: 'well'
+  end
+
+  g.column name:  'ID', attribute: 'id'
+
+  g.column name:  'Title', attribute: 'title'
+
+end -%>

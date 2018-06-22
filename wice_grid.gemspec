@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '4.0.0'
+  s.version       = '4.0.1'
   s.authors       = ['Yuri Leikind and contributors']
-  s.email         = ['yuri.leikind@gmail.com']
+  s.email         = ['patrick@yamasolutions.com']
   s.homepage      = 'https://github.com/leikind/wice_grid'
   s.summary       = 'A Rails grid plugin to quickly create grids with sorting, pagination, and filters.'
   s.description   = 'A Rails grid plugin to create grids with sorting, pagination, and filters generated automatically based on column types. ' \
@@ -13,19 +13,40 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.license       = 'MIT'
   s.require_paths = ['lib']
-  s.date          = '2018-01-18'
+  s.date          = '2018-05-31'
 
-  s.add_dependency 'rails', '~> 5.0', '< 5.2'
+  s.add_dependency 'rails', '~> 5.0', '< 5.3'
   s.add_dependency 'kaminari',          ['~> 0.16']
   s.add_dependency 'coffee-rails',      ['> 3.2']
 
   s.add_development_dependency('rake',  '~> 10.1')
-  s.add_development_dependency('rspec', '~> 3.2.0')
+  s.add_development_dependency('byebug')
+  s.add_development_dependency('appraisal')
+
+  s.add_development_dependency('rspec', '~> 3.6.0')
+  s.add_development_dependency('rspec-rails', '~> 3.6.0')
+  s.add_development_dependency('shoulda-matchers', '2.8.0')
+  s.add_development_dependency('capybara', '~> 2.2.0')
+  s.add_development_dependency('faker', '~> 1.8.7')
+  s.add_development_dependency('poltergeist', '~> 1.9.0')
+  s.add_development_dependency('capybara-screenshot', '~> 1.0.11')
+  s.add_development_dependency('selenium-webdriver', '~> 2.51.0')
+
+  # Required by the test app.
+  s.add_development_dependency('haml', '~> 5.0.4')
+  s.add_development_dependency('coderay', '~> 1.1.0')
+  s.add_development_dependency('jquery-rails', '~> 4.3.3')
+  s.add_development_dependency('jquery-ui-rails', '~> 5.0.5')
+  s.add_development_dependency('jquery-ui-themes', '~> 0.0.11')
+  s.add_development_dependency('sass-rails', '>= 3.2')
+  s.add_development_dependency('bootstrap-sass', '3.1.1.1')
+  s.add_development_dependency('font-awesome-sass', '4.4.0')
+  s.add_development_dependency('turbolinks', '~> 5.1.1')
+  s.add_development_dependency('therubyracer')
 
   s.add_development_dependency('bundler',   '~> 1.3')
   s.add_development_dependency('simplecov', '~> 0.7')
   s.add_development_dependency('coveralls', '~> 0.8.2')
-  s.add_development_dependency('codeclimate-test-reporter', '~> 0.4.7')
   s.add_development_dependency('sqlite3',   '~> 1.3')
 
   s.add_development_dependency('yard', '~> 0.8')

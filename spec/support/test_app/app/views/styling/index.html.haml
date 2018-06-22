@@ -1,0 +1,65 @@
+:css
+  table.my-grid {
+    border: 1px solid red;
+  }
+  table.my-grid tr.my-header {
+    background-color: #ebebeb;
+  }
+
+
+.well
+  %h2= current_page_title
+  %ul
+    %li
+      %code :html
+      in the
+      %code grid
+      helper defines html arguments for the
+      %code table
+      tag.
+
+    %li
+      %code :header_tr_html
+      in the
+      %code grid
+      helper defines html attributes for the header rows with column names and filters.
+
+
+    %li
+      %code :html
+      in the
+      %code column
+      helper defines html attributes for the
+      %code td
+      tag.
+
+
+    %li
+      %code g.row_attributes do |record| ... end
+      is similar to a
+      %code column
+      definition, but returns a hash of html attributes to be added to each
+      %code tr.
+      Because the block is evaluated for each record, just like
+      %column
+      , the returned value can be calculated dynamically depending on the record.
+
+    %li
+      Each
+      %code column
+      block can return a 2-value array, the first value of which is the content of the cell, and
+      the second is a hash of html attributes for the
+      %code td
+      tag.
+
+= show_code
+
+
+.row-fluid
+  .col-md-12
+    = render   'grid1'
+
+
+.row-fluid
+  .col-md-12
+    = render   'grid2'

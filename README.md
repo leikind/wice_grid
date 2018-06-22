@@ -6,7 +6,7 @@ This fork has been made to support Rails 5+.
 ## Usage
 ```
 # Rails => 5
-gem 'wice_grid', git: 'https://github.com/patricklindsay/wice_grid.git', tag: 'v4.0.0'
+gem 'wice_grid', git: 'https://github.com/patricklindsay/wice_grid.git', tag: 'v4.0.1'
 
 # Rails < 5
 gem 'wice_grid', '3.6.2'
@@ -17,7 +17,7 @@ gem 'wice_grid', '3.6.2'
 * Renamed 'Rails3' branch to 'master' and made this default
 * [Diff between the latest wice_grid (Edge) & this fork](https://github.com/leikind/wice_grid/compare/leikind:rails3...patricklindsay:master)
 * [Diff between last wice_grid published version (3.6.2) & this fork](https://github.com/leikind/wice_grid/compare/cd21a0ec93c4b55013ebddf8cbcc13df9acf20e9...patricklindsay:master)
-* Checkout CHANGELOG.md for more information.
+* Checkout [CHANGELOG.md](https://github.com/patricklindsay/wice_grid/blob/master/CHANGELOG.md) for more information.
 
 -------------------------------
 
@@ -59,6 +59,7 @@ http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind
   - [Date and DateTime Filters](#date-and-datetime-filters)
   - [Detached Filters](#detached-filters)
 - [Defaults](#defaults)
+- [Testing](#testing)
 - [Bug reports](#bug-reports)
 
 
@@ -1534,6 +1535,18 @@ def index
   end
 end
 ```
+
+## Testing
+
+To run tests:
+
+1. `git clone https://github.com/patricklindsay/wice_grid.git`
+2. `cd wice_grid`
+3. `bundle`
+4. Install phantomjs (e.g. `brew install phantomjs` or `apt-get install phantomjs` or something else)
+5. `rspec`
+
+This repository contains a Rails application for testing purposes. To fire up this application manually, run `cd spec/support/test_app/bin; RAILS_ENV=test rails s`.
 
 ## Bug reports
 
