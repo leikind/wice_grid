@@ -18,16 +18,17 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'rspec'
-require 'coveralls'
 require 'simplecov'
 require 'byebug'
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-    Coveralls::SimpleCov::Formatter,
-    SimpleCov::Formatter::HTMLFormatter
-])
 SimpleCov.start do
+  formatter = SimpleCov::Formatter::MultiFormatter.new([
+    SimpleCov::Formatter::HTMLFormatter
+  ])
+
   add_filter "/spec/"
+
+  minimum_coverage 87.53
 end
 
 begin

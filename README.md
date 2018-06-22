@@ -26,10 +26,6 @@ gem 'wice_grid', '3.6.2'
 [![Inline docs](http://inch-ci.org/github/leikind/wice_grid.svg?branch=rails3)](http://inch-ci.org/github/leikind/wice_grid/branch/rails3)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
-<!-- let's disable for a while ;-)
-[![Coverage Status](https://coveralls.io/repos/leikind/wice_grid/badge.svg?branch=development&service=github)](https://coveralls.io/github/leikind/wice_grid?branch=development)
--->
-
 THE PROJECT IS LOOKING FOR CONTRIBUTORS. THE AUTHOR WILL NOT WORK ON IT ANYMORE!
 
 * Yuri Leikind, yuri.leikind at gmail dot com
@@ -1544,7 +1540,9 @@ To run tests:
 2. `cd wice_grid`
 3. `bundle`
 4. Install phantomjs (e.g. `brew install phantomjs` or `apt-get install phantomjs` or something else)
-5. `rspec`
+5. `bundle exec appraisal rspec`
+
+Tests against Rails 5.0, 5.1 & 5.2. To test against a specific version, for example Rails 5.2 run `bundle exec appraisal rails-5.2 rspec`
 
 This repository contains a Rails application for testing purposes. To fire up this application manually, run `cd spec/support/test_app/bin; RAILS_ENV=test rails s`.
 
