@@ -1,9 +1,41 @@
-dependencies:
-  post:
-    - bundle exec appraisal install
-  test:
-    pre:
-      - bundle exec appraisal rake db:create
-      - bundle exec appraisal rake db:migrate
-    override:
-      - bundle exec appraisal rspec
+version: 2
+jobs:
+  build:
+    working_directory: ~/wice_grid
+    docker:
+      - image: circleci/ruby:2.4.1
+        environment:
+          RAILS_ENV: test
+    steps:
+      - checkout
+
+      # Install PhantomJS (if not found in cache)
+      - run:
+          name: Install phantomjs
+          command: |
+            if ! [ $(which phantomjs) ]; then
+            sudo curl --output /usr/local/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
+            fi
+
+            sudo chmod ugo+x /usr/local/bin/phantomjs
+
+      # Restore Cached Dependencies
+      - type: cache-restore
+        name: Restore bundle cache
+        key: wice_grid-{{ checksum "Gemfile.lock" }}
+
+      # Bundle install dependencies
+      - run: bundle install --path vendor/bundle
+
+      # Install Appraisal gemfiles
+      - run: bundle exec appraisal install
+
+      # Cache Dependencies
+      - type: cache-save
+        name: Store bundle cache
+        key: wice_grid-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
+      # Run the tests
+      - run: bundle exec appraisal rspec
