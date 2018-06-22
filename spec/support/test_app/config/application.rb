@@ -63,5 +63,8 @@ module Examples
 
     config.assets.initialize_on_precompile = false
     I18n.enforce_available_locales = false
+
+    # Rails 5.2+
+    config.active_record.sqlite3.represent_boolean_as_integer = true if config.active_record.sqlite3
   end
 end
