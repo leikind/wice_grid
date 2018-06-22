@@ -4,7 +4,7 @@ PATH
     wice_grid (4.0.1)
       coffee-rails (> 3.2)
       kaminari (~> 0.16)
-      rails (~> 5.0, < 5.2)
+      rails (~> 5.0, < 5.3)
 
 GEM
   remote: https://rubygems.org/
