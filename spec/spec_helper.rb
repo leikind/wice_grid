@@ -26,7 +26,9 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
     Coveralls::SimpleCov::Formatter,
     SimpleCov::Formatter::HTMLFormatter
 ])
-SimpleCov.start
+SimpleCov.start do
+  add_filter "/spec/"
+end
 
 begin
   require 'support/active_record'
