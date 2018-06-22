@@ -179,7 +179,7 @@ module Wice
       @performed_render = false
 
       logger.info "Sending file #{path}" unless logger.nil?
-      File.open(path, 'rb') { |file| render status: options[:status], text: file.read }
+      File.open(path, 'rb') { |file| render status: options[:status], plain: file.read }
     end
 
     DEFAULT_SEND_FILE_OPTIONS_RAILS2 = { #:nodoc:
