@@ -40,10 +40,12 @@ module Wice
     # * <tt>:enable_export_to_csv</tt> - <Enable export of the table to CSV. Read the How-To to learn what else is needed to enable CSV export.
     # * <tt>:csv_file_name</tt> - Name of the exported CSV file. If the parameter is missing, the name of the grid will be used instead.
     # * <tt>:csv_field_separator</tt> - field separator for CSV files. The default is defined in +CSV_FIELD_SEPARATOR+ in the config file.
-    # * <tt>:custom_order</tt> - used for overriding the ORDER BY clause with custom sql code (for example, including a function).
-    #   The value of the parameter is a hash where keys are fully qualified names
-    #   of database columns, and values the required chunks of SQL to use in the ORDER BY clause, either as strings or Proc object
-    #   evaluating to string. See section 'Custom Ordering' in the README.
+    # * <tt>:custom_order</tt> - used for overriding the ORDER BY clause with custom sql code (for example, using an SQL
+    #   function). A Hash with keys of the fully qualified names of database columns and with values that specify the
+    #   ordering to be used, without specifying the direction (no ASC or DESC). The values of this Hash can any String
+    #   of SQL that can be passed to the ActiveRecord order clause, an instance of Arel::Attributes::Attribute, or a
+    #   Proc that receives the fully qualified column name and returns a String or Arel::Attributes::Attribute. See
+    #   section 'Custom Ordering' in the README.
     # * <tt>:saved_query</tt> - id of the saved query or the query object itself to load initially.
     #   Read section "Saving Queries How-To" in README for more details.
     # * <tt>:after</tt> - defined a name of a controller method which would be called by the grid after all user input has been processed,

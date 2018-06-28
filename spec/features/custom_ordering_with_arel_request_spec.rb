@@ -1,9 +1,9 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'custom_ordering with Strings WiceGrid', type: :request, js: true do
+describe 'custom_ordering with Arel WiceGrid', type: :request, js: true do
   before :each do
-    visit '/custom_ordering'
+    visit '/custom_ordering_with_arel'
   end
 
   it 'should be sorted by the length of the word' do
