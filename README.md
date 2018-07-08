@@ -570,34 +570,50 @@ The name can only contain alphanumeric characters.
 It is possible to change the way results are ordered injecting a chunk of SQL code, for example, use
 `ORDER BY INET_ATON(ip_address)` instead of `ORDER BY ip_address`.
 
-To do so, provide parameter `:custom_order` in the initialization of the grid with a hash where
-keys are fully qualified names of database columns, and values the required chunks of SQL to use in the
-`ORDER BY` clause.
+To do so, provide parameter `:custom_order` in the initialization of the grid with a `Hash` where
+keys are fully qualified names of database columns, and values are anything that can be passed to ActiveRecord's
+`order` method (without specifying `ASC` or `DESC`.)
 
-For example:
+#### String
+
+Starting in Rails 5.2, you may need to whitelist `String` values with `Arel.sql` 
+to avoid a warning or error.
 
 ```ruby
 @hosts_grid = initialize_grid(Host,
   custom_order: {
-    'hosts.ip_address' => 'INET_ATON(hosts.ip_address)'
+    'hosts.ip_address' => Arel.sql('INET_ATON(hosts.ip_address)')
   })
 ```
 
-It is possible to use the '?' character instead of the name of the column in the hash value:
+It is possible to use `?` instead of the name of the column in the `Hash` value:
 
 ```ruby
 @hosts_grid = initialize_grid(Host,
   custom_order: {
-    'hosts.ip_address' => 'INET_ATON( ? )'
+    'hosts.ip_address' => Arel.sql('INET_ATON( ? )')
   })
 ```
 
-Values can also be Proc objects. The parameter supplied to such a Proc object is the name of the column:
+#### Arel::Attributes::Attribute
+
+Assuming you wish to display `hosts.ip_address` but sort by another column named `hosts.ip_address_number`:
 
 ```ruby
 @hosts_grid = initialize_grid(Host,
   custom_order: {
-    'hosts.ip_address' => lambda{|f| "INET_ATON( #{f} )"}
+    'hosts.ip_address' => Arel::Table.new(:hosts)[:ip_address_number]
+  })
+```
+
+#### Proc
+
+You can use a `Proc` to return a `String` or `Arel::Attributes::Attribute` as above.
+
+```ruby
+@hosts_grid = initialize_grid(Host,
+  custom_order: {
+    'hosts.ip_address' => lambda{|f| Arel.sql(request[:numeric_sorting] ? "INET_ATON( #{f} )" : f) }
   })
 ```
 
