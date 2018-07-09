@@ -298,9 +298,21 @@ module Wice
       # conditions processed
 
       if (!opts[:skip_ordering]) && ! @status[:order].blank?
-        @ar_options[:order] = add_custom_order_sql(complete_column_name(@status[:order]))
-
-        @ar_options[:order] += ' ' + @status[:order_direction]
+        custom_order = get_custom_order_reference
+        if custom_order
+          @ar_options[:order] = custom_order
+        else
+          @ar_options[:order] = arel_column_reference(@status[:order])
+        end
+        if @ar_options[:order].is_a?(Arel::Attributes::Attribute)
+          if @status[:order_direction] == 'desc'
+            @ar_options[:order] = @ar_options[:order].desc
+          else
+            @ar_options[:order] = @ar_options[:order].asc
+          end
+        else
+          @ar_options[:order] += " #{@status[:order_direction]}"
+        end
       end
 
       @ar_options[:joins]   = @options[:joins]
@@ -547,7 +559,11 @@ module Wice
       invoke_resultset_callback(@options[:with_resultset], self.active_relation_for_resultset_without_paging_with_user_filters)
     end
 
-    def add_custom_order_sql(fully_qualified_column_name) #:nodoc:
+    # If a custom order has been configured, gets the column/function to be ordered by. If no custom order, returns nil.
+    def get_custom_order_reference
+      # TODO Do we need to distinguish between no custom order and a custom order that defines no ordering? Both return nil.
+
+      fully_qualified_column_name = complete_column_name(@status[:order])
       custom_order = if @options[:custom_order].key?(fully_qualified_column_name)
         @options[:custom_order][fully_qualified_column_name]
       else
@@ -556,31 +572,26 @@ module Wice
         end
       end
 
-      if custom_order.blank?
-        sqlite = ActiveRecord::ConnectionAdapters.const_defined?(:SQLite3Adapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::SQLite3Adapter)
-        postgres = ActiveRecord::ConnectionAdapters.const_defined?(:PostgreSQLAdapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
-        if sqlite || postgres
-          fully_qualified_column_name.strip.split('.').map { |chunk| ActiveRecord::Base.connection.quote_table_name(chunk) }.join('.')
-        else
-          ActiveRecord::Base.connection.quote_table_name(fully_qualified_column_name.strip)
-        end
-      else
-        if custom_order.is_a? String
-          custom_order.gsub(/\?/, fully_qualified_column_name)
-        elsif custom_order.is_a? Proc
-          custom_order.call(fully_qualified_column_name)
-        else
-          raise WiceGridArgumentError.new("invalid custom order #{custom_order.inspect}")
-        end
+      return custom_order if custom_order.nil? || custom_order.is_a?(Arel::Attributes::Attribute)
+      return custom_order.gsub(/\?/, fully_qualified_column_name) if custom_order.is_a?(String)
+      return custom_order.call(fully_qualified_column_name) if custom_order.is_a?(Proc)
+      raise WiceGridArgumentError.new("invalid custom order #{custom_order.inspect}")
+    end
+
+    # Returns an Arel::Attributes::Attribute for the passed column reference.
+    def arel_column_reference(col_name)  #:nodoc:
+      if col_name.index('.') # already has a table name
+        table_name, col_name = col_name.split('.', 2)
+        Arel::Table.new(table_name)[col_name]
+      else # add the default table
+        @klass.arel_table[col_name]
       end
     end
 
-    def complete_column_name(col_name)  #:nodoc:
-      if col_name.index('.') # already has a table name
-        col_name
-      else # add the default table
-        "#{@klass.table_name}.#{col_name}"
-      end
+    # Returns tablename.columnname for the passed column reference.
+    def complete_column_name(col_name)
+      return col_name if col_name.index('.') # already has a table name
+      return "#{@klass.table_name}.#{col_name}"
     end
 
     def params  #:nodoc:

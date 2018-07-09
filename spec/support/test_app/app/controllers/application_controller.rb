@@ -54,7 +54,9 @@ class ApplicationController < ActionController::Base
 
       ['Custom filters and ordering',
        [
-         [:custom_ordering, 'Custom ordering'],
+         [:custom_ordering, 'Custom ordering (with String)'],
+         [:custom_ordering_with_arel, 'Custom ordering (with Arel)'],
+         [:custom_ordering_with_proc, 'Custom ordering (with Proc)'],
          [:custom_filters1, 'Custom filters (one table)'],
          [:custom_filters2, 'Custom filters (joined tables)'],
          [:custom_filters3, 'Custom filters (method chains)'],
