@@ -340,6 +340,7 @@ module Wice
       relation
     end
 
+    # Apply the sort_by option to the results.
     def apply_sort_by(relation)
       active_sort_by = nil
       @renderer.find_one_for(->(c) {c.attribute == @status[:order]}) {|r| active_sort_by = r.sort_by}
@@ -410,7 +411,8 @@ module Wice
       end
     end
 
-    def ordered_by?(column)  #:nodoc:
+    # Returns true if the current results are ordered by the passed column.
+    def ordered_by?(column)
       return nil if @status[:order].blank?
       if column.main_table && ! @status[:order].index('.') || column.table_alias_or_table_name.nil?
         @status[:order] == column.attribute
