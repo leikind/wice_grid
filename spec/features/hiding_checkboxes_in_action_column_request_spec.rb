@@ -10,13 +10,8 @@ describe 'action_column WiceGrid', type: :request, js: true do
     select 'Assigned', from: 'g_f_status_id'
     find(:css, '#g_submit_grid_icon').click
 
-    find(:css, %(.clickable.select-all)).click
-
-    first(:css, 'button.btn', text: 'Process tasks').click
-
-    expect do
-      find(:css, %(.sel input[type=checkbox]))
-    end.to raise_error(Capybara::ElementNotFound)
+    expect(page).to have_content('1-4 / 4')
+    expect(page).to have_no_selector('tbody input[type=checkbox]')
   end
 
   it 'should select rows' do
