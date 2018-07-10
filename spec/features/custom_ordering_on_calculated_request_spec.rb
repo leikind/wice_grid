@@ -12,6 +12,7 @@ describe 'custom_ordering on calculated WiceGrid', type: :request, js: true do
 
       within 'thead' do
         click_on 'Task Count'
+        expect(page).to have_selector('i.fa-arrow-down')
       end
 
       expect(page).to have_selector('tbody tr:first-child', text: 'New')
@@ -19,6 +20,7 @@ describe 'custom_ordering on calculated WiceGrid', type: :request, js: true do
 
       within 'thead' do
         click_on 'Task Count'
+        expect(page).to have_selector('i.fa-arrow-up')
       end
 
       expect(page).to have_selector('tbody tr:first-child', text: 'Duplicate')

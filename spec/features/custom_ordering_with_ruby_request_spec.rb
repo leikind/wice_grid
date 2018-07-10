@@ -14,12 +14,14 @@ describe 'custom_ordering with Ruby WiceGrid', type: :request, js: true do
 
       within 'thead' do
         click_on 'Status Name'
+        expect(page).to have_selector('i.fa-arrow-down')
       end
 
       expect(page).to have_selector('tbody tr:first-child td.sorted', text: 'New')
 
       within 'thead' do
         click_on 'Status Name'
+        expect(page).to have_selector('i.fa-arrow-up')
       end
 
       expect(page).to have_selector('tbody tr:first-child td.sorted', text: 'Duplicate')
