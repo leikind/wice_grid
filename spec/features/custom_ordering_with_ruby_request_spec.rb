@@ -23,6 +23,8 @@ describe 'custom_ordering with Ruby WiceGrid', type: :request, js: true do
         click_on 'Status Name'
         expect(page).to have_selector('i.fa-arrow-up')
       end
+      
+      sleep 1
 
       expect(page).to have_selector('tbody tr:first-child td.sorted', text: 'Duplicate')
     end
