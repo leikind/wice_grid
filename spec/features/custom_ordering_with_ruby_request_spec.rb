@@ -16,17 +16,13 @@ describe 'custom_ordering with Ruby WiceGrid', type: :request, js: true do
         click_on 'Status Name'
       end
 
-      within 'tbody tr:first-child td.sorted' do
-        expect(page).to have_content('New')
-      end
+      expect(page).to have_selector('tbody tr:first-child td.sorted', text: 'New')
 
       within 'thead' do
         click_on 'Status Name'
       end
 
-      within 'tbody tr:first-child td.sorted' do
-        expect(page).to have_content('Duplicate')
-      end
+      expect(page).to have_selector('tbody tr:first-child td.sorted', text: 'Duplicate')
     end
   end
 end

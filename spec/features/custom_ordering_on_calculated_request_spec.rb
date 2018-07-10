@@ -8,31 +8,21 @@ describe 'custom_ordering on calculated WiceGrid', type: :request, js: true do
 
   it 'should be sorted by the number of tasks' do
     within 'div#grid.wice-grid-container table.wice-grid' do
-      within 'tbody tr:first-child' do
-        expect(page).to have_content('New')
-      end
+      expect(page).to have_selector('tbody tr:first-child', text: 'New')
 
       within 'thead' do
         click_on 'Task Count'
       end
 
-      within 'tbody tr:first-child' do
-        expect(page).to have_content('New')
-        within 'td.sorted' do
-          expect(page).to have_content('3')
-        end
-      end
+      expect(page).to have_selector('tbody tr:first-child', text: 'New')
+      expect(page).to have_selector('tbody tr:first-child td.sorted', text: '3')
 
       within 'thead' do
         click_on 'Task Count'
       end
 
-      within 'tbody tr:first-child' do
-        expect(page).to have_content('Duplicate')
-        within 'td.sorted' do
-          expect(page).to have_content('10')
-        end
-      end
+      expect(page).to have_selector('tbody tr:first-child', text: 'Duplicate')
+      expect(page).to have_selector('tbody tr:first-child td.sorted', text: '10')
     end
   end
 end
