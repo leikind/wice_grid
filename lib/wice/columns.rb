@@ -100,7 +100,7 @@ module Wice #:nodoc:
       # fields defined from the options parameter
       FIELDS = [:attribute, :name, :html, :filter, :model, :allow_multiple_selection,
                 :in_html, :in_csv, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload,
-                :filter_control_options, :custom_sort]
+                :filter_control_options, :sort_by]
 
       attr_accessor(*FIELDS)
 
@@ -205,7 +205,8 @@ module Wice #:nodoc:
 
       # bad name, because for the main table the name is not really 'fully_qualified'
       def attribute_name_fully_qualified_for_all_but_main_table_columns #:nodoc:
-        self.main_table ? attribute : table_alias_or_table_name + '.' + attribute
+        return attribute if main_table
+        return fully_qualified_attribute_name
       end
 
       def fully_qualified_attribute_name #:nodoc:

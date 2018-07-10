@@ -318,7 +318,7 @@ module Wice
         negation:                    ConfigurationProvider.value_for(:NEGATION_IN_STRING_FILTERS),
         ordering:                    true,
         table_alias:                 nil,
-        custom_sort:                 nil,
+        sort_by:                 nil,
       }
 
       opts.assert_valid_keys(options.keys)
@@ -381,7 +381,7 @@ module Wice
           table_alias:          options[:table_alias],
           filter_type:          options[:filter_type],
           assocs:               assocs,
-          custom_sort:          options[:custom_sort],
+          sort_by:          options[:sort_by],
         )
 
         # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]

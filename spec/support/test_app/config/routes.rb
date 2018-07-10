@@ -42,6 +42,8 @@ Examples::TestApp.routes.draw do
             :custom_ordering,
             :custom_ordering_with_proc,
             :custom_ordering_with_arel,
+            :custom_ordering_with_ruby,
+            :custom_ordering_on_calculated,
             :many_grids_on_page,
             :two_associations,
             :joining_tables,

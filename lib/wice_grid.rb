@@ -229,7 +229,7 @@ module Wice
                  table_alias: nil,
                  filter_type: nil,
                  assocs: [],
-                 custom_sort: nil)  #:nodoc:
+                 sort_by: nil)  #:nodoc:
 
 
       @options[:include] = Wice.build_includes(@options[:include], assocs)
@@ -242,7 +242,7 @@ module Wice
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
         # Allow the column to not exist if we're doing a custom sort (calculated field)
-        if column.nil? && !custom_sort
+        if column.nil? && !sort_by
           raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " \
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " \
             'the grid, and specify :model in column declaration.')
@@ -340,11 +340,11 @@ module Wice
       relation
     end
 
-    def apply_custom_sort(relation)
-      active_custom_sort = nil
-      @renderer.find_one_for(->(c) {c.attribute == @status[:order]}) {|r| active_custom_sort = r.custom_sort}
-      return relation if !active_custom_sort
-      relation = relation.sort_by(&active_custom_sort)
+    def apply_sort_by(relation)
+      active_sort_by = nil
+      @renderer.find_one_for(->(c) {c.attribute == @status[:order]}) {|r| active_sort_by = r.sort_by}
+      return relation if !active_sort_by
+      relation = relation.sort_by(&active_sort_by)
       relation = relation.reverse if @status[:order_direction] == 'desc'
       return relation
     end
@@ -359,9 +359,9 @@ module Wice
                        .group(@ar_options[:group])
                        .merge(@ar_options[:conditions])
         relation = add_references relation
-        relation = apply_custom_sort relation
+        relation = apply_sort_by relation
 
-        # If relation is an Array, it got the sort from apply_custom_sort.
+        # If relation is an Array, it got the sort from apply_sort_by.
         relation = relation.order(@ar_options[:order]) if !relation.is_a?(Array)
 
         if !output_csv? && !all_record_mode?
