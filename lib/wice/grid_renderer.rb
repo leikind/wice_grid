@@ -262,6 +262,12 @@ module Wice
     #     However, if the retuned value is a two element array, the first element is used for the option label and the
     #     second - for the value.
     #     Read more in README, section 'Custom dropdown filters'
+    # * <tt>:sort_by</tt> - allows arbitrary sorting of the results. This option takes a Proc which returns a value to
+    #   sort by. When this option is used and sorting on this column is activated, the entire resultset is loaded and
+    #   the Proc is passed to Enumerable#sort_by. This can also be used with calculated columns, but an arbitrary
+    #   <tt>:attribute</tt> option must be included to provide a request parameter key. Because this option will load
+    #   the entire resultset, it should only be used with small resultsets. The <tt>:custom_order</tt> option on grid
+    #   initialization should be preferred if possible, as it will perform the sorting in SQL.
     # * <tt>:boolean_filter_true_label</tt> - overrides the label for <tt>true</tt> in the boolean filter (<tt>wice_grid.boolean_filter_true_label</tt> in <tt>wice_grid.yml</tt>).
     # * <tt>:boolean_filter_false_label</tt> - overrides the label for <tt>false</tt> in the boolean filter (<tt>wice_grid.boolean_filter_false_label</tt> in <tt>wice_grid.yml</tt>).
     # * <tt>:allow_multiple_selection</tt> - enables or disables switching between single and multiple selection modes for
@@ -317,7 +323,8 @@ module Wice
         name:                        '',
         negation:                    ConfigurationProvider.value_for(:NEGATION_IN_STRING_FILTERS),
         ordering:                    true,
-        table_alias:                 nil
+        table_alias:                 nil,
+        sort_by:                     nil,
       }
 
       opts.assert_valid_keys(options.keys)
@@ -379,7 +386,8 @@ module Wice
           custom_filter_active: options[:custom_filter],
           table_alias:          options[:table_alias],
           filter_type:          options[:filter_type],
-          assocs:               assocs
+          assocs:               assocs,
+          sort_by:              options[:sort_by],
         )
 
         # [ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::Column, String, Boolean]
@@ -571,7 +579,7 @@ module Wice
     end
 
     def column_link(column, direction, params, extra_parameters = {})   #:nodoc:
-      column_attribute_name = if column.attribute.index('.') || column.main_table
+      column_attribute_name = if column.attribute.index('.') || column.main_table || column.table_alias_or_table_name.nil?
         column.attribute
       else
         column.table_alias_or_table_name + '.' + column.attribute

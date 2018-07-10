@@ -49,6 +49,7 @@ http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind
   - [Joined associations referring to the same table](#joined-associations-referring-to-the-same-table)
   - [More than one grid on a page](#more-than-one_grid-on-a-page)
   - [Custom Ordering](#custom-ordering)
+  - [Custom Sorting](#custom-sorting)  
 - [Filters](#filters)
   - [Custom dropdown filters](#custom-dropdown-filters)
   - [Numeric Filters](#numeric-filters)
@@ -616,6 +617,24 @@ You can use a `Proc` to return a `String` or `Arel::Attributes::Attribute` as ab
     'hosts.ip_address' => lambda{|f| Arel.sql(request[:numeric_sorting] ? "INET_ATON( #{f} )" : f) }
   })
 ```
+
+### Custom Sorting
+
+While `:custom_order` lets you define SQL that determines the results order, you may want to sort the result by arbritrary Ruby code. The `:sort_by` option on columns lets you define a `Proc` that determines the sorting on that column. This `Proc` is passed to Ruby's `Enumerable#sort_by`.
+
+```ruby
+grid.column name:  'Status Name', attribute: 'name', sort_by: ->(status) { [status.number_of_vowels, status] }
+```
+
+You can also use `:sort_by` to add sorting on values that are not columns in the database. In this case, you must also define an arbitrary `:attribute` option that serves as the request's sort key parameter.
+
+```ruby
+grid.column name: 'Task Count', attribute: 'task_count', sort_by: ->(status) { status.tasks.count } do |status|
+  status.tasks.count
+end
+```
+
+Note that `sort_by` will load all records into memory to sort them (even the ones not on the current page), so it may not be appropriate for use with a large number of results.
 
 ## Filters
 

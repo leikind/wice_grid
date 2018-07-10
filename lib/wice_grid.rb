@@ -228,7 +228,8 @@ module Wice
                  custom_filter_active: nil,
                  table_alias: nil,
                  filter_type: nil,
-                 assocs: [])  #:nodoc:
+                 assocs: [],
+                 sort_by: nil)  #:nodoc:
 
 
       @options[:include] = Wice.build_includes(@options[:include], assocs)
@@ -240,7 +241,8 @@ module Wice
         table_name = model.table_name
       else
         column = @table_column_matrix.get_column_in_default_model_class_by_column_name(column_name)
-        if column.nil?
+        # Allow the column to not exist if we're doing a custom sort (calculated field)
+        if column.nil? && !sort_by
           raise WiceGridArgumentError.new("Column '#{column_name}' is not found in table '#{@klass.table_name}'! " \
             "If '#{column_name}' belongs to another table you should declare it in :include or :join when initialising " \
             'the grid, and specify :model in column declaration.')
@@ -338,36 +340,49 @@ module Wice
       relation
     end
 
+    # Apply the sort_by option to the results.
+    def apply_sort_by(relation)
+      active_sort_by = nil
+      @renderer.find_one_for(->(c) {c.attribute == @status[:order]}) {|r| active_sort_by = r.sort_by}
+      return relation if !active_sort_by
+      relation = relation.sort_by(&active_sort_by)
+      relation = relation.reverse if @status[:order_direction] == 'desc'
+      return relation
+    end
+
     # TO DO: what to do with other @ar_options values?
     def read  #:nodoc:
       form_ar_options
       use_default_or_unscoped do
-        @resultset = if self.output_csv? || all_record_mode?
-          relation = @relation
-                     .includes(@ar_options[:include])
-                     .joins(@ar_options[:joins])
-                     .order(@ar_options[:order])
-                     .group(@ar_options[:group])
-                     .merge(@ar_options[:conditions])
-          relation = add_references relation
+        relation = @relation
+                       .includes(@ar_options[:include])
+                       .joins(@ar_options[:joins])
+                       .group(@ar_options[:group])
+                       .merge(@ar_options[:conditions])
+        relation = add_references relation
+        relation = apply_sort_by relation
 
-          relation
-        else
-          # p @ar_options
-          relation = @relation
-                     .send(@options[:page_method_name], @ar_options[:page])
-                     .per(@ar_options[:per_page])
-                     .includes(@ar_options[:include])
-                     .joins(@ar_options[:joins])
-                     .order(@ar_options[:order])
-                     .group(@ar_options[:group])
-                     .merge(@ar_options[:conditions])
+        # If relation is an Array, it got the sort from apply_sort_by.
+        relation = relation.order(@ar_options[:order]) if !relation.is_a?(Array)
 
-          relation = add_references relation
-
-          relation
+        if !output_csv? && !all_record_mode?
+          if relation.is_a?(Array)
+            relation = Kaminari.paginate_array(relation, limit: @ar_options[:per_page], offset: @ar_options[:per_page].to_i * (@ar_options[:page].to_i - 1))
+          else
+            relation = relation
+                           .send(@options[:page_method_name], @ar_options[:page])
+                           .per(@ar_options[:per_page])
+          end
         end
+
+        if all_record_mode? && relation.is_a?(Array)
+          # This still needs to be a Kaminari object as the paginator will read limit_value.
+          relation = Kaminari.paginate_array(relation, limit: relation.count)
+        end
+
+        @resultset = relation
       end
+
       invoke_resultset_callbacks
     end
 
@@ -396,9 +411,10 @@ module Wice
       end
     end
 
-    def ordered_by?(column)  #:nodoc:
+    # Returns true if the current results are ordered by the passed column.
+    def ordered_by?(column)
       return nil if @status[:order].blank?
-      if column.main_table && ! @status[:order].index('.')
+      if column.main_table && ! @status[:order].index('.') || column.table_alias_or_table_name.nil?
         @status[:order] == column.attribute
       else
         @status[:order] == column.table_alias_or_table_name + '.' + column.attribute
