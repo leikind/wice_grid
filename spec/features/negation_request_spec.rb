@@ -13,11 +13,13 @@ describe 'negation WiceGrid', type: :request, js: true do
     find(:css, '#grid_submit_grid_icon').click
 
     expect(page).to have_content('sed impedit iste')
+    expect(page).to have_no_content('ut ipsum excepturi')
 
     find(:css, '#grid_f_title_n').click
 
     find(:css, '#grid_submit_grid_icon').click
 
     expect(page).to have_no_content('sed impedit iste')
+    expect(page).to have_content('ut ipsum excepturi')
   end
 end
