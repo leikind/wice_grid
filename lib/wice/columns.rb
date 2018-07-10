@@ -100,7 +100,7 @@ module Wice #:nodoc:
       # fields defined from the options parameter
       FIELDS = [:attribute, :name, :html, :filter, :model, :allow_multiple_selection,
                 :in_html, :in_csv, :table_alias, :custom_order, :detach_with_id, :ordering, :auto_reload,
-                :filter_control_options]
+                :filter_control_options, :sort_by]
 
       attr_accessor(*FIELDS)
 
@@ -203,13 +203,16 @@ module Wice #:nodoc:
         [query, query_without_equals_sign, parameter_name, dom_id.tr('.', '_')]
       end
 
-      # bad name, because for the main table the name is not really 'fully_qualified'
-      def attribute_name_fully_qualified_for_all_but_main_table_columns #:nodoc:
-        self.main_table ? attribute : table_alias_or_table_name + '.' + attribute
+      # Returns a reference to the column in the form: "table_name.column_name", unless it is a column in the main
+      # table, in which case it will return just "column_name",
+      def attribute_name_fully_qualified_for_all_but_main_table_columns
+        return attribute if main_table
+        return fully_qualified_attribute_name
       end
 
-      def fully_qualified_attribute_name #:nodoc:
-        table_alias_or_table_name + '.' + attribute
+      # Returns a reference to the column in the form: "table_name.column_name".
+      def fully_qualified_attribute_name
+        table_alias_or_table_name ? (table_alias_or_table_name + '.' + attribute) : nil
       end
 
       def filter_shown? #:nodoc:
