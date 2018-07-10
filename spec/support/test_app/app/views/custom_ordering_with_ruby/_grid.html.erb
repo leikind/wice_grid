@@ -2,7 +2,7 @@
 
   g.column name:  'ID', attribute: 'id', filter: false
 
-  g.column name:  'Status Name', attribute: 'name', sort_by: ->(status) { status.number_of_vowels }
+  g.column name:  'Status Name', attribute: 'name', sort_by: ->(status) { [status.number_of_vowels, status] }
 
   g.column  name:  'Created' do |status|
     status.created_at.to_s(:db) if status.created_at
