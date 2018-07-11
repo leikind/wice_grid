@@ -24,10 +24,8 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
   it 'should filter by Added' do
     set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2011, 5, 1)
-    sleep 1
 
     set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2011, 9, 1)
-    sleep 1
 
     # find(:css, '#grid_submit_grid_icon').click
 
@@ -42,7 +40,10 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-09-29 22:11:12')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 29')
@@ -51,7 +52,6 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1
 
     # WTF
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
@@ -59,7 +59,7 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     end
 
     find(:css, '#grid_reset_grid_icon').click
-    sleep 1
+
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 50')
     end
@@ -146,7 +146,6 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
       expect(page).to have_content('1-3 / 3')
     end
 
-    # sleep 10
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
       expect(page).to have_content('507')
     end
@@ -232,12 +231,9 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
   it 'should filter by Due Date' do
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 0, 1)
-
-    sleep 1
-
+    expect(page).to have_selector('#grid_f_due_date_fr_date_placeholder a', text: '2012-01-01')
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2013, 0, 1)
-
-    sleep 1
+    expect(page).to have_selector('#grid_f_due_date_to_date_placeholder a', text: '2013-01-01')
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -251,7 +247,9 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
       click_on 'ID'
     end
 
-    sleep 1
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-10-02')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -261,17 +259,14 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
       click_link '2'
     end
 
-    sleep 1
-
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2012-07-02')
     end
 
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 6, 28)
-    sleep 1
-
+    expect(page).to have_selector('#grid_f_due_date_fr_date_placeholder a', text: '2012-05-28')
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2012, 6, 31)
-    sleep 1
+    expect(page).to have_selector('#grid_f_due_date_to_date_placeholder a', text: '2012-05-31')
 
     within '.pagination_status' do
       expect(page).to have_content('1-1 / 1')
@@ -279,15 +274,11 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
     find(:css, '#grid_f_due_date_fr_date_view').click
 
-    sleep 1
-
     within '.pagination_status' do
       expect(page).to have_content('1-10 / 10')
     end
 
     find(:css, '#grid_f_due_date_to_date_view').click
-
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 50')

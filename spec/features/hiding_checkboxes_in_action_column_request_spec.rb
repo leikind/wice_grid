@@ -46,7 +46,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     fill_in('g_f_id_to', with: 509)
 
     first(:css, 'button.btn', text: 'Process tasks').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
@@ -62,7 +61,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
@@ -78,7 +76,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
@@ -91,7 +88,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Title'
     end
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
@@ -140,7 +136,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     set_datepicker(self, 'g_f_created_at_to_date_placeholder', 2011, 9, 1)
 
     first(:css, 'button.btn', text: 'Process tasks').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 29')
@@ -153,7 +148,10 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-09-29 22:11:12')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 29')
@@ -162,11 +160,9 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2011-09-22 22:11:12')
-      # page.should have_content('2011-08-14 22:11:12')
     end
   end
 
@@ -176,7 +172,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2013, 0, 1)
 
     first(:css, 'button.btn', text: 'Process tasks').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -189,7 +184,10 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-10-02')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -198,7 +196,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2012-07-02')
@@ -209,27 +206,22 @@ describe 'action_column WiceGrid', type: :request, js: true do
     set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2012, 6, 31)
 
     first(:css, 'button.btn', text: 'Process tasks').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-1 / 1')
     end
 
     find(:css, '#g_f_due_date_fr_date_view').click
-    sleep 1
 
     first(:css, 'button.btn', text: 'Process tasks').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-10 / 10')
     end
 
     find(:css, '#g_f_due_date_to_date_view').click
-    sleep 1
 
     first(:css, 'button.btn', text: 'Process tasks').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 50')

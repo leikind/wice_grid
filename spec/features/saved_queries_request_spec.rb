@@ -34,19 +34,22 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
     find(:css, '#grid_submit_grid_icon').click
 
-    # TO DO: find out why this randomly fails without sleep 1
-    sleep 1
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-09-13 22:11:12')
+    end
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Title'
+    end
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-08-13 22:11:12')
     end
 
     check_saved_query.call
 
     fill_in('grid_saved_query_name', with: 'test query 1')
     click_on 'Save the state of filters'
-
-    sleep 1
 
     expect(page).to have_content('Query saved.')
     expect(page).to have_content('test query 1')
@@ -92,8 +95,6 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
     fill_in('grid_saved_query_name', with: 'test query 2')
     click_on 'Save the state of filters'
-
-    sleep 1
 
     expect(page).to have_content('Query saved.')
     expect(page).to have_content('test query 2')
