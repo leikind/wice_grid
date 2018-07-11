@@ -211,12 +211,20 @@ describe 'action_column WiceGrid', type: :request, js: true do
       expect(page).to have_content('1-1 / 1')
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-07-29')
+    end
+
     find(:css, '#g_f_due_date_fr_date_view').click
 
     first(:css, 'button.btn', text: 'Process tasks').click
 
     within '.pagination_status' do
       expect(page).to have_content('1-10 / 10')
+    end
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-07-29')
     end
 
     find(:css, '#g_f_due_date_to_date_view').click

@@ -413,6 +413,7 @@ shared_examples 'sorting Archived in all records mode' do
     click_on 'show all'
 
     within '.pagination_status' do
+      expect(page).to have_content('back to paginated view')
       expect(page).to have_content('1-50 / 50')
     end
 
