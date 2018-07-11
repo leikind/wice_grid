@@ -8,7 +8,6 @@ describe 'CSV export WiceGrid', type: :request, js: true do
 
   it 'should export csv' do
     find(:css, 'button.wg-external-csv-export-button').click
-    sleep 1
-    expect(page.body).to include('ID;Title;Priority;Status;Project Name;')
+    expect(page).to have_content('ID;Title;Priority;Status;Project Name;')
   end
 end
