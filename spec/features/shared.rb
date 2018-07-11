@@ -679,6 +679,10 @@ shared_examples 'Created At standard filtering' do
       click_on 'ID'
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-12-07 22:11:12')
+    end
+
     within '.pagination_status' do
       expect(page).to have_content('1-14 / 14')
     end
