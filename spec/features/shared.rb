@@ -477,15 +477,6 @@ shared_examples 'sorting Due Date in all records mode' do
   end
 end
 
-def wait_for_ajax(page)
-  counter = 0
-  while page.execute_script('return $.active').to_i > 0
-    counter += 1
-    sleep(0.1)
-    fail 'AJAX request took longer than 5 seconds.' if counter >= 50
-  end
-end
-
 MONTH_NAMES = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 
 
