@@ -1,9 +1,9 @@
 ja:
   date:
     order:
-      - :年
-      - :月
-      - :日
+      - ":年"
+      - ":月"
+      - ":日"
   wice_grid:
     show_filter_tooltip: フィルタ表示
     hide_filter_tooltip: フィルタ非表示
