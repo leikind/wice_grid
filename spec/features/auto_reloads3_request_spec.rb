@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'auto reloads WiceGrid', type: :request, js: true do
+describe 'auto reloads 3 WiceGrid', type: :request, js: true do
   before :each do
     visit '/auto_reloads3'
   end
@@ -73,10 +73,14 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
 
   it 'should filter by Due Date independantly' do
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 0, 1)
-
-    sleep 1
+    within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2013-01-26')
+    end
 
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2013, 0, 1)
+    within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-07-29')
+    end
 
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -87,12 +91,14 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     end
 
     set_datepicker(self, 'grid2_f_due_date_fr_date_placeholder', 2012, 0, 1)
-
-    sleep 1
+    within 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2013-01-26')
+    end
 
     set_datepicker(self, 'grid2_f_due_date_to_date_placeholder', 2013, 0, 1)
-
-    sleep 1
+    within 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2013-01-26')
+    end
 
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-20 / 35')

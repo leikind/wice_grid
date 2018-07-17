@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with_resultset WiceGrid', type: :request, js: true do
+describe 'with_resultset 2 WiceGrid', type: :request, js: true do
   before :each do
     visit '/resultset_processings2'
   end
@@ -13,14 +13,14 @@ describe 'with_resultset WiceGrid', type: :request, js: true do
 
   it 'should show records displayed on all pages with a text filter selection' do
     fill_in('g_f_title', with: 'ed')
-    sleep 2
+    expect(page).to have_content('1-2 / 2')
     find(:css, '#process').click
     expect(page).to have_content('2 records on all pages: 507 and 534')
   end
 
   it 'should show records displayed on all pages with a custom filter selection' do
     select 'Cancelled',  from: 'g_f_status_id'
-    sleep 2
+    expect(page).to have_content('1-5 / 8')
     find(:css, '#process').click
     expect(page).to have_content('8 records on all pages: 511, 515, 523, 524, 527, 531, 542, and 551')
   end

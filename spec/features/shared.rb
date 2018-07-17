@@ -91,7 +91,6 @@ shared_examples 'sorting ID' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.desc' do
       expect(page).to have_content('ID')
@@ -104,7 +103,6 @@ shared_examples 'sorting ID' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
 
     within 'div.wice-grid-container table.wice-grid thead th.sorted a.asc' do
       expect(page).to have_content('ID')
@@ -117,7 +115,6 @@ shared_examples 'sorting ID' do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1
 
     within '.wice-grid li.active' do
       expect(page).to have_content('2')
@@ -162,8 +159,6 @@ shared_examples 'sorting Title' do
     within 'ul.pagination' do
       click_link '2'
     end
-
-    sleep 1
 
     within '.wice-grid li.active' do
       expect(page).to have_content('2')
@@ -383,8 +378,6 @@ shared_examples 'sorting Description in all records mode' do
   it 'should sort column Description' do
     click_on 'show all'
 
-    sleep 1
-
     within '.pagination_status' do
       expect(page).to have_content('1-50 / 50')
     end
@@ -420,6 +413,7 @@ shared_examples 'sorting Archived in all records mode' do
     click_on 'show all'
 
     within '.pagination_status' do
+      expect(page).to have_content('back to paginated view')
       expect(page).to have_content('1-50 / 50')
     end
 
@@ -483,15 +477,6 @@ shared_examples 'sorting Due Date in all records mode' do
   end
 end
 
-def wait_for_ajax(page)
-  counter = 0
-  while page.execute_script('return $.active').to_i > 0
-    counter += 1
-    sleep(0.1)
-    fail 'AJAX request took longer than 5 seconds.' if counter >= 50
-  end
-end
-
 MONTH_NAMES = %w(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
 
 
@@ -517,8 +502,6 @@ shared_examples 'Due Date datepicker filtering' do
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2013, 0, 1)
 
     find(:css, '#grid_submit_grid_icon').click
-    sleep 1
-
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -531,7 +514,10 @@ shared_examples 'Due Date datepicker filtering' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-10-02')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -540,7 +526,6 @@ shared_examples 'Due Date datepicker filtering' do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2012-07-02')
@@ -551,27 +536,22 @@ shared_examples 'Due Date datepicker filtering' do
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2012, 6, 31)
 
     find(:css, '#grid_submit_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-1 / 1')
     end
 
     find(:css, '#grid_f_due_date_fr_date_view').click
-    sleep 1
 
     find(:css, '#grid_submit_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-10 / 10')
     end
 
     find(:css, '#grid_f_due_date_to_date_view').click
-    sleep 1
 
     find(:css, '#grid_submit_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 50')
@@ -586,7 +566,6 @@ shared_examples 'Added datepicker filtering' do
     set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2011, 9, 1)
 
     find(:css, '#grid_submit_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 29')
@@ -599,7 +578,10 @@ shared_examples 'Added datepicker filtering' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-09-29 22:11:12')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 29')
@@ -608,15 +590,12 @@ shared_examples 'Added datepicker filtering' do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 2
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2011-09-22 22:11:12')
-      # page.should have_content('2011-08-14 22:11:12')
     end
 
     find(:css, '#grid_reset_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 50')
@@ -679,7 +658,6 @@ shared_examples 'Created At standard filtering' do
     select '00', from: 'grid_f_updated_at_to_minute'
 
     find(:css, '#grid_submit_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-14 / 14')
@@ -692,14 +670,16 @@ shared_examples 'Created At standard filtering' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-12-07 22:11:12')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-14 / 14')
     end
 
     find(:css, '#grid_reset_grid_icon').click
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 50')
@@ -977,7 +957,7 @@ shared_examples 'Archived filtering' do
 end
 
 shared_examples 'Title filtering' do
-  it 'should filter by Ttile' do
+  it 'should filter by Title' do
     fill_in('grid_f_title', with: 'ed')
 
     find(:css, '#grid_submit_grid_icon').click

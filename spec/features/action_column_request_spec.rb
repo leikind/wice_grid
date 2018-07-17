@@ -50,7 +50,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
@@ -66,7 +65,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
@@ -132,7 +130,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
       expect(page).to have_content('1-20 / 29')
     end
 
-    # sleep 200
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2011-09-13 22:11:12')
     end
@@ -140,7 +137,10 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2011-09-29 22:11:12')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 29')
@@ -149,7 +149,6 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       # page.should have_content('2011-08-14 22:11:12')
@@ -175,7 +174,10 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
-    sleep 1
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('2012-10-02')
+    end
 
     within '.pagination_status' do
       expect(page).to have_content('1-20 / 35')
@@ -184,7 +186,10 @@ describe 'action_column WiceGrid', type: :request, js: true do
     within 'ul.pagination' do
       click_link '2'
     end
-    sleep 1 # !!!!
+
+    within '.pagination_status' do
+      expect(page).to have_content('21-35 / 35')
+    end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2012-07-02')

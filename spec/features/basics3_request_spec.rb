@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'basisc3 WiceGrid',  js: true do
+describe 'basics3 WiceGrid',  js: true do
   before :each do
     visit '/basics3'
   end
