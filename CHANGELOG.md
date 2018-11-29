@@ -6,6 +6,7 @@
 * Add support for using `Arel::Attributes::Attribute`s with the `custom_order` option. - [#41](https://github.com/patricklindsay/wice_grid/pull/41)
 * Added `sort_by` option to column to allow arbitrary, Ruby-based ordering. - [#3](https://github.com/patricklindsay/wice_grid/pull/3)
 * Added Rails 5.2 support
+* Bump Kaminari to ~> 1.1.0
 
 ## 4.0.1 (31 May, 2018)
 

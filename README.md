@@ -1,41 +1,13 @@
-# Rails 5+ Version of WiceGrid.
-
-Yuri no longer maintains WiceGrid & the latest published version (3.6.2) is not compatible with Rails 5.
-This fork has been made to support Rails 5+.
-
-## Usage
-```
-# Rails => 5
-gem 'wice_grid', git: 'https://github.com/patricklindsay/wice_grid.git', tag: 'v4.0.1'
-
-# Rails < 5
-gem 'wice_grid', '3.6.2'
-```
-
-## What has changed since you forked?
-* Removed old 'development', 'master' & 'modernization' branches
-* Renamed 'Rails3' branch to 'master' and made this default
-* [Diff between the latest wice_grid (Edge) & this fork](https://github.com/leikind/wice_grid/compare/leikind:rails3...patricklindsay:master)
-* [Diff between last wice_grid published version (3.6.2) & this fork](https://github.com/leikind/wice_grid/compare/cd21a0ec93c4b55013ebddf8cbcc13df9acf20e9...patricklindsay:master)
-* Checkout [CHANGELOG.md](https://github.com/patricklindsay/wice_grid/blob/master/CHANGELOG.md) for more information.
-
--------------------------------
-
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
-[![Build](https://travis-ci.org/leikind/wice_grid.svg)](https://travis-ci.org/leikind/wice_grid)
-[![Inline docs](http://inch-ci.org/github/leikind/wice_grid.svg?branch=rails3)](http://inch-ci.org/github/leikind/wice_grid/branch/rails3)
+[![CircleCI](https://circleci.com/gh/patricklindsay/wice_grid.svg?style=svg)](https://circleci.com/gh/patricklindsay/wice_grid)
+[![Inline docs](http://inch-ci.org/github/patricklindsay/wice_grid.svg)](http://inch-ci.org/github/patricklindsay/wice_grid)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
-THE PROJECT IS LOOKING FOR CONTRIBUTORS. THE AUTHOR WILL NOT WORK ON IT ANYMORE!
-
-* Yuri Leikind, yuri.leikind at gmail dot com
-* Version 3.6.0.pre3; [What's New In 3.6.0](https://github.com/leikind/wice_grid/wiki/What's-New-In-3.6.0)
-* This tutorial is accompanied by a sample application with WiceGrid examples which you can browse online:
-http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind/wice_grid_testbed.
-
-
-
 # WiceGrid
+
+THE PROJECT IS LOOKING FOR CONTRIBUTORS.
+
+Check out this [sample application](http://wicegrid.herokuapp.com) which demos all features & includes code samples.
 
 - [Intro](#intro)
 - [Requirements and Rails versions](#requirements-and-rails-versions)
@@ -49,7 +21,7 @@ http://wicegrid.herokuapp.com, or just view the code: https://github.com/leikind
   - [Joined associations referring to the same table](#joined-associations-referring-to-the-same-table)
   - [More than one grid on a page](#more-than-one_grid-on-a-page)
   - [Custom Ordering](#custom-ordering)
-  - [Custom Sorting](#custom-sorting)  
+  - [Custom Sorting](#custom-sorting)
 - [Filters](#filters)
   - [Custom dropdown filters](#custom-dropdown-filters)
   - [Numeric Filters](#numeric-filters)
@@ -92,15 +64,18 @@ WiceGrid views do not contain forms so you can include it in your own forms.
 
 WiceGrid is known to work with MySQL, Postgres, and Oracle.
 
+Continue reading for more information or check out our [CHANGELOG](https://github.com/patricklindsay/wice_grid/blob/master/CHANGELOG.md) to find out whats been going on.
+
 
 ## Requirements and Rails versions
 
-For rails 2 use version 0.6 in [the master branch](https://github.com/leikind/wice_grid/tree/master).
-That branch is hardly supported.
+```
+# Rails => 5
+gem 'wice_grid'
 
-The main supported branch is `rails3`. Latest Rails 3.2.x and Rails 4.x.x are supported in this branch.
-
-If you need to use the plugin in with Rails 3.0.x and 3.1.x versions, please use WiceGrid version 3.0.4.
+# Rails 4
+gem 'wice_grid', '3.6.2'
+```
 
 WiceGrid relies on jQuery.
 
@@ -114,14 +89,14 @@ WARNING: Since 3.2.pre2 WiceGrid is not compatible with `will_paginate` because 
 
 ## Installation
 
-Add the following to your Gemfile:
+Add the following to your Gemfile & run `bundle`:
 
 ```ruby
-gem "wice_grid", '3.6.0.pre4'
+gem "wice_grid"
 gem 'font-awesome-sass',  '~> 4.3'
 ```
 
-and run the `bundle` command. `font-awesome-sass` is not a dependency of WiceGrid in case you decide to style WiceGrid icons differently.
+Note: `font-awesome-sass` is not a dependency of WiceGrid in case you decide to style WiceGrid icons differently.
 
 Run the generator:
 
@@ -130,7 +105,7 @@ rails g wice_grid:install
 ```
 
 This adds the following file:
-* config/initializers/wice_grid_config.rb
+* `config/initializers/wice_grid_config.rb`
 
 
 Require WiceGrid javascript in your js index file:
@@ -577,7 +552,7 @@ keys are fully qualified names of database columns, and values are anything that
 
 #### String
 
-Starting in Rails 5.2, you may need to whitelist `String` values with `Arel.sql` 
+Starting in Rails 5.2, you may need to whitelist `String` values with `Arel.sql`
 to avoid a warning or error.
 
 ```ruby
@@ -1583,5 +1558,4 @@ This repository contains a Rails application for testing purposes. To fire up th
 
 ## Bug reports
 
-The author of the plugin welcomes any contribution.
-Please follow [these guidelines](https://github.com/leikind/wice_grid/wiki/How-to-submit-a-bug-report-or-a-question) when submitting a bug report.
+If you discover a problem with Wicegrid, we would love to know about it. Please use the [GitHub issue tracker](https://github.com/patricklindsay/wice_grid/issues)
