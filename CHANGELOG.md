@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 4.1.0 (28 November, 2018)
+
 * Add option `filter_control_options` to columns. Initial use is to pass in the options `start_year`, `end_year`, and `max_year_allowed` when using `rails_datetime_helper` - [#12](https://github.com/patricklindsay/wice_grid/pull/18)
 * Fix deprecation (in Rails 5.0.x) and incorrect behaviour (in Rails 5.1.x) of CSV exports - [#4](https://github.com/patricklindsay/wice_grid/pull/4)
 * Fix deprecation (in Rails 5.2) regarding "Dangerous query methods" in `order` clauses. Note that when using the `custom_order` option you must pass a value acceptable for ActiveRecord's `order` method, otherwise you will receive the same warning. - [#41](https://github.com/patricklindsay/wice_grid/pull/41)
