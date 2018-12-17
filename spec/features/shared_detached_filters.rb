@@ -138,9 +138,14 @@ shared_examples "detached_filters" do
 
     expect(page).to have_content('Inventore iure eos labore ipsum.')
     expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
+    expect(page).to have_no_content('Eos qui est quis.')
 
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Description'
+    end
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child' do
+      expect(page).to have_content('Accusamus voluptas sunt deleniti iusto dolorem repudiandae.')
     end
 
     within '.pagination_status' do
@@ -149,6 +154,7 @@ shared_examples "detached_filters" do
 
     expect(page).to have_content('Inventore iure eos labore ipsum.')
     expect(page).to have_content('Velit atque sapiente aspernatur sint fuga.')
+    expect(page).to have_no_content('Eos qui est quis.')
 
     click_button('Reset')
     within '.pagination_status' do
