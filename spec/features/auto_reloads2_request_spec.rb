@@ -293,13 +293,18 @@ describe 'auto reloads 2 WiceGrid', type: :request, js: true do
   end
 
   it 'should negate the semantics of the text  filter' do
+    expect(page).to have_content('sequi')
+    expect(page).to have_content('sed impedit iste')
+
     fill_in('grid_f_title_v', with: 'sed')
     select 'no', from: 'grid_f_archived'
 
+    expect(page).to have_no_content('sequi')
     expect(page).to have_content('sed impedit iste')
 
     find(:css, '#grid_f_title_n').click
 
+    expect(page).to have_content('sequi')
     expect(page).to have_no_content('sed impedit iste')
   end
 
@@ -340,6 +345,10 @@ describe 'auto reloads 2 WiceGrid', type: :request, js: true do
 
     expect(page).to have_content('corporis expedita vel')
     expect(page).to have_content('sed impedit iste')
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('sed impedit iste')
+    end
 
     find(:css, '.wg-external-reset-button').click
     within '.pagination_status' do
