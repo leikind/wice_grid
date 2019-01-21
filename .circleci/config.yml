@@ -61,3 +61,4 @@ workflows:
     jobs:
     - build-ruby24
     - build-ruby25
+    - build-ruby26
