@@ -154,6 +154,10 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
       click_on 'Title'
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
+      expect(page).to have_content('ab')
+    end
+
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
     end
@@ -337,8 +341,11 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
       expect(page).to have_content('1-2 / 2')
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('sed impedit iste')
+    end
+
     expect(page).to have_content('corporis expedita vel')
-    expect(page).to have_content('sed impedit iste')
 
     find(:css, '#grid_reset_grid_icon').click
     within '.pagination_status' do

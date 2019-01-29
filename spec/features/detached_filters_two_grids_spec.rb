@@ -50,6 +50,9 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     find(:css, '.external-buttons-grid1 .wg-external-reset-button').click
 
+    expect(page).to have_selector('#grid_f_due_date_fr_date_placeholder:not([value])')
+    expect(page).to have_selector('#grid_f_due_date_to_date_placeholder:not([value])')
+
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-20 / 50')
     end
@@ -59,6 +62,9 @@ describe 'buttons WiceGrid', type: :request, js: true do
     end
 
     find(:css, '.external-buttons-grid2 .wg-external-reset-button').click
+
+    expect(page).to have_selector('#grid2_f_due_date_fr_date_placeholder:not([value])')
+    expect(page).to have_selector('#grid2_f_due_date_to_date_placeholder:not([value])')
 
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-20 / 50')

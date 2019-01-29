@@ -78,8 +78,11 @@ shared_examples "detached_filters" do
       expect(page).to have_content('1-2 / 2')
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('sed impedit iste')
+    end
+
     expect(page).to have_content('corporis expedita vel')
-    expect(page).to have_content('sed impedit iste')
 
     click_button('Reset')
     within '.pagination_status' do
