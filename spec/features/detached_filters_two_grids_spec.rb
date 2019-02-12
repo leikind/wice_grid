@@ -72,6 +72,9 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
 
+    # Test is flaky, not sure why.
+    sleep 1
+
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-2 / 2')
     end
