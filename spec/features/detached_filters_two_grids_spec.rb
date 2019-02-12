@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'buttons WiceGrid', type: :request, js: true do
+describe 'buttons WiceGrid', type: :feature, js: true do
   before :each do
     visit '/detached_filters_two_grids'
   end
@@ -31,9 +31,6 @@ describe 'buttons WiceGrid', type: :request, js: true do
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2012, 11, 31)
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
 
-    # Test is flaky, not sure why.
-    sleep 1
-
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-3 / 3')
     end
@@ -41,8 +38,6 @@ describe 'buttons WiceGrid', type: :request, js: true do
     set_datepicker(self, 'grid2_f_due_date_fr_date_placeholder', 2013, 0, 1)
     set_datepicker(self, 'grid2_f_due_date_to_date_placeholder', 2013, 11, 31)
     find(:css, '.external-buttons-grid2 .wg-external-submit-button').click
-
-    sleep 1
 
     # stays the same
     within 'div#grid.wice-grid-container .pagination_status' do
@@ -55,8 +50,6 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     find(:css, '.external-buttons-grid1 .wg-external-reset-button').click
 
-    sleep 1
-
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-20 / 50')
     end
@@ -66,8 +59,6 @@ describe 'buttons WiceGrid', type: :request, js: true do
     end
 
     find(:css, '.external-buttons-grid2 .wg-external-reset-button').click
-
-    sleep 1
 
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-20 / 50')
@@ -80,8 +71,6 @@ describe 'buttons WiceGrid', type: :request, js: true do
     fill_in('grid_f_title', with: 'ed')
 
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
-
-    sleep 1
 
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-2 / 2')
@@ -134,5 +123,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
     within first(:css, 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter') do
       expect(page).to have_content('sequi')
     end
+
+    expect(true).to eq(false)
   end
 end
