@@ -123,7 +123,5 @@ describe 'buttons WiceGrid', type: :feature, js: true do
     within first(:css, 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter') do
       expect(page).to have_content('sequi')
     end
-
-    expect(true).to eq(false)
   end
 end
