@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'auto reloads WiceGrid', type: :request, js: true do
+describe 'auto reloads WiceGrid', type: :feature, js: true do
   before :each do
     visit '/auto_reloads'
   end
