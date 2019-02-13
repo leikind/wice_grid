@@ -154,6 +154,10 @@ describe 'auto reloads WiceGrid', type: :feature, js: true do
       click_on 'Title'
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
+      expect(page).to have_content('ab')
+    end
+
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
     end
@@ -337,7 +341,7 @@ describe 'auto reloads WiceGrid', type: :feature, js: true do
       expect(page).to have_content('1-2 / 2')
     end
 
-    within 'div#grid.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('sed impedit iste')
     end
 
