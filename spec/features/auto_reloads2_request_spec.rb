@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'auto reloads 2 WiceGrid', type: :request, js: true do
+describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
   before :each do
     visit '/auto_reloads2'
   end
@@ -159,6 +159,10 @@ describe 'auto reloads 2 WiceGrid', type: :request, js: true do
 
     within '.pagination_status' do
       expect(page).to have_content('1-3 / 3')
+    end
+
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
+      expect(page).to have_content('ab')
     end
 
     expect(page).to have_content('507')

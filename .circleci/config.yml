@@ -34,6 +34,10 @@ build_job: &build_job
     # Run the tests
     - run: bundle exec appraisal rspec
 
+    - store_artifacts:
+        path: spec/support/test_app/tmp/capybara
+        destination: screenshots
+
 version: 2
 jobs:
   build-ruby24:

@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'buttons WiceGrid', type: :request, js: true do
+describe 'buttons WiceGrid', type: :feature, js: true do
   before :each do
     visit '/detached_filters_two_grids'
   end
 
-  it 'should be independant of each other' do
+  it 'should be independent of each other' do
     select 'yes', from: 'grid_f_archived'
 
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
@@ -50,6 +50,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     find(:css, '.external-buttons-grid1 .wg-external-reset-button').click
 
+    expect(page).to have_select('grid_f_archived', selected: '--')
     expect(page).to have_selector('#grid_f_due_date_fr_date_placeholder:not([value])')
     expect(page).to have_selector('#grid_f_due_date_to_date_placeholder:not([value])')
 
@@ -63,6 +64,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
 
     find(:css, '.external-buttons-grid2 .wg-external-reset-button').click
 
+    expect(page).to have_select('grid2_f_archived', selected: '--')
     expect(page).to have_selector('#grid2_f_due_date_fr_date_placeholder:not([value])')
     expect(page).to have_selector('#grid2_f_due_date_to_date_placeholder:not([value])')
 
