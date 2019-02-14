@@ -295,15 +295,24 @@ describe 'auto reloads WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should negate the semantics of the text  filter' do
+  it 'should negate the semantics of the text filter' do
     fill_in('grid_f_title_v', with: 'sed')
-    select 'no', from: 'grid_f_archived'
 
     expect(page).to have_content('sed impedit iste')
+    expect(page).to have_no_content('sequi')
+
+    select 'no', from: 'grid_f_archived'
+
+    # Does not change the visible rows, just highlights the archived column
+    expect(page).to have_selector('.wice-grid tbody tr td:nth-child(3).active-filter')
+
+    expect(page).to have_content('sed impedit iste')
+    expect(page).to have_no_content('sequi')
 
     find(:css, '#grid_f_title_n').click
 
     expect(page).to have_no_content('sed impedit iste')
+    expect(page).to have_content('sequi')
   end
 
   it 'should reload the title filter' do
