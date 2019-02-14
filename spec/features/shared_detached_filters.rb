@@ -74,6 +74,10 @@ shared_examples "detached_filters" do
       click_on 'ID'
     end
 
+    within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
+      expect(page).to have_content('sed impedit iste')
+    end
+
     within '.pagination_status' do
       expect(page).to have_content('1-2 / 2')
     end
