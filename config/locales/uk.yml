@@ -1,9 +1,4 @@
 uk:
-  date:
-    order:
-      - :year
-      - :month
-      - :day
   wice_grid:
     show_filter_tooltip: "Показати фільтр"
     hide_filter_tooltip: "Сховати фільтр"

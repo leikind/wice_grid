@@ -1,9 +1,4 @@
 ru:
-  date:
-    order:
-      - :year
-      - :month
-      - :day
   wice_grid:
     show_filter_tooltip: Показать фильтр
     hide_filter_tooltip: Спрятать фильтр

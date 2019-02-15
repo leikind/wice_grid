@@ -1,9 +1,4 @@
 pt:
-  date:
-    order:
-      - :year
-      - :month
-      - :day
   wice_grid:
     show_filter_tooltip: Mostrar o filtro
     hide_filter_tooltip: Esconder o filtro

@@ -1,9 +1,4 @@
 is:
-  date:
-    order:
-      - :year
-      - :month
-      - :day
   wice_grid:
     show_filter_tooltip: Sýna síumöguleika
     hide_filter_tooltip: Fela síumoguleika

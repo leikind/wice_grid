@@ -1,9 +1,4 @@
 sk:
-  date:
-    order:
-      - :year
-      - :month
-      - :day
   wice_grid:
     show_filter_tooltip: Zobraziť filter
     hide_filter_tooltip: Skryť filter
