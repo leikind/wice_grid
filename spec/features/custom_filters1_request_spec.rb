@@ -1,35 +1,16 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'custom_ordering WiceGrid', type: :request, js: true do
+describe 'custom_ordering WiceGrid', type: :feature, js: true do
   before :each do
     visit '/custom_filters1'
   end
 
   it 'should have all options' do
-    within '#g1_f_status' do
-      expect(page).to have_content('Development')
-      expect(page).to have_content('Testing')
-      expect(page).to have_content('Production')
-    end
-
-    within '#g2_f_status' do
-      expect(page).to have_content('Development')
-      expect(page).to have_content('Testing')
-      expect(page).to have_content('Production')
-    end
-
-    within '#g3_f_status' do
-      expect(page).to have_content('development')
-      expect(page).to have_content('testing')
-      expect(page).to have_content('production')
-    end
-
-    within '#g4_f_status' do
-      expect(page).to have_content('development')
-      expect(page).to have_content('testing')
-      expect(page).to have_content('production')
-    end
+    expect(page).to have_select('g1_f_status', options: %w(-- Development Testing Production))
+    expect(page).to have_select('g2_f_status', options: %w(-- Development Testing Production))
+    expect(page).to have_select('g3_f_status', options: %w(-- development testing production))
+    expect(page).to have_select('g4_f_status', options: %w(-- development testing production))
   end
 
   it 'should have expand/collapse' do

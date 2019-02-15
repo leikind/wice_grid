@@ -16,6 +16,7 @@ else
   require 'capybara-screenshot/rspec'
   Capybara::Screenshot.prune_strategy = :keep_last_run
 end
+Capybara.server = :webrick
 
 # Slow down responses to help debug tests that have race conditions.
 if ENV['TEST_RESPONSE_DELAY']
