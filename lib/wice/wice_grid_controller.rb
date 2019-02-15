@@ -115,7 +115,7 @@ module Wice
         temp_filename = temp_filename.strip
         filename = (grid.csv_file_name || grid.name) + '.csv'
         grid.csv_tempfile.close
-        send_file_rails2 temp_filename, filename: filename, type: "text/csv; charset=#{get_output_encoding grid.csv_encoding}"
+        send_file temp_filename, filename: filename, type: "text/csv; charset=#{get_output_encoding grid.csv_encoding}"
         grid.csv_tempfile = nil
         true
       else
@@ -169,56 +169,6 @@ module Wice
       else
         csv_encoding.split(':').first
       end
-    end
-
-    def send_file_rails2(path, options = {}) #:nodoc:
-      raise "Cannot read file #{path}" unless File.file?(path) && File.readable?(path)
-
-      options[:length] ||= File.size(path)
-      options[:filename] ||= File.basename(path) unless options[:url_based_filename]
-      send_file_headers_rails2! options
-
-      @performed_render = false
-
-      logger.info "Sending file #{path}" unless logger.nil?
-      File.open(path, 'rb') { |file| render status: options[:status], plain: file.read }
-    end
-
-    DEFAULT_SEND_FILE_OPTIONS_RAILS2 = { #:nodoc:
-      type:         'application/octet-stream'.freeze,
-      disposition:  'attachment'.freeze,
-      stream:       true,
-      buffer_size:  4096,
-      x_sendfile:   false
-    }.freeze
-
-    def send_file_headers_rails2!(options) #:nodoc:
-      options.update(DEFAULT_SEND_FILE_OPTIONS_RAILS2.merge(options))
-      [:length, :type, :disposition].each do |arg|
-        raise ArgumentError, ":#{arg} option required" if options[arg].nil?
-      end
-
-      disposition = options[:disposition].dup || 'attachment'
-
-      disposition <<= %(; filename="#{options[:filename]}") if options[:filename]
-
-      content_type = options[:type]
-      content_type = content_type.to_s.strip # fixes a problem with extra '\r' with some browsers
-
-      headers.merge!(
-        'Content-Length'            => options[:length].to_s,
-        'Content-Type'              => content_type,
-        'Content-Disposition'       => disposition,
-        'Content-Transfer-Encoding' => 'binary'
-      )
-
-      # Fix a problem with IE 6.0 on opening downloaded files:
-      # If Cache-Control: no-cache is set (which Rails does by default),
-      # IE removes the file it just downloaded from its cache immediately
-      # after it displays the "open/save" dialog, which means that if you
-      # hit "open" the file isn't there anymore when the application that
-      # is called for handling the download is run, so let's workaround that
-      headers['Cache-Control'] = 'private' if headers['Cache-Control'] == 'no-cache'
     end
   end
 end
