@@ -52,6 +52,12 @@ jobs:
       - image: circleci/ruby:2.5
         environment:
           RAILS_ENV: test
+  build-ruby26:
+    <<: *build_job
+    docker:
+      - image: circleci/ruby:2.6
+        environment:
+          RAILS_ENV: test
 
 workflows:
   version: 2
@@ -59,3 +65,4 @@ workflows:
     jobs:
     - build-ruby24
     - build-ruby25
+    - build-ruby26
