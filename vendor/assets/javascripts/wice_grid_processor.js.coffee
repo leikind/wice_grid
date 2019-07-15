@@ -14,8 +14,8 @@ class WiceGridProcessor
   process : (domIdToFocus)->
     @visit @buildUrlWithParams(domIdToFocus)
 
-  visit : (path) ->
-    if Turbolinks?
+  visit : (path, use_turbolink = true) ->
+    if Turbolinks? and use_turbolink
       Turbolinks.visit path
     else
       window.location = path
@@ -84,7 +84,7 @@ class WiceGridProcessor
 
 
   exportToCsv : ->
-    @visit @linkForExport
+    @visit @linkForExport, false
 
 
   register : (func)->

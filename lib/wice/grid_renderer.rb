@@ -106,7 +106,7 @@ module Wice
     def csv_export_icon #:nodoc:
       content_tag(
         :div,
-        content_tag(:i, '', class: 'fa fa-file-excel-o'),
+        content_tag(:i, '', class: 'fa fa-file-csv'),
         title: NlMessage['csv_export_tooltip'],
         class: 'clickable export-to-csv-button'
       )
@@ -119,13 +119,13 @@ module Wice
 
       if panel.nil?
         if render_csv_button
-          "<tr><td colspan=\"#{number_of_columns}\"></td><td>#{csv_export_icon}</td></tr>"
+          "<tr><td colspan=\"#{number_of_columns}\"></td><td class=\"csv_export\">#{csv_export_icon}</td></tr>"
         else
           ''
         end
       else
         if render_csv_button
-          "<tr><td colspan=\"#{number_of_columns}\">#{panel}</td><td>#{csv_export_icon}</td></tr>"
+          "<tr><td colspan=\"#{number_of_columns}\">#{panel}</td><td class=\"csv_export\">#{csv_export_icon}</td></tr>"
         else
           "<tr><td colspan=\"#{number_of_columns + 1}\">#{panel}</td></tr>"
         end
