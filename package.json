@@ -1,0 +1,18 @@
+{
+  "name": "wice-grid",
+  "version": "4.1.0",
+  "description": "WiceGrid is a Rails grid plugin",
+  "main": "vendor/assets/javascripts/wice_grid.js",
+  "repository": {
+    "type": "git",
+    "url": "/home/dima/devel/github/wice_grid"
+  },
+  "author": "Dmitry Kulikov",
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
