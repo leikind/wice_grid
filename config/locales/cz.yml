@@ -38,3 +38,5 @@ cz:
     query_saved_message: Filtr byl uložen.
     select_all: Vyber všechno
     deselect_all: Zrušit výběr
+    expand: Rozšířit
+    collapse: Kolaps

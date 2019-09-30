@@ -38,3 +38,5 @@ sk:
     query_saved_message: Filter bol uložený.
     select_all: Vyber všetko
     deselect_all: Zrušiť výber
+    expand: Zväčšiť
+    collapse: Kolaps

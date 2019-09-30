@@ -38,3 +38,5 @@ pt:
     query_saved_message: A query foi gravada.
     select_all: Selecionar todos
     deselect_all: Remover seleção
+    expand: Expandir
+    collapse: Colapso

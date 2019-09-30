@@ -36,6 +36,7 @@ is:
     validates_presence_error: Vinsamlegast gefið heiti fyrir leitarskipun
     query_deleted_message: Vistaðri leitarskipun hefur verið eytt
     query_saved_message: leitaskipun hefur verið vistuð
-    # To do: translate
-    select_all: Select all
-    deselect_all: Remove selection
+    select_all: Velja allt
+    deselect_all: Fjarlægðu val
+    expand: Stækka
+    collapse: Hrun

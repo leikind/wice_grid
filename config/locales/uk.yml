@@ -38,3 +38,5 @@ uk:
     query_saved_message: "Збережуваний фільтр збережено."
     select_all: "Виділити все"
     deselect_all: "Забрати виділення"
+    expand: Розгорнути
+    collapse: Згорнути

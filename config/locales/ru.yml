@@ -38,3 +38,5 @@ ru:
     query_saved_message: Сохранённый фильтр сохранён.
     select_all: Отметить все
     deselect_all: Убрать выделение
+    expand: Развернуть
+    collapse: Свернуть

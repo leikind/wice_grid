@@ -29,3 +29,5 @@ pt-BR:
     query_saved_message: O filtro foi gravado.
     select_all: Selecionar todos
     deselect_all: Remover seleção
+    expand: Expandir
+    collapse: Colapso

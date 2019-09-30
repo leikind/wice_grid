@@ -38,3 +38,5 @@ fr:
     query_saved_message: La requête a été sauvée.
     select_all: Sélectionner tout
     deselect_all: Désélectionner tout
+    expand: Étendre
+    collapse: Écrouler

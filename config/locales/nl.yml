@@ -38,3 +38,5 @@ nl:
     query_saved_message: Query opgeslagen
     select_all: Selecteer alle rijen
     deselect_all: Deselecteer alle rijen
+    expand: Uitbreiden
+    collapse: Ineenstorting
