@@ -3,7 +3,7 @@ PATH
   specs:
     wice_grid (4.1.0)
       coffee-rails (> 3.2)
-      kaminari (~> 1.1.0)
+      kaminari (~> 1.1)
       rails (~> 5.0, < 5.3)
 
 GEM
