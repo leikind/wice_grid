@@ -1,5 +1,7 @@
 ## Unreleased
 
+* Fix bug in "Dangerous query methods" deprecation warning fix in custom order when using Arel.sql
+
 ## 4.1.0 (28 November, 2018)
 
 * Add option `filter_control_options` to columns. Initial use is to pass in the options `start_year`, `end_year`, and `max_year_allowed` when using `rails_datetime_helper` - [#12](https://github.com/patricklindsay/wice_grid/pull/18)

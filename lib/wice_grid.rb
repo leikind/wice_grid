@@ -304,7 +304,7 @@ module Wice
         else
           @ar_options[:order] = arel_column_reference(@status[:order])
         end
-        if @ar_options[:order].is_a?(Arel::Attributes::Attribute)
+        if @ar_options[:order].is_a?(Arel::Attributes::Attribute) || @ar_options[:order].is_a?(Arel::Nodes::SqlLiteral)
           if @status[:order_direction] == 'desc'
             @ar_options[:order] = @ar_options[:order].desc
           else
