@@ -115,6 +115,12 @@ module Wice
       @column.model
     end
 
+    def array?
+      @column.sql_type_metadata.array
+    rescue
+      false
+    end
+
     def alias_or_table_name(table_alias) #:nodoc:
       table_alias || @column.model.table_name
     end

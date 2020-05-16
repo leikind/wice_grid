@@ -83,17 +83,23 @@ module Wice
         end
         opts = (opts.is_a?(Array) && opts.size == 1) ? opts[0] : opts
 
+        column_name =
+            "#{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name}"
         if opts.is_a?(Array)
           opts_with_special_values, normal_opts = opts.partition { |v| ::Wice::GridTools.special_value(v) }
 
           conditions_ar = if normal_opts.size > 0
-            [" #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
+            if @column_wrapper.array?
+              [(["? = ANY(#{column_name})"] * normal_opts.size).join(' OR ')] + normal_opts
+            else
+              [" #{column_name} IN ( " + (['?'] * normal_opts.size).join(', ') + ' )'] + normal_opts
+            end
           else
             []
           end
 
           if opts_with_special_values.size > 0
-            special_conditions = opts_with_special_values.collect { |v| " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} is " + v }.join(' or ')
+            special_conditions = opts_with_special_values.collect { |v| " #{column_name} is " + v }.join(' or ')
             if conditions_ar.size > 0
               conditions_ar[0] = " (#{conditions_ar[0]} or #{special_conditions} ) "
             else
@@ -103,9 +109,13 @@ module Wice
           conditions_ar
         else
           if ::Wice::GridTools.special_value(opts)
-            " #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} is " + opts
+            " #{column_name} is " + opts
           else
-            [" #{@column_wrapper.alias_or_table_name(table_alias)}.#{@column_wrapper.name} = ?", opts]
+            if @column_wrapper.array?
+              [" ? = ANY(#{column_name})", opts]
+            else
+              [" #{column_name} = ?", opts]
+            end
           end
         end
       end
