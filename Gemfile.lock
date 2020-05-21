@@ -4,7 +4,7 @@ PATH
     wice_grid (4.1.0)
       coffee-rails (> 3.2)
       kaminari (~> 1.1)
-      rails (~> 5.0, < 5.3)
+      rails (>= 5.0)
 
 GEM
   remote: https://rubygems.org/
@@ -297,4 +297,4 @@ DEPENDENCIES
   yard (~> 0.8)
 
 BUNDLED WITH
-   1.17.2
+   1.17.3
