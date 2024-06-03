@@ -33,9 +33,12 @@ module ApplicationHelper
 
       @view_files_dir.each do|filename_for_view, filename|
         filetype = filename_for_view =~ /\.erb/ ? :rhtml : :haml
-        res << code_for(filename, filename_for_view, filetype)
+        res << code_for(filename, filename_for_view, filetype) unless filename.ends_with? '~'
       end
     end
+    #.reject do |file_name|
+      #file_name.ends_with? '~'
+    #end
   end
 
   def code_for(filename, filename_for_view, filetype = :ruby)
