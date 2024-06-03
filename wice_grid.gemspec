@@ -37,6 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'coderay'
   s.add_development_dependency 'font-awesome-sass', '4.4.0'
+  s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'haml'
   s.add_development_dependency 'inch'
   s.add_development_dependency 'jquery-rails'
