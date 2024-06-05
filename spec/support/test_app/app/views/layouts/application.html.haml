@@ -11,7 +11,10 @@
     .container-fluid
 
       %header
-        %h1 WiceGrid 3.6.0.pre4 examples
+        %h1
+          WiceGrid
+          = Gem.loaded_specs['wice_grid'].version.to_s
+          examples
         .example-navigator
           %ul.pager
             - previous_example_controller, next_example_controller = previous_next_example_urls
