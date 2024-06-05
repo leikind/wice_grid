@@ -1,39 +1,57 @@
 describe Wice::GridOutputBuffer do
-  FILTER_COMMON_CODE = 'here filter code'
+  subject(:buffer){Wice::GridOutputBuffer.new}
+  let(:key) {'key'}
+  let(:filter_code) {'here filter code'}
+  describe '#to_s' do
+    subject(:method_to_s) {buffer.to_s}
 
-
-  let(:buffer){Wice::GridOutputBuffer.new}
-
-  it 'should to_s' do
-    expect(buffer.to_s.class).to eq(ActiveSupport::SafeBuffer)
+    it 'has class ActiveSupport::SafeBuffer' do
+      is_expected.to be_an ActiveSupport::SafeBuffer
+    end
   end
 
-  it 'should add_filter' do
+  describe '#add_filter(key, filter_code)' do
+    subject(:add_filter) {buffer.add_filter key, filter_code}
 
-    expect(buffer.add_filter('key', FILTER_COMMON_CODE)).to eq(FILTER_COMMON_CODE)
+    it 'returns filter_code' do
+      is_expected.to be filter_code
+    end
   end
+  describe '#filter_for(key)' do
+    subject(:filter_for) {buffer.filter_for key}
+    before do
+      buffer.return_empty_strings_for_nonexistent_filters = false
+    end
 
-  it 'should filter_for' do
+    context 'when #add_filter has been called with the key' do
+      before do
+        buffer.add_filter(key, filter_code)
+      end
 
-    buffer.add_filter('key', FILTER_COMMON_CODE)
-    expect(buffer.filter_for('key')).to eq(FILTER_COMMON_CODE)
-  end
+      it 'returns the code saved under the key' do
+        is_expected.to be filter_code
+      end
 
-  it 'should filter_for 2 times' do
-    buffer.add_filter('key', FILTER_COMMON_CODE)
+      it 'removes the code and railses Wice::WiceGridException when called again' do
+        buffer.filter_for key
+        expect { filter_for }.to raise_error Wice::WiceGridException
+      end
+    end
 
-    expect(buffer.filter_for('key')).to eq(FILTER_COMMON_CODE)
-    expect { buffer.filter_for('key') }.to raise_error(Wice::WiceGridException)
-  end
+    context 'when #add_filter has not been called with the key' do
+      it 'railses Wice::WiceGridException' do
+        expect { filter_for }.to raise_error Wice::WiceGridException
+      end
 
-  it 'should filter_for without filters' do
+      context 'when #return_empty_strings_for_nonexistent_filters is set to true' do
+        before do
+          buffer.return_empty_strings_for_nonexistent_filters = true
+        end
 
-    expect { buffer.filter_for('key') }.to raise_error(Wice::WiceGridException)
-  end
-
-  it 'should filter_for return empty string' do
-    buffer.return_empty_strings_for_nonexistent_filters = true
-
-    expect(buffer.filter_for('key')).to eq('')
+        it 'returns empty string' do
+          is_expected.to eq ''
+        end
+      end
+    end
   end
 end

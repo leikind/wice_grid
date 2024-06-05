@@ -1,12 +1,12 @@
 # encoding: UTF-8
 require 'acceptance_helper'
 
-describe 'localization WiceGrid', type: :request, js: true do
+describe 'with the proper use of I18n WiceGrid', type: :request, js: true do
   before :each do
     visit '/localization'
   end
 
-  it 'should switch to different languages' do
+  it 'allows to switch to different languages' do
     click_on('en')
     expect(page).to have_content('show all')
 

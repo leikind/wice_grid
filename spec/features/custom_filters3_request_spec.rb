@@ -1,17 +1,17 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'custom_ordering WiceGrid', type: :feature, js: true do
+describe 'with method chains and custom filters WiceGrid', type: :feature, js: true do
   before :each do
     visit '/custom_filters3'
   end
 
-  it 'should have all options' do
+  it 'shows all options' do
     expect(page).to have_select('grid_f_expected_version_id', options: %w(-- 1.0 2.0 1.2))
     expect(page).to have_select('grid_f_versions_name', options: %w(-- 1.0 1.1 1.2 2.0 3.0 6.0 7.1 8.0 88.1 99.0))
   end
 
-  it 'should filter by custom fields' do
+  it 'allows to filter by custom fields' do
     first(:css, '.expand-multi-select-icon').click
 
     select('1.0', from: 'grid_f_versions_name')

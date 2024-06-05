@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'basisc4 WiceGrid',  js: true do
+describe 'with filter: false WiceGrid',  js: true do
   before :each do
     visit '/basics4'
   end
 
-  it 'should not have disabled filters' do
+  it 'does not render filters' do
     expect(page).to have_no_selector('#grid_f_id_fr')
     expect(page).to have_no_selector('#grid_f_id_to')
     expect(page).to have_no_selector('#grid_f_description')

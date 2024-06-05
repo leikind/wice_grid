@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'dates WiceGrid', type: :request, js: true do
+describe 'with filter_type: :rails_datetime_helper WiceGrid', type: :request, js: true do
   before :each do
     visit '/dates'
   end
@@ -22,7 +22,7 @@ describe 'dates WiceGrid', type: :request, js: true do
   include_examples 'Added datepicker filtering'
   include_examples 'Created At standard filtering'
 
-  it 'should filter by multiple fields' do
+  it 'filters by multiple fields' do
     select '2021', from: 'grid_f_updated_at_fr_year'
     select 'January', from: 'grid_f_updated_at_fr_month'
     select '8', from: 'grid_f_updated_at_fr_day'

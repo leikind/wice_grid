@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'action_column WiceGrid', type: :request, js: true do
+describe 'On the page /action_column WiceGrid', type: :request, js: true do
   before :each do
     visit '/action_column'
   end
 
-  it 'should select rows' do
+  it 'allows to select all rows by clicking the checkbox in the header' do
     510.upto(520).each do |i|
       find(:css, %(input[type="checkbox"][value="#{i}"])).click
     end
@@ -16,7 +16,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     expect(page).to have_content('Selected tasks: 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, and 520')
   end
 
-  it 'should select rows with the select all button and deselect them with the deselect button' do
+  it 'allows to select rows with the select all button and deselect them with the deselect button' do
     find(:css, '.clickable.select-all').click
 
     first(:css, 'button.btn', text: 'Process tasks').click
@@ -30,7 +30,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     expect(page).to have_no_content('Selected tasks: 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, and 526')
   end
 
-  it 'should filter by ID inside a form, two limits' do
+  it 'allows to filter by ID inside a form, two limits' do
     fill_in('g_f_id_fr', with: 507)
     fill_in('g_f_id_to', with: 509)
 
@@ -83,7 +83,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter by Archived inside a form' do
+  it 'allows to filter by Archived inside a form' do
     select 'yes', from: 'g_f_archived'
     first(:css, 'button.btn', text: 'Process tasks').click
 
@@ -119,7 +119,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter by Added inside a form' do
+  it 'allows to filter by Added inside a form' do
     set_datepicker(self, 'g_f_created_at_fr_date_placeholder', 2021, 5, 1)
 
     set_datepicker(self, 'g_f_created_at_to_date_placeholder', 2021, 9, 1)
@@ -156,7 +156,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter by Due Date' do
+  it 'allows to filter by Due Date' do
     set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2022, 0, 1)
 
     set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2023, 0, 1)
@@ -222,7 +222,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should negate the semantics of the text  filter inside a form' do
+  it 'allows to negate the semantics of the text  filter inside a form' do
     fill_in('g_f_title_v', with: 'sed')
     select 'no', from: 'g_f_archived'
 
@@ -237,7 +237,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     expect(page).to have_no_content('sed impedit iste')
   end
 
-  it 'should reload the title filter' do
+  it 'allows to reload the title filter' do
     fill_in('g_f_title_v', with: 'ed')
 
     first(:css, 'button.btn', text: 'Process tasks').click

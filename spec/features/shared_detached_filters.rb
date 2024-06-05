@@ -1,6 +1,6 @@
 # encoding: utf-8
 shared_examples "detached_filters" do
-  it "should filter by Archived" do
+  it "allows to filter by Archived" do
     select 'yes', :from => 'grid_f_archived'
     click_button('Submit')
 
@@ -41,7 +41,7 @@ shared_examples "detached_filters" do
     end
   end
 
-  it "should filter by Title" do
+  it "allows to filter by Title" do
     fill_in('grid_f_title', :with => 'ed')
 
     click_button('Submit')
@@ -94,7 +94,7 @@ shared_examples "detached_filters" do
     end
   end
 
-  it "should filter by Description" do
+  it "allows to filter by Description" do
     fill_in('grid_f_description', :with => 've')
 
     click_button('Submit')
@@ -136,7 +136,7 @@ shared_examples "detached_filters" do
     expect(page).to have_selector('.pagination_status', text: '1-20 / 50')
   end
 
-  it "should filter by multiple columns" do
+  it "allows to filter by multiple columns" do
     fill_in('grid_f_description', :with => 'v')
     fill_in('grid_f_title', :with => 's')
     select 'no', :from => 'grid_f_archived'

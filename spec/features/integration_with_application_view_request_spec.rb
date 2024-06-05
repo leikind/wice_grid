@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'current_page_records & all_pages_records WiceGrid', type: :request, js: true do
+describe 'with the methods #current_page_records & #all_pages_records WiceGrid', type: :request, js: true do
   before :each do
     visit '/integration_with_application_view'
   end
 
-  it 'should return records displayed on the page and throughout all pages' do
+  it 'returns records displayed on the page and throughout all pages' do
     all_records_current_page_text = '10 records on the current page: 507, 519, 537, 540, 511, 515, 523, 524, 527, and 531'
     all_records_all_pages_text = '50 records throughout all pages: 507, 519, 537, 540, 511, 515, 523, 524, 527, 531, 542, 551, 518, 520, 532, 535, 539, 512, 514, 516, 521, 522, 543, 544, 546, 550, 552, 510, 541, 553, 508, 513, 528, 529, 548, 556, 525, 534, 547, 555, 509, 517, 526, 536, 538, 545, 549, 530, 533, and 554'
 

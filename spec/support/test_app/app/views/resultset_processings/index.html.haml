@@ -7,16 +7,18 @@
     and
     %a{href: integration_with_application_view_index_path}
       %code current_page_records
-    helpers
-    a callback can be setup in the controller which is executed when a grid page is rendered.
-    Though the results of that processing is rendered on page, normally such callbacks are used
-    for some kind of background processing. Please notice that the callback is executed
+    helpers a callback can be setup in the controller which is executed
+    when a grid page is rendered.
+    Though the results of that processing is rendered on page, normally such callbacks
+    are used for some kind of background processing.
+    Please notice that the callback is executed
     %em after
-    the controller action and thus all controller instance variables have already been injected inti the view,
-    that is why the current example has a definition of
+    the controller action and thus all controller instance variables have already been
+    injected into the view, that is why the current example has a definition of
     %code @one_page_records
     %em before
-    the callback, so that the object is injected into the view and the callback block has access to the object as well.
+    the callback, so that the object is injected into the view and the callback block
+    has access to the object as well.
 
     The callback can be setup separately as a block:
 

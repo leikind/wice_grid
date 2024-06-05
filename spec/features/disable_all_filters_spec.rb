@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'disable_all_filters WiceGrid', type: :request, js: true do
+describe 'with show_filters: :no as a grid parameter WiceGrid', type: :request, js: true do
   before :each do
     visit '/disable_all_filters'
   end
 
-  it 'should not have disabled filters' do
+  it 'does not render filters' do
     expect(page).to have_no_selector('#grid_f_id_fr')
     expect(page).to have_no_selector('#grid_f_id_to')
     expect(page).to have_no_selector('#grid_f_description')

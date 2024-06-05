@@ -12,6 +12,10 @@ module Wice
       @filters = HashWithIndifferentAccess.new
     end
 
+    def inspect
+      "#<Wice::GridOutputBuffer #{@filters.map{|key, filter| "#{key}: #{filter.inspect}"}.join ', '}>"
+    end
+
     # returns HTML code the grid
     def to_s
       super.html_safe

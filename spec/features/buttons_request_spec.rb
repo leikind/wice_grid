@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'buttons WiceGrid', type: :request, js: true do
+describe 'with external buttons for Submit and Reset filters WiceGrid', type: :request, js: true do
   before :each do
     visit '/buttons'
   end
 
-  it 'should filter by Archived' do
+  it 'allows to filter by Archived' do
     select 'yes', from: 'grid_f_archived'
     click_button('Submit')
 
@@ -47,7 +47,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter by Ttile' do
+  it 'allows to filter by Ttile' do
     fill_in('grid_f_title', with: 'ed')
 
     click_button('Submit')
@@ -93,7 +93,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter by Description' do
+  it 'allows to filter by Description' do
     fill_in('grid_f_description', with: 've')
 
     click_button('Submit')
@@ -139,7 +139,7 @@ describe 'buttons WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter by multiple columns' do
+  it 'allows to filter by multiple columns' do
     fill_in('grid_f_description', with: 'v')
     fill_in('grid_f_title', with: 's')
     select 'no', from: 'grid_f_archived'

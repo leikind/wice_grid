@@ -1,19 +1,19 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'joining_tables WiceGrid', type: :request, js: true do
+describe 'with :include in :initialize_grid to include associated tables WiceGrid', type: :request, js: true do
   before :each do
     visit '/joining_tables'
   end
 
-  it 'should have filters for joined tables' do
+  it 'has filters for joined tables' do
     expect(page).to have_field('grid[f][priorities.name]')
     expect(page).to have_field('grid[f][statuses.name]')
     expect(page).to have_field('grid[f][projects.name]')
     expect(page).to have_field('grid[f][users.name]')
   end
 
-  it 'should have filter joined tables' do
+  it 'allows to filter based on joined tables' do
      fill_in('grid_f_priorities_name', with: 'Normal')
      fill_in('grid_f_statuses_name', with: 'Postponed')
      fill_in('grid_f_projects_name', with: 'Super')

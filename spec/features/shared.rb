@@ -4,13 +4,13 @@ shared_examples 'basic task table specs' do
     expect(page).to have_selector('div.wice-grid-container table.wice-grid')
   end
 
-  it 'should have a show all link' do
+  it 'has "show all" link' do
     within 'div.wice-grid-container table.wice-grid' do
       expect(page).to have_selector('a.wg-show-all-link')
     end
   end
 
-  it 'should change pages' do
+  it 'allows to navigate through the pages' do
     within 'ul.pagination' do
       click_link '2'
     end
@@ -36,7 +36,7 @@ shared_examples 'basic task table specs' do
     end
   end
 
-  it 'should have a pagination status with page 1 as the current page' do
+  it 'shows the pagination status with page 1 as the current page' do
     within 'div.wice-grid-container table.wice-grid' do
       expect(page).to have_selector('div.pagination')
 
@@ -55,7 +55,7 @@ shared_examples 'basic task table specs' do
 end
 
 shared_examples 'show all and back' do
-  it 'should show all records when asked' do
+  it 'shows all records when the button "show all" is clicked' do
     click_on 'show all'
 
     within 'div.wice-grid-container table.wice-grid' do
@@ -75,7 +75,7 @@ shared_examples 'show all and back' do
 end
 
 shared_examples 'names of columns' do
-  it 'should have names of columns' do
+  it 'shows the names of columns' do
     within 'div.wice-grid-container table.wice-grid thead' do
       expect(page).to have_content('ID')
       expect(page).to have_content('Title')
@@ -87,7 +87,7 @@ shared_examples 'names of columns' do
 end
 
 shared_examples 'sorting ID' do
-  it 'should sort column ID' do
+  it 'allows to sort column ID' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'ID'
     end
@@ -131,7 +131,7 @@ shared_examples 'sorting ID' do
 end
 
 shared_examples 'sorting Title' do
-  it 'should sort column Title' do
+  it 'allows to sort column Title' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Title'
     end
@@ -175,7 +175,7 @@ shared_examples 'sorting Title' do
 end
 
 shared_examples 'sorting Description' do
-  it 'should sort column Description' do
+  it 'allows to sort column Description' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Description'
     end
@@ -219,7 +219,7 @@ shared_examples 'sorting Description' do
 end
 
 shared_examples 'sorting Archived' do
-  it 'should sort column Archived' do
+  it 'allows to sort column Archived' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Archived'
     end
@@ -263,7 +263,7 @@ shared_examples 'sorting Archived' do
 end
 
 shared_examples 'sorting Due Date' do
-  it 'should sort column Due Date' do
+  it 'allows to sort column Due Date' do
     within 'div.wice-grid-container table.wice-grid thead' do
       click_on 'Due Date'
     end
@@ -307,7 +307,7 @@ shared_examples 'sorting Due Date' do
 end
 
 shared_examples 'sorting ID in all records mode' do
-  it 'should sort column ID' do
+  it 'allows to sort column ID' do
     click_on 'show all'
 
     within '.pagination_status' do
@@ -341,7 +341,7 @@ shared_examples 'sorting ID in all records mode' do
 end
 
 shared_examples 'sorting Title in all records mode' do
-  it 'should sort column Title' do
+  it 'allows to sort column Title' do
     click_on 'show all'
 
     within '.pagination_status' do
@@ -375,7 +375,7 @@ shared_examples 'sorting Title in all records mode' do
 end
 
 shared_examples 'sorting Description in all records mode' do
-  it 'should sort column Description' do
+  it 'allows to sort column Description' do
     click_on 'show all'
 
     within '.pagination_status' do
@@ -409,7 +409,7 @@ shared_examples 'sorting Description in all records mode' do
 end
 
 shared_examples 'sorting Archived in all records mode' do
-  it 'should sort column Archived' do
+  it 'allows to sort column Archived' do
     click_on 'show all'
 
     within '.pagination_status' do
@@ -444,7 +444,7 @@ shared_examples 'sorting Archived in all records mode' do
 end
 
 shared_examples 'sorting Due Date in all records mode' do
-  it 'should sort column Due Date' do
+  it 'allows to sort column Due Date' do
     click_on 'show all'
 
     within '.pagination_status' do
@@ -496,7 +496,7 @@ def set_datepicker(context, picker, year, month, day)
 end
 
 shared_examples 'Due Date datepicker filtering' do
-  it 'should filter by Due Date' do
+  it 'allows to filter by Due Date' do
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2022, 0, 1)
 
     set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2023, 0, 1)
@@ -560,7 +560,7 @@ shared_examples 'Due Date datepicker filtering' do
 end
 
 shared_examples 'Added datepicker filtering' do
-  it 'should filter by Added' do
+  it 'allows to filter by Added' do
     set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2021, 5, 1)
 
     set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2021, 9, 1)
@@ -605,7 +605,7 @@ end
 
 # !!!
 shared_examples 'Due Date standard filtering' do
-  it 'should filter by Due Date (standard filter)' do
+  it 'allows to filter by Due Date (standard filter)' do
     select '2021', from: 'grid_f_created_at_fr_year'
     select 'February', from: 'grid_f_created_at_fr_month'
     select '8', from: 'grid_f_created_at_fr_day'
@@ -644,7 +644,7 @@ shared_examples 'Due Date standard filtering' do
 end
 
 shared_examples 'Created At standard filtering' do
-  it 'should filter by created_at' do
+  it 'allows to filter by created_at' do
     select '2021', from: 'grid_f_updated_at_fr_year'
     select 'January', from: 'grid_f_updated_at_fr_month'
     select '8', from: 'grid_f_updated_at_fr_day'
@@ -688,7 +688,7 @@ shared_examples 'Created At standard filtering' do
 end
 
 shared_examples 'Description filtering' do
-  it 'should filter by Description' do
+  it 'allows to filter by Description' do
     fill_in('grid_f_description', with: 've')
 
     find(:css, '#grid_submit_grid_icon').click
@@ -736,7 +736,7 @@ shared_examples 'Description filtering' do
 end
 
 shared_examples 'ID filtering' do
-  it 'should filter by ID, one limit' do
+  it 'allows to filter by ID, one limit' do
     fill_in('grid_f_id_eq', with: 550)
 
     find(:css, '#grid_submit_grid_icon').click
@@ -752,7 +752,7 @@ shared_examples 'ID filtering' do
 end
 
 shared_examples 'ID filtering, range' do
-  it 'should filter by ID, one limit' do
+  it 'allows to filter by ID, one limit' do
     fill_in('grid_f_id_fr', with: 550)
 
     find(:css, '#grid_submit_grid_icon').click
@@ -817,7 +817,7 @@ shared_examples 'ID filtering, range' do
 end
 
 shared_examples 'ID two limits filtering' do
-  it 'should filter by ID, two limits' do
+  it 'allows to filter by ID, two limits' do
     fill_in('grid_f_id_fr', with: 507)
     fill_in('grid_f_id_to', with: 509)
 
@@ -881,7 +881,7 @@ shared_examples 'ID two limits filtering' do
 end
 
 shared_examples 'Description and Title filtering' do
-  it 'should filter by multiple columns' do
+  it 'allows to filter by multiple columns' do
     fill_in('grid_f_description', with: 'v')
     fill_in('grid_f_title', with: 's')
     select 'no', from: 'grid_f_archived'
@@ -914,7 +914,7 @@ shared_examples 'Description and Title filtering' do
 end
 
 shared_examples 'Archived filtering' do
-  it 'should filter by Archived' do
+  it 'allows to filter by Archived' do
     select 'yes', from: 'grid_f_archived'
     find(:css, '#grid_submit_grid_icon').click
 
@@ -957,7 +957,7 @@ shared_examples 'Archived filtering' do
 end
 
 shared_examples 'Title filtering' do
-  it 'should filter by Title' do
+  it 'allows to filter by Title' do
     fill_in('grid_f_title', with: 'ed')
 
     find(:css, '#grid_submit_grid_icon').click

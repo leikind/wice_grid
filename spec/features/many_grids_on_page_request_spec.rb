@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'many_grids_on_page WiceGrid', type: :request, js: true do
+describe 'with multiple girds on the page WiceGrid', type: :request, js: true do
   before :each do
     visit '/many_grids_on_page'
   end
 
-  it 'should sort independantly' do
+  it 'allows to sort independantly' do
     within 'div#g1.wice-grid-container table.wice-grid thead' do
       click_on 'Title'
     end
@@ -36,7 +36,7 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should paginate independantly' do
+  it 'allows to paginate independantly' do
     within '#g1 ul.pagination' do
       click_link '2'
     end
@@ -50,7 +50,7 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     expect(page).to have_selector('#g2 ul.pagination li.active', text: '3')
   end
 
-  it 'should show all records independantly for the two grids' do
+  it 'allows to show all records independantly for the two grids' do
     within '#g1' do
       click_on 'show all'
     end
@@ -68,7 +68,7 @@ describe 'many_grids_on_page WiceGrid', type: :request, js: true do
     end
   end
 
-  it 'should filter independantly' do
+  it 'allows to filter independantly' do
     fill_in('g1_f_description', with: 've')
 
     find(:css, '#g1_submit_grid_icon').click

@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
+describe 'On the page /auto_reloads2 with detached filters WiceGrid', type: :feature, js: true do
   before :each do
     visit '/auto_reloads2'
   end
 
-  it 'should filter by Assigned custom filter' do
+  it 'allows to filter immediately by changing Assigned custom filter' do
     select 'Assigned', from: 'grid_f_status_id'
 
     within '#grid .pagination_status' do
@@ -14,7 +14,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should filter by grid_f_project_id custom filter' do
+  it 'allows to filter immediately by changing Project custom filter' do
     select 'Divine Firmware', from: 'grid_f_project_id'
 
     within '#grid .pagination_status' do
@@ -22,7 +22,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should filter by Added' do
+  it 'allows to filter immediately by changing "Added" custom filter' do
     set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2021, 5, 1)
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2021-09-13 22:11:12')
@@ -63,7 +63,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should filter by Archived' do
+  it 'allows to filter immediately by changing "Archived" custom filter' do
     select 'yes', from: 'grid_f_archived'
     # find(:css, '#grid_submit_grid_icon').click
 
@@ -104,7 +104,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should filter by ID, two limits' do
+  it 'allows to filter immediately by changing the fields for ID two limits' do
     fill_in('grid_f_id_fr', with: 507)
     fill_in('grid_f_id_to', with: 509)
 
@@ -175,7 +175,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should filter by ID, one limit' do
+  it 'allows to filter immediately by changing the field for ID one limit' do
     fill_in('grid_f_id_fr', with: 550)
 
     # find(:css, '#grid_submit_grid_icon').click
@@ -238,7 +238,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should filter by Due Date' do
+  it 'allows to filter immediately by changing the field for Due Date' do
     set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2022, 0, 1)
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
       expect(page).to have_content('2023-01-26')
@@ -300,7 +300,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     end
   end
 
-  it 'should negate the semantics of the text  filter' do
+  it 'allows to negate filter by clickin the checkbox for "Title" filter' do
     expect(page).to have_content('sequi')
     expect(page).to have_content('sed impedit iste')
 
@@ -316,7 +316,7 @@ describe 'auto reloads 2 WiceGrid', type: :feature, js: true do
     expect(page).to have_no_content('sed impedit iste')
   end
 
-  it 'should reload the title filter' do
+  it 'allows to reload the title filter' do
     fill_in('grid_f_title_v', with: 'ed')
 
     within '.pagination_status' do

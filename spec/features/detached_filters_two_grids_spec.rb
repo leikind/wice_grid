@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'buttons WiceGrid', type: :feature, js: true do
+describe 'with detached filters and 2 grids WiceGrid', type: :feature, js: true do
   before :each do
     visit '/detached_filters_two_grids'
   end
 
-  it 'should be independent of each other' do
+  it 'the filters are independent of each other' do
     select 'yes', from: 'grid_f_archived'
 
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click

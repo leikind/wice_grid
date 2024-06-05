@@ -1,12 +1,13 @@
 describe Wice::Spreadsheet do
-  let(:spreadsheet){Wice::Spreadsheet.new('hello', ';')}
+  subject(:spreadsheet){Wice::Spreadsheet.new('hello', ';')}
 
-  it 'should initialize' do
+  describe '#<<(row)' do
+    subject(:add_row) {spreadsheet << row}
+    let(:row) {%w(hello world!)}
 
-    expect(spreadsheet.class).to eq(Wice::Spreadsheet)
-  end
-
-  it 'should add_row' do
-    spreadsheet << %w(hello world!)
+    it 'sends :<< to @csv' do
+      expect(spreadsheet.instance_variable_get :@csv).to receive(:<<).with row
+      add_row
+    end
   end
 end

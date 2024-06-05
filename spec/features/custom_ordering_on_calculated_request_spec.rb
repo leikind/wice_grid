@@ -1,12 +1,12 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'custom_ordering on calculated WiceGrid', type: :request, js: true do
+describe 'with sort_by: as a Proc WiceGrid', type: :request, js: true do
   before :each do
     visit '/custom_ordering_on_calculated'
   end
 
-  it 'should be sorted by the number of tasks' do
+  it 'allows to sort by the result of the Proc' do
     within 'div#grid.wice-grid-container table.wice-grid' do
       expect(page).to have_selector('tbody tr:first-child', text: 'New')
 

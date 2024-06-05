@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'auto reloads WiceGrid', type: :request, js: true do
+describe 'when saved queries are configured WiceGrid', type: :request, js: true do
   before :each do
     visit '/saved_queries'
   end
@@ -15,7 +15,7 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     true
   end
 
-  it 'should filter by Added' do
+  it 'allows to filter by Added' do
     check_saved_query = lambda do
       within '.pagination_status' do
         expect(page).to have_content('1-20 / 29')
@@ -73,7 +73,7 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     expect(page).to have_content('Saved query deleted.')
   end
 
-  it 'should filter by Archived and Project Name' do
+  it 'allows to filter by Archived and Project Name' do
     check_saved_query = lambda do
       within '.pagination_status' do
         expect(page).to have_content('1-2 / 2')

@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-describe "upper pagination panel WiceGrid", :type => :request do
+describe "with the upper_pagination_panel parameter for the grid WiceGrid", :type => :request do
   before :each do
     visit '/upper_pagination_panel'
   end
@@ -10,7 +10,7 @@ describe "upper pagination panel WiceGrid", :type => :request do
     include_examples "names of columns"
   end
 
-  it "upper pagination panel should be present" do
+  it "shows the upper pagination panel" do
     skip "This test should be run with BROWSER=y in environment" unless ENV['BROWSER']
     expect(page).to have_selector('table.wice-grid thead tr td .pagination li.active')
 

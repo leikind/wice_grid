@@ -3,6 +3,8 @@ module Wice
   # a matrix for all declared columns
   class TableColumnMatrix < Hash #:nodoc:
 
+    # returns the main ActiveRecord model class
+    attr_reader :default_model_class
     # a structure to hold generates Arels for all column filters
     attr_reader :generated_conditions
 
@@ -23,12 +25,6 @@ module Wice
       @generated_conditions.collect { |_, cond| cond }
     end
 
-    # returns Arels for one model
-    alias_method :get, :[]
-
-    # returns the main ActiveRecord model class
-    attr_reader :default_model_class
-
     # sets the main ActiveRecord model class
     def default_model_class=(model)  #:nodoc:
       init_columns_of_table(model) unless key?(model)
@@ -36,6 +32,7 @@ module Wice
     end
 
     # returns Arels for one model
+    alias_method :get, :[]
     def [](model)  #:nodoc:
       init_columns_of_table(model) unless key?(model)
       get(model)
@@ -59,7 +56,6 @@ module Wice
       @by_table_names[model.table_name] = self[model]
       self[model].each_value { |c| c.model = model }
     end
-
     alias_method :<<, :init_columns_of_table
   end
 end
