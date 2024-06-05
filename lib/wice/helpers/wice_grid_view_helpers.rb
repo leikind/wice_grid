@@ -510,7 +510,7 @@ module Wice
           %$   alert("wice_grid.js not loaded, WiceGrid cannot proceed!\\n" +\n$ +
           %(     "Make sure that you have loaded wice_grid.js.\\n" + ) +
           %(     "Add line //= require wice_grid.js " + ) +
-          %$     "to app/assets/javascripts/application.js")\n$ +
+          %$     "to app/javascript/application.js")\n$ +
           %( } ) +
           %$ } $)
       end
