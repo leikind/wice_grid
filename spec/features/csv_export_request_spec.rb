@@ -7,7 +7,10 @@ describe 'CSV export WiceGrid', type: :request, js: true do
   end
 
   it 'should export csv' do
-    find(:css, 'button.wg-external-csv-export-button').click
-    expect(page).to have_content('ID;Title;Priority;Status;Project Name;')
+    skip "This test should be run with BROWSER=y in environment" unless ENV['BROWSER']
+    button = find(:css, 'button.wg-external-csv-export-button')
+    button.click
+    expect(DownloadHelpers::download_content)
+        .to start_with('ID;Title;Priority;Status;Project Name;')
   end
 end

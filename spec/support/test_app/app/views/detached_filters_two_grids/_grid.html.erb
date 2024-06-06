@@ -12,7 +12,7 @@
 
 
   g.column name:  'Due Date', attribute: 'due_date', detach_with_id: :due_date do |task|
-    task.due_date.to_s(:db)
+    task.due_date.to_fs(:db)
   end
 
 

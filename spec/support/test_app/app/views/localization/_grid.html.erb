@@ -21,12 +21,12 @@
   end
 
   g.column name:  'Due Date', attribute: 'due_date' do |task|
-    task.due_date.to_s(:short)
+    task.due_date.to_fs(:short)
   end
 
 
   g.column name:  'Added', attribute: 'created_at' do |task|
-    task.created_at.to_s(:short)
+    task.created_at.to_fs(:short)
   end
 
   g.column   do |task|

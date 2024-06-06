@@ -14,11 +14,11 @@
   end
 
   g.column name:  'Added', attribute: 'created_at' do |task|
-    task.created_at.to_s(:db)
+    task.created_at.to_fs(:db)
   end
 
-  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper, filter_control_options: {start_year: 2011} do |task|
-    task.updated_at.to_s(:db)
+  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper, filter_control_options: {start_year: 2021} do |task|
+    task.updated_at.to_fs(:db)
   end
 
 

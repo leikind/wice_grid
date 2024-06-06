@@ -22,20 +22,20 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
       end
 
       within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-        expect(page).to have_content('2011-08-13 22:11:12')
+        expect(page).to have_content('2021-08-13 22:11:12')
       end
     end
 
     delete_all_saved_queries self
 
-    set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2011, 5, 1)
+    set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2021, 5, 1)
 
-    set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2011, 9, 1)
+    set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2021, 9, 1)
 
     find(:css, '#grid_submit_grid_icon').click
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-13 22:11:12')
+      expect(page).to have_content('2021-09-13 22:11:12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -43,7 +43,7 @@ describe 'auto reloads WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-08-13 22:11:12')
+      expect(page).to have_content('2021-08-13 22:11:12')
     end
 
     check_saved_query.call

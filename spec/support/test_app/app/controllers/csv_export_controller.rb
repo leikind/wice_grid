@@ -21,7 +21,7 @@ class CsvExportController < ApplicationController
       csv_file_name: 'projects'
     )
 
-    export_grid_if_requested('g1' => 'tasks_grid', 'g2' => 'projects_grid') do
+    return export_grid_if_requested('g1' => 'tasks_grid', 'g2' => 'projects_grid') do
       # usual render or redirect code executed if the request is not a CSV export request
     end
   end

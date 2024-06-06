@@ -116,9 +116,9 @@ describe 'dump_filter_parameters_as_hidden_fields WiceGrid', type: :request, js:
   end
 
   it 'should keep the state of a date filter  while reloading another form' do
-    set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2013, 0, 1)
+    set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2023, 0, 1)
 
-    set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2015, 0, 1)
+    set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2025, 0, 1)
 
     find(:css, '#g_submit_grid_icon').click
 

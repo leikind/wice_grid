@@ -21,7 +21,7 @@
   end
 
   g.column name:  'Added', attribute: 'created_at' do |task|
-    task.created_at.to_s(:db)
+    task.created_at.to_fs(:db)
   end
 
   g.column   do |task|

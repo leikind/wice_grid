@@ -131,9 +131,9 @@ describe 'action_column WiceGrid', type: :request, js: true do
   end
 
   it 'should filter by Added inside a form' do
-    set_datepicker(self, 'g_f_created_at_fr_date_placeholder', 2011, 5, 1)
+    set_datepicker(self, 'g_f_created_at_fr_date_placeholder', 2021, 5, 1)
 
-    set_datepicker(self, 'g_f_created_at_to_date_placeholder', 2011, 9, 1)
+    set_datepicker(self, 'g_f_created_at_to_date_placeholder', 2021, 9, 1)
 
     first(:css, 'button.btn', text: 'Process tasks').click
 
@@ -142,7 +142,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-13 22:11:12')
+      expect(page).to have_content('2021-09-13 22:11:12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -150,7 +150,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-29 22:11:12')
+      expect(page).to have_content('2021-09-29 22:11:12')
     end
 
     within '.pagination_status' do
@@ -162,14 +162,14 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-22 22:11:12')
+      expect(page).to have_content('2021-09-22 22:11:12')
     end
   end
 
   it 'should filter by Due Date' do
-    set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2012, 0, 1)
+    set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2022, 0, 1)
 
-    set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2013, 0, 1)
+    set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2023, 0, 1)
 
     first(:css, 'button.btn', text: 'Process tasks').click
 
@@ -178,7 +178,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-07-29')
+      expect(page).to have_content('2022-07-29')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -186,7 +186,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-10-02')
+      expect(page).to have_content('2022-10-02')
     end
 
     within '.pagination_status' do
@@ -198,12 +198,12 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-07-02')
+      expect(page).to have_content('2022-07-02')
     end
 
-    set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2012, 6, 28)
+    set_datepicker(self, 'g_f_due_date_fr_date_placeholder', 2022, 6, 28)
 
-    set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2012, 6, 31)
+    set_datepicker(self, 'g_f_due_date_to_date_placeholder', 2022, 6, 31)
 
     first(:css, 'button.btn', text: 'Process tasks').click
 
@@ -212,7 +212,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-07-29')
+      expect(page).to have_content('2022-07-29')
     end
 
     find(:css, '#g_f_due_date_fr_date_view').click
@@ -224,7 +224,7 @@ describe 'action_column WiceGrid', type: :request, js: true do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-07-29')
+      expect(page).to have_content('2022-07-29')
     end
 
     find(:css, '#g_f_due_date_to_date_view').click

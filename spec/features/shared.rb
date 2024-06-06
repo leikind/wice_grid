@@ -273,7 +273,7 @@ shared_examples 'sorting Due Date' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      expect(page).to have_content('2012-06-12')
+      expect(page).to have_content('2022-06-12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -285,7 +285,7 @@ shared_examples 'sorting Due Date' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      expect(page).to have_content('2013-03-30')
+      expect(page).to have_content('2023-03-30')
     end
 
     within 'ul.pagination' do
@@ -301,7 +301,7 @@ shared_examples 'sorting Due Date' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      expect(page).to have_content('2012-12-13')
+      expect(page).to have_content('2022-12-13')
     end
   end
 end
@@ -460,7 +460,7 @@ shared_examples 'sorting Due Date in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      expect(page).to have_content('2012-06-12')
+      expect(page).to have_content('2022-06-12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -472,7 +472,7 @@ shared_examples 'sorting Due Date in all records mode' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.sorted' do
-      expect(page).to have_content('2013-03-30')
+      expect(page).to have_content('2023-03-30')
     end
   end
 end
@@ -497,9 +497,9 @@ end
 
 shared_examples 'Due Date datepicker filtering' do
   it 'should filter by Due Date' do
-    set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 0, 1)
+    set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2022, 0, 1)
 
-    set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2013, 0, 1)
+    set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2023, 0, 1)
 
     find(:css, '#grid_submit_grid_icon').click
 
@@ -508,7 +508,7 @@ shared_examples 'Due Date datepicker filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-07-29')
+      expect(page).to have_content('2022-07-29')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -516,7 +516,7 @@ shared_examples 'Due Date datepicker filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-10-02')
+      expect(page).to have_content('2022-10-02')
     end
 
     within '.pagination_status' do
@@ -528,12 +528,12 @@ shared_examples 'Due Date datepicker filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2012-07-02')
+      expect(page).to have_content('2022-07-02')
     end
 
-    set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 6, 28)
+    set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2022, 6, 28)
 
-    set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2012, 6, 31)
+    set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2022, 6, 31)
 
     find(:css, '#grid_submit_grid_icon').click
 
@@ -561,9 +561,9 @@ end
 
 shared_examples 'Added datepicker filtering' do
   it 'should filter by Added' do
-    set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2011, 5, 1)
+    set_datepicker(self, 'grid_f_created_at_fr_date_placeholder', 2021, 5, 1)
 
-    set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2011, 9, 1)
+    set_datepicker(self, 'grid_f_created_at_to_date_placeholder', 2021, 9, 1)
 
     find(:css, '#grid_submit_grid_icon').click
 
@@ -572,7 +572,7 @@ shared_examples 'Added datepicker filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-13 22:11:12')
+      expect(page).to have_content('2021-09-13 22:11:12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -580,7 +580,7 @@ shared_examples 'Added datepicker filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-29 22:11:12')
+      expect(page).to have_content('2021-09-29 22:11:12')
     end
 
     within '.pagination_status' do
@@ -592,7 +592,7 @@ shared_examples 'Added datepicker filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-09-22 22:11:12')
+      expect(page).to have_content('2021-09-22 22:11:12')
     end
 
     find(:css, '#grid_reset_grid_icon').click
@@ -606,13 +606,13 @@ end
 # !!!
 shared_examples 'Due Date standard filtering' do
   it 'should filter by Due Date (standard filter)' do
-    select '2011', from: 'grid_f_created_at_fr_year'
+    select '2021', from: 'grid_f_created_at_fr_year'
     select 'February', from: 'grid_f_created_at_fr_month'
     select '8', from: 'grid_f_created_at_fr_day'
     select '00', from: 'grid_f_created_at_fr_hour'
     select '00', from: 'grid_f_created_at_fr_minute'
 
-    select '2011', from: 'grid_f_created_at_to_year'
+    select '2021', from: 'grid_f_created_at_to_year'
     select 'September', from: 'grid_f_created_at_to_month'
     select '10', from: 'grid_f_created_at_to_day'
     select '00', from: 'grid_f_created_at_to_hour'
@@ -645,13 +645,13 @@ end
 
 shared_examples 'Created At standard filtering' do
   it 'should filter by created_at' do
-    select '2011', from: 'grid_f_updated_at_fr_year'
+    select '2021', from: 'grid_f_updated_at_fr_year'
     select 'January', from: 'grid_f_updated_at_fr_month'
     select '8', from: 'grid_f_updated_at_fr_day'
     select '00', from: 'grid_f_updated_at_fr_hour'
     select '00', from: 'grid_f_updated_at_fr_minute'
 
-    select '2011', from: 'grid_f_updated_at_to_year'
+    select '2021', from: 'grid_f_updated_at_to_year'
     select 'December', from: 'grid_f_updated_at_to_month'
     select '10', from: 'grid_f_updated_at_to_day'
     select '00', from: 'grid_f_updated_at_to_hour'
@@ -664,7 +664,7 @@ shared_examples 'Created At standard filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-11-26 22:11:12')
+      expect(page).to have_content('2021-11-26 22:11:12')
     end
 
     within 'div.wice-grid-container table.wice-grid thead' do
@@ -672,7 +672,7 @@ shared_examples 'Created At standard filtering' do
     end
 
     within 'div.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2011-12-07 22:11:12')
+      expect(page).to have_content('2021-12-07 22:11:12')
     end
 
     within '.pagination_status' do

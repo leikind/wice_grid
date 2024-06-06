@@ -21,7 +21,7 @@
   end
 
   g.column name:  'Added', attribute: 'created_at', auto_reload:  true do |task|
-    task.created_at.to_s(:short)
+    task.created_at.to_fs(:short)
   end
 
 end -%>

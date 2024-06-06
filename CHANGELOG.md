@@ -120,7 +120,7 @@ Example:
 
 ```ruby
 g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
-  task.updated_at.to_s(:db)
+  task.updated_at.to_fs(:db)
 end
 ```
 

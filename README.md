@@ -66,6 +66,9 @@ Continue reading for more information or check out our [CHANGELOG](https://githu
 ## Requirements and Rails versions
 
 ```
+# Rails 7 with importmap
+gem 'wice_grid', '~> 7.1'
+
 # Rails 5, 6, and 7.0 without importmap (see below)
 gem 'wice_grid', '~> 6.1'
 
@@ -878,7 +881,7 @@ Specify a date/datetime filter just like you specify any other filter:
 
 ```
   g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
-    task.updated_at.to_s(:db)
+    task.updated_at.to_fs(:db)
   end
 ```
 
@@ -946,7 +949,7 @@ arbitrary string or a symbol value which will be used later to identify the filt
   end
 
   g.column name: 'Added', attribute: 'created_at', detach_with_id: :created_at_filter do |task|
-    task.created_at.to_s(:short)
+    task.created_at.to_fs(:short)
   end
 
 end -%>
@@ -1081,7 +1084,7 @@ Use option `:auto_reload` in the column definiton:
 
   # Datetime
   g.column name: 'Added', attribute: 'created_at', auto_reload: true, helper_style: :calendar do |task|
-    task.created_at.to_s(:short)
+    task.created_at.to_fs(:short)
   end
 
 end -%>

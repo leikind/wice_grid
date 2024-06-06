@@ -16,6 +16,8 @@ require_relative '../../../../lib/wice_grid'
 
 module Examples
   class TestApp < Rails::Application
+    config.load_defaults 7.1
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -66,5 +68,11 @@ module Examples
 
     # Rails 5.2+
     config.active_record.sqlite3.represent_boolean_as_integer = true if config.active_record.sqlite3
+
+    config.active_record.default_column_serializer = YAML
+    config.active_record.yaml_column_permitted_classes = [
+      ActionController::Parameters,
+      ActiveSupport::HashWithIndifferentAccess,
+    ]
   end
 end

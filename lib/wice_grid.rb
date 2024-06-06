@@ -363,6 +363,9 @@ module Wice
         relation = apply_sort_by relation
 
         # If relation is an Array, it got the sort from apply_sort_by.
+        if @ar_options[:order].is_a? String
+          @ar_options[:order] = Arel.sql @ar_options[:order]
+        end
         relation = relation.order(@ar_options[:order]) if !relation.is_a?(Array)
 
         if !output_csv? && !all_record_mode?
@@ -641,6 +644,9 @@ module Wice
       relation = nil
 
       use_default_or_unscoped do
+        if @ar_options[:order].is_a? String
+          @ar_options[:order] = Arel.sql @ar_options[:order]
+        end
         relation = @relation
                    .joins(@ar_options[:joins])
                    .includes(@ar_options[:include])

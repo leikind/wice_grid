@@ -27,16 +27,16 @@ describe 'buttons WiceGrid', type: :feature, js: true do
       expect(page).to have_content('1-20 / 46')
     end
 
-    set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2012, 11, 1)
-    set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2012, 11, 31)
+    set_datepicker(self, 'grid_f_due_date_fr_date_placeholder', 2022, 11, 1)
+    set_datepicker(self, 'grid_f_due_date_to_date_placeholder', 2022, 11, 31)
     find(:css, '.external-buttons-grid1 .wg-external-submit-button').click
 
     within 'div#grid.wice-grid-container .pagination_status' do
       expect(page).to have_content('1-3 / 3')
     end
 
-    set_datepicker(self, 'grid2_f_due_date_fr_date_placeholder', 2013, 0, 1)
-    set_datepicker(self, 'grid2_f_due_date_to_date_placeholder', 2013, 11, 31)
+    set_datepicker(self, 'grid2_f_due_date_fr_date_placeholder', 2023, 0, 1)
+    set_datepicker(self, 'grid2_f_due_date_to_date_placeholder', 2023, 11, 31)
     find(:css, '.external-buttons-grid2 .wg-external-submit-button').click
 
     # stays the same

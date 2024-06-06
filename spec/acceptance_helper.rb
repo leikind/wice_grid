@@ -18,15 +18,6 @@ else
 end
 Capybara.server = :webrick
 
-# Slow down responses to help debug tests that have race conditions.
-if ENV['TEST_RESPONSE_DELAY']
-  Capybara.default_wait_time += ENV['TEST_RESPONSE_DELAY'].to_i
-
-  class ActionController::Base
-    before_action { sleep ENV['TEST_RESPONSE_DELAY'].to_i }
-  end
-end
-
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
@@ -38,7 +29,8 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
-  config.fixture_path = "spec/fixtures"
+  config.fixture_paths ||= []
+  config.fixture_paths << "spec/fixtures"
 
   config.use_transactional_fixtures = true
 
