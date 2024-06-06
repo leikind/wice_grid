@@ -46,6 +46,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'sass-rails', '>= 3.2'
   s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'stimulus-rails'
   s.add_development_dependency 'sqlite3', '~> 1.4'
   s.add_development_dependency 'therubyracer'
   s.add_development_dependency 'turbolinks'

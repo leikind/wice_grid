@@ -12,6 +12,7 @@ require 'jquery-ui-rails'
 require 'jquery-ui-themes'
 require 'turbolinks'
 require 'sprockets'
+require "stimulus-rails"
 require_relative '../../../../lib/wice_grid'
 
 module Examples
