@@ -116,7 +116,11 @@ module Wice
     end
 
     def array?
-      @column.sql_type_metadata.array
+      if @column.sql_type_metadata.respond_to? :array
+        @column.sql_type_metadata.array
+      else
+        @column.sql_type_metadata.sql_type.index('[]')
+      end
     rescue
       false
     end
