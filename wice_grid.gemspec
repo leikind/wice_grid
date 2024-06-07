@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '4.1.0'
+  s.version       = '6.1.0'
   s.authors       = ['Yuri Leikind and contributors']
-  s.email         = ['patrick@yamasolutions.com']
+  s.email         = ['koulikoff@gmail.com']
   s.homepage      = 'https://github.com/patricklindsay/wice_grid'
   s.summary       = 'A Rails grid plugin to quickly create grids with sorting, pagination, and filters.'
   s.description   = 'A Rails grid plugin to create grids with sorting, pagination, and filters generated automatically based on column types. ' \
@@ -13,11 +13,12 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files`.split($INPUT_RECORD_SEPARATOR)
   s.license       = 'MIT'
   s.require_paths = ['lib']
-  s.date          = '2018-11-28'
+  s.date          = '2024-06-07'
 
   s.add_dependency 'rails', '>= 5.0'
   s.add_dependency 'kaminari',          ['~> 1.1']
   s.add_dependency 'coffee-rails',      ['> 3.2']
+  s.add_dependency 'font-awesome-sass'
 
   s.add_development_dependency('rake',  '~> 10.1')
   s.add_development_dependency('byebug')

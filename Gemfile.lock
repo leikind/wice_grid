@@ -3,6 +3,7 @@ PATH
   specs:
     wice_grid (6.1.0)
       coffee-rails (> 3.2)
+      font-awesome-sass
       kaminari (~> 1.1)
       rails (>= 5.0)
 

@@ -5,8 +5,6 @@
 
 # WiceGrid
 
-THE PROJECT IS LOOKING FOR CONTRIBUTORS.
-
 Check out this [sample application](http://wicegrid.herokuapp.com) which demos all features & includes code samples.
 
 - [Intro](#intro)
@@ -70,8 +68,8 @@ Continue reading for more information or check out our [CHANGELOG](https://githu
 ## Requirements and Rails versions
 
 ```
-# Rails => 5
-gem 'wice_grid'
+# Rails 5, 6
+gem 'wice_grid', '~> 6.1'
 
 # Rails 4
 gem 'wice_grid', '3.6.2'
@@ -93,7 +91,6 @@ Add the following to your Gemfile & run `bundle`:
 
 ```ruby
 gem "wice_grid"
-gem 'font-awesome-sass',  '~> 4.3'
 ```
 
 Note: `font-awesome-sass` is not a dependency of WiceGrid in case you decide to style WiceGrid icons differently.
