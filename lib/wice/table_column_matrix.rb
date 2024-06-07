@@ -54,7 +54,8 @@ module Wice
     end
 
     def init_columns_of_table(model) #:nodoc:
-      self[model] = HashWithIndifferentAccess.new(model.columns.index_by(&:name))
+      self[model] =
+          HashWithIndifferentAccess.new(model.columns.map(&:dup).index_by(&:name))
       @by_table_names[model.table_name] = self[model]
       self[model].each_value { |c| c.model = model }
     end
