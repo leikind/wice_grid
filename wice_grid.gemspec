@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('jquery-ui-rails', '~> 5.0.5')
   s.add_development_dependency('jquery-ui-themes', '~> 0.0.11')
   s.add_development_dependency('sass-rails', '>= 3.2')
-  s.add_development_dependency('bootstrap-sass', '3.1.1.1')
+  s.add_development_dependency('bootstrap-sass', '3.4.1')
   s.add_development_dependency('font-awesome-sass', '4.4.0')
   s.add_development_dependency('turbolinks', '~> 5.1.1')
   s.add_development_dependency('therubyracer')
