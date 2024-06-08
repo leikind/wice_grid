@@ -37,16 +37,16 @@ Gem::Specification.new do |s|
   # Required by the test app.
   s.add_development_dependency('haml', '~> 5.0.4')
   s.add_development_dependency('coderay', '~> 1.1.0')
-  s.add_development_dependency('jquery-rails', '~> 4.3.3')
-  s.add_development_dependency('jquery-ui-rails', '~> 5.0.5')
+  s.add_development_dependency('jquery-rails', '~> 4.4.0')
+  s.add_development_dependency('jquery-ui-rails', '~> 7.0.0')
   s.add_development_dependency('jquery-ui-themes', '~> 0.0.11')
   s.add_development_dependency('sass-rails', '>= 3.2')
-  s.add_development_dependency('bootstrap-sass', '3.1.1.1')
+  s.add_development_dependency('bootstrap-sass', '3.4.1')
   s.add_development_dependency('font-awesome-sass', '4.4.0')
   s.add_development_dependency('turbolinks', '~> 5.1.1')
   s.add_development_dependency('therubyracer')
 
-  s.add_development_dependency('bundler',   '~> 1.3')
+  s.add_development_dependency('bundler')
   s.add_development_dependency('simplecov', '~> 0.7')
   s.add_development_dependency('sqlite3',   '~> 1.3')
 
