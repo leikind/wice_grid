@@ -5,8 +5,6 @@
 
 # WiceGrid
 
-Check out this [sample application](http://wicegrid.herokuapp.com) which demos all features & includes code samples.
-
 - [Intro](#intro)
 - [Requirements and Rails versions](#requirements-and-rails-versions)
 - [Installation](#installation)
@@ -68,14 +66,16 @@ Continue reading for more information or check out our [CHANGELOG](https://githu
 ## Requirements and Rails versions
 
 ```
-# Rails 5, 6
+# Rails 5, 6, and 7.0 without importmap (see below)
 gem 'wice_grid', '~> 6.1'
 
 # Rails 4
 gem 'wice_grid', '3.6.2'
 ```
 
-WiceGrid relies on jQuery.
+WiceGrid relies on jQuery and coffeescript. So the current version will not work with Rails 7, that uses gem `importmap-rails`. But if your application allows the javascript transpiling the gem should work.
+
+The development of the version of WiceGrid that works with Ruby 7.1 and higher is in progress.
 
 If you need a JS Datepicker, WiceGrid supports jQuery Datepicker or
 [Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails), so you might need one of
