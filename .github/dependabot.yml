@@ -1,0 +1,32 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: activerecord
+  - dependency-name: activesupport
+  - dependency-name: actionpack
+  - dependency-name: appraisal
+  - dependency-name: byebug
+  - dependency-name: capybara
+  - dependency-name: coffee-rails
+  - dependency-name: font-awesome-sass
+  - dependency-name: haml
+  - dependency-name: inch
+  - dependency-name: jquery-rails
+  - dependency-name: nokogiri
+  - dependency-name: rack
+  - dependency-name: rails
+  - dependency-name: rake
+  - dependency-name: rdoc
+  - dependency-name: rspec
+  - dependency-name: rspec-rails
+  - dependency-name: sass-rails
+  - dependency-name: selenium-webdriver
+  - dependency-name: simplecov
+  - dependency-name: sqlite3
+  - dependency-name: turbolinks
+  - dependency-name: yard
