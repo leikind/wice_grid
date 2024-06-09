@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('bundler')
   s.add_development_dependency('simplecov', '~> 0.7')
-  s.add_development_dependency('sqlite3',   '~> 1.3')
+  s.add_development_dependency('sqlite3',   '~> 2.0')
 
   s.add_development_dependency('yard', '~> 0.8')
   s.add_development_dependency('inch', '~> 0.6.4')
