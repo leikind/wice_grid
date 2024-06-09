@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency('rspec', '~> 3.6.0')
   s.add_development_dependency('rspec-rails', '~> 3.6.0')
-  s.add_development_dependency('shoulda-matchers', '2.8.0')
+  s.add_development_dependency('shoulda-matchers', '6.2.0')
   s.add_development_dependency('capybara', '~> 3.13.2')
   s.add_development_dependency('faker', '~> 1.8.7')
   s.add_development_dependency('poltergeist', '~> 1.18.0')
