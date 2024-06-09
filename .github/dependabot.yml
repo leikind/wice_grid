@@ -1,0 +1,14 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: inch
+  - dependency-name: nokogiri
+  - dependency-name: rails
+  - dependency-name: sass-rails
+  - dependency-name: simplecov
+  - dependency-name: yard
