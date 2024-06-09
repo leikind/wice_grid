@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('faker', '~> 1.8.7')
   s.add_development_dependency('poltergeist', '~> 1.18.0')
   s.add_development_dependency('capybara-screenshot', '~> 1.0.11')
-  s.add_development_dependency('selenium-webdriver', '~> 2.51.0')
+  s.add_development_dependency('selenium-webdriver', '~> 4.21.1')
   s.add_development_dependency('phantomjs', '>= 2.1.1')
 
   # Required by the test app.
