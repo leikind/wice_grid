@@ -47,8 +47,8 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
+    addressable (2.8.6)
+      public_suffix (>= 2.0.2, < 6.0)
     appraisal (2.2.0)
       bundler
       rake
@@ -69,7 +69,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.2)
       xpath (~> 3.2)
-    capybara-screenshot (1.0.21)
+    capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
     childprocess (0.9.0)
@@ -130,8 +130,8 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
-    launchy (2.4.3)
-      addressable (~> 2.3)
+    launchy (2.5.2)
+      addressable (~> 2.8)
     libv8 (3.16.14.19)
     loofah (2.1.1)
       crass (~> 1.0.2)
@@ -142,8 +142,8 @@ GEM
       net-pop
       net-smtp
     method_source (0.9.0)
-    mini_mime (1.0.1)
-    mini_portile2 (2.4.0)
+    mini_mime (1.1.5)
+    mini_portile2 (2.8.7)
     minitest (5.11.1)
     multi_json (1.13.1)
     multi_xml (0.6.0)
@@ -157,8 +157,9 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.10.1)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.16.5)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     phantomjs (2.1.1.0)
     poltergeist (1.18.1)
       capybara (>= 2.1, < 4)
@@ -167,10 +168,11 @@ GEM
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
-    public_suffix (3.0.2)
-    rack (2.0.6)
-    rack-test (1.1.0)
-      rack (>= 1.0, < 3)
+    public_suffix (5.0.5)
+    racc (1.8.0)
+    rack (2.2.9)
+    rack-test (2.1.0)
+      rack (>= 1.3)
     rails (5.1.4)
       actioncable (= 5.1.4)
       actionmailer (= 5.1.4)
@@ -201,7 +203,7 @@ GEM
     rdoc (4.2.2)
       json (~> 1.4)
     ref (2.0.0)
-    regexp_parser (1.3.0)
+    regexp_parser (1.8.2)
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
       rspec-expectations (~> 3.6.0)
@@ -288,7 +290,7 @@ PLATFORMS
 DEPENDENCIES
   appraisal
   bootstrap-sass (= 3.4.1)
-  bundler (~> 1.3)
+  bundler
   byebug
   capybara (~> 3.13.2)
   capybara-screenshot (~> 1.0.11)
