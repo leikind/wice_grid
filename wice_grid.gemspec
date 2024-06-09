@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   # Required by the test app.
   s.add_development_dependency('haml', '~> 5.0.4')
   s.add_development_dependency('coderay', '~> 1.1.0')
-  s.add_development_dependency('jquery-rails', '~> 4.4.0')
+  s.add_development_dependency('jquery-rails', '~> 4.6.0')
   s.add_development_dependency('jquery-ui-rails', '~> 7.0.0')
   s.add_development_dependency('jquery-ui-themes', '~> 0.0.11')
   s.add_development_dependency('sass-rails', '>= 3.2')
