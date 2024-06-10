@@ -1,6 +1,6 @@
 [![Version](http://img.shields.io/gem/v/wice_grid.svg)](https://rubygems.org/gems/wice_grid)
-[![CircleCI](https://circleci.com/gh/patricklindsay/wice_grid.svg?style=svg)](https://circleci.com/gh/patricklindsay/wice_grid)
-[![Inline docs](http://inch-ci.org/github/patricklindsay/wice_grid.svg)](http://inch-ci.org/github/patricklindsay/wice_grid)
+[![CircleCI](https://circleci.com/gh/leikind/wice_grid.svg?style=svg)](https://circleci.com/gh/leikind/wice_grid)
+[![Inline docs](http://inch-ci.org/github/leikind/wice_grid.svg)](http://inch-ci.org/github/leikind/wice_grid)
 [![License](http://img.shields.io/badge/license-MIT-yellowgreen.svg)](#license)
 
 # WiceGrid
@@ -60,7 +60,7 @@ WiceGrid views do not contain forms so you can include it in your own forms.
 
 WiceGrid is known to work with MySQL, Postgres, and Oracle.
 
-Continue reading for more information or check out our [CHANGELOG](https://github.com/patricklindsay/wice_grid/blob/master/CHANGELOG.md) to find out whats been going on.
+Continue reading for more information or check out our [CHANGELOG](https://github.com/leikind/wice_grid/blob/master/CHANGELOG.md) to find out whats been going on.
 
 
 ## Requirements and Rails versions
@@ -1543,7 +1543,7 @@ end
 
 To run tests:
 
-1. `git clone https://github.com/patricklindsay/wice_grid.git`
+1. `git clone https://github.com/leikind/wice_grid.git`
 2. `cd wice_grid`
 3. `bundle`
 4. Install phantomjs (e.g. `brew install phantomjs` or `apt-get install phantomjs` or something else)
@@ -1555,4 +1555,4 @@ This repository contains a Rails application for testing purposes. To fire up th
 
 ## Bug reports
 
-If you discover a problem with Wicegrid, we would love to know about it. Please use the [GitHub issue tracker](https://github.com/patricklindsay/wice_grid/issues)
+If you discover a problem with Wicegrid, we would love to know about it. Please use the [GitHub issue tracker](https://github.com/leikind/wice_grid/issues)
