@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with negation: true WiceGrid', type: :request, js: true do
+describe 'On the page /negation with negation: true WiceGrid', type: :request, js: true do
   before :each do
     visit '/negation'
   end

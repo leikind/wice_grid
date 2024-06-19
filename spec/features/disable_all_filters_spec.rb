@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with show_filters: :no as a grid parameter WiceGrid', type: :request, js: true do
+describe 'On the page /disable_all_filters with show_filters: :no as a grid parameter WiceGrid', type: :request, js: true do
   before :each do
     visit '/disable_all_filters'
   end

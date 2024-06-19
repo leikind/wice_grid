@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with filter_type: :rails_datetime_helper WiceGrid', type: :request, js: true do
+describe 'On the page /dates with filter_type: :rails_datetime_helper WiceGrid', type: :request, js: true do
   before :each do
     visit '/dates'
   end

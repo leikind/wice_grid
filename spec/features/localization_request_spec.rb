@@ -1,7 +1,7 @@
 # encoding: UTF-8
 require 'acceptance_helper'
 
-describe 'with the proper use of I18n WiceGrid', type: :request, js: true do
+describe 'On the page /localization with the proper use of I18n WiceGrid', type: :request, js: true do
   before :each do
     visit '/localization'
   end

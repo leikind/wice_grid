@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with allow_multiple_selection: false WiceGrid', type: :feature, js: true do
+describe 'On the page /custom_filters4 with allow_multiple_selection: false WiceGrid', type: :feature, js: true do
   before :each do
     visit '/custom_filters4'
   end

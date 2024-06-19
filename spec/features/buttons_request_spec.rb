@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with external buttons for Submit and Reset filters WiceGrid', type: :request, js: true do
+describe 'On the page /buttons with external buttons for Submit and Reset filters WiceGrid', type: :request, js: true do
   before :each do
     visit '/buttons'
   end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with the methods #current_page_records & #all_pages_records WiceGrid', type: :request, js: true do
+describe 'On the page /integration_with_application_view with the methods #current_page_records & #all_pages_records WiceGrid', type: :request, js: true do
   before :each do
     visit '/integration_with_application_view'
   end

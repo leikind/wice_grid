@@ -1,8 +1,8 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-context 'with another form on the page that uses the helper dump_filter_parameters_as_hidden_fields' do
-  describe 'WiceGrid', type: :request, js: true do
+context 'On the page /integration_with_forms with another form on the page that uses the helper dump_filter_parameters_as_hidden_fields' do
+  describe '(on /integration_with_form) WiceGrid', type: :request, js: true do
     before :each do
       visit '/integration_with_forms'
     end

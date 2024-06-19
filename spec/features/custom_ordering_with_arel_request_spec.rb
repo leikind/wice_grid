@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with custom_ordering in controler with Arel WiceGrid', type: :request, js: true do
+describe 'On the page /custom_ordering_with_arel with custom_ordering in controler with Arel WiceGrid', type: :request, js: true do
   before :each do
     visit '/custom_ordering_with_arel'
   end

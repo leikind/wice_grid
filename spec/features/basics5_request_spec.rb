@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with allow_ordering: false WiceGrid',  js: true do
+describe 'On the page /basics5 with allow_ordering: false WiceGrid',  js: true do
   before :each do
     visit '/basics5'
   end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with the helper :with_resultset that defines a callback on a resultset as an ActiveRelation', type: :request, js: true do
+describe 'On the page /resultset_processings2 with the helper :with_resultset that defines a callback on a resultset as an ActiveRelation', type: :request, js: true do
   describe 'WiceGrid' do
     before :each do
       visit '/resultset_processings2'

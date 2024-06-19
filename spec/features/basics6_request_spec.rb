@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with the parameters :order and :order_direction in initialize_grid WiceGrid',  js: true do
+describe 'On the page /basics6 with the parameters :order and :order_direction in initialize_grid WiceGrid',  js: true do
   before :each do
     visit '/basics6'
   end

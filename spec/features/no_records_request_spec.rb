@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-context 'when there is no records to show' do
+context 'On the page /no_records when there is no records to show' do
   describe 'with the grid helper :blank_slate WiceGrid', type: :request, js: true do
     before :each do
       visit '/no_records'

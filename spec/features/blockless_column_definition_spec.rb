@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'it is possible to render without block and WiceGrid', type: :request, js: true do
+describe 'On the page /blockless_column_definition it is possible to render without block and WiceGrid', type: :request, js: true do
   before :each do
     visit '/blockless_column_definition'
   end

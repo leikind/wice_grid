@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with g.action_column html_check_box: false and a block that return status.name != "Assigned" WiceGrid', type: :request, js: true do
+describe 'On the page /hiding_checkboxes_in_action_column with g.action_column html_check_box: false and a block that return status.name != "Assigned" WiceGrid', type: :request, js: true do
   before :each do
     visit '/hiding_checkboxes_in_action_column'
   end

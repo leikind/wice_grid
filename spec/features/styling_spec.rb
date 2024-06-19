@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-describe "with the :html helper in the grid WiceGrid", :type => :request, :js => true do
+describe "On the page /styling with the :html helper in the grid WiceGrid", :type => :request, :js => true do
 
   before :each do
     visit '/styling'

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with multiple girds on the page WiceGrid', type: :request, js: true do
+describe 'On the page /many_grids_on_page with multiple girds on the page WiceGrid', type: :request, js: true do
   before :each do
     visit '/many_grids_on_page'
   end

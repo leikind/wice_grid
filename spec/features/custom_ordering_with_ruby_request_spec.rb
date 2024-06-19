@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with custom_ordering in view with Ruby code WiceGrid', type: :request, js: true do
+describe 'On the page /custom_ordering_with_ruby with custom_ordering in view with Ruby code WiceGrid', type: :request, js: true do
   before :each do
     visit '/custom_ordering_with_ruby'
   end

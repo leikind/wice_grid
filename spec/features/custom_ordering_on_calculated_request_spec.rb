@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with sort_by: as a Proc WiceGrid', type: :request, js: true do
+describe 'On the page /custom_ordering_on_calculated with sort_by: as a Proc WiceGrid', type: :request, js: true do
   before :each do
     visit '/custom_ordering_on_calculated'
   end

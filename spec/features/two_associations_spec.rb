@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-context 'when two associations referring to the same model are joined' do
+context 'On the page /two_associations when two associations referring to the same model are joined' do
   describe "with the help of :table_alias WiceGrid", :type => :request, :js => true do
     before :each do
       visit '/two_associations'

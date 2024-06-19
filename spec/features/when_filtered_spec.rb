@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-describe "whith the parameter show_filters: :when_filtered in grid WiceGrid",  :js => true do
+describe "On the page /when_filtered whith the parameter show_filters: :when_filtered in grid WiceGrid",  :js => true do
   before :each do
     visit '/when_filtered'
   end

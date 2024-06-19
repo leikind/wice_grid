@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with detached filters and 2 grids WiceGrid', type: :feature, js: true do
+describe 'On the page /detached_filters_two_grids with detached filters and 2 grids WiceGrid', type: :feature, js: true do
   before :each do
     visit '/detached_filters_two_grids'
   end

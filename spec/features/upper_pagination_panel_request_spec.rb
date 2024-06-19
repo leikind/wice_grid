@@ -1,6 +1,6 @@
 require 'acceptance_helper'
 
-describe "with the upper_pagination_panel parameter for the grid WiceGrid", :type => :request do
+describe "On the page /upper_pagination_panel with the upper_pagination_panel parameter for the grid WiceGrid", :type => :request do
   before :each do
     visit '/upper_pagination_panel'
   end

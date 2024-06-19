@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'when saved queries are configured WiceGrid', type: :request, js: true do
+describe 'On the page /saved_queries when saved queries are configured WiceGrid', type: :request, js: true do
   before :each do
     visit '/saved_queries'
   end

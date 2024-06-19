@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with :attrubute parameter WiceGrid',  js: true do
+describe 'On the page /basics3 with :attrubute parameter WiceGrid',  js: true do
   before :each do
     visit '/basics3'
   end

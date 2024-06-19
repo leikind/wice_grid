@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with custom_ordering in controler with Procs WiceGrid', type: :request, js: true do
+describe 'On the page /custom_ordering_with_proc with custom_ordering in controler with Procs WiceGrid', type: :request, js: true do
   context 'when "statuses.name" => ->(column_name) { params[:sort_by_length] ? "length(#{column_name})" : column_name }' do
     context 'with no special param' do
       before :each do

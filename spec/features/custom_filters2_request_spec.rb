@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with joined tables and custom filters WiceGrid', type: :feature, js: true do
+describe 'On the page /custom_filters2 with joined tables and custom filters WiceGrid', type: :feature, js: true do
   before :each do
     visit '/custom_filters2'
   end

@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with helper :wice_grid_custom_filter_params WiceGrid', type: :request, js: true do
+describe 'On the page /custom_filter_params with helper :wice_grid_custom_filter_params WiceGrid', type: :request, js: true do
   before :each do
     visit '/custom_filter_params'
   end

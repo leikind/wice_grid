@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'acceptance_helper'
 
-describe 'with :include in :initialize_grid to include associated tables WiceGrid', type: :request, js: true do
+describe 'On the page /joining_tables with :include in :initialize_grid to include associated tables WiceGrid', type: :request, js: true do
   before :each do
     visit '/joining_tables'
   end
