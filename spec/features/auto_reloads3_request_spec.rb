@@ -96,7 +96,7 @@ describe 'On the page /auto_reloads3 with two tables and detached filters WiceGr
 
     set_datepicker(self, 'grid2_f_due_date_to_date_placeholder', 2023, 0, 1)
     within 'div#grid2.wice-grid-container table.wice-grid tbody tr:first-child td.active-filter' do
-      expect(page).to have_content('2023-01-26')
+      expect(page).to have_content('2022-07-29')
     end
 
     within 'div#grid.wice-grid-container .pagination_status' do
