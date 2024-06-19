@@ -1,16 +1,10 @@
 <%= grid(@tasks_grid) do |g|
-
-  g.column name:  'ID', attribute: 'id', filter: false
-
-  g.column name:  'Title', attribute: 'title'
-
-
-  g.column name:  'Priority', attribute: 'priority_id',
+  g.column name: 'ID', attribute: 'id', filter: false
+  g.column name: 'Title', attribute: 'title'
+  g.column name: 'Priority', attribute: 'priority_id',
     custom_filter: [['NOT DEFINED', 'null'], ['DEFINED', 'not null']] + Priority.to_dropdown do |task|
     task.priority.name if task.priority
   end
-
-
   g.column   do |task|
     link_to('Edit', edit_task_path(task))
   end

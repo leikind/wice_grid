@@ -14,7 +14,6 @@ class CsvExportController < ApplicationController
       csv_field_separator: ';',
       csv_file_name: 'tasks'
     )
-
     @projects_grid = initialize_grid(Project,
       name: 'g2',
       enable_export_to_csv: true,

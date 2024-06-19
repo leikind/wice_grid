@@ -1,20 +1,13 @@
 <%= grid(@tasks_grid) do |g|
-
-  g.column name:  'ID', attribute: 'id', filter: false
-
-  g.column name:  'Title', attribute: 'title'
-
-  g.column  name:  'Description', attribute: 'description', filter: false
-
-  g.column  name:  'Archived', attribute: 'archived' do |task|
+  g.column name: 'ID', attribute: 'id', filter: false
+  g.column name: 'Title', attribute: 'title'
+  g.column  name: 'Description', attribute: 'description', filter: false
+  g.column  name: 'Archived', attribute: 'archived' do |task|
     task.archived? ? 'Yes' : 'No'
   end
-
-  g.column name:  'Added', attribute: 'created_at', filter: false do |task|
+  g.column name: 'Added', attribute: 'created_at', filter: false do |task|
     task.created_at.to_fs(:short)
   end
-
-
   g.column   do |task|
     link_to('Edit', edit_task_path(task))
   end

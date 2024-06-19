@@ -1,9 +1,6 @@
 <%= grid(@versions_grid2) do |g|
-
-  g.column name:  'Project', attribute: 'name', assoc: :project, filter: false
-
-  g.column name:  'Version name', attribute: 'name', filter: false
-
-  g.column name:  'Status', attribute: 'status',
-           custom_filter: [['Development', 'development'], ['Testing', 'testing'], ['Production', 'production']]
+  g.column name: 'Project', attribute: 'name', assoc: :project, filter: false
+  g.column name: 'Version name', attribute: 'name', filter: false
+  g.column name: 'Status', attribute: 'status',
+      custom_filter: [['Development', 'development'], ['Testing', 'testing'], ['Production', 'production']]
 end -%>

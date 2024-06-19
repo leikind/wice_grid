@@ -1,23 +1,14 @@
 <%= define_grid(tasks_grid, hide_submit_button: true, hide_reset_button: true) do |g|
-
-  g.column name:  'ID', attribute: 'id', detach_with_id: :id_filter
-
-  g.column name:  'Title', attribute: 'title', detach_with_id: :title_filter
-
-  g.column  name:  'Description', attribute: 'description', detach_with_id: :description_filter
-
-  g.column  name:  'Archived', attribute: 'archived', detach_with_id: :archived_filter do |task|
+  g.column name: 'ID', attribute: 'id', detach_with_id: :id_filter
+  g.column name: 'Title', attribute: 'title', detach_with_id: :title_filter
+  g.column  name: 'Description', attribute: 'description', detach_with_id: :description_filter
+  g.column  name: 'Archived', attribute: 'archived', detach_with_id: :archived_filter do |task|
     task.archived? ? 'Yes' : 'No'
   end
-
-
-  g.column name:  'Due Date', attribute: 'due_date', detach_with_id: :due_date do |task|
+  g.column name: 'Due Date', attribute: 'due_date', detach_with_id: :due_date do |task|
     task.due_date.to_fs(:db)
   end
-
-
   g.column   do |task|
     link_to('Edit', edit_task_path(task))
   end
-
 end -%>

@@ -1,25 +1,16 @@
-
 <%= grid(@tasks_grid) do |g|
-
-  g.column name:  'ID', attribute: 'id', filter: false
-
-  g.column name:  'Title', attribute: 'title'
-
-  g.column  name:  'Archived', attribute: 'archived' do |task|
+  g.column name: 'ID', attribute: 'id', filter: false
+  g.column name: 'Title', attribute: 'title'
+  g.column  name: 'Archived', attribute: 'archived' do |task|
     task.archived? ? 'Yes' : 'No'
   end
-
-  g.column name:  'Due Date', attribute: 'due_date' do |task|
+  g.column name: 'Due Date', attribute: 'due_date' do |task|
     task.due_date if task.due_date
   end
-
-  g.column name:  'Added', attribute: 'created_at' do |task|
+  g.column name: 'Added', attribute: 'created_at' do |task|
     task.created_at.to_fs(:db)
   end
-
-  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper, filter_control_options: {start_year: 2021} do |task|
+  g.column name: 'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper, filter_control_options: {start_year: 2021} do |task|
     task.updated_at.to_fs(:db)
   end
-
-
 end -%>

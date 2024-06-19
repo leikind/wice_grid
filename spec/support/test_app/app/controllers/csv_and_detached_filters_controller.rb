@@ -7,7 +7,6 @@ class CsvAndDetachedFiltersController < ApplicationController
       csv_field_separator: ';',
       csv_file_name: 'tasks'
     )
-
     export_grid_if_requested('grid' => 'grid')
   end
 end

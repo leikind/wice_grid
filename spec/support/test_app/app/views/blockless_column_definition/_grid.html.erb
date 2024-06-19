@@ -1,18 +1,11 @@
 <%= grid(@tasks_grid) do |g|
-
-  g.column name:  'ID', attribute: 'id'
-
-  g.column name:  'Title', attribute: 'title'
-
-  g.column  name:  'Description', attribute: 'description'
-
-  g.column  name:  'Archived', attribute: 'archived' do |task|
+  g.column name: 'ID', attribute: 'id'
+  g.column name: 'Title', attribute: 'title'
+  g.column  name: 'Description', attribute: 'description'
+  g.column  name: 'Archived', attribute: 'archived' do |task|
     task.archived? ? 'Yes' : 'No'
   end
-
-  g.column name:  'Due Date', attribute: 'due_date'
-
-
+  g.column name: 'Due Date', attribute: 'due_date'
   g.column   do |task|
     link_to('Edit', edit_task_path(task))
   end

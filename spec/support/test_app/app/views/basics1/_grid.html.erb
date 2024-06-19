@@ -1,25 +1,19 @@
 <%= grid(@tasks_grid) do |g|
-
   g.column do |task|
     task.id
   end
-
   g.column  do |task|
     task.title
   end
-
   g.column do |task|
     task.description
   end
-
   g.column do |task|
     task.archived? ? 'Yes' : 'No'
   end
-
   g.column do |task|
     task.created_at.to_fs(:short)
   end
-
   g.column do |task|
     link_to('Edit', edit_task_path(task))
   end

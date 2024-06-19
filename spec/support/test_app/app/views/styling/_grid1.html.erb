@@ -1,12 +1,8 @@
-<%= grid(@versions_grid1, html: {class: 'my-grid'}, header_tr_html:  {class: 'my-header'}) do |g|
-
-  g.column name:  'ID', attribute: 'id', filter: false
-
-  g.column name:  'Project', attribute: 'name', assoc: :project do |version|
+<%= grid(@versions_grid1, html: {class: 'my-grid'}, header_tr_html: {class: 'my-header'}) do |g|
+  g.column name: 'ID', attribute: 'id', filter: false
+  g.column name: 'Project', attribute: 'name', assoc: :project do |version|
     version.project.name if version.project
   end
-
-  g.column name:  'Version name', attribute: 'name', html: {style: 'font-weight: bold; text-align: center'}
-
-  g.column name:  'Status', attribute: 'status', custom_filter: {'Development' => 'development', 'Testing' => 'testing', 'Production' => 'production'}
+  g.column name: 'Version name', attribute: 'name', html: {style: 'font-weight: bold; text-align: center'}
+  g.column name: 'Status', attribute: 'status', custom_filter: {'Development' => 'development', 'Testing' => 'testing', 'Production' => 'production'}
 end -%>

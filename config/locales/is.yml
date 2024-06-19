@@ -30,7 +30,7 @@ is:
     saved_query_panel_title: Vistaðar leitarskipanir
     save_query_button_label: Vista síuval
     saved_query_deletion_confirmation: Ertu viss?
-    saved_query_deletion_link_title:  Eyða leitarskipun
+    saved_query_deletion_link_title: Eyða leitarskipun
     saved_query_link_title: Hlaða leitarskipun
     validates_uniqueness_error: Leitarskipun með þessu nafni er þegar til
     validates_presence_error: Vinsamlegast gefið heiti fyrir leitarskipun

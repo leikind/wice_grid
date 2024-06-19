@@ -1,9 +1,5 @@
 <%= grid(@tasks_grid3) do |g|
-
-  g.blank_slate partial:  "empty_grid"
-
-  g.column name:  'ID', attribute: 'id'
-
-  g.column name:  'Title', attribute: 'title'
-
+  g.blank_slate partial: "empty_grid"
+  g.column name: 'ID', attribute: 'id'
+  g.column name: 'Title', attribute: 'title'
 end -%>

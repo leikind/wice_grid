@@ -108,10 +108,10 @@ module Wice
         @options = {
           conditions:                 nil,
           csv_file_name:              nil,
-          csv_field_separator:        ConfigurationProvider.value_for(:CSV_FIELD_SEPARATOR),
+          csv_field_separator: ConfigurationProvider.value_for(:CSV_FIELD_SEPARATOR),
           csv_encoding:               ConfigurationProvider.value_for(:CSV_ENCODING),
           custom_order:               {},
-          enable_export_to_csv:       ConfigurationProvider.value_for(:ENABLE_EXPORT_TO_CSV),
+          enable_export_to_csv: ConfigurationProvider.value_for(:ENABLE_EXPORT_TO_CSV),
           group:                      nil,
           include:                    nil,
           joins:                      nil,

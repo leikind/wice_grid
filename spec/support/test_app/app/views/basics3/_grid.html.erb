@@ -1,27 +1,20 @@
 <%# show_filters: :when_filtered %>
 <%= grid(@tasks_grid) do |g|
-
-  g.column name:  'ID', attribute: 'id' do |task|
+  g.column name: 'ID', attribute: 'id' do |task|
     task.id
   end
-
-  g.column name:  'Title', attribute: 'title'  do |task|
+  g.column name: 'Title', attribute: 'title'  do |task|
     task.title
   end
-
-  g.column  name:  'Description', attribute: 'description' do |task|
+  g.column  name: 'Description', attribute: 'description' do |task|
     task.description
   end
-
-  g.column  name:  'Archived', attribute: 'archived' do |task|
+  g.column  name: 'Archived', attribute: 'archived' do |task|
     task.archived? ? 'Yes' : 'No'
   end
-
-  g.column name:  'Due Date', attribute: 'due_date' do |task|
+  g.column name: 'Due Date', attribute: 'due_date' do |task|
     task.due_date
   end
-
-
   g.column   do |task|
     link_to('Edit', edit_task_path(task))
   end

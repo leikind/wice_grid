@@ -1,13 +1,9 @@
 <%= grid(grid, show_filters: :always) do |g|
-
-  g.column name:  'ID', attribute: 'id', filter: false
-
-  g.column name:  'Status Name', attribute: 'name'
-
-  g.column name:  'Created' do |status|
+  g.column name: 'ID', attribute: 'id', filter: false
+  g.column name: 'Status Name', attribute: 'name'
+  g.column name: 'Created' do |status|
     status.created_at.to_fs(:db) if status.created_at
   end
-
   g.column name: 'Task Count', attribute: 'task_count', sort_by: ->(status) { status.tasks.count } do |status|
     status.tasks.count
   end

@@ -6,9 +6,7 @@ class LocalizationController < ApplicationController
     if params[:lang]
       session[:lang] = params[:lang]
     end
-
     session[:lang] = :nl unless session[:lang]
-
     I18n.locale = session[:lang]
   end
 

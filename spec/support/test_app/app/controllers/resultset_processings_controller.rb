@@ -12,11 +12,8 @@ class ResultsetProcessingsController < ApplicationController
         'tasks.status_id' => 'statuses.position',
         'tasks.project_id' => 'projects.name'
       }
-
     )
-
     @one_page_records = []
-
     @tasks_grid.with_paginated_resultset do |records|
       records.each { |rec| @one_page_records << rec }
     end
