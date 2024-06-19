@@ -117,7 +117,7 @@ describe 'with g.action_column html_check_box: false and a block that return sta
       expect(page).to have_content('No')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -157,7 +157,7 @@ describe 'with g.action_column html_check_box: false and a block that return sta
       expect(page).to have_content('1-20 / 29')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -193,7 +193,7 @@ describe 'with g.action_column html_check_box: false and a block that return sta
       expect(page).to have_content('1-20 / 35')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 

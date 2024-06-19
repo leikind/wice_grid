@@ -49,7 +49,7 @@ module Wice
     #       account.username
     #     end
     #
-    #     g.column name: 'application_account.field.identity_id'._, attribute: 'firstname', model:  Person do |account|
+    #     g.column name: 'application_account.field.identity_id'._, attribute: 'firstname', model: Person do |account|
     #       link_to(account.identity.name, identity_path(account.identity))
     #     end
     #
@@ -86,18 +86,18 @@ module Wice
       end
 
       options = {
-        allow_showing_all_records:      Defaults::ALLOW_SHOWING_ALL_RECORDS,
-        class:                          nil,
-        extra_request_parameters:       {},
-        header_tr_html:                 {},
-        hide_reset_button:              false,
-        hide_submit_button:             false,
-        hide_csv_button:                false,
-        show_filters:                   Defaults::SHOW_FILTER,
-        sorting_dependant_row_cycling:  false,
-        html:                           {},
-        upper_pagination_panel:         Defaults::SHOW_UPPER_PAGINATION_PANEL,
-        pagination_theme:               ConfigurationProvider.value_for(:PAGINATION_THEME)
+        allow_showing_all_records:     Defaults::ALLOW_SHOWING_ALL_RECORDS,
+        class:                         nil,
+        extra_request_parameters:      {},
+        header_tr_html:                {},
+        hide_reset_button:             false,
+        hide_submit_button:            false,
+        hide_csv_button:               false,
+        show_filters:                  Defaults::SHOW_FILTER,
+        sorting_dependant_row_cycling: false,
+        html:                          {},
+        upper_pagination_panel:        Defaults::SHOW_UPPER_PAGINATION_PANEL,
+        pagination_theme: ConfigurationProvider.value_for(:PAGINATION_THEME)
       }
 
       opts.assert_valid_keys(options.keys)
@@ -528,13 +528,13 @@ module Wice
         ''
       else
 
-        content_tag(:div, content_tag(:i, '', class: 'fa fa-eye-slash'),
+        content_tag(:div, content_tag(:i, '', class: 'fa-regular fa-eye-slash'),
                     title: NlMessage['hide_filter_tooltip'],
                     style: styles[0],
                     class: 'clickable  wg-hide-filter'
         ) +
 
-          content_tag(:div, content_tag(:i, '', class: 'fa fa-eye'),
+          content_tag(:div, content_tag(:i, '', class: 'fa-regular fa-eye'),
                       title: NlMessage['show_filter_tooltip'],
                       style: styles[1],
                       class: 'clickable  wg-show-filter'
@@ -621,11 +621,11 @@ module Wice
       html = pagination_info(grid, allow_showing_all_records)
 
       paginate(grid.resultset,
-               theme:         pagination_theme,
-               param_name:    "#{grid.name}[page]",
-               params:        extra_request_parameters,
-               inner_window:  4,
-               outer_window:  2
+               theme:        pagination_theme,
+               param_name:   "#{grid.name}[page]",
+               params:       extra_request_parameters,
+               inner_window: 4,
+               outer_window: 2
       ) +
         (' <div class="pagination_status">' + html + '</div>').html_safe
     end
@@ -635,7 +635,7 @@ module Wice
       confirmation = collection_total_entries > Defaults::START_SHOWING_WARNING_FROM ? message : nil
 
       html = content_tag(:a, NlMessage['show_all_records_label'],
-                         href:  '#',
+                         href: '#',
                          title: NlMessage['show_all_records_tooltip'],
                          class: 'wg-show-all-link',
                          'data-grid-state'     => parameters.to_json,
@@ -650,9 +650,9 @@ module Wice
       parameters = parameters.reject { |k, _v| k == pagination_override_parameter_name }
 
       content_tag(:a, NlMessage['switch_back_to_paginated_mode_label'],
-                  href:   '#',
-                  title:  NlMessage['switch_back_to_paginated_mode_tooltip'],
-                  class:  'wg-back-to-pagination-link',
+                  href: '#',
+                  title: NlMessage['switch_back_to_paginated_mode_tooltip'],
+                  class: 'wg-back-to-pagination-link',
                   'data-grid-state' => parameters.to_json
       )
     end

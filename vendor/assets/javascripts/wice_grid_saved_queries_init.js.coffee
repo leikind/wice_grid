@@ -1,19 +1,17 @@
-$(document).on 'page:load ready', -> savedQueriesInit()
-$(document).on 'turbolinks:render', -> savedQueriesInit()
-
+if Turbo?
+  $(document).on 'turbo:load', -> savedQueriesInit()
+else
+  $(document).on 'page:load ready', -> savedQueriesInit()
+  $(document).on 'turbolinks:render', -> savedQueriesInit() if Turbolinks?
 
 savedQueriesInit = ->
-
   $('.wice-grid-save-query-field').keydown (event) ->
     if event.keyCode == 13
       saveQuery($(this).next(), event)
-
   $(".wice-grid-save-query-button").click (event) ->
     saveQuery(this, event)
-
   $(".wice-grid-delete-query").click (event) ->
     deleteQuery(this, event)
-
   $(".wice-grid-query-load-link").click (event) ->
     loadQuery(this, event)
 
@@ -25,16 +23,12 @@ loadQuery = (loadLink, event) ->
       gridProcessor.buildUrlWithParams(),
       gridProcessor.parameterNameForQueryLoading +  encodeURIComponent(queryId)
     )
-
     gridProcessor.visit request
-
   event.preventDefault()
   event.stopPropagation()
   false
 
-
 deleteQuery = (deleteQueryButton, event) ->
-
   confirmation = $(deleteQueryButton).data('wg-confirm')
 
   invokeConfirmation = if confirmation

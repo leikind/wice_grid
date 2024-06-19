@@ -1,15 +1,16 @@
-.well
-  %h2= current_page_title
-  %p
-    If the contents of the cell is the return value of calling
-    %code :attrubute
-    on the active record, without any additional markup or transformations, the
-    block of the
-    %code column
-    method can be dropped.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      If the contents of the cell is the return value of calling
+      %code :attrubute
+      on the active record, without any additional markup or transformations, the
+      block of the
+      %code column
+      method can be dropped.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

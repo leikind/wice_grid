@@ -1,12 +1,13 @@
-.well
-  %h2= current_page_title
-  %p
-    Use
-    %code allow_multiple_selection:  false
-    to turn off mutiple selection in custom filters.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      Use
+      %code allow_multiple_selection: false
+      to turn off mutiple selection in custom filters.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

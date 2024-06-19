@@ -6,15 +6,15 @@
     background-color: #ebebeb;
   }
 
-
-.well
-  %h2= current_page_title
-  %p
-    It is possible to override the default ordering by specifying a Proc to define the key to sort on. This key can be
-    a method of the model or other Ruby code. "Status Name" sorts on Status#number_of_vowels.
-  %p
-    Note that this method requires loading every result of the query into memory and running the Proc on each, so is
-    unsuitable for a large number of results or expensive calculations.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      It is possible to override the default ordering by specifying a Proc to define the key to sort on. This key can be
+      a method of the model or other Ruby code. "Status Name" sorts on Status#number_of_vowels.
+    %p
+      Note that this method requires loading every result of the query into memory and running the Proc on each, so is
+      unsuitable for a large number of results or expensive calculations.
 
 = show_code
 

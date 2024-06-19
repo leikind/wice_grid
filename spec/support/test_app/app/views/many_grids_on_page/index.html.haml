@@ -1,26 +1,24 @@
-.well
-  %h2= current_page_title
-  %p
-    There can be many grids on one page, but in order to work correctly and independantly
-    from each other they should
-    all have  different names. A grid name is the basis and the scope for all CSS classes and HTTP
-    parameters of the grid. By default the name of a grid is
-    %code grid
-    and in case there is only one grid on a page defining the name is not required unless it
-    clashes with some other form field names.
-    Define the name with the
-    %code :name
-    parameter of the
-    %code initialize_grid
-    method.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      There can be many grids on one page, but in order to work correctly and independantly
+      from each other they should
+      all have  different names. A grid name is the basis and the scope for all CSS classes and HTTP
+      parameters of the grid. By default the name of a grid is
+      %code grid
+      and in case there is only one grid on a page defining the name is not required unless it
+      clashes with some other form field names.
+      Define the name with the
+      %code :name
+      parameter of the
+      %code initialize_grid
+      method.
 
 = show_code
 
-.row-fluid.many-grids-on-page
+.row.many-grids-on-page
   .col-md-6
     .example1= render   'tasks_grid1'
   .col-md-6
     .example2= render   'tasks_grid2'
-
-
-

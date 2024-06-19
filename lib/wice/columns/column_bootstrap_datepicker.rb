@@ -9,16 +9,16 @@ module Wice
       def do_render(params) #:nodoc:
         calendar_data_from = prepare_data_for_bscalendar(
           initial_date: params[:fr],
-          name:         @name1,
-          fire_event:   auto_reload,
-          grid_name:    self.grid.name
+          name:       @name1,
+          fire_event: auto_reload,
+          grid_name:  self.grid.name
         )
 
         calendar_data_to = prepare_data_for_bscalendar(
           initial_date: params[:to],
-          name:         @name2,
-          fire_event:   auto_reload,
-          grid_name:    self.grid.name
+          name:       @name2,
+          fire_event: auto_reload,
+          grid_name:  self.grid.name
         )
 
         calendar_data_from.the_other_datepicker_id_to   = calendar_data_to.dom_id

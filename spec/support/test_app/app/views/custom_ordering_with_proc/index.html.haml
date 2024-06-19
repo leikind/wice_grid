@@ -6,13 +6,13 @@
     background-color: #ebebeb;
   }
 
-
-.well
-  %h2= current_page_title
-  %p
-    It is possible to override the default ordering by specifying a Proc which generates custom sql code. "Status Name"
-    is sorted alphabetically unless
-    = link_to 'a sort_by_length parameter is in the request.', sort_by_length: true
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      It is possible to override the default ordering by specifying a Proc which generates custom sql code. "Status Name"
+      is sorted alphabetically unless
+      = link_to 'a sort_by_length parameter is in the request.', sort_by_length: true
 
 = show_code
 

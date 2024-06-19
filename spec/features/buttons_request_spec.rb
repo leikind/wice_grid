@@ -29,7 +29,7 @@ describe 'with external buttons for Submit and Reset filters WiceGrid', type: :r
       expect(page).to have_content('No')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 

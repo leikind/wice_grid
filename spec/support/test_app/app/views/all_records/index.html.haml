@@ -1,12 +1,13 @@
-.well
-  %h2= current_page_title
-  %p
-    Use
-    %code allow_showing_all_records:  false
-    to remove "show all" link from the grid.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      Use
+      %code allow_showing_all_records: false
+      to remove "show all" link from the grid.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

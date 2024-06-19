@@ -1,14 +1,15 @@
-.well
-  %h2= current_page_title
-  %p
-    To disable all filters at once use
-    %code show_filters: :no
-    as a
-    %code grid
-    parameter .
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      To disable all filters at once use
+      %code show_filters: :no
+      as a
+      %code grid
+      parameter .
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

@@ -116,7 +116,7 @@ describe "whith the parameter show_filters: :when_filtered in grid WiceGrid",  :
         expect(page).to have_content('No')
       end
 
-      within 'ul.pagination' do
+      within 'ul.grid.pagination' do
         click_link '2'
       end
 

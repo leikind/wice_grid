@@ -10,24 +10,22 @@ class WiceGridProcessor
   toString :  ->
     "<WiceGridProcessor instance for grid '" + @name + "'>"
 
-
   process : (domIdToFocus)->
     @visit @buildUrlWithParams(domIdToFocus)
 
-  visit : (path, use_turbolink = true) ->
-    if Turbolinks? and use_turbolink
+  visit : (path, use_turbo = true) ->
+    if Turbo? and use_turbo
+      Turbo.visit path
+    else if Turbolinks? and use_turbo
       Turbolinks.visit path
     else
       window.location = path
 
   setProcessTimer : (domIdToFocus)->
-
     if @timer
       clearTimeout(@timer)
       @timer = null
-
     processor = this
-
     @timer = setTimeout(
       -> processor.process(domIdToFocus)
       1000
@@ -37,16 +35,13 @@ class WiceGridProcessor
     requestPath = @gridStateToRequest(gridState)
     @visit @appendToUrl(@baseLinkForShowAllRecords, requestPath)
 
-
   gridStateToRequest : (gridState)->
     jQuery.map(
       gridState
       (pair) -> encodeURIComponent(pair[0]) + '=' + encodeURIComponent(pair[1])
     ).join('&')
 
-
   appendToUrl : (url, str)->
-
     sep = if url.indexOf('?') != -1
       if /[&\?]$/.exec(url)
         ''
@@ -74,22 +69,16 @@ class WiceGridProcessor
 
     if domIdToFocus
       res = @appendToUrl(res, @parameterNameForFocus + domIdToFocus)
-
     res
-
-
 
   reset : ->
     @visit @baseRequestForFilter
 
-
   exportToCsv : ->
     @visit @linkForExport, false
 
-
   register : (func)->
     @filterDeclarations.push(func)
-
 
   readValuesAndFormQueryString : (filterName, detached, templates, ids)->
     res = new Array()
@@ -101,9 +90,7 @@ class WiceGridProcessor
           message = 'WiceGrid: Error reading state of filter "' + filterName + '". No DOM element with id "' + ids[i] + '" found.'
           if detached
             message += 'You have declared "' + filterName + '" as a detached filter but have not output it anywhere in the template. Read documentation about detached filters.'
-
           alert(message);
-
         return ''
 
       el = $('#' + ids[i])
@@ -121,12 +108,9 @@ class WiceGridProcessor
 
       else if val &&  val != ''
         res.push(templates[i]  + encodeURIComponent(val));
-
-
     res.join('&');
 
   this
-
 
 WiceGridProcessor._version = '3.4'
 

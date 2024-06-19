@@ -1,7 +1,8 @@
-.well
-  %h2= current_page_title
-  %p
-    An example of two grids with detached filters functioning independantly of each other.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      An example of two grids with detached filters functioning independantly of each other.
 
 = show_code
 
@@ -17,8 +18,6 @@
     ID:
   .col-md-4
     = grid_filter @grid2, :id_filter
-
-
 .row
   .col-md-2
     Title:
@@ -28,9 +27,6 @@
     Title:
   .col-md-4
     = grid_filter @grid2, :title_filter
-
-
-
 .row
   .col-md-2
     Description:
@@ -40,8 +36,6 @@
     Description:
   .col-md-4
     = grid_filter @grid2, :description_filter
-
-
 .row
   .col-md-2
     Archived:
@@ -51,8 +45,6 @@
     Archived:
   .col-md-4
     = grid_filter @grid2, :archived_filter
-
-
 .row
   .col-md-2
     Due date:
@@ -62,14 +54,11 @@
     Due date:
   .col-md-4
     = grid_filter @grid2, :due_date
-
-
 .row
   .col-md-6
     .external-buttons-grid1
       %button.btn.btn-primary.wg-external-submit-button{'data-grid-name' => 'grid'} Submit
       %button.btn.btn-default.wg-external-reset-button{'data-grid-name' => 'grid'} Reset
-
   .col-md-6
     .external-buttons-grid2
       %button.btn.btn-primary.wg-external-submit-button{'data-grid-name' => 'grid2'} Submit
@@ -80,6 +69,5 @@
 .row
   .col-md-6
     = render_grid(@grid1)
-
   .col-md-6
     = render_grid(@grid2)

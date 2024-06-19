@@ -23,7 +23,7 @@ shared_examples "detached_filters" do
       expect(page).to have_content('No')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 

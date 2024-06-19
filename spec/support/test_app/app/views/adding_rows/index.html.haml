@@ -1,37 +1,38 @@
-.well
-  %h2= current_page_title
-  %p
-    It is possible to insert a custom row at the bottom of the grid with
-    %code last_row
-    and a custom row before or after a certain row with
-    %code before_row
-    and
-    %code after_row.
-  %p
-    The block of
-    %code before_row
-    or
-    %code after_row
-    is executed for each record and if it returns a string.
-  %p
-    Both
-    %code before_row
-    and
-    %code last_row
-    are expected to return the complete markup for a table row starting with the
-    %code tr
-    tag.
-  %p
-    The first argument for a
-    %code last_row
-    block and the second argument for
-    %code before_row
-    and
-    %code after_row
-    blocks is the number of columns in the grid.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      It is possible to insert a custom row at the bottom of the grid with
+      %code last_row
+      and a custom row before or after a certain row with
+      %code before_row
+      and
+      %code after_row.
+    %p
+      The block of
+      %code before_row
+      or
+      %code after_row
+      is executed for each record and if it returns a string.
+    %p
+      Both
+      %code before_row
+      and
+      %code last_row
+      are expected to return the complete markup for a table row starting with the
+      %code tr
+      tag.
+    %p
+      The first argument for a
+      %code last_row
+      block and the second argument for
+      %code before_row
+      and
+      %code after_row
+      blocks is the number of columns in the grid.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

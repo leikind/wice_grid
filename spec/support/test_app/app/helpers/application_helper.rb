@@ -4,26 +4,25 @@ module ApplicationHelper
 
   def show_code
     n = 0
-    content_tag(:ul,
-                code_chunks.map do |filename_for_view, code|
-                  n += 1
-
-                  content_tag(:li,
-                              content_tag(:div,
-                                          link_to(filename_for_view, "#collapse#{n}", 'data-toggle' => 'collapse', 'data-parent' => '#code-accordion', :class => 'accordion-toggle'),
-                                          class: 'accordion-heading'
-                              ) +
-                              content_tag(:div,
-                                          content_tag(:div, code, class: 'accordion-inner'),
-                                          class: 'accordion-body collapse',
-                                          style: 'height: 0px;',
-                                          id: "collapse#{n}"
-                              ),
-                              class: 'list-group-item'
-                  )
-                end.join.html_safe,
-                id: 'code-accordion',
-                class: 'list-group'
+    content_tag(
+      :ul, code_chunks.map do |filename_for_view, code|
+        n += 1
+        content_tag(
+          :li, content_tag(
+            :div, link_to(filename_for_view, "#collapse#{n}", 'data-bs-toggle' => 'collapse', 'data-parent' => '#code-accordion', :class => 'accordion-button'),
+            class: 'accordion-header'
+          ) +
+          content_tag(
+            :div, content_tag(:div, code, class: 'accordion-inner'),
+            class: 'accordion-body collapse',
+            style: 'height: 0px;',
+            id: "collapse#{n}"
+          ),
+          class: 'accordion-item'
+        )
+      end.join.html_safe,
+      id: 'code-accordion',
+      class: 'accordion'
     )
   end
 

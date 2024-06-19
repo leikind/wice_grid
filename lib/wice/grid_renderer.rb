@@ -161,11 +161,11 @@ module Wice
       end
 
       options = {
-        param_name:          :selected,
-        html:                {},
-        select_all_buttons:  true,
-        object_property:     :id,
-        html_check_box:      true
+        param_name:         :selected,
+        html:               {},
+        select_all_buttons: true,
+        object_property:    :id,
+        html_check_box:     true
       }
 
       opts.assert_valid_keys(options.keys)
@@ -303,28 +303,28 @@ module Wice
 
     def column(opts = {}, &block)
       options = {
-        allow_multiple_selection:    ConfigurationProvider.value_for(:ALLOW_MULTIPLE_SELECTION),
-        assoc:                       nil,
-        attribute:                   nil,
-        auto_reload:                 ConfigurationProvider.value_for(:AUTO_RELOAD),
-        boolean_filter_false_label:  NlMessage['boolean_filter_false_label'],
-        boolean_filter_true_label:   NlMessage['boolean_filter_true_label'],
-        class:                       nil,
-        custom_filter:               nil,
-        detach_with_id:              nil,
-        filter:                      true,
-        filter_all_label:            ConfigurationProvider.value_for(:CUSTOM_FILTER_ALL_LABEL),
-        filter_control_options:      {},
-        filter_type:                 nil,
-        html:                        {},
-        in_csv:                      true,
-        in_html:                     true,
-        model:                       nil, # will throw an exception with instructions
-        name:                        '',
-        negation:                    ConfigurationProvider.value_for(:NEGATION_IN_STRING_FILTERS),
-        ordering:                    true,
-        table_alias:                 nil,
-        sort_by:                     nil,
+        allow_multiple_selection: ConfigurationProvider.value_for(:ALLOW_MULTIPLE_SELECTION),
+        assoc:                      nil,
+        attribute:                  nil,
+        auto_reload:                ConfigurationProvider.value_for(:AUTO_RELOAD),
+        boolean_filter_false_label: NlMessage['boolean_filter_false_label'],
+        boolean_filter_true_label:  NlMessage['boolean_filter_true_label'],
+        class:                      nil,
+        custom_filter:              nil,
+        detach_with_id:             nil,
+        filter:                     true,
+        filter_all_label: ConfigurationProvider.value_for(:CUSTOM_FILTER_ALL_LABEL),
+        filter_control_options: {},
+        filter_type:            nil,
+        html:                   {},
+        in_csv:                 true,
+        in_html:                true,
+        model:                  nil, # will throw an exception with instructions
+        name:                   '',
+        negation: ConfigurationProvider.value_for(:NEGATION_IN_STRING_FILTERS),
+        ordering:               true,
+        table_alias:            nil,
+        sort_by:                nil,
       }
 
       opts.assert_valid_keys(options.keys)

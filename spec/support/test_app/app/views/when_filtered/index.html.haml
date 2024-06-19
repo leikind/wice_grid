@@ -1,15 +1,16 @@
-.well
-  %h2= current_page_title
-  %p
-    %code show_filters: :when_filtered
-    in
-    %code grid
-    hides the filter panel but the user can make it visible by clicking on the "Show filter" panel.
-  %p
-    When any of the filters is active the filter panel is shown anyway.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      %code show_filters: :when_filtered
+      in
+      %code grid
+      hides the filter panel but the user can make it visible by clicking on the "Show filter" panel.
+    %p
+      When any of the filters is active the filter panel is shown anyway.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

@@ -16,9 +16,22 @@
 @import "bootstrap";
 @import "wice_grid";
 
-@import "font-awesome-sprockets";
+/*
+ * @import "font-awesome"
+ */
 @import "font-awesome";
 
+ul.nav-pills {
+  padding-left: 0;
+  .nav-link {
+    display: list-item;
+    list-style-type: disc;
+    margin-left: 12px;
+    &.active a {
+      color: white
+    }
+  }
+}
 
 body {padding-top: 20px;}
 header{padding-bottom: 20px;}

@@ -67,18 +67,18 @@ module Wice
           }
           link_opts[:class] += ' current' if saved_query == sq
           '<li>' + link_to(
-            content_tag(:i, '', class: 'fa fa-trash-o delete-icon'),
+            content_tag(:i, '', class: 'fa-regular fa-trash-can delete-icon'),
             delete_serialized_query_path(
               grid_name: grid_name,
-              id:        sq.id,
-              current:   currently_loaded_query_id,
-              extra:     extra_parameters,
-              confirm:   confirm
+              id:      sq.id,
+              current: currently_loaded_query_id,
+              extra:   extra_parameters,
+              confirm: confirm
             ),
-            class:               'wice-grid-delete-query',
+            class: 'wice-grid-delete-query',
             'data-wg-confirm' => deletion_confirmation,
             'data-grid-name'  => grid_name,
-            title:               "#{deletion_link_title} #{sq.name}"
+            title: "#{deletion_link_title} #{sq.name}"
           ) + ' &nbsp; ' +
             link_to(h(sq.name), '#', link_opts) +
             if sq.respond_to? :description

@@ -1,21 +1,22 @@
-.well
-  %h2= current_page_title
-  %p
-    Strings
-    %code null
-    and
-    %code not null
-    in
-    %code custom_filter
-    values
-    are treated speacially and result in
-    %code IS NULL
-    and
-    %code IS NOT NULL
-    WHERE-clauses.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      Strings
+      %code null
+      and
+      %code not null
+      in
+      %code custom_filter
+      values
+      are treated speacially and result in
+      %code IS NULL
+      and
+      %code IS NOT NULL
+      WHERE-clauses.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

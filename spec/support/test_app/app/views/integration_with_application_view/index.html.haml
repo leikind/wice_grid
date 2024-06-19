@@ -1,33 +1,34 @@
-.well
-  %h2= current_page_title
-  %p
-    Method
-    %code current_page_records
-    sent to the grid object returns a list of all ActiveRecord objects currently displayed on the page.
-  %p
-    Method
-    %code all_pages_records
-    returns a list of all ActiveRecord objects throughout all pages of the current selection.
-    %code all_pages_records
-    causes an additional SQL query to be executed and has to be used with care.
-  %p Both methods can be used after the grid definition only.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      Method
+      %code current_page_records
+      sent to the grid object returns a list of all ActiveRecord objects currently displayed on the page.
+    %p
+      Method
+      %code all_pages_records
+      returns a list of all ActiveRecord objects throughout all pages of the current selection.
+      %code all_pages_records
+      causes an additional SQL query to be executed and has to be used with care.
+    %p Both methods can be used after the grid definition only.
 
 = show_code
 
 = render   'grid'
 
-.row-fluid
+.row
   .col-md-6
-    .well
-      - current_page_records = @tasks_grid.current_page_records
-      = current_page_records.size
-      records on the current page:
-      = current_page_records.map(&:id).to_sentence
-
+    .card.bg-light
+      .card-body
+        - current_page_records = @tasks_grid.current_page_records
+        = current_page_records.size
+        records on the current page:
+        = current_page_records.map(&:id).to_sentence
   .col-md-6
-    .well
-      - all_pages_records = @tasks_grid.all_pages_records
-      = all_pages_records.size
-      records throughout all pages:
-      = all_pages_records.map(&:id).to_sentence
-
+    .card.bg-light
+      .card-body
+        - all_pages_records = @tasks_grid.all_pages_records
+        = all_pages_records.size
+        records throughout all pages:
+        = all_pages_records.map(&:id).to_sentence

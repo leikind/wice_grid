@@ -6,15 +6,15 @@
     background-color: #ebebeb;
   }
 
-
-.well
-  %h2= current_page_title
-  %p
-    It is possible to support ordering on calculated fields with custom_sort. When using this method you must specify
-    an (arbitrary) attribute name, which is used as a query parameter.
-  %p
-    Note that this method requires loading every result of the query into memory and running the Proc on each, so is
-    unsuitable for a large number of results or expensive calculations.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      It is possible to support ordering on calculated fields with custom_sort. When using this method you must specify
+      an (arbitrary) attribute name, which is used as a query parameter.
+    %p
+      Note that this method requires loading every result of the query into memory and running the Proc on each, so is
+      unsuitable for a large number of results or expensive calculations.
 
 = show_code
 

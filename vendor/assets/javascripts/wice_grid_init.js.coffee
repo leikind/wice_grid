@@ -1,19 +1,17 @@
-$ -> initWiceGrid()
-$(document).on 'turbolinks:render', -> initWiceGrid()
+if Turbo?
+  $(document).on 'turbo:load', -> initWiceGrid()
+else
+  $ -> initWiceGrid()
+  $(document).on 'turbolinks:render', -> initWiceGrid() if Turbolinks?
 
 globalVarForAllGrids = 'wiceGrids'
 
 initWiceGrid = ->
-
   $(".wice-grid-container").each (index, wiceGridContainer) ->
-
     gridName = wiceGridContainer.id
     dataDiv = $(".wg-data", wiceGridContainer)
-
     processorInitializerArguments = dataDiv.data("processor-initializer-arguments")
-
     filterDeclarations = dataDiv.data("filter-declarations")
-
     focusElementIfNeeded dataDiv.data("foc")
 
     gridProcessor = new WiceGridProcessor(gridName,
@@ -52,8 +50,6 @@ initWiceGrid = ->
   # for all grids on oage because it does not matter which grid it is
   setupMultiSelectToggle $('.wg-detached-filter')
 
-
-
 moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerHiddenField, selectedDate, dateFormat, predicate) ->
   if (datepickerId = datepickerHiddenField.data(dataFieldNameWithTheOtherDatepicker)) &&
     (theOtherDatepicker = $(_datepickerId = "#" + datepickerId)) &&
@@ -63,14 +59,12 @@ moveDateBoundIfInvalidPeriod = (dataFieldNameWithTheOtherDatepicker, datepickerH
       theOtherDatepicker.datepicker("setDate", selectedDate)
       theOtherDatepicker.next().next().html  $.datepicker.formatDate(dateFormat, selectedDate)
 
-
 setupDatepicker = ->
   if $('.date-filter.wg-jquery-datepicker').length != 0
     setupJqueryUiDatepicker()
 
   if $('.date-filter.wg-bootstrap-datepicker').length != 0
     setupBootstrapDatepicker()
-
 
 setupBootstrapDatepicker = ->
   # check for bootstrap datepicker
@@ -95,7 +89,6 @@ setupBootstrapDatepicker = ->
         if $to.length > 0
           $to.datepicker 'show'
 
-
 setupJqueryUiDatepicker = ->
   # check jquery ui datepickeer
   unless $.datepicker
@@ -106,10 +99,8 @@ setupJqueryUiDatepicker = ->
   if locale = $('.date-filter.wg-jquery-datepicker input[type=hidden]').data('locale')
     $.datepicker.setDefaults($.datepicker.regional[locale]);
 
-
   $('.date-filter.wg-jquery-datepicker .date-label').each  (index, removeLink) ->
     datepickerHiddenField  = $('#' + $(removeLink).data('dom-id'))
-
     eventToTriggerOnChange = datepickerHiddenField.data('close-calendar-event-name')
 
     # setting up the remove link for datepicker
@@ -167,9 +158,7 @@ setupJqueryUiDatepicker = ->
     newlyAdded = $('.fa-calendar', datepickerContainer)
 
     newlyAdded.click ->
-
       datepickerHiddenField.datepicker("show")
-
 
 # hiding and showing the row with filters
 setupHidingShowingOfFilterRow = (wiceGridContainer) ->
@@ -187,11 +176,9 @@ setupHidingShowingOfFilterRow = (wiceGridContainer) ->
     $(hideFilter, wiceGridContainer).show()
     $(filterRow, wiceGridContainer).show()
 
-
 setupCsvExport = (wiceGridContainer, gridProcessor) ->
   $('.export-to-csv-button', wiceGridContainer).click ->
     gridProcessor.exportToCsv()
-
 
 # trigger submit/reset from within the grid
 setupSubmitReset = (wiceGridContainer, gridProcessor) ->
@@ -240,14 +227,11 @@ setupAutoreloadsForInternalFilters = (wiceGridContainer, gridProcessor) ->
   $(document).bind 'wg:calendarChanged_' + gridProcessor.name, ->
     gridProcessor.process()
 
-
-
 isKeySignificant = (keyCode, func)->
   [37, 38, 39, 40, 9, 27].indexOf(keyCode) == -1
 
 # autoreload for internal filters
 setupAutoreloadsForExternalFilters =  ->
-
   $('.wg-detached-filter').each (index, detachedFilterContainer) ->
     gridProcessor = getGridProcessorForElement(detachedFilterContainer)
     if gridProcessor
@@ -260,7 +244,6 @@ setupAutoreloadsForExternalFilters =  ->
 
       $('input.negation-checkbox.auto-reload', detachedFilterContainer).click ->
         gridProcessor.process()
-
 
 # trigger the all records mode
 setupShowingAllRecords = (wiceGridContainer, gridProcessor) ->
@@ -290,7 +273,6 @@ setupMultiSelectToggle = (wiceGridContainer)->
     $(this).prev().show()
     $(this).hide()
 
-
 setupBulkToggleForActionColumn = (wiceGridContainer) ->
   $('.select-all', wiceGridContainer).click ->
     $('.sel input', wiceGridContainer).prop('checked', true).trigger('change')
@@ -301,7 +283,6 @@ setupBulkToggleForActionColumn = (wiceGridContainer) ->
   $('.wg-select-all', wiceGridContainer).click ->
     $('.sel input', wiceGridContainer).prop('checked', $(this).prop('checked')).trigger('change')
 
-
 getGridProcessorForElement = (element) ->
   gridName = $(element).data('grid-name')
   if gridName && window[globalVarForAllGrids]
@@ -309,18 +290,14 @@ getGridProcessorForElement = (element) ->
   else
     null
 
-
 setupExternalCsvExport =  ->
-
   $(".wg-external-csv-export-button").each (index, externalCsvExportButton) ->
     gridProcessor = getGridProcessorForElement(externalCsvExportButton)
     if gridProcessor
       $(externalCsvExportButton).click (event) ->
         gridProcessor.exportToCsv()
 
-
 setupExternalSubmitReset =  ->
-
   $(".wg-external-submit-button").each (index, externalSubmitButton) ->
     gridProcessor = getGridProcessorForElement(externalSubmitButton)
     if gridProcessor
@@ -336,7 +313,6 @@ setupExternalSubmitReset =  ->
         gridProcessor.reset()
         event.preventDefault()
         false
-
 
   $('.wg-detached-filter').each (index, detachedFilterContainer) ->
     gridProcessor = getGridProcessorForElement(detachedFilterContainer)

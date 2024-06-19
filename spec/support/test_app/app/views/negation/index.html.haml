@@ -1,15 +1,16 @@
-.well
-  %h2= current_page_title
-  %p
-    %code negation: true
-    adds a checkox to a text filter. The checked checkbox is the logical
-    %i NOT
-    \- it changes the semantics of a text filter to
-    %b not
-    showing all records with a matching substring.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      %code negation: true
+      adds a checkox to a text filter. The checked checkbox is the logical
+      %i NOT
+      \- it changes the semantics of a text filter to
+      %b not
+      showing all records with a matching substring.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

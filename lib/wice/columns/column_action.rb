@@ -35,11 +35,11 @@ module Wice
           check_box_tag :select_all, 1, false, class: 'wg-select-all'
         else
           content_tag(:div,
-                      content_tag(:i, '', class: 'fa fa-check-square-o'),
+                      content_tag(:i, '', class: 'fa-regular fa-square-check'),
                       class: 'clickable select-all',
                       title: NlMessage['select_all']) + ' ' +
             content_tag(:div,
-                        content_tag(:i, '', class: 'fa fa-square-o'),
+                        content_tag(:i, '', class: 'fa-regular fa-square'),
                         class: 'clickable deselect-all',
                         title: NlMessage['deselect_all'])
         end

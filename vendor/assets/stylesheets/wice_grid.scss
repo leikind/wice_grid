@@ -1,3 +1,36 @@
+/*!
+ * WiceGrid CSS
+ *
+ * @import "font-awesome"
+ */
+//@import "font-awesome-sprockets";
+@import "font-awesome";
+
+/*!
+ * WiceGrid CSS
+ *
+ * @import "jquery-ui/core"
+ */
+@import "jquery-ui/core";
+/*!
+ * WiceGrid CSS
+ *
+ * @import "jquery-ui/theme"
+ */
+@import "jquery-ui/theme";
+/*!
+ * WiceGrid CSS
+ *
+ * @import "jquery-ui/datepicker"
+ */
+@import "jquery-ui/datepicker";
+
+//@import "jquery-ui";
+/*!
+ * WiceGrid CSS
+ *
+ * self
+ */
 .wg-detached-filter, .wice-grid{
 
   .text-filter-container {

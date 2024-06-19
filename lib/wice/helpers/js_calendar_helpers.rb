@@ -59,7 +59,7 @@ module Wice #:nodoc:
       content_tag(
         :span,
         date_picker,
-        id:    calendar_data.datepicker_placeholder_id,
+        id: calendar_data.datepicker_placeholder_id,
         class: 'jq-datepicker-container'
       )
     end

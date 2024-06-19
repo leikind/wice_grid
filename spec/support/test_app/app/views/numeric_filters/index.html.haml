@@ -1,12 +1,12 @@
-.well
-  %h2= current_page_title
-  %p
-    By default the filter for numeric columns is a one input field filter which checks for equality. You can also use a range filter which check if the value is with a range. Use
-    %code filter_type: :range
-
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      By default the filter for numeric columns is a one input field filter which checks for equality. You can also use a range filter which check if the value is with a range. Use
+      %code filter_type: :range
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

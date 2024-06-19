@@ -3,16 +3,19 @@ require File.expand_path('../boot', __FILE__)
 
 # We don't have our own Gemfile, make sure these things are loaded.
 require 'rails/all'
+require 'sprockets/railtie'
 require 'haml'
 require 'coderay'
-require 'bootstrap-sass'
+require 'bootstrap'
+require 'dartsass-rails'
 require 'font-awesome-sass'
+require 'importmap-rails'
 require 'jquery-rails'
 require 'jquery-ui-rails'
 require 'jquery-ui-themes'
-require 'turbolinks'
-require 'sprockets'
 require "stimulus-rails"
+require 'turbo-rails'
+
 require_relative '../../../../lib/wice_grid'
 
 module Examples
@@ -75,5 +78,7 @@ module Examples
       ActionController::Parameters,
       ActiveSupport::HashWithIndifferentAccess,
     ]
+
+    config.dartsass.build_options = '--style=expanded --embed-source-map'
   end
 end

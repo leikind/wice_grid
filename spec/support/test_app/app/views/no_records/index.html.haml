@@ -1,21 +1,22 @@
-.well
-  %h2= current_page_title
-  %p
-    What if there no records to render in a grid?
-    There are three ways to define what to show in this case:
-    %ul
-      %li
-        %code blank_slate
-        with a block. This looks like a column definition, but the value
-        returned by the block is rendred when there are no records.
-      %li
-        %code blank_slate
-        whithout a block, but with one string argument.
-      %li
-        %code blank_slate
-        with parameter
-        %code partial:  "partial_name"
-        which defines a partial to render.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      What if there no records to render in a grid?
+      There are three ways to define what to show in this case:
+      %ul
+        %li
+          %code blank_slate
+          with a block. This looks like a column definition, but the value
+          returned by the block is rendred when there are no records.
+        %li
+          %code blank_slate
+          whithout a block, but with one string argument.
+        %li
+          %code blank_slate
+          with parameter
+          %code partial: "partial_name"
+          which defines a partial to render.
 
 = show_code
 

@@ -1,13 +1,14 @@
-.well
-  %h2= current_page_title
-  %p
-    Use
-    %code :order
-    and
-    %code :order_direction
-    in
-    %code  initialize_grid
-    to define by which column the grid should be ordered once it is loaded initially.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      Use
+      %code :order
+      and
+      %code :order_direction
+      in
+      %code  initialize_grid
+      to define by which column the grid should be ordered once it is loaded initially.
 
   %p
     Use
@@ -18,6 +19,6 @@
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

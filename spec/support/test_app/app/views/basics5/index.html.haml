@@ -1,12 +1,13 @@
-.well
-  %h2= current_page_title
-  %p
-    To disable ordering columns use
-    %code allow_ordering:  false
-    \.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      To disable ordering columns use
+      %code allow_ordering: false
+      \.
 
 = show_code
 
-.row-fluid
+.row
   .col-md-12
     = render   'grid'

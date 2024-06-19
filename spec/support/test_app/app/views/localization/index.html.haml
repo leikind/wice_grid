@@ -1,10 +1,11 @@
-.well
-  %h2= current_page_title
-  %p
-    WiceGrid integrated well with I18n.
-    Edit file
-    %code wice_grid.yml
-    to add or change languages.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      WiceGrid integrated well with I18n.
+      Edit file
+      %code wice_grid.yml
+      to add or change languages.
 
 = show_code
 
@@ -16,5 +17,3 @@
       %a{href:url_for(lang: lang)}= lang
 
 = render   'grid'
-
-

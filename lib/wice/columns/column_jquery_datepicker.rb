@@ -9,18 +9,18 @@ module Wice
       def do_render(params) #:nodoc:
         calendar_data_from = prepare_data_for_calendar(
           initial_date: params[:fr],
-          title:        NlMessage['date_selector_tooltip_from'],
-          name:         @name1,
-          fire_event:   auto_reload,
-          grid_name:    self.grid.name
+          title:      NlMessage['date_selector_tooltip_from'],
+          name:       @name1,
+          fire_event: auto_reload,
+          grid_name:  self.grid.name
         )
 
         calendar_data_to = prepare_data_for_calendar(
           initial_date: params[:to],
-          title:        NlMessage['date_selector_tooltip_to'],
-          name:         @name2,
-          fire_event:   auto_reload,
-          grid_name:    self.grid.name
+          title:      NlMessage['date_selector_tooltip_to'],
+          name:       @name2,
+          fire_event: auto_reload,
+          grid_name:  self.grid.name
         )
 
         calendar_data_from.the_other_datepicker_id_to   = calendar_data_to.dom_id

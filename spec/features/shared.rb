@@ -11,7 +11,7 @@ shared_examples 'basic task table specs' do
   end
 
   it 'allows to navigate through the pages' do
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -23,7 +23,7 @@ shared_examples 'basic task table specs' do
       expect(page).to have_content('21-40 / 50')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '3'
     end
 
@@ -112,7 +112,7 @@ shared_examples 'sorting ID' do
       expect(page).to have_content('507')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -156,7 +156,7 @@ shared_examples 'sorting Title' do
       expect(page).to have_content('voluptatum non')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -200,7 +200,7 @@ shared_examples 'sorting Description' do
       expect(page).to have_content('Voluptate occaecati quisquam in et qui nostrum eos minus.')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -244,7 +244,7 @@ shared_examples 'sorting Archived' do
       expect(page).to have_content('Yes')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -288,7 +288,7 @@ shared_examples 'sorting Due Date' do
       expect(page).to have_content('2023-03-30')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -523,7 +523,7 @@ shared_examples 'Due Date datepicker filtering' do
       expect(page).to have_content('1-20 / 35')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -587,7 +587,7 @@ shared_examples 'Added datepicker filtering' do
       expect(page).to have_content('1-20 / 29')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 
@@ -937,7 +937,7 @@ shared_examples 'Archived filtering' do
       expect(page).to have_content('No')
     end
 
-    within 'ul.pagination' do
+    within 'ul.grid.pagination' do
       click_link '2'
     end
 

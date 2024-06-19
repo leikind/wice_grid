@@ -1,79 +1,68 @@
-.well
-  %h2= current_page_title
-  %p
-    Filters can also be detached from the grid table. This is a 3-step process.
+.card.bg-light
+  .card-body
+    %h2= current_page_title
+    %p
+      Filters can also be detached from the grid table. This is a 3-step process.
 
-  %ol
-    %li
-      First, define the grid with helper
-      %code define_grid
-      instead of
-      %code grid
-      \. Everything should be done the same way as with
-      %code grid, but every column which will have an external filter, add
-      %code detach_with_id: :some_filter_name
-      in the
-      %code column
-      definition.
-
-    %li
-      Then use
-      %code grid_filter(grid, :some_filter_name)
-      to render filters.
-
-    %li
-      Finally, use
-      %code render_grid(@grid)
-      to actually output the grid table
-      \.
+    %ol
+      %li
+        First, define the grid with helper
+        %code define_grid
+        instead of
+        %code grid
+        \. Everything should be done the same way as with
+        %code grid, but every column which will have an external filter, add
+        %code detach_with_id: :some_filter_name
+        in the
+        %code column
+        definition.
+      %li
+        Then use
+        %code grid_filter(grid, :some_filter_name)
+        to render filters.
+      %li
+        Finally, use
+        %code render_grid(@grid)
+        to actually output the grid table
+        \.
 
 = show_code
 
 = render   'grid'
-
 
 .row
   .col-md-2
     ID:
   .col-md-10
     = grid_filter @tasks_grid, :id_filter
-
 .row
   .col-md-2
     Title:
   .col-md-3
     = grid_filter @tasks_grid, :title_filter
   .col-md-7
-
-
 .row
   .col-md-2
     Description:
   .col-md-3
     = grid_filter @tasks_grid, :description_filter
   .col-md-7
-
 .row
   .col-md-2
     Archived:
   .col-md-10
     = grid_filter @tasks_grid, :archived_filter
-
-
 .row
   .col-md-2
     Due date:
   .col-md-10
     = grid_filter @tasks_grid, :due_date
-
-
-.row-fluid
+.row
   .col-md-12
     .external-buttons
       %button.btn.btn-primary.wg-external-submit-button{'data-grid-name' => 'grid'} Submit
       %button.btn.btn-default.wg-external-reset-button{'data-grid-name' => 'grid'} Reset
-
-.row-fluid
+.row
   .col-md-12
 
     = render_grid(@tasks_grid)
