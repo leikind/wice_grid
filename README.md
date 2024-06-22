@@ -60,13 +60,13 @@ WiceGrid views do not contain forms so you can include it in your own forms.
 
 WiceGrid is known to work with MySQL, Postgres, and Oracle.
 
-Continue reading for more information or check out our [CHANGELOG](https://github.com/leikind/wice_grid/blob/master/CHANGELOG.md) to find out whats been going on.
+Continue reading for more information or check out our [CHANGELOG](https://github.com/leikind/wice_grid/blob/rails7/CHANGELOG.md) to find out whats been going on.
 
 
 ## Requirements and Rails versions
 
 ```
-# Rails 7 with importmap
+# Rails 7 with importmap, HotWire, and dartsass-rails
 gem 'wice_grid', '~> 7.1'
 
 # Rails 5, 6, and 7.0 without importmap (see below)
@@ -76,27 +76,49 @@ gem 'wice_grid', '~> 6.1'
 gem 'wice_grid', '3.6.2'
 ```
 
-WiceGrid relies on jQuery and coffeescript. So the current version will not work with Rails 7, that uses gem `importmap-rails`. But if your application allows the javascript transpiling the gem should work.
-
-The development of the version of WiceGrid that works with Ruby 7.1 and higher is in progress.
+WiceGrid relies on jQuery and coffeescript and the dependencies are added to the gem specification.
 
 If you need a JS Datepicker, WiceGrid supports jQuery Datepicker or
-[Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails), so you might need one of
-those. See section Installation for details on how to use datepickers.
-
-WARNING: Since 3.2.pre2 WiceGrid is not compatible with `will_paginate` because internally it uses
-`kaminari` for pagination, and `kaminari` is not compatible with `will_paginate`!
-
+Bootstrap Datepicker, so you might need one of those. See the section "Installation"
+for details on how to use datepickers.
 
 ## Installation
 
-Add the following to your Gemfile & run `bundle`:
+Here is described the case when the gems `importmap` and `dartsass-rails` are in use.
+For the case of `sass-rails` and other JavaScript approach see the
+branch [rails6](https://github.com/leikind/wice_grid/tree/rails6).
+
+Add the following lines to your `Gemfile`:
 
 ```ruby
 gem "wice_grid"
+gem 'font-awesome-sass', github: 'dima4p/font-awesome-sass'
 ```
 
-Note: `font-awesome-sass` is not a dependency of WiceGrid in case you decide to style WiceGrid icons differently.
+The current version of the gem `font-awesome-sass` has a
+[bug](https://github.com/FortAwesome/font-awesome-sass/issues/222).
+As soon as it is fixed, you can use the standard version.
+
+If the application uses Date and DateTime filters, you have to use
+jQuery Datepicker from the gem `jquery-ui-rails`.
+
+```ruby
+gem 'jquery-ui-rails', github: 'dima4p/jquery-ui-rails'
+```
+
+The regular version of the gem also have an
+[incompatibility](https://github.com/jquery-ui-rails/jquery-ui-rails/pull/153) with
+`dartsass-rails` that is fixed in the custom version. I hope it will be fixed too.
+
+Alternatively you can also use Bootstrap Datepicker.
+
+```ruby
+gem 'bootstrap'
+```
+
+Note: `font-awesome-sass` is not a dependency of WiceGrid in case you decide to style WiceGrid icons differently. But if you use it it must be the version that is compatible with `dartsass-rails`. As well as the gem `jquery-ui-rails`.
+
+Then run `bundle install`.
 
 Run the generator:
 
@@ -107,55 +129,74 @@ rails g wice_grid:install
 This adds the following file:
 * `config/initializers/wice_grid_config.rb`
 
+You have to edit it if required in order to define which kind of the Datepicker
+to use changing the value for `DEFAULT_FILTER_FOR_DATE` and
+`DEFAULT_FILTER_FOR_DATETIME`.
 
-Require WiceGrid javascript in your js index file:
+In the file `config/importmap.rb` add the following lines:
 
-```
-//= require wice_grid
-```
-
-Make sure jQuery is loaded. If the application uses Date and DateTime filters, you have to install
-jQuery Datepicker by yourself. You can also use
-[Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails).
-
-Here is an example of `application.js` if jquery.ui.datepicker is used:
-
-```
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require wice_grid
-//= require jquery.ui.datepicker
-//= require_tree .
+```ruby
+pin "jquery", to: "jquery3.min.js", preload: true
+pin "wice_grid", to: "wice_grid.js", preload: true
+pin "jquery-ui", to: "jquery-ui.js", preload: true
 ```
 
-Here is `application.js` if [Bootstrap Datepicker](https://github.com/Nerian/bootstrap-datepicker-rails) is used:
+You do not need the last line if you do not use jQuery Datepicker.
 
-```
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require wice_grid
-//= require bootstrap-datepicker
-//= require_tree .
+If you are going to use `bootstrap` add also the lines:
+
+```ruby
+pin "bootstrap", to: "bootstrap.min.js", preload: true
+pin "@popperjs/core", to: "popper.js", preload: true
 ```
 
-Require WiceGrid and [Font Awesome](http://fortawesome.github.io/Font-Awesome/) CSS in your `application.scss`:
+In the file `app/assets/config/manifest.js` add the following lines:
 
 ```
-  @import "wice_grid";
-  @import "font-awesome-sprockets";
-  @import "font-awesome";
+//= link wice_grid.js
+//= link jquery3.min.js
+//= link jquery-ui.js
+//= link bootstrap.min.js
+//= link popper.js
 ```
 
-This will provide very basic styles, not specifying exactly how the table should look like, but if
-the application uses Twitter Bootstrap, the markup generated by WiceGrid will have correct classes and
-will fit nicely.
+The last two lines are required if you use `bootstrap`. And the middle is not needed if you do not use jQuery Datepicker.
 
-WiceGrid uses icons from [Font Awesome](http://fortawesome.github.io/Font-Awesome/).
+If the application uses Date and DateTime filters, you have to use one of
+jQuery Datepicker, Bootstrap Datepicker or the standard Rails date helper.
 
+Here is an example of `app/javascript/application.js` if jQuery Datepicker is used:
+
+```javascript
+import "jquery" // this import first
+import "jquery-ui"
+import "wice_grid"
+```
+
+Here is `app/javascript/application.js` if Bootstrap Datepicker is used:
+
+```javascript
+import "jquery" // this import first
+import "bootstrap"
+import "wice_grid"
+```
+
+Require WiceGrid and Font Awesome CSS in your `app/assets/stylesheets/application.scss`:
+
+```scss
+@import "wice_grid";
+@import "font-awesome";
+@import "bootstrap";
+```
+
+This will provide very basic styles, not specifying exactly how the table should
+look like.
+
+WiceGrid uses icons from Font Awesome.
 Should you decide to write you own styles for WiceGrid, you can just remove these imports and write your own styles.
 
+If the application does not use Bootstrap you do not need the last line.
+But the markup generated by WiceGrid will have correct classes and will fit nicely if you include Bootstrap.
 
 ## Basics
 
@@ -433,14 +474,14 @@ To join other tables, use `:include`:
 The value of `:include` can be an array of association names:
 
 ```ruby
-include:  [:category, :users, :status]
+include: [:category, :users, :status]
 ```
 
 If you need to join tables to joined tables, use hashes:
 
 
 ```ruby
-include:  [:category, {users: :group}, :status]
+include: [:category, {users: :group}, :status]
 ```
 
 
@@ -598,7 +639,7 @@ You can use a `Proc` to return a `String` or `Arel::Attributes::Attribute` as ab
 While `:custom_order` lets you define SQL that determines the results order, you may want to sort the result by arbritrary Ruby code. The `:sort_by` option on columns lets you define a `Proc` that determines the sorting on that column. This `Proc` is passed to Ruby's `Enumerable#sort_by`.
 
 ```ruby
-grid.column name:  'Status Name', attribute: 'name', sort_by: ->(status) { [status.number_of_vowels, status] }
+grid.column name: 'Status Name', attribute: 'name', sort_by: ->(status) { [status.number_of_vowels, status] }
 ```
 
 You can also use `:sort_by` to add sorting on values that are not columns in the database. In this case, you must also define an arbitrary `:attribute` option that serves as the request's sort key parameter.
@@ -808,7 +849,7 @@ end
 together with
 
 ```ruby
-custom_filter:  :to_option
+custom_filter: :to_option
 ```
 
 would do the trick:
@@ -880,7 +921,7 @@ WiceGrid provides four filters for selecting dates and time:
 Specify a date/datetime filter just like you specify any other filter:
 
 ```
-  g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
+  g.column name: 'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
     task.updated_at.to_fs(:db)
   end
 ```
@@ -995,8 +1036,8 @@ The first step is to edit `Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS` in
 ```ruby
 
 Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS = {
-  my_own_filter:    ['ViewColumnMyOwnFilter',   'ConditionsGeneratorMyOwnFilter'],
-  another_filter:   ['ViewColumnAnotherFilter', 'ConditionsGeneratorAnotherFilter']
+  my_own_filter:  ['ViewColumnMyOwnFilter',   'ConditionsGeneratorMyOwnFilter'],
+  another_filter: ['ViewColumnAnotherFilter', 'ConditionsGeneratorAnotherFilter']
 }
 ```
 
@@ -1017,8 +1058,8 @@ class ViewColumnMyOwnFilter < Wice::Columns::ViewColumn
 
   def yield_declaration_of_column_filter
     {
-      templates:  [...],
-      ids:        [...]
+      templates: [...],
+      ids:       [...]
     }
   end
 end
@@ -1454,7 +1495,6 @@ end -%>
 ```
 
 Mind that this helper results in an additional SQL query.
-
 
 Because of the current implementation of WiceGrid these helpers work only after the declaration
 of the grid in the view.

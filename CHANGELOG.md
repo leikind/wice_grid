@@ -1,11 +1,16 @@
-## Unreleased
+## 7.1.0
 
-* Fix bug in "Dangerous query methods" deprecation warning fix in custom order when using Arel.sql
-* Loosen lock on Kaminari
+* Rails 7.1 uses the gem `dartsass-rails` instead of the deprecatad gem `sass-rails`.
+And the gem `importmap-rails` is the standard gem for Javascript. The support of them is added and the required gems for development are changed.
+* Turbolinks was replaced with Turbo.
+* Added the dependencies of `jquery-rails`.
+* I could not fix the problem with the Specs to run without a browser that is required
+with the environment variable `BROWSER` set to any value. Moreover not always all the test are green. The suggesons are welcome.
 
 ## 6.1.2
 
 * Added Rails 6.1 support
+* Fix bug in "Dangerous query methods" deprecation warning fix in custom order when using Arel.sql
 
 ## 4.1.0 (28 November, 2018)
 
@@ -52,7 +57,7 @@ In 3.6.0 the API has changed to use associations.
 If, say, a `Task` `belongs_to` a `Priority`, a column definition should specify this association using `:assoc`:
 
 ```ruby
-g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+g.column name: 'Priority', attribute: 'name',  assoc: :priority do |task|
   task.priority.name if task.priority
 end
 ```
@@ -61,7 +66,7 @@ If, say, a `Task` `belongs_to` a `Project`, and a `Project` belongs to a `Custom
 `assoc:` should be a list of these associations:
 
 ```ruby
-g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+g.column name: 'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
   task.project.customer.name if task.project && task.project.customer
 end
 ```
@@ -75,7 +80,7 @@ Now they can be used for joined tables, too.
 Instead of
 
 ```ruby
-g.column name:  'Priority', attribute: 'name',  assoc: :priority do |task|
+g.column name: 'Priority', attribute: 'name',  assoc: :priority do |task|
   task.priority.name if task.priority
 end
 ```
@@ -83,13 +88,13 @@ end
 you can write
 
 ```ruby
-g.column name:  'Priority', attribute: 'name',  assoc: :priority
+g.column name: 'Priority', attribute: 'name',  assoc: :priority
 ```
 
 Instead of
 
 ```ruby
-g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
+g.column name: 'Customer', attribute: 'name', assoc: [:project, :customer]  do |task|
   task.project.customer.name if task.project && task.project.customer
 end
 ```
@@ -97,7 +102,7 @@ end
 you can write
 
 ```ruby
-  g.column name:  'Customer', attribute: 'name', assoc: [:project, :customer]
+  g.column name: 'Customer', attribute: 'name', assoc: [:project, :customer]
 ```
 
 
@@ -119,7 +124,7 @@ Filter types for dates and datetimes are
 Example:
 
 ```ruby
-g.column name:  'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
+g.column name: 'Updated', attribute: 'updated_at', filter_type: :rails_datetime_helper do |task|
   task.updated_at.to_fs(:db)
 end
 ```
@@ -660,7 +665,7 @@ something else, for example, ILIKE of Postgresql.
 
 === 19/11/2008
 
-Experimental feature : :table_alias parameter to allow ordering and filtering for joining associations referring the same table.
+Experimental feature: :table_alias parameter to allow ordering and filtering for joining associations referring the same table.
 (See "Joined associations referring to the same table" in README)
 
 === 18/11/2008
@@ -752,7 +757,7 @@ In this case +attribute_name+ will be used as the method name to send to the Act
 
 === revision 10
 
-* New parameter +grid+ parameter:  <tt>:extra_request_parameters</tt>.
+* New parameter +grid+ parameter: <tt>:extra_request_parameters</tt>.
   (Read http://redmine.wice.eu/api/wice_grid/classes/Wice/GridViewHelper.html#M000002)
 
 === 0
