@@ -1,4 +1,10 @@
-## Unreleased
+## 6.1.4
+
+* I have discovered that [Facebook](https://www.facebook.com) spoils the links
+that have WiceGrid filters when you share them. That lead to the exception
+in the application. This is a workaround for the case.
+
+## 6.1.3
 
 * Fix bug in "Dangerous query methods" deprecation warning fix in custom order when using Arel.sql
 * Loosen lock on Kaminari

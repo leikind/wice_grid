@@ -168,6 +168,7 @@ module Wice
       @status[:conditions]    = @options[:conditions]
       @status[:f]             = @options[:f]
 
+      fix_facebook_bug
       process_loading_query
       process_params
 
@@ -185,6 +186,20 @@ module Wice
     # the callback is a lambda object which returns the list of records when called. See the README for the explanation.
     def with_resultset(&callback)
       @options[:with_resultset] = callback
+    end
+
+    def fix_facebook_bug
+        Rails.logger.debug {%%WiceGrid@#{__LINE__}#fix_facebook_bug: #{params[name].inspect}%}
+      if params[name] and filter = params[name][:f]
+        params[name][:f] = filter.to_unsafe_h
+            .each_with_object({}) do |(key, value), hash|
+          if value.is_a? Hash
+            hash[key] = value.values
+          else
+            hash[key] = value
+          end
+        end
+      end
     end
 
     def process_loading_query #:nodoc:
