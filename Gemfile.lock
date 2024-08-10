@@ -16,7 +16,7 @@ GIT
 PATH
   remote: .
   specs:
-    wice_grid (7.1.0)
+    wice_grid (7.1.1)
       coffee-rails (>= 5.0.0)
       jquery-rails
       kaminari

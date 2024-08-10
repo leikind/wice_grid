@@ -1,7 +1,14 @@
+## 7.1.1
+
+* I have discovered that [Facebook](https://www.facebook.com) spoils the links
+that have WiceGrid filters when you share them. That lead to the exception
+in the application. This is a workaround for the case.
+
 ## 7.1.0
 
 * Rails 7.1 uses the gem `dartsass-rails` instead of the deprecatad gem `sass-rails`.
-And the gem `importmap-rails` is the standard gem for Javascript. The support of them is added and the required gems for development are changed.
+And the gem `importmap-rails` is the standard gem for Javascript.
+The support of them is added and the required gems for development are changed.
 * Turbolinks was replaced with Turbo.
 * Added the dependencies of `jquery-rails`.
 * I could not fix the problem with the Specs to run without a browser that is required

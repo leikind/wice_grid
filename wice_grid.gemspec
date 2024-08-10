@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '7.1.0'
+  s.version       = '7.1.1'
   s.authors       = ['Yuri Leikind and contributors']
   s.email         = ['koulikoff@gmail.com']
   s.homepage      = 'https://github.com/leikind/wice_grid'
