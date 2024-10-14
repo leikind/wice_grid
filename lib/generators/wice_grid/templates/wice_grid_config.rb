@@ -80,7 +80,7 @@ if defined?(Wice::Defaults)
   # It is also possible to define you own processors:
   #
   #     Wice::Defaults::ADDITIONAL_COLUMN_PROCESSORS = {
-  #       some_key_identifying_new_column_type:  ['AViewColumnProcessorClass', 'ConditionsGeneratorClass'],
+  #       some_key_identifying_new_column_type: ['AViewColumnProcessorClass', 'ConditionsGeneratorClass'],
   #       another_key_identifying_new_column_type:  ['AnotherViewColumnProcessorClass', 'AnotherConditionsGeneratorClass']
   #     }
   #

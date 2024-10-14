@@ -16,7 +16,7 @@ GIT
 PATH
   remote: .
   specs:
-    wice_grid (7.1.1)
+    wice_grid (7.1.2)
       coffee-rails (>= 5.0.0)
       jquery-rails
       kaminari
@@ -484,6 +484,7 @@ DEPENDENCIES
   capybara
   capybara-screenshot
   coderay
+  csv
   dartsass-rails
   faker
   font-awesome-sass!

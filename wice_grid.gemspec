@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name          = 'wice_grid'
-  s.version       = '7.1.1'
+  s.version       = '7.1.2'
   s.authors       = ['Yuri Leikind and contributors']
-  s.email         = ['koulikoff@gmail.com']
+  s.email         = ['dim.kulk@gmail.com']
   s.homepage      = 'https://github.com/leikind/wice_grid'
   s.summary       = 'A Rails grid plugin to quickly create grids with sorting, pagination, and filters.'
   s.description   = 'A Rails grid plugin to create grids with sorting, pagination, and filters generated automatically based on column types. ' \
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'byebug'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'capybara-screenshot'
+  s.add_development_dependency 'csv'
   s.add_development_dependency 'faker'
   s.add_development_dependency 'phantomjs', '>= 2.1.1'
   s.add_development_dependency 'poltergeist'

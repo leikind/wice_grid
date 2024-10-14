@@ -1,3 +1,7 @@
+## 7.1.2
+
+* This is the fix for the workaround of the [Facebook](https://www.facebook.com) problem.
+
 ## 7.1.1
 
 * I have discovered that [Facebook](https://www.facebook.com) spoils the links

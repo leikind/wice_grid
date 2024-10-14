@@ -193,7 +193,7 @@ module Wice
       if params[name] and filter = params[name][:f]
         params[name][:f] = filter.to_unsafe_h
             .each_with_object({}) do |(key, value), hash|
-          if value.is_a? Hash
+          if value.is_a?(Hash) and value.keys.all? {|key| key.to_s.match? /^[0-9]+$/}
             hash[key] = value.values
           else
             hash[key] = value
