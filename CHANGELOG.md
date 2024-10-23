@@ -1,3 +1,7 @@
+## 7.1.3
+
+* Fixes [the bug](https://github.com/leikind/wice_grid/issues/395).
+
 ## 7.1.2
 
 * This is the fix for the workaround of the [Facebook](https://www.facebook.com) problem.

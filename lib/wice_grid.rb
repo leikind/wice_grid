@@ -189,7 +189,6 @@ module Wice
     end
 
     def fix_facebook_bug
-        Rails.logger.debug {%%WiceGrid@#{__LINE__}#fix_facebook_bug: #{params[name].inspect}%}
       if params[name] and filter = params[name][:f]
         params[name][:f] = filter.to_unsafe_h
             .each_with_object({}) do |(key, value), hash|
@@ -267,8 +266,12 @@ module Wice
       end
 
       if column
-        conditions_generator = ActiveRecordColumnWrapper.new(column, @status[:f], main_table, table_alias, custom_filter_active, filter_type)
-        conditions, current_parameter_name = conditions_generator.wg_initialize_request_parameters
+        conditions_generator = ActiveRecordColumnWrapper.new(
+          column, @status[:f], main_table,
+          table_alias, custom_filter_active, filter_type
+        )
+        conditions, current_parameter_name =
+            conditions_generator.wg_initialize_request_parameters
 
         if @status[:f] && conditions.blank?
           @status[:f].delete(current_parameter_name)
