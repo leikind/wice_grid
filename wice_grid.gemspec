@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
   s.date          = `date +%Y-%m-%d`
 
-  s.add_dependency 'rails', '~> 7.0'
+  s.add_dependency 'rails', '~> 8.0'
   s.add_dependency 'kaminari'
   s.add_dependency 'coffee-rails', '>= 5.0.0'
   s.add_dependency 'jquery-rails'
