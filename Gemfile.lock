@@ -16,11 +16,11 @@ GIT
 PATH
   remote: .
   specs:
-    wice_grid (7.1.4)
+    wice_grid (7.2.0)
       coffee-rails (>= 5.0.0)
       jquery-rails
       kaminari
-      rails (~> 8.0)
+      rails (>= 7.1, < 9.0)
 
 GEM
   remote: https://rubygems.org/
