@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/dima4p/font-awesome-sass.git
-  revision: bed06b0e9c62ec7e9523879d2012d43ec14afa75
+  revision: b8fc8f9c4f6ac47cd6cbedeac6d7de9e4ff72fad
   specs:
-    font-awesome-sass (6.5.2.1)
+    font-awesome-sass (6.6.0.2)
       sassc (~> 2.0)
 
 GIT
@@ -149,16 +149,16 @@ GEM
     execjs (2.9.1)
     faker (3.4.1)
       i18n (>= 1.8.11, < 2)
-    ffi (1.17.0-aarch64-linux-gnu)
-    ffi (1.17.0-aarch64-linux-musl)
-    ffi (1.17.0-arm-linux-gnu)
-    ffi (1.17.0-arm-linux-musl)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86-linux-gnu)
-    ffi (1.17.0-x86-linux-musl)
-    ffi (1.17.0-x86_64-darwin)
-    ffi (1.17.0-x86_64-linux-gnu)
-    ffi (1.17.0-x86_64-linux-musl)
+    ffi (1.17.4-aarch64-linux-gnu)
+    ffi (1.17.4-aarch64-linux-musl)
+    ffi (1.17.4-arm-linux-gnu)
+    ffi (1.17.4-arm-linux-musl)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86-linux-gnu)
+    ffi (1.17.4-x86-linux-musl)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
+    ffi (1.17.4-x86_64-linux-musl)
     formatador (1.1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
