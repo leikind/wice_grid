@@ -28,7 +28,7 @@ require 'yard'
 require 'yard/rake/yardoc_task'
 desc 'Generate YARDOC documentation for the plugin'
 YARD::Rake::YardocTask.new(:yardoc) do |t|
-  OTHER_PATHS = %w()
+  OTHER_PATHS = %w[]
   t.files   = ['lib/**/*.rb', OTHER_PATHS]
   t.options = %w(--main=README.md --file TODO.md,CHANGELOG.md,SAVED_QUERIES_HOWTO.md,MIT-LICENSE)
   t.stats_options = ['--list-undoc']

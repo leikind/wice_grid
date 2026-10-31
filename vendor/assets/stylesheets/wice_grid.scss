@@ -4,26 +4,26 @@
  * @import "font-awesome"
  */
 //@import "font-awesome-sprockets";
-@import "font-awesome";
+@use "font-awesome";
 
 /*!
  * WiceGrid CSS
  *
  * @import "jquery-ui/core"
  */
-@import "jquery-ui/core";
+@use "jquery-ui/core";
 /*!
  * WiceGrid CSS
  *
  * @import "jquery-ui/theme"
  */
-@import "jquery-ui/theme";
+@use "jquery-ui/theme";
 /*!
  * WiceGrid CSS
  *
  * @import "jquery-ui/datepicker"
  */
-@import "jquery-ui/datepicker";
+@use "jquery-ui/datepicker";
 
 //@import "jquery-ui";
 /*!
