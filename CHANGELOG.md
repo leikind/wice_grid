@@ -1,3 +1,7 @@
+## 7.2.0
+
+* Style files .scss fixed in the project and used gem to remove the deprecatad syntax
+
 ## 7.1.4
 
 * Allow Rails 7.0
