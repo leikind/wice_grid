@@ -1,5 +1,5 @@
 class WiceGridSerializedQuery < ActiveRecord::Base  #:nodoc:
-  serialize :query
+  serialize :query, coder: JSON
 
   validates_uniqueness_of :name, scope: :grid_name, on: :create, message: 'A query with this name already exists'
 
