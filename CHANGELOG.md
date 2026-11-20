@@ -1,3 +1,7 @@
+## 7.2.1
+
+* Bugfix: SQL injection fixed
+
 ## 7.2.0
 
 * Style files .scss fixed in the project and used gem to remove the deprecatad syntax

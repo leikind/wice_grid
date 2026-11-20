@@ -305,10 +305,12 @@ module Wice
       #   @status.delete(:f)
       # end
 
+      @status[:conditions] = @klass.sanitize_sql_for_conditions @status[:conditions]
       initial_conditions_active_relation = @klass.where(@status[:conditions])
 
       @ar_options[:conditions] =
         @table_column_matrix.conditions.reduce(initial_conditions_active_relation) do |active_relation_accu, cond|
+          cond = @klass.sanitize_sql_for_conditions cond
           conditions_active_relation = @klass.where(cond)
           active_relation_accu.merge(conditions_active_relation)
         end
@@ -697,7 +699,7 @@ module Wice
   module GridTools   #:nodoc:
     class << self
       def special_value(str)   #:nodoc:
-        str =~ /^\s*(not\s+)?null\s*$/i
+        str =~ /\A\s*(not\s+)?null\s*\z/i
       end
 
       # create a Time instance out of parameters
