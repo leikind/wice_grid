@@ -120,44 +120,57 @@ setupJqueryUiDatepicker = ->
     labelText = datepickerHiddenField.data('button-text')
 
     # datepicker constructor
-    datepickerHiddenField.datepicker
-      firstDay:        1
-      dateFormat:      dateFormat
-      changeMonth:     true
-      changeYear:      true
-      yearRange:       yearRange
+    datepickerInstance = $.data(datepickerHiddenField[0], 'datepicker')
 
-      onSelect: (dateText, inst) ->
+    if datepickerInstance && datepickerInstance.dpDiv.parent()[0] != document.body
+      datepickerHiddenField.datepicker('destroy')
+      datepickerInstance = null
 
-        selectedDate = $(this).datepicker("getDate")
+    unless datepickerInstance
+      datepickerHiddenField.removeClass('hasDatepicker')
+      datepickerHiddenField.datepicker
+        firstDay:        1
+        dateFormat:      dateFormat
+        changeMonth:     true
+        changeYear:      true
+        yearRange:       yearRange
 
-        moveDateBoundIfInvalidPeriod(
-          'the-other-datepicker-id-to',
-          datepickerHiddenField,
-          selectedDate,
-          dateFormat,
-          (theOther, selected)-> theOther < selected
-        )
+        onSelect: (dateText, inst) ->
 
-        moveDateBoundIfInvalidPeriod(
-          'the-other-datepicker-id-from',
-          datepickerHiddenField,
-          selectedDate,
-          dateFormat,
-          (theOther, selected)-> theOther > selected
-        )
+          selectedDate = $(this).datepicker("getDate")
 
-        $(that).html(dateText)
-        if eventToTriggerOnChange
-          datepickerHiddenField.trigger(eventToTriggerOnChange)
+          moveDateBoundIfInvalidPeriod(
+            'the-other-datepicker-id-to',
+            datepickerHiddenField,
+            selectedDate,
+            dateFormat,
+            (theOther, selected)-> theOther < selected
+          )
+
+          moveDateBoundIfInvalidPeriod(
+            'the-other-datepicker-id-from',
+            datepickerHiddenField,
+            selectedDate,
+            dateFormat,
+            (theOther, selected)-> theOther > selected
+          )
+
+          $(that).html(dateText)
+          if eventToTriggerOnChange
+            datepickerHiddenField.trigger(eventToTriggerOnChange)
 
     datepickerContainer = datepickerHiddenField.parent()
 
-    $(removeLink).before(" <i class=\"fa fa-calendar ui-datepicker-trigger\" title=\"#{labelText}\" ></i> ")
+    calendarIcons = datepickerContainer.children('.ui-datepicker-trigger')
+    calendarIcons.slice(1).remove()
 
-    newlyAdded = $('.fa-calendar', datepickerContainer)
+    unless calendarIcons.length
+      calendarIcons = $("<i class=\"fa fa-calendar ui-datepicker-trigger\" title=\"#{labelText}\"></i>")
+      $(removeLink).before(calendarIcons)
 
-    newlyAdded.click ->
+    calendarIcons = datepickerContainer.children('.ui-datepicker-trigger')
+    calendarIcons.off('click.wiceGrid').on 'click.wiceGrid', ->
+      $.datepicker.dpDiv.appendTo(document.body)
       datepickerHiddenField.datepicker("show")
 
 # hiding and showing the row with filters

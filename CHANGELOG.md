@@ -1,3 +1,8 @@
+## 7.3.0
+
+* The old bug with the calendar that doubles the icons at return to a page and
+stops working is fixed
+
 ## 7.2.1
 
 * Bugfix: SQL injection fixed
